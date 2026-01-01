@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Làm Bài Thi</title>
+    <title>Làm Bài Thi (Chuẩn 2025)</title>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
@@ -20,8 +20,9 @@
         .timer { font-size: 24px; color: #c62828; font-weight: bold; }
         .question-block { background: white; padding: 25px; border-radius: 10px; margin-bottom: 20px; }
         .part-header { background: #e0f2f1; color: #00695c; padding: 10px; margin: 30px 0; font-weight: bold; border-radius: 5px; border: 1px solid #004d40; text-transform: uppercase; }
-        .correct-ans { color: #2e7d32; font-weight: bold; background: #c8e6c9; padding: 5px; display: inline-block; margin-top: 5px; }
+        .correct-ans { color: #2e7d32; font-weight: bold; background: #c8e6c9; padding: 5px; display: inline-block; margin-top: 5px; border-radius: 5px; }
         .wrong-ans { color: #c62828; text-decoration: line-through; opacity: 0.7; }
+        .partial-score { color: #f57c00; font-weight: bold; background: #ffe0b2; padding: 5px; display: inline-block; margin-top: 5px; border-radius: 5px; }
         .result-box { display: none; background: #e8f5e9; padding: 30px; text-align: center; border-radius: 15px; margin-top: 20px; border: 3px solid #4caf50; }
         .btn-submit { background: #1976d2; color: white; padding: 15px; width: 100%; border: none; border-radius: 10px; font-size: 20px; font-weight: bold; cursor: pointer; margin-top: 20px; }
         .question-image img { max-width: 100%; } .options label { display: block; padding: 8px; cursor: pointer; } .options label:hover { background: #e0f2f1; }
@@ -34,17 +35,16 @@
 <body>
 <div class="loading" id="loading">Đang tải...</div>
 <div class="welcome-overlay" id="welcome-screen">
-<div class="welcome-card">
-        <h1 id="exam-title">BÀI KIỂM TRA</h1>
-        <p id="exam-desc">Đang tải...</p>
-        <hr style="border:0; border-top:1px solid #eee; margin: 20px 0;">
+    <div class="welcome-card">
+        <h1 id="exam-title">BÀI KIỂM TRA</h1><p id="exam-desc">...</p><hr>
         
         <p style="color: #e65100; font-style: italic; font-weight: bold; margin-bottom: 20px; font-size: 1.1em;">
             "Hãy bình tĩnh, tự tin và làm bài hết sức mình nhé!<br>Thầy chúc em đạt điểm cao!"
         </p>
-        <div class="input-group"><label>Họ và Tên (*)</label><input type="text" id="s-name" placeholder="Nhập họ tên..."></div>
-        <div class="input-group"><label>Lớp (*)</label><input type="text" id="s-class" placeholder="Nhập lớp..."></div>
-        <button class="btn-start" onclick="startQuiz()">BẮT ĐẦU LÀM BÀI</button>
+
+        <div class="input-group"><label>Họ Tên</label><input type="text" id="s-name"></div>
+        <div class="input-group"><label>Lớp</label><input type="text" id="s-class"></div>
+        <button class="btn-start" onclick="startQuiz()">VÀO THI</button>
     </div>
 </div>
 <div id="main-interface">
@@ -60,10 +60,7 @@
 
     let rawQuestions=[], currentQuestions=[], timerDuration=0, timerInterval;
 
-    // HÀM MÃ HÓA (ĐỂ SO SÁNH VỚI ĐỀ THI)
-    function hash(input) {
-        return CryptoJS.MD5(String(input).trim().toLowerCase()).toString();
-    }
+    function hash(input) { return CryptoJS.MD5(String(input).trim().toLowerCase()).toString(); }
 
     const urlParams = new URLSearchParams(window.location.search);
     const examId = urlParams.get('id');
@@ -94,15 +91,13 @@
 
         part1.forEach(q => {
             let indices = q.options.map((_, i) => i);
-            shuffle(indices);
-            q.shuffledIndices = indices;
+            shuffle(indices); q.shuffledIndices = indices;
         });
-        
         part2.forEach(q => shuffle(q.items));
 
-        if(part1.length) part1[0].isPartHeader = "PHẦN 1. Trắc nghiệm";
-        if(part2.length) part2[0].isPartHeader = "PHẦN 2. Đúng Sai";
-        if(part3.length) part3[0].isPartHeader = "PHẦN 3. Trả lời ngắn";
+        if(part1.length) part1[0].isPartHeader = "PHẦN 1. Trắc nghiệm (Mỗi câu 0,25đ)";
+        if(part2.length) part2[0].isPartHeader = "PHẦN 2. Đúng/Sai (Điểm theo số ý đúng: 0,1 - 0,25 - 0,5 - 1,0)";
+        if(part3.length) part3[0].isPartHeader = "PHẦN 3. Trả lời ngắn (Mỗi câu 0,5đ)";
 
         currentQuestions = [...part1, ...part2, ...part3];
         renderQuestions();
@@ -120,7 +115,7 @@
                 q.shuffledIndices.forEach(originalIndex => {
                     html += `<label><input type="radio" name="q${idx}" value="${originalIndex}"> ${q.options[originalIndex]}</label>`;
                 });
-                html += `</div><div class="feedback"><i>(Đáp án đã được ẩn để bảo mật)</i><br>${q.explain}</div>`;
+                html += `</div><div class="feedback"><i>(Đáp án đã ẩn)</i><br>${q.explain}</div>`;
             } 
             else if(q.type === 'tf') {
                 html += `<table class="tf-table"><tr><th>Mệnh đề</th><th>Đ</th><th>S</th></tr>`;
@@ -153,47 +148,80 @@
         }, 1000);
     }
 
+    // --- HÀM CHẤM ĐIỂM (LOGIC MỚI 2025) ---
     function submitQuiz() {
         clearInterval(timerInterval);
         document.getElementById('btn-submit').style.display = 'none';
-        let score = 0, total = 0;
+        
+        let totalScore = 0; // Tổng điểm học sinh đạt được
+        let maxScore = 0;   // Tổng điểm tối đa của đề (Thường là 10)
 
         currentQuestions.forEach((q, idx) => {
             const block = document.getElementById(`q-${idx}`);
             block.classList.add('show-feedback');
 
+            // --- PHẦN 1: TRẮC NGHIỆM (0.25đ / câu) ---
             if(q.type === 'mcq') {
-                total++;
+                maxScore += 0.25;
                 const sel = document.querySelector(`input[name="q${idx}"]:checked`);
-                // MÃ HÓA CÂU TRẢ LỜI CỦA HỌC SINH ĐỂ SO SÁNH VỚI ĐÁP ÁN
-                if(sel) {
-                    if(hash(sel.value) === q.ans) { score++; block.innerHTML += `<div class="correct-ans">Đúng</div>`; } 
-                    else { block.innerHTML += `<div class="wrong-ans">Sai</div>`; }
-                } else { block.innerHTML += `<div class="wrong-ans">Bỏ trống</div>`; }
+                if(sel && hash(sel.value) === q.ans) { 
+                    totalScore += 0.25; 
+                    block.innerHTML += `<div class="correct-ans">Đúng (+0.25đ)</div>`;
+                } else { 
+                    block.innerHTML += `<div class="wrong-ans">Sai / Chưa làm</div>`; 
+                }
             } 
+            
+            // --- PHẦN 2: ĐÚNG/SAI (Tính theo bậc thang) ---
             else if(q.type === 'tf') {
+                maxScore += 1.0; // Mỗi câu chùm này tối đa 1 điểm
+                
+                let correctCount = 0; // Đếm số ý đúng trong câu này
                 q.items.forEach((it, sIdx) => {
-                    total += 0.25;
                     const sel = document.querySelector(`input[name="q${idx}_${sIdx}"]:checked`);
-                    if(sel && hash(sel.value) === it.ans) score += 0.25;
+                    if(sel && hash(sel.value) === it.ans) {
+                        correctCount++;
+                    }
                 });
+
+                // Quy tắc tính điểm bậc thang 2025
+                let point = 0;
+                if(correctCount === 1) point = 0.1;
+                else if(correctCount === 2) point = 0.25;
+                else if(correctCount === 3) point = 0.5;
+                else if(correctCount === 4) point = 1.0;
+
+                totalScore += point;
+                
+                if(point > 0) block.innerHTML += `<div class="partial-score">Đúng ${correctCount}/4 ý (+${point}đ)</div>`;
+                else block.innerHTML += `<div class="wrong-ans">Sai hết</div>`;
             }
+            
+            // --- PHẦN 3: TRẢ LỜI NGẮN (0.5đ / câu) ---
             else if(q.type === 'short') {
-                total++;
-                const val = document.getElementById(`in-${idx}`).value.replace(',', '.'); // Đổi phẩy thành chấm trước khi mã hóa
-                if(hash(val) === q.ans) { score++; block.innerHTML += `<div class="correct-ans">Đúng</div>`; } 
-                else { block.innerHTML += `<div class="wrong-ans">Sai</div>`; }
+                maxScore += 0.5;
+                const val = document.getElementById(`in-${idx}`).value.replace(',', '.');
+                if(hash(val) === q.ans) {
+                    totalScore += 0.5; 
+                    block.innerHTML += `<div class="correct-ans">Đúng (+0.5đ)</div>`;
+                } else { 
+                    block.innerHTML += `<div class="wrong-ans">Sai / Chưa làm</div>`; 
+                }
             }
         });
 
+        // Làm tròn điểm số đến 2 chữ số thập phân (để tránh lỗi số học 0.1 + 0.2 = 0.300004)
+        totalScore = Math.round(totalScore * 100) / 100;
+        maxScore = Math.round(maxScore * 100) / 100;
+
         document.getElementById('result-area').style.display = 'block';
-        document.getElementById('final-score').innerText = `${score} / ${total}`;
+        document.getElementById('final-score').innerText = `${totalScore} / ${maxScore}`;
         window.scrollTo(0,0);
         
         if(GOOGLE_SCRIPT_URL) {
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST', mode: 'no-cors', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ name: document.getElementById('s-name').value, class: document.getElementById('s-class').value, score: score + "/" + total, exam: window.EXAM_DATA.title })
+                body: JSON.stringify({ name: document.getElementById('s-name').value, class: document.getElementById('s-class').value, score: totalScore + "/" + maxScore, exam: window.EXAM_DATA.title })
             });
         }
     }
