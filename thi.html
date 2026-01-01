@@ -34,11 +34,17 @@
 <body>
 <div class="loading" id="loading">Đang tải...</div>
 <div class="welcome-overlay" id="welcome-screen">
-    <div class="welcome-card">
-        <h1 id="exam-title">BÀI KIỂM TRA</h1><p id="exam-desc">...</p><hr>
-        <div class="input-group"><label>Họ Tên</label><input type="text" id="s-name"></div>
-        <div class="input-group"><label>Lớp</label><input type="text" id="s-class"></div>
-        <button class="btn-start" onclick="startQuiz()">VÀO THI</button>
+<div class="welcome-card">
+        <h1 id="exam-title">BÀI KIỂM TRA</h1>
+        <p id="exam-desc">Đang tải...</p>
+        <hr style="border:0; border-top:1px solid #eee; margin: 20px 0;">
+        
+        <p style="color: #e65100; font-style: italic; font-weight: bold; margin-bottom: 20px; font-size: 1.1em;">
+            "Hãy bình tĩnh, tự tin và làm bài hết sức mình nhé!<br>Thầy chúc em đạt điểm cao!"
+        </p>
+        <div class="input-group"><label>Họ và Tên (*)</label><input type="text" id="s-name" placeholder="Nhập họ tên..."></div>
+        <div class="input-group"><label>Lớp (*)</label><input type="text" id="s-class" placeholder="Nhập lớp..."></div>
+        <button class="btn-start" onclick="startQuiz()">BẮT ĐẦU LÀM BÀI</button>
     </div>
 </div>
 <div id="main-interface">
