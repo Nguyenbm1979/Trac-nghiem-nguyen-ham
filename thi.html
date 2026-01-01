@@ -55,8 +55,8 @@
 </div>
 
 <script>
-    // 👇👇👇 DÁN LINK GOOGLE SCRIPT CỦA BẠN VÀO ĐÂY 👇👇👇
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw9AvPfuJ53SMG-AIdP9SBL6LThFM-r8DRphGwSqRutArucIK5jxf4BxzTHY2SIBJE/exec'; 
+    // 👇👇👇 LINK SCRIPT MỚI CỦA THẦY ĐÃ ĐƯỢC CẬP NHẬT Ở ĐÂY 👇👇👇
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwqCgitWSaFUcEIn8eO7ovoVfpGK1iGqxQOZIQKJj38Y-UbHK3XU_7MTRX4epbvDkEJ/exec'; 
 
     let rawQuestions=[], currentQuestions=[], timerDuration=0, timerInterval;
 
@@ -174,17 +174,13 @@
             
             // --- PHẦN 2: ĐÚNG/SAI (Tính theo bậc thang) ---
             else if(q.type === 'tf') {
-                maxScore += 1.0; // Mỗi câu chùm này tối đa 1 điểm
-                
-                let correctCount = 0; // Đếm số ý đúng trong câu này
+                maxScore += 1.0; 
+                let correctCount = 0; 
                 q.items.forEach((it, sIdx) => {
                     const sel = document.querySelector(`input[name="q${idx}_${sIdx}"]:checked`);
-                    if(sel && hash(sel.value) === it.ans) {
-                        correctCount++;
-                    }
+                    if(sel && hash(sel.value) === it.ans) correctCount++;
                 });
 
-                // Quy tắc tính điểm bậc thang 2025
                 let point = 0;
                 if(correctCount === 1) point = 0.1;
                 else if(correctCount === 2) point = 0.25;
@@ -210,7 +206,6 @@
             }
         });
 
-        // Làm tròn điểm số đến 2 chữ số thập phân (để tránh lỗi số học 0.1 + 0.2 = 0.300004)
         totalScore = Math.round(totalScore * 100) / 100;
         maxScore = Math.round(maxScore * 100) / 100;
 
