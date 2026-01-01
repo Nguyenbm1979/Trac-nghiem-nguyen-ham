@@ -2,6 +2,7 @@ window.EXAM_DATA = {
     "title": "Kiểm Tra Nguyên Hàm (90 phút)",
     "description": "22 Câu hỏi | Thời gian: 90 phút | Chủ đề: Nguyên hàm cơ bản & Vận dụng",
     "time": 90, 
+    "password": "98eb45b771496fe725ae4e0177604c36",
     "questions": [
         // --- PHẦN 1: TRẮC NGHIỆM (12 CÂU) ---
         {
