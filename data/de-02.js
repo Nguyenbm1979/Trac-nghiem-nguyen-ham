@@ -2,6 +2,7 @@ window.EXAM_DATA = {
     "title": "Đề Kiểm Tra Nguyên Hàm Số 02",
     "description": "22 Câu hỏi | Thời gian: 90 phút | Mức độ: Vận dụng",
     "time": 90,
+    "password": "0441cc2e91e078d08f103804b422feea",
     "questions": [
         {
             "type": "mcq",
