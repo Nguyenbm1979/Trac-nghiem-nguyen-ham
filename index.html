@@ -4,17 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bài Kiểm Tra Nguyên Hàm 12</title>
-    
     <script>
     window.MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']], // Cho phép dùng dấu $ để kẹp công thức
-        displayMath: [['$$', '$$'], ['\\[', '\\]']]
-      },
-      options: {
-        ignoreHtmlClass: 'tex2jax_ignore',
-        processHtmlClass: 'tex2jax_process'
-      }
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      options: { ignoreHtmlClass: 'tex2jax_ignore', processHtmlClass: 'tex2jax_process' }
     };
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -23,32 +16,19 @@
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; background-color: #f4f4f9; padding: 20px; max-width: 900px; margin: 0 auto; }
         .header-info { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
         .timer { font-size: 24px; font-weight: bold; color: #d9534f; }
-        .student-form { margin-top: 15px; }
         .student-form input { padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-right: 10px; width: 200px; }
         .quiz-container { background: white; padding: 30px; margin-top: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .question-block { margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
-        
-        /* Chỉnh font chữ câu hỏi và công thức to hơn */
         .question-title { font-weight: bold; color: #2c3e50; margin-bottom: 15px; font-size: 1.1em; }
-        mjx-container { font-size: 115% !important; } /* Phóng to công thức toán */
-
-        .options label { display: block; margin-bottom: 10px; cursor: pointer; padding: 5px 0; }
-        .options label:hover { background-color: #f9f9f9; }
-        
+        mjx-container { font-size: 115% !important; }
+        .options label { display: block; margin-bottom: 10px; cursor: pointer; }
         .tf-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .tf-table th, .tf-table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        .tf-table th { background-color: #f8f9fa; text-align: center; }
-        .tf-table td.center { text-align: center; width: 60px; }
-        
         .btn-submit { display: block; width: 100%; padding: 15px; background: #42b983; color: white; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; margin-top: 20px; font-weight: bold; }
-        .btn-submit:hover { background: #3aa876; }
-        
-        /* Kết quả */
+        .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
         .result-box { display: none; background: #e8f5e9; border: 2px solid #4caf50; padding: 20px; border-radius: 8px; margin-top: 20px; text-align: center; }
         .result-score { font-size: 32px; font-weight: bold; color: #2e7d32; margin: 10px 0; }
-        
-        /* Trạng thái đúng sai */
-        .correct-ans { color: #2e7d32; font-weight: bold; background: #e8f5e9; padding: 5px 10px; border-radius: 4px; display: inline-block; margin-top: 5px;}
+        .correct-ans { color: #2e7d32; font-weight: bold; background: #e8f5e9; padding: 5px; display: inline-block; margin-top: 5px;}
         .wrong-ans { color: #c62828; text-decoration: line-through; margin-right: 10px;}
         .feedback { font-size: 0.95em; margin-top: 10px; color: #444; background: #f1f1f1; padding: 10px; border-radius: 5px; display: none; }
         .show-feedback .feedback { display: block; }
@@ -71,23 +51,20 @@
         <h3>KẾT QUẢ BÀI LÀM</h3>
         <p>Học sinh: <span id="res-name" style="font-weight:bold"></span> - Lớp: <span id="res-class" style="font-weight:bold"></span></p>
         <div class="result-score" id="score-display">0 / 0</div>
-        <p>Hãy kéo xuống dưới để xem chi tiết đáp án đúng/sai.</p>
+        <div id="submit-status" style="margin-top:10px; font-style:italic;"></div>
+        <p>Hãy kéo xuống để xem đáp án chi tiết.</p>
     </div>
 
-    <div class="quiz-container" id="quiz-body">
-        <p style="text-align:center">Đang tải câu hỏi...</p>
-    </div>
-
+    <div class="quiz-container" id="quiz-body"><p style="text-align:center">Đang tải câu hỏi...</p></div>
     <button class="btn-submit" onclick="submitQuiz()" id="btn-submit">NỘP BÀI & XEM ĐIỂM</button>
 
 <script>
-    // --- CẤU HÌNH GỬI ĐIỂM ---
-    // 👇👇👇 DÁN LINK GOOGLE SCRIPT CỦA BẠN VÀO GIỮA DẤU NHÁY DƯỚI ĐÂY 👇👇👇
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw9AvPfuJ53SMG-AIdP9SBL6LThFM-r8DRphGwSqRutArucIK5jxf4BxzTHY2SIBJE/exec"; 
+    // --- CẤU HÌNH LIÊN KẾT GOOGLE SHEET (ĐÃ CHÈN SẴN) ---
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw9AvPfuJ53SMG-AIdP9SBL6LThFM-r8DRphGwSqRutArucIK5jxf4BxzTHY2SIBJE/exec';
 
-    // --- DỮ LIỆU CÂU HỎI (GIỮ NGUYÊN) ---
+    // --- DỮ LIỆU 22 CÂU HỎI ---
     const questions = [
-        // PHẦN 1: TRẮC NGHIỆM (12 CÂU)
+        // 12 CÂU TRẮC NGHIỆM
         { type: 'mcq', q: 'Câu 1: Hàm số $F(x)$ là một nguyên hàm của hàm số $f(x)$ trên khoảng $K$ nếu:', options: ['A. $F\'(x) = -f(x)$', 'B. $f\'(x) = F(x)$', 'C. $F\'(x) = f(x)$', 'D. $F\'(x) = f\'(x)$'], ans: 2 },
         { type: 'mcq', q: 'Câu 2: Họ tất cả các nguyên hàm của hàm số $f(x) = x^3$ là:', options: ['A. $3x^2 + C$', 'B. $\\frac{x^4}{4} + C$', 'C. $x^4 + C$', 'D. $\\frac{x^3}{3} + C$'], ans: 1 },
         { type: 'mcq', q: 'Câu 3: Tìm nguyên hàm của hàm số $f(x) = e^x + 1$.', options: ['A. $e^x + x + C$', 'B. $e^x + C$', 'C. $e^x - x + C$', 'D. $xe^x + C$'], ans: 0 },
@@ -101,71 +78,42 @@
         { type: 'mcq', q: 'Câu 11: Khẳng định nào SAI?', options: ['A. $\\int 0 dx = C$', 'B. $\\int dx = x + C$', 'C. $\\int x^n dx = \\frac{x^{n+1}}{n+1} + C$ với mọi $n$', 'D. $\\int k dx = kx + C$'], ans: 2 },
         { type: 'mcq', q: 'Câu 12: Tìm họ nguyên hàm của $f(x) = \\frac{1}{\\cos^2 x}$.', options: ['A. $\\tan x + C$', 'B. $-\\tan x + C$', 'C. $\\cot x + C$', 'D. $-\\cot x + C$'], ans: 0 },
 
-        // PHẦN 2: ĐÚNG SAI (4 CÂU)
-        { type: 'tf', q: 'Câu 13: Cho $f(x) = 4x^3 - 2x + 1$. Xét các khẳng định:', items: [
-            {sub: 'a) $F(x) = x^4 - x^2 + x$ là một nguyên hàm.', ans: 'T'},
-            {sub: 'b) $G(x) = x^4 - x^2 + x + 2024$ cũng là nguyên hàm.', ans: 'T'},
-            {sub: 'c) Mọi nguyên hàm đều có dạng $x^4 - x^2 + x + C$.', ans: 'T'},
-            {sub: 'd) Tồn tại nguyên hàm $H(x)$ sao cho $H(1) = 5$.', ans: 'T'}
-        ]},
-        { type: 'tf', q: 'Câu 14: Vật lí: $v(t) = 6t - 4$.', items: [
-            {sub: 'a) Gia tốc $a(t) = 6$.', ans: 'T'},
-            {sub: 'b) Quãng đường là nguyên hàm vận tốc.', ans: 'T'},
-            {sub: 'c) Công thức quãng đường là $s(t) = 3t^2 - 4t$.', ans: 'F'},
-            {sub: 'd) Tại $t=0, s=10$ thì $s(2) = 14$.', ans: 'T'}
-        ]},
-        { type: 'tf', q: 'Câu 15: Cho $f(x) = e^x$ và $g(x) = x^2$.', items: [
-            {sub: 'a) Tổng nguyên hàm bằng nguyên hàm tổng.', ans: 'T'},
-            {sub: 'b) Tích nguyên hàm bằng nguyên hàm tích.', ans: 'F'},
-            {sub: 'c) Nguyên hàm $2f(x)$ là $2e^x$.', ans: 'T'},
-            {sub: 'd) $\\int \\frac{g(x)}{x} dx = \\frac{x^2}{2} + C$.', ans: 'T'}
-        ]},
-        { type: 'tf', q: 'Câu 16: $f(x) = \\frac{1}{\\sin^2 x}$.', items: [
-            {sub: 'a) Xác định với mọi R.', ans: 'F'},
-            {sub: 'b) Nguyên hàm là $-\\cot x + C$.', ans: 'T'},
-            {sub: 'c) Đạo hàm $\\cot x$ là $f(x)$.', ans: 'F'},
-            {sub: 'd) $F(\\pi/4) = 1$ với $F(x)=-\\cot x+2$.', ans: 'T'}
-        ]},
+        // 4 CÂU ĐÚNG SAI
+        { type: 'tf', q: 'Câu 13: Cho $f(x) = 4x^3 - 2x + 1$. Xét các khẳng định:', items: [{sub: 'a) $F(x) = x^4 - x^2 + x$ là một nguyên hàm.', ans: 'T'}, {sub: 'b) $G(x) = x^4 - x^2 + x + 2024$ cũng là nguyên hàm.', ans: 'T'}, {sub: 'c) Mọi nguyên hàm đều có dạng $x^4 - x^2 + x + C$.', ans: 'T'}, {sub: 'd) Tồn tại nguyên hàm $H(x)$ sao cho $H(1) = 5$.', ans: 'T'}]},
+        { type: 'tf', q: 'Câu 14: Vật lí: $v(t) = 6t - 4$.', items: [{sub: 'a) Gia tốc $a(t) = 6$.', ans: 'T'}, {sub: 'b) Quãng đường là nguyên hàm vận tốc.', ans: 'T'}, {sub: 'c) Công thức quãng đường là $s(t) = 3t^2 - 4t$.', ans: 'F'}, {sub: 'd) Tại $t=0, s=10$ thì $s(2) = 14$.', ans: 'T'}]},
+        { type: 'tf', q: 'Câu 15: Cho $f(x) = e^x$ và $g(x) = x^2$.', items: [{sub: 'a) Tổng nguyên hàm bằng nguyên hàm tổng.', ans: 'T'}, {sub: 'b) Tích nguyên hàm bằng nguyên hàm tích.', ans: 'F'}, {sub: 'c) Nguyên hàm $2f(x)$ là $2e^x$.', ans: 'T'}, {sub: 'd) $\\int \\frac{g(x)}{x} dx = \\frac{x^2}{2} + C$.', ans: 'T'}]},
+        { type: 'tf', q: 'Câu 16: $f(x) = \\frac{1}{\\sin^2 x}$.', items: [{sub: 'a) Xác định với mọi R.', ans: 'F'}, {sub: 'b) Nguyên hàm là $-\\cot x + C$.', ans: 'T'}, {sub: 'c) Đạo hàm $\\cot x$ là $f(x)$.', ans: 'F'}, {sub: 'd) $F(\\pi/4) = 1$ với $F(x)=-\\cot x+2$.', ans: 'T'}]},
 
-        // PHẦN 3: TRẢ LỜI NGẮN (6 CÂU)
+        // 6 CÂU TRẢ LỜI NGẮN
         { type: 'short', q: 'Câu 17: Tìm $C$ biết $F(x)$ của $4x^3+1$ qua $M(1;5)$.', ans: '3' },
         { type: 'short', q: 'Câu 18: Chi phí $MC(x)=6x+50$, phí cố định 1000. Tính chi phí tại $x=10$.', ans: '1800' },
-        { type: 'short', q: 'Câu 19: Vi khuẩn $N\'(t)=100e^t$, ban đầu 200 con. Đạt 1300 con sau bao nhiêu phút? (Làm tròn đơn vị)', ans: '2' }, 
-        { type: 'short', q: 'Câu 20: Tính $f(\\pi)$ biết $f\'(x)=3-5\\sin x, f(0)=10$. (Làm tròn 2 số thập phân)', ans: '9.42' },
-        { type: 'short', q: 'Câu 21: Thời gian đạn lên cao cực đại (giây)? ($v_0=98, g=-9.8$)', ans: '10' },
-        { type: 'short', q: 'Câu 22: Tính $F(e+1)$ biết $F(x)$ là nguyên hàm $\\frac{1}{x-1}, F(2)=1$.', ans: '2' }
+        { type: 'short', q: 'Câu 19: Vi khuẩn $N\'(t)=100e^t$. Đạt 1300 con sau bao nhiêu phút?', ans: '2' }, 
+        { type: 'short', q: 'Câu 20: Tính $f(\\pi)$ biết $f\'(x)=3-5\\sin x, f(0)=10$.', ans: '9.42' },
+        { type: 'short', q: 'Câu 21: Thời gian đạn lên cao cực đại (giây)?', ans: '10' },
+        { type: 'short', q: 'Câu 22: Tính $F(e+1)$ biết $F(2)=1$.', ans: '2' }
     ];
 
-    // --- LOGIC CHƯƠNG TRÌNH ---
+    // --- LOGIC XỬ LÝ ---
     const quizBody = document.getElementById('quiz-body');
-    let timerDuration = 90 * 60; 
+    let timerDuration = 90 * 60; // 90 phút
 
     function initQuiz() {
         let html = '';
         questions.forEach((q, index) => {
             html += `<div class="question-block" id="q-${index}">`;
-            
             if(q.type === 'mcq') {
                 html += `<div class="question-title">${q.q}</div><div class="options">`;
-                q.options.forEach((opt, i) => {
-                    html += `<label><input type="radio" name="q${index}" value="${i}"> ${opt}</label>`;
-                });
-                html += `</div><div class="feedback" id="fb-${index}">Đáp án đúng: ${q.options[q.ans]}</div>`;
+                q.options.forEach((opt, i) => html += `<label><input type="radio" name="q${index}" value="${i}"> ${opt}</label>`);
+                html += `</div><div class="feedback">Đáp án đúng: ${q.options[q.ans]}</div>`;
             } else if (q.type === 'tf') {
-                html += `<div class="question-title">${q.q}</div>`;
-                html += `<table class="tf-table"><tr><th>Mệnh đề</th><th>Đ</th><th>S</th></tr>`;
-                q.items.forEach((item, subIndex) => {
-                    html += `<tr><td>${item.sub}</td><td class="center"><input type="radio" name="q${index}_${subIndex}" value="T"></td><td class="center"><input type="radio" name="q${index}_${subIndex}" value="F"></td></tr>`;
-                });
-                html += `</table><div class="feedback" id="fb-${index}">Đáp án: ${q.items.map(i => i.ans).join(', ')}</div>`;
+                html += `<div class="question-title">${q.q}</div><table class="tf-table"><tr><th>Mệnh đề</th><th>Đ</th><th>S</th></tr>`;
+                q.items.forEach((item, subIndex) => html += `<tr><td>${item.sub}</td><td style="text-align:center"><input type="radio" name="q${index}_${subIndex}" value="T"></td><td style="text-align:center"><input type="radio" name="q${index}_${subIndex}" value="F"></td></tr>`);
+                html += `</table><div class="feedback">Đáp án: ${q.items.map(i => i.ans).join(', ')}</div>`;
             } else if (q.type === 'short') {
-                html += `<div class="question-title">${q.q}</div>`;
-                html += `<input type="text" id="in-${index}" placeholder="Nhập kết quả...">`;
-                html += `<div class="feedback" id="fb-${index}">Đáp án đúng: ${q.ans}</div>`;
+                html += `<div class="question-title">${q.q}</div><input type="text" id="in-${index}" placeholder="Nhập kết quả..."><div class="feedback">Đáp án đúng: ${q.ans}</div>`;
             }
             html += `</div>`;
         });
-        
         quizBody.innerHTML = html;
         if(window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
         startTimer();
@@ -174,95 +122,72 @@
     function startTimer() {
         const display = document.getElementById('timer');
         const timerInterval = setInterval(() => {
-            let minutes = parseInt(timerDuration / 60, 10);
-            let seconds = parseInt(timerDuration % 60, 10);
-            minutes = minutes < 10 ? "0" + minutes : minutes;
-            seconds = seconds < 10 ? "0" + seconds : seconds;
-            display.textContent = minutes + ":" + seconds;
-
-            if (--timerDuration < 0) {
-                clearInterval(timerInterval);
-                alert("Hết giờ làm bài!");
-                submitQuiz();
-            }
+            let m = parseInt(timerDuration / 60, 10);
+            let s = parseInt(timerDuration % 60, 10);
+            display.textContent = (m<10?"0"+m:m) + ":" + (s<10?"0"+s:s);
+            if (--timerDuration < 0) { clearInterval(timerInterval); submitQuiz(); }
         }, 1000);
         window.quizTimer = timerInterval; 
     }
 
     function submitQuiz() {
-        // Kiểm tra xem đã nhập tên chưa
         const name = document.getElementById('hs-name').value;
         const className = document.getElementById('hs-class').value;
-        if(!name || !className) {
-            alert("Em vui lòng điền đầy đủ Họ tên và Lớp trước khi nộp bài!");
-            return;
-        }
+        if(!name || !className) { alert("Vui lòng nhập Họ tên và Lớp!"); return; }
 
-        clearInterval(window.quizTimer); 
+        clearInterval(window.quizTimer);
         const btn = document.getElementById('btn-submit');
         btn.disabled = true;
-        btn.innerText = "ĐANG GỬI ĐIỂM..."; // Thông báo đang gửi
+        btn.innerText = "ĐANG CHẤM VÀ GỬI ĐIỂM...";
 
-        let score = 0;
-        let totalPoints = 0;
-
+        let score = 0, total = 0;
         questions.forEach((q, index) => {
             const block = document.getElementById(`q-${index}`);
             block.classList.add('show-feedback');
-            
             if(q.type === 'mcq') {
-                totalPoints++;
-                const selected = document.querySelector(`input[name="q${index}"]:checked`);
-                if(selected && parseInt(selected.value) === q.ans) {
-                    score++;
-                    block.innerHTML += `<div class="correct-ans">Đúng (+1đ)</div>`;
-                } else { block.innerHTML += `<div class="wrong-ans">Sai</div>`; }
+                total++;
+                const sel = document.querySelector(`input[name="q${index}"]:checked`);
+                if(sel && parseInt(sel.value) === q.ans) { score++; block.insertAdjacentHTML('beforeend', '<div class="correct-ans">Đúng</div>'); }
+                else block.insertAdjacentHTML('beforeend', '<div class="wrong-ans">Sai</div>');
             } else if(q.type === 'tf') {
-                q.items.forEach((item, subIndex) => {
-                    totalPoints += 0.25;
-                    const selected = document.querySelector(`input[name="q${index}_${subIndex}"]:checked`);
-                    if(selected && selected.value === item.ans) score += 0.25;
+                q.items.forEach((item, sub) => {
+                    total+=0.25;
+                    const sel = document.querySelector(`input[name="q${index}_${sub}"]:checked`);
+                    if(sel && sel.value === item.ans) score+=0.25;
                 });
             } else if(q.type === 'short') {
-                totalPoints++;
-                const input = document.getElementById(`in-${index}`).value.trim();
-                if(input === q.ans || input.replace(',', '.') === q.ans) {
-                    score++;
-                    block.innerHTML += `<div class="correct-ans">Đúng (+1đ)</div>`;
-                } else { block.innerHTML += `<div class="wrong-ans">Sai</div>`; }
+                total++;
+                const val = document.getElementById(`in-${index}`).value.trim();
+                if(val === q.ans || val.replace(',','.') === q.ans) { score++; block.insertAdjacentHTML('beforeend', '<div class="correct-ans">Đúng</div>'); }
+                else block.insertAdjacentHTML('beforeend', '<div class="wrong-ans">Sai</div>');
             }
         });
 
-        // HIỂN THỊ KẾT QUẢ CHO HỌC SINH
         document.getElementById('result-area').style.display = 'block';
         document.getElementById('res-name').innerText = name;
         document.getElementById('res-class').innerText = className;
-        document.getElementById('score-display').innerText = `${score} / ${totalPoints}`;
+        document.getElementById('score-display').innerText = `${score} / ${total}`;
+        const statusDiv = document.getElementById('submit-status');
+
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST', mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: name, class: className, score: score + "/" + total })
+        }).then(() => {
+            btn.innerText = "ĐÃ GỬI ĐIỂM THÀNH CÔNG";
+            statusDiv.innerText = "Dữ liệu đã được lưu vào hệ thống.";
+            statusDiv.style.color = "green";
+        }).catch(e => {
+            btn.innerText = "LỖI GỬI ĐIỂM";
+            statusDiv.innerText = "Không gửi được điểm. Hãy chụp màn hình!";
+            statusDiv.style.color = "red";
+        });
         
-        // GỬI ĐIỂM VỀ GOOGLE SHEET (ẨN)
-        if(GOOGLE_SCRIPT_URL.startsWith('http')) {
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors', // Quan trọng: chế độ no-cors để gửi được từ GitHub
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: name, class: className, score: score + "/" + totalPoints })
-            }).then(() => {
-                btn.innerText = "ĐÃ NỘP BÀI THÀNH CÔNG";
-            }).catch(err => {
-                console.error('Lỗi gửi điểm:', err);
-                btn.innerText = "LỖI GỬI ĐIỂM (Hãy chụp màn hình)";
-            });
-        } else {
-             btn.innerText = "ĐÃ NỘP BÀI (Chưa kết nối Sheet)";
-        }
-
-        document.getElementById('btn-submit').style.display = 'none'; // Ẩn nút nộp
-        window.scrollTo(0, 0);
-        if(window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+        btn.style.display = 'none';
+        window.scrollTo(0,0);
+        if(window.MathJax) MathJax.typesetPromise();
     }
-
     initQuiz();
 </script>
-
 </body>
 </html>
