@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kiểm Tra Nguyên Hàm 12 (CT Mới)</title>
+    <title>Kiểm Tra Nguyên Hàm - Đề 1</title>
     <script>
     window.MathJax = {
       tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
@@ -62,207 +62,184 @@
 
 <script>
     // ============================================================
-    // 👇👇👇 DÁN LINK GOOGLE SCRIPT CỦA BẠN VÀO DƯỚI ĐÂY 👇👇👇
+    // 👇 LINK GOOGLE SCRIPT CỦA BẠN 👇
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw9AvPfuJ53SMG-AIdP9SBL6LThFM-r8DRphGwSqRutArucIK5jxf4BxzTHY2SIBJE/exec'; 
     // ============================================================
 
-    // --- DỮ LIỆU CÂU HỎI ĐÃ ĐƯỢC CẢI TIẾN ---
+    // --- DỮ LIỆU CÂU HỎI (Được chuyển đổi từ file LaTeX Đề 1) ---
     const questions = [
-        // --- PHẦN 1: TRẮC NGHIỆM (12 CÂU) ---
-        { 
-            type: 'mcq', 
-            q: 'Câu 1: (Nhận biết) Mệnh đề nào sau đây <b>sai</b>?', 
-            options: [
-                'A. $\\int f\'(x) dx = f(x) + C$.', 
-                'B. $\\int k f(x) dx = k \\int f(x) dx$ ($k$ là hằng số khác 0).', 
-                'C. $\\int [f(x) + g(x)] dx = \\int f(x) dx + \\int g(x) dx$.', 
-                'D. $\\int [f(x).g(x)] dx = \\int f(x) dx . \\int g(x) dx$.'
-            ], 
+        // --- PHẦN 1: TRẮC NGHIỆM ---
+        {
+            type: 'mcq',
+            q: 'Câu 1: Họ nguyên hàm của hàm số $f(x)=x^3$ là',
+            options: ['$4x^4+C$', '$3x^2+C$', '$x^4+C$', '$\\dfrac{1}{4}x^4+C$'],
             ans: 3,
-            explain: 'Nguyên hàm của một tích KHÔNG bằng tích các nguyên hàm.'
+            explain: 'Ta có $\\displaystyle\\int x^3\\mathrm{\\,d}x=\\dfrac{1}{4}x^4+C$.'
         },
-        { 
-            type: 'mcq', 
-            q: 'Câu 2: (Thông hiểu) Tìm nguyên hàm của hàm số $f(x) = \\cos(3x + \\frac{\\pi}{6})$.', 
-            options: [
-                'A. $\\sin(3x + \\frac{\\pi}{6}) + C$', 
-                'B. $\\frac{1}{3}\\sin(3x + \\frac{\\pi}{6}) + C$', 
-                'C. $-\\frac{1}{3}\\sin(3x + \\frac{\\pi}{6}) + C$', 
-                'D. $3\\sin(3x + \\frac{\\pi}{6}) + C$'
-            ], 
-            ans: 1,
-            explain: 'Áp dụng công thức $\\int \\cos(ax+b) dx = \\frac{1}{a}\\sin(ax+b) + C$. Nhớ chia cho hệ số $a=3$.'
-        },
-        { 
-            type: 'mcq', 
-            q: 'Câu 3: (Thông hiểu) Họ nguyên hàm của hàm số $f(x) = e^{-x} + 2x$ là:', 
-            options: [
-                'A. $-e^{-x} + x^2 + C$', 
-                'B. $e^{-x} + x^2 + C$', 
-                'C. $-e^{-x} + 2x^2 + C$', 
-                'D. $e^{-x} + 2 + C$'
-            ], 
+        {
+            type: 'mcq',
+            q: 'Câu 2: Tìm nguyên hàm của hàm số $ f(x)=2\\sin x$.',
+            options: ['$\\displaystyle\\int 2\\sin x\\mathrm{\\,d}x=-2\\cos x+C$', '$\\displaystyle\\int 2\\sin x\\mathrm{\\,d}x=2\\cos x+C$', '$\\displaystyle\\int 2\\sin x\\mathrm{\\,d}x=\\sin^2x+C$', '$\\displaystyle\\int 2\\sin x\\mathrm{\\,d}x=\\sin 2x+C$'],
             ans: 0,
-            explain: '$\int e^{-x} dx = -e^{-x}$ (chú ý dấu trừ) và $\\int 2x dx = x^2$.'
+            explain: 'Ta có $\\displaystyle\\int 2\\sin x\\mathrm{\\,d}x=2\\displaystyle\\int \\sin x \\mathrm{\\,d}x=-2\\cos x+C$.'
         },
-        { 
-            type: 'mcq', 
-            q: 'Câu 4: (Thông hiểu) Hàm số $F(x) = x^3 - 3x^2 + 1$ là một nguyên hàm của hàm số nào?', 
-            options: [
-                'A. $f(x) = \\frac{x^4}{4} - x^3 + x + C$', 
-                'B. $f(x) = 3x^2 - 6x$', 
-                'C. $f(x) = 3x^2 - 6x + 1$', 
-                'D. $f(x) = x^2 - 3x$'
-            ], 
-            ans: 1,
-            explain: 'Lấy đạo hàm của $F(x)$: $F\'(x) = (x^3)\' - (3x^2)\' + (1)\' = 3x^2 - 6x$.'
+        {
+            type: 'mcq',
+            q: 'Câu 3: Họ nguyên hàm của hàm số $f(x)=\\mathrm{e}^x+x$ là',
+            options: ['$\\mathrm{e}^x+1+C$', '$\\mathrm{e}^x+x^2+C$', '$\\mathrm{e}^x+\\dfrac{1}{2}{x^2}+C$', '$\\dfrac{1}{x+1}{\\mathrm{e}^x}+\\dfrac{1}{2}{x^2}+C$'],
+            ans: 2,
+            explain: 'Ta có $\\displaystyle\\int \\left(\\mathrm{e}^x+x\\right) \\mathrm{\\,d}x=\\displaystyle\\int \\mathrm{e}^x \\mathrm{\\,d}x+\\displaystyle\\int x \\mathrm{\\,d}x=\\mathrm{e}^x+\\dfrac{x^2}{2}+C$.'
         },
-        { 
-            type: 'mcq', 
-            q: 'Câu 5: (Thông hiểu) Tìm nguyên hàm $F(x)$ của hàm số $f(x) = \\frac{1}{2x-1}$ trên khoảng $(\\frac{1}{2}; +\\infty)$.', 
-            options: [
-                'A. $F(x) = \\ln(2x-1) + C$', 
-                'B. $F(x) = \\frac{1}{2}\\ln(2x-1) + C$', 
-                'C. $F(x) = \\ln|2x-1| + C$', 
-                'D. $F(x) = \\frac{1}{2}\\ln|1-2x| + C$'
-            ], 
-            ans: 1,
-            explain: 'CT mở rộng: $\\int \\frac{1}{ax+b} dx = \\frac{1}{a}\\ln|ax+b|$. Với $x > 1/2$ thì $|2x-1| = 2x-1$.'
+        {
+            type: 'mcq',
+            q: 'Câu 4: Họ nguyên hàm của hàm số $y=x^2-3x+\\dfrac{1}{x}$ là',
+            options: ['$\\dfrac{x^3}{3}-\\dfrac{3x^2}{2}-\\ln\\left|x\\right|+C$', '$\\dfrac{x^3}{3}-\\dfrac{3x^2}{2}+\\ln x+C$', '$\\dfrac{x^3}{3}-\\dfrac{3x^2}{2}+\\ln\\left|x\\right|+C$', '$\\dfrac{x^3}{3}-\\dfrac{3x^2}{2}+\\dfrac{1}{x^2}+C$'],
+            ans: 2,
+            explain: 'Ta có $\\displaystyle\\int \\left(x^2-3x+\\dfrac{1}{x}\\right) \\mathrm{\\,d}x=\\dfrac{x^3}{3}-\\dfrac{3x^2}{2}+\\ln\\left|x\\right|+C$.'
         },
-        { 
-            type: 'mcq', 
-            q: 'Câu 6: (Vận dụng) Một chất điểm chuyển động với vận tốc $v(t) = 2t + 5$ (m/s). Quãng đường vật đi được từ thời điểm $t=0$ đến $t=2s$ là bao nhiêu? (Dùng hiệu $S(2) - S(0)$)', 
-            options: [
-                'A. 14 m', 'B. 9 m', 'C. 10 m', 'D. 19 m'
-            ], 
+        {
+            type: 'mcq',
+            q: 'Câu 5: Tìm nguyên hàm của hàm số $f(x)=\\dfrac{x^4+2}{x^2}$.',
+            options: ['$\\dfrac{x^3}{3}-\\dfrac{1}{x}+C$', '$\\dfrac{x^3}{3}+\\dfrac{2}{x}+C$', '$\\dfrac{x^3}{3}+\\dfrac{1}{x}+C$', '$\\dfrac{x^3}{3}-\\dfrac{2}{x}+C$'],
+            ans: 3,
+            explain: 'Ta có $\\displaystyle\\int \\dfrac{x^4+2}{x^2} \\mathrm{\\,d}x=\\displaystyle\\int \\left(x^2+\\dfrac{2}{x^2}\\right) \\mathrm{\\,d}x=\\dfrac{x^3}{3}-\\dfrac{2}{x}+C$.'
+        },
+        {
+            type: 'mcq',
+            q: 'Câu 6: Cho hàm số $ f(x)=1-\\dfrac{1}{\\cos^2 x}$. Khẳng định nào dưới đây đúng?',
+            options: ['$x+\\tan x+C$', '$x+\\cot x+C$', '$x-\\tan x+C$', '$x-\\cot x+C$'],
+            ans: 2,
+            explain: 'Ta có $\\displaystyle\\int f(x) \\mathrm{\\,d}x=\\displaystyle\\int \\left(1-\\dfrac{1}{\\cos^2x}\\right)\\mathrm{\\,d}x=x-\\tan x+C$.'
+        },
+        {
+            type: 'mcq',
+            q: 'Câu 7: Họ nguyên hàm của hàm số $f(x)=\\cos x+6x$ là',
+            options: ['$\\sin x+3x^2+C$', '$-\\sin x+3x^2+C$', '$\\sin x+6x^2+C$', '$-\\sin x+C$'],
             ans: 0,
-            explain: '$S(t) = t^2 + 5t$. Quãng đường = $S(2) - S(0) = (4+10) - 0 = 14$.'
+            explain: 'Ta có $\\displaystyle\\int f(x)\\mathrm{\\,d}x=\\displaystyle\\int \\left(\\cos x+6x\\right)\\mathrm{\\,d}x=\\sin x+3x^2+C$.'
         },
-        { 
-            type: 'mcq', 
-            q: 'Câu 7: (Nhận biết) Họ nguyên hàm của hàm số $y = 5^x$ là:', 
-            options: [
-                'A. $5^x \\ln 5 + C$', 'B. $\\frac{5^x}{\\ln 5} + C$', 'C. $5^{x+1} + C$', 'D. $x 5^{x-1} + C$'
-            ], 
-            ans: 1,
-            explain: 'Công thức cơ bản: $\\int a^x dx = \\frac{a^x}{\\ln a} + C$.'
+        {
+            type: 'mcq',
+            q: 'Câu 8: $\\displaystyle\\int f(x)\\mathrm{\\,d}x=4x^3+x^2+C$ thì hàm số $f(x)$ bằng',
+            options: ['$f(x)=x^4+\\dfrac{x^3}{3}+Cx$', '$f(x)=12x^2+2x+C$', '$f(x)=12x^2+2x$', '$f(x)=x^4+\\dfrac{x^3}{3}$'],
+            ans: 2,
+            explain: 'Ta có $ f(x)=F\'(x)=\\left(4x^3+x^2+C\\right)\'=12x^2+2x$.'
         },
-        { 
-            type: 'mcq', 
-            q: 'Câu 8: (Thông hiểu) Cho $F(x)$ là một nguyên hàm của $f(x) = \\sin^2 x$. Khẳng định nào đúng? (Sử dụng hạ bậc)', 
-            options: [
-                'A. $F(x) = \\frac{x}{2} - \\frac{\\sin 2x}{4} + C$', 
-                'B. $F(x) = \\frac{\\sin^3 x}{3} + C$', 
-                'C. $F(x) = \\frac{x}{2} + \\frac{\\sin 2x}{4} + C$', 
-                'D. $F(x) = 2\\sin x \\cos x + C$'
-            ], 
+        {
+            type: 'mcq',
+            q: 'Câu 9: Hàm số $F(x)=2x+3^x-1$ là nguyên hàm của hàm số nào trong các hàm số sau',
+            options: ['$f(x)=2+3^x\\ln 3$', '$f(x)=x^2+\\dfrac{3^x}{\\ln 3}-x+C$', '$f(x)=x^2+\\dfrac{3^x}{\\ln 3}-x$', '$f(x)=2+3^x\\ln 3+C$'],
             ans: 0,
-            explain: 'Hạ bậc: $\\sin^2 x = \\frac{1 - \\cos 2x}{2} = \\frac{1}{2} - \\frac{1}{2}\\cos 2x$. Nguyên hàm là $\\frac{1}{2}x - \\frac{1}{2}\\cdot\\frac{1}{2}\\sin 2x$.'
+            explain: 'Ta có $ f(x)=F\'(x)\\Rightarrow f(x)=\\left(2x+3^x-1\\right)\'=2+3^x\\ln 3$.'
         },
-        { 
-            type: 'mcq', 
-            q: 'Câu 9: (Thông hiểu) Biết $F(x) = x^2$ là một nguyên hàm của $f(x) e^{2x}$. Khi đó nguyên hàm của $f\'(x) e^{2x}$ là? (Mẹo: Đạo hàm ngược lại)', 
-            options: [
-                'A. $2x^2 - 2x + C$', 'B. Không xác định', 'C. Dạng này cần từng phần (bỏ qua)', 'D. $x^2 + C$'
-            ], 
+        {
+            type: 'mcq',
+            q: 'Câu 10: Cho $\\displaystyle\\int \\ln x \\mathrm{\\,d}x=F(x)+C$. Khẳng định nào dưới đây đúng?',
+            options: ['$F\'(x)=\\dfrac{1}{x}$', '$F\'(x)=\\dfrac{1}{x}+C$', '$F\'(x)=\\ln x$', '$F\'(x)=\\ln x+1$'],
+            ans: 2,
+            explain: 'Theo định nghĩa nguyên hàm: Đạo hàm của nguyên hàm chính là hàm số dưới dấu tích phân. $F\'(x) = \\ln x$.'
+        },
+        {
+            type: 'mcq',
+            q: 'Câu 11: Cho $F(x)$ là một nguyên hàm của hàm số $f(x)=\\mathrm{e}^x+2x$ thỏa mãn $F(0)=\\dfrac{3}{2}$. Tìm $F(x)$.',
+            options: ['$F(x)=\\mathrm{e}^x+x^2+\\dfrac{1}{2}$', '$F(x)=\\mathrm{e}^x+x^2+\\dfrac{5}{2}$', '$F(x)=\\mathrm{e}^x+x^2+\\dfrac{3}{2}$', '$F(x)=2\\mathrm{e}^x+x^2-\\dfrac{1}{2}$'],
             ans: 0,
-            explain: 'Câu hỏi bẫy tư duy. Ta có $f(x)e^{2x} = (x^2)\' = 2x \\Rightarrow f(x) = 2x e^{-2x}$. Câu này hơi khó, chọn A theo logic loại trừ.'
+            explain: '$F(x)=\\mathrm{e}^x+x^2+C$. $F(0)=1+C=\\dfrac{3}{2} \\Rightarrow C=\\dfrac{1}{2}$.'
         },
-        { 
-            type: 'mcq', 
-            q: 'Câu 10: (Vận dụng) Tốc độ thay đổi doanh thu cận biên là $R\'(x) = 50 - 0.02x$ (triệu đồng). Tìm hàm doanh thu $R(x)$ biết $R(0)=0$.', 
-            options: [
-                'A. $R(x) = 50x - 0.02x^2$', 
-                'B. $R(x) = 50x - 0.01x^2$', 
-                'C. $R(x) = 50x - 0.01x^2 + 100$', 
-                'D. $R(x) = 25x^2 - 0.02x$'
-            ], 
-            ans: 1,
-            explain: 'Nguyên hàm của $0.02x$ là $0.02 \\frac{x^2}{2} = 0.01x^2$. Vậy $R(x) = 50x - 0.01x^2$.'
-        },
-        { 
-            type: 'mcq', 
-            q: 'Câu 11: (Nhận biết) Nguyên hàm của hàm số $y = \\sqrt{x}$ (với $x>0$) là:', 
-            options: [
-                'A. $\\frac{1}{2\\sqrt{x}} + C$', 
-                'B. $\\frac{2}{3}x\\sqrt{x} + C$', 
-                'C. $\\frac{3}{2}x^{\\frac{3}{2}} + C$', 
-                'D. $\\sqrt{x} + C$'
-            ], 
-            ans: 1,
-            explain: '$\\sqrt{x} = x^{1/2}$. Áp dụng $x^n$: $\\frac{x^{3/2}}{3/2} = \\frac{2}{3}x\\sqrt{x}$.'
-        },
-        { 
-            type: 'mcq', 
-            q: 'Câu 12: (Vận dụng) Cho $F(x)$ là nguyên hàm của $f(x) = \\frac{1}{x+1}$ và $F(0)=1$. Tính $F(e-1)$.', 
-            options: [
-                'A. 2', 'B. 1', 'C. $e$', 'D. $\\ln 2 + 1$'
-            ], 
-            ans: 0,
-            explain: '$F(x) = \\ln|x+1| + C$. $F(0)=1 \\Rightarrow \\ln 1 + C = 1 \\Rightarrow C=1$. $F(e-1) = \\ln(e-1+1) + 1 = \\ln e + 1 = 1+1=2$.'
+        {
+            type: 'mcq',
+            q: 'Câu 12: Một viên đạn được bắn thẳng đứng lên trên. $v(t)=160-9{,}8t$ (m/s). Độ cao của viên đạn sau $t=10$ giây là',
+            options: ['$620$ m', '$1\\,240$ m', '$555$ m', '$1\\,110$ m'],
+            ans: 3,
+            explain: '$S(t) = 160t - 4.9t^2$. $S(10) = 1600 - 490 = 1110$ m.'
         },
 
-        // --- PHẦN 2: ĐÚNG SAI (4 CÂU) ---
-        { 
-            type: 'tf', 
-            q: 'Câu 13: Xét tính đúng sai của các công thức nguyên hàm cơ bản:', 
+        // --- PHẦN 2: ĐÚNG SAI ---
+        {
+            type: 'tf',
+            q: 'Câu 13: Cho hàm số $y=h(x)$ có đạo hàm $h\'(x)=3x^2$ và hàm số $y=g(x)$ có đạo hàm $g\'(x)=\\mathrm{e}^x$.',
             items: [
-                {sub: 'a) $\\int \\frac{dx}{\\cos^2 x} = \\tan x + C$.', ans: 'T'},
-                {sub: 'b) $\\int \\frac{dx}{x} = \\ln x + C$. (Thiếu trị tuyệt đối)', ans: 'F'},
-                {sub: 'c) $\\int 0 dx = 0$. (Sai, bằng C)', ans: 'F'},
-                {sub: 'd) $\\int a^x dx = \\frac{a^x}{\\ln a} + C$ ($0<a\\ne 1$).', ans: 'T'}
+                {sub: 'Hàm số $y=h(x)=6x+C_1$, với $C_1\\in \\mathbb{R}$', ans: 'F'},
+                {sub: 'Hàm số $y=g(x)=\\mathrm{e}^x+C_2$, với $C_2\\in \\mathbb{R}$', ans: 'T'},
+                {sub: '$ I=\\displaystyle\\int \\left[xh\'(x)+2025\\right]\\mathrm{\\,d}x=\\dfrac{3}{4}{x^4}+2025x+C$', ans: 'T'},
+                {sub: 'Cho $ f\'(x)=3x^2+\\mathrm{e}^x+m-1$. Cho $f(0)=2$; $ f(1)=2\\mathrm{e}$ thì giá trị của $m\\in (1;2)$', ans: 'T'}
             ],
-            explain: 'b Sai vì thiếu dấu trị tuyệt đối. c Sai vì nguyên hàm của 0 là hằng số C.'
+            explain: 'a) Sai vì nguyên hàm của $3x^2$ là $x^3$.'
         },
-        { 
-            type: 'tf', 
-            q: 'Câu 14: Cho hàm số $f(x)$ liên tục trên $\\mathbb{R}$. Gọi $F(x)$ là một nguyên hàm của $f(x)$.', 
+        {
+            type: 'tf',
+            q: 'Câu 14: Cho các hàm số $g(x)=\\sin x$ , $h(x)=\\cos x$.',
             items: [
-                {sub: 'a) $F(x)$ là duy nhất.', ans: 'F'},
-                {sub: 'b) $G(x) = F(x) + 2024$ cũng là một nguyên hàm của $f(x)$.', ans: 'T'},
-                {sub: 'c) Nếu $F(x)$ đồng biến trên K thì $f(x) \\ge 0$ trên K.', ans: 'T'},
-                {sub: 'd) $\\int f(x) dx = F(x)$. (Sai, thiếu C)', ans: 'F'}
+                {sub: '$\\displaystyle\\int \\left[2g(x)-3h(x)\\right]\\mathrm{\\,d}x=3\\displaystyle\\int g(x)\\mathrm{\\,d}x-2\\displaystyle\\int h(x)\\mathrm{\\,d}x$', ans: 'F'},
+                {sub: 'Một nguyên của hàm số $g(x)$ là $-\\cos x$', ans: 'T'},
+                {sub: 'Họ nguyên của hàm số $h(x)+2\\sqrt{x}$ là $\\sin x+\\dfrac{3}{2}\\sqrt{x^3}+C$', ans: 'F'},
+                {sub: 'Họ nguyên hàm của hàm số $f(x)=g(x)\\cdot h^2(x)$ là $F(x)=-\\dfrac{1}{3}\\cos^3 x+C$', ans: 'T'}
             ],
-            explain: 'a Sai vì có vô số nguyên hàm (sai khác nhau hằng số C). d Sai vì thiếu + C.'
+            explain: 'a) Sai hệ số. c) Sai, phải là $\\frac{4}{3}x\\sqrt{x}$.'
         },
-        { 
-            type: 'tf', 
-            q: 'Câu 15: Bài toán thực tế: Một đám vi khuẩn có số lượng ban đầu $N_0$. Tốc độ tăng trưởng $N\'(t) = k.N(t)$.', 
+        {
+            type: 'tf',
+            q: 'Câu 15: Cho các hàm số $g(x)=\\dfrac{1}{x^2}$, $h(x)=\\ln (x+3)$.',
             items: [
-                {sub: 'a) Công thức số lượng vi khuẩn là $N(t) = N_0 . e^{kt}$.', ans: 'T'},
-                {sub: 'b) Nếu $k > 0$ thì số lượng vi khuẩn giảm dần.', ans: 'F'},
-                {sub: 'c) Đây là bài toán về sự tăng trưởng mũ.', ans: 'T'},
-                {sub: 'd) Để tìm $N(t)$ ta lấy nguyên hàm của $N\'(t)$.', ans: 'T'}
+                {sub: 'Biết $G(x)$ là một nguyên hàm của $g(x)$ và $ G(1)=1$. Khi đó $ G(2)=-\\dfrac{1}{2}$', ans: 'F'},
+                {sub: '$ J=\\displaystyle\\int \\left[h(x)+\\ln\\dfrac{1}{x+3}+2025\\right]\\mathrm{\\,d}x=2025x+C$', ans: 'T'},
+                {sub: '$I=\\displaystyle\\int x\\cdot h\'(x)\\mathrm{\\,d}x=x-\\ln (x+3)+C$ với $C\\in \\mathbb{R}$', ans: 'F'},
+                {sub: 'Giả sử $F(x)$ là một nguyên hàm của $f(x)=\\dfrac{x+3}{g(x)}$ và $F(1)=\\dfrac{1}{4}$. Khi đó $F(-1)=-\\dfrac{7}{4}$', ans: 'T'}
             ],
-            explain: 'b Sai, k>0 thì số mũ dương, hàm tăng.'
+            explain: 'a) Sai, tính ra $G(2)=1.5$.'
         },
-        { 
-            type: 'tf', 
-            q: 'Câu 16: Cho $I = \\int (2x+1)^5 dx$. Đặt $u = 2x+1$.', 
+        {
+            type: 'tf',
+            q: 'Câu 16: Cho các hàm số $g(x)=\\mathrm{e}^{\\dfrac{x}{2}}$, $h(x)=2x^3+5x^2-2x+4$.',
             items: [
-                {sub: 'a) $du = 2dx$.', ans: 'T'},
-                {sub: 'b) $I = \\int u^5 du$. (Sai, thiếu chia 2)', ans: 'F'},
-                {sub: 'c) $I = \\frac{1}{2} \\frac{(2x+1)^6}{6} + C$.', ans: 'T'},
-                {sub: 'd) Đây là phương pháp đổi biến số (tuy đơn giản).', ans: 'T'}
+                {sub: '$\\displaystyle\\int \\left[2g(x)+3h(x)\\right]\\mathrm{\\,d}x=2\\displaystyle\\int g(x)\\mathrm{\\,d}x+3\\displaystyle\\int h(x)\\mathrm{\\,d}x$', ans: 'T'},
+                {sub: 'Một nguyên của hàm số $3\\cdot g^2(x)$ là $3\\mathrm{e}^x$', ans: 'T'},
+                {sub: 'Họ nguyên của hàm số $h(x)$ là $\\dfrac{1}{4}{x^3}+\\dfrac{5}{3}{x^3}-x^2+C$', ans: 'F'},
+                {sub: 'Biết $\\displaystyle\\int g^4(x)\\cdot h(x)\\mathrm{\\,d}x=(a{x^3}+b{x^2}+cx+d)\\mathrm{e}^{2x}+C$. Khi đó $ a+b+c+d=3$', ans: 'T'}
             ],
-            explain: 'b Sai, phải là $\\frac{1}{2}\\int u^5 du$.'
+            explain: 'c) Sai vì nguyên hàm của $2x^3$ là $\\frac{1}{2}x^4$.'
         },
 
-        // --- PHẦN 3: TRẢ LỜI NGẮN (6 CÂU) ---
-        { type: 'short', q: 'Câu 17: Tìm $a$ để hàm số $F(x) = ax^2 + 3x$ là một nguyên hàm của $f(x) = 4x + 3$.', ans: '2', explain: 'Đạo hàm $F\'(x) = 2ax + 3$. Để bằng $4x+3$ thì $2a=4 \\Rightarrow a=2$.' },
-        
-        { type: 'short', q: 'Câu 18: Một vật rơi tự do với gia tốc $g=10 m/s^2$, vận tốc ban đầu bằng 0. Tính quãng đường vật rơi được sau 3 giây. (Nhập số nguyên)', ans: '45', explain: '$v(t)=10t$. $S(t)=5t^2$. Tại $t=3 \\Rightarrow S=5.9=45$.' },
-        
-        { type: 'short', q: 'Câu 19: Biết $F(x)$ là nguyên hàm của $f(x) = \\frac{1}{x}$ và $F(1)=2$. Giá trị của $F(e^2)$ bằng bao nhiêu?', ans: '4', explain: '$F(x)=\\ln|x|+C. F(1)=2 \\Rightarrow C=2. F(e^2)=\\ln(e^2)+2 = 2+2=4$.' },
-        
-        { type: 'short', q: 'Câu 20: Chi phí biên để sản xuất $x$ sản phẩm là $C\'(x) = 2x + 10$. Chi phí cố định là 100 (đvtt). Tìm tổng chi phí khi sản xuất 10 sản phẩm.', ans: '300', explain: '$C(x)=x^2+10x+100$. Thay $x=10 \\Rightarrow 100+100+100=300$.' },
-        
-        { type: 'short', q: 'Câu 21: Cho $\\int f(x)dx = F(x)+C$. Nếu $F(0)=0, F(\\pi)=3$ và $F(x)$ là nguyên hàm của $k\\sin x$. Tìm $k$. (Gợi ý: Nguyên hàm $\\sin$ là $-\\cos$)', ans: '1.5', explain: '$F(x) = -k\\cos x + C$. $F(0)=-k+C=0$. $F(\\pi)=k+C=3$. Giải hệ: $C=k=1.5$.' },
-        
-        { type: 'short', q: 'Câu 22: Biết một nguyên hàm của $f(x) = 4x^3$ đi qua điểm $A(1; 2)$. Tìm tung độ giao điểm của đồ thị nguyên hàm đó với trục tung.', ans: '1', explain: '$F(x)=x^4+C$. Đi qua $(1;2) \\Rightarrow 1+C=2 \\Rightarrow C=1$. Giao trục tung là $x=0 \\Rightarrow y=1$.' }
+        // --- PHẦN 3: TRẢ LỜI NGẮN ---
+        {
+            type: 'short',
+            q: 'Câu 17: Cho $F(x)$ là một nguyên hàm của hàm $f(x)=\\dfrac{\\cos 2x}{\\sin x+\\cos x}$ thỏa mãn $F(0)=1$. Tính $F(\\pi)$.',
+            ans: '-1',
+            explain: '$F(x)=\\sin x + \\cos x$. $F(\\pi) = -1$.'
+        },
+        {
+            type: 'short',
+            q: 'Câu 18: $F(x)$ là một nguyên hàm của hàm số $f(x)=2^x$, thỏa mãn $ F(0)=\\dfrac{1}{\\ln 2}$. Biểu thức $ F(0)+F(1)+\\ldots+F(2024)=\\dfrac{a^b-c}{\\ln a}$. Tính $ T=a+b-2c$.',
+            ans: '2025',
+            explain: 'Tính được $a=2, b=2025, c=1$. $T = 2+2025-2 = 2025$.'
+        },
+        {
+            type: 'short',
+            q: 'Câu 19: $F(x)$ là nguyên hàm của $f(x)=\\dfrac{(3x-1)^2}{x^2}$, đồ thị $y=F(x)$ đi qua $M(1;-2)$. Tính $F\\left(\\mathrm{e}^2\\right)$ (làm tròn đến hàng phần chục).',
+            ans: '44,4', // Chấp nhận cả 44.4 trong code xử lý
+            explain: '$F(x)=9x-6\\ln|x|-1/x-10$. Kết quả xấp xỉ 44,4.'
+        },
+        {
+            type: 'short',
+            q: 'Câu 20: Ô tô chạy $90$ km/h, đạp phanh chậm dần $v(t)=-\\dfrac{25}{4}t+25$ (m/s). Quãng đường từ lúc phát hiện chướng ngại vật đến khi dừng hẳn là bao nhiêu mét?',
+            ans: '100',
+            explain: 'Quãng đường phản xạ: $25 \\times 2 = 50m$. Quãng đường phanh: $\\int_0^4 v(t)dt = 50m$. Tổng = 100m.'
+        },
+        {
+            type: 'short',
+            q: 'Câu 21: Vi khuẩn tăng trưởng $P\'(t)=k\\sqrt{t}$. Ban đầu 500 con, sau 1 ngày 600 con. Tính số lượng sau 9 ngày.',
+            ans: '3200',
+            explain: '$P(t)=150t\\sqrt{t} + 500$ (sau khi tìm k). $P(9) = 3200$.'
+        },
+        {
+            type: 'short',
+            q: 'Câu 22: Cây cà chua cao 5cm. Tốc độ lớn $ v(t)=-0{,}1t^3+t^2$. Chiều cao khi cây phát triển nhanh nhất là bao nhiêu? (làm tròn đến hàng phần chục).',
+            ans: '54,4',
+            explain: '$v(t)$ max tại $t=20/3$. $h(20/3) \\approx 54,4$ cm.'
+        }
     ];
 
-    // --- LOGIC XỬ LÝ (GIỮ NGUYÊN NHƯ CŨ) ---
+    // --- LOGIC XỬ LÝ ---
     const quizBody = document.getElementById('quiz-body');
     let timerDuration = 90 * 60; 
 
@@ -276,18 +253,17 @@
                     html += `<div class="question-title">${q.q}</div><div class="options">`;
                     q.options.forEach((opt, i) => html += `<label><input type="radio" name="q${index}" value="${i}"> ${opt}</label>`);
                     html += `</div>`;
-                    // Thêm phần giải thích (ẩn)
-                    html += `<div class="feedback"><b>Kết quả:</b> ${q.options[q.ans]}<br><i>Giải thích: ${q.explain}</i></div>`;
+                    html += `<div class="feedback"><b>Đáp án đúng:</b> ${q.options[q.ans]}<br><i>${q.explain}</i></div>`;
                 } 
                 else if (q.type === 'tf') {
                     html += `<div class="question-title">${q.q}</div><table class="tf-table"><tr><th>Mệnh đề</th><th>Đ</th><th>S</th></tr>`;
                     q.items.forEach((item, subIndex) => html += `<tr><td>${item.sub}</td><td style="text-align:center"><input type="radio" name="q${index}_${subIndex}" value="T"></td><td style="text-align:center"><input type="radio" name="q${index}_${subIndex}" value="F"></td></tr>`);
                     html += `</table>`;
-                    html += `<div class="feedback"><b>Đáp án:</b> ${q.items.map(i => i.ans).join(', ')}<br><i>Giải thích: ${q.explain}</i></div>`;
+                    html += `<div class="feedback"><b>Đáp án:</b> ${q.items.map(i => i.ans).join(', ')}<br><i>${q.explain}</i></div>`;
                 } 
                 else if (q.type === 'short') {
                     html += `<div class="question-title">${q.q}</div><input type="text" id="in-${index}" placeholder="Nhập kết quả...">`;
-                    html += `<div class="feedback"><b>Đáp án đúng:</b> ${q.ans}<br><i>Giải thích: ${q.explain}</i></div>`;
+                    html += `<div class="feedback"><b>Đáp án đúng:</b> ${q.ans}<br><i>${q.explain}</i></div>`;
                 }
                 html += `</div>`;
             });
@@ -321,24 +297,38 @@
         let score = 0, total = 0;
         questions.forEach((q, index) => {
             const block = document.getElementById(`q-${index}`);
-            block.classList.add('show-feedback'); // Hiện giải thích
+            block.classList.add('show-feedback');
+            
             if(q.type === 'mcq') {
                 total++;
                 const sel = document.querySelector(`input[name="q${index}"]:checked`);
-                if(sel && parseInt(sel.value) === q.ans) { score++; block.insertAdjacentHTML('beforeend', '<div class="correct-ans">Đúng (+1đ)</div>'); }
-                else block.insertAdjacentHTML('beforeend', '<div class="wrong-ans">Sai</div>');
-            } else if(q.type === 'tf') {
+                if(sel && parseInt(sel.value) === q.ans) { 
+                    score++; 
+                    block.insertAdjacentHTML('beforeend', '<div class="correct-ans">Đúng (+1đ)</div>'); 
+                } else { 
+                    block.insertAdjacentHTML('beforeend', '<div class="wrong-ans">Sai</div>'); 
+                }
+            } 
+            else if(q.type === 'tf') {
                 q.items.forEach((item, sub) => {
                     total+=0.25;
                     const sel = document.querySelector(`input[name="q${index}_${sub}"]:checked`);
                     if(sel && sel.value === item.ans) score+=0.25;
                 });
-            } else if(q.type === 'short') {
+            } 
+            else if(q.type === 'short') {
                 total++;
-                const val = document.getElementById(`in-${index}`).value.trim();
-                // Chấp nhận cả dấu chấm và phẩy
-                if(val === q.ans || val.replace(',','.') === q.ans) { score++; block.insertAdjacentHTML('beforeend', '<div class="correct-ans">Đúng (+1đ)</div>'); }
-                else block.insertAdjacentHTML('beforeend', '<div class="wrong-ans">Sai</div>');
+                let val = document.getElementById(`in-${index}`).value.trim();
+                // Xử lý dấu phẩy thành dấu chấm để so sánh
+                let valNormalized = val.replace(',', '.');
+                let ansNormalized = q.ans.replace(',', '.');
+                
+                if(valNormalized === ansNormalized) { 
+                    score++; 
+                    block.insertAdjacentHTML('beforeend', '<div class="correct-ans">Đúng (+1đ)</div>'); 
+                } else { 
+                    block.insertAdjacentHTML('beforeend', '<div class="wrong-ans">Sai</div>'); 
+                }
             }
         });
 
