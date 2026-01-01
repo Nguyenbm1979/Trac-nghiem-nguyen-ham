@@ -81,10 +81,13 @@
     <button class="btn-submit" onclick="submitQuiz()" id="btn-submit">NỘP BÀI & XEM ĐIỂM</button>
 
 <script>
-    // --- DỮ LIỆU CÂU HỎI ---
-    // (Lưu ý: Với công thức Toán trong chuỗi JS, dấu gạch chéo cần nhân đôi. Ví dụ: \\int thay vì \int)
+    // --- CẤU HÌNH GỬI ĐIỂM ---
+    // 👇👇👇 DÁN LINK GOOGLE SCRIPT CỦA BẠN VÀO GIỮA DẤU NHÁY DƯỚI ĐÂY 👇👇👇
+    const GOOGLE_SCRIPT_URL = https://script.google.com/macros/s/AKfycbw9AvPfuJ53SMG-AIdP9SBL6LThFM-r8DRphGwSqRutArucIK5jxf4BxzTHY2SIBJE/exec; 
+
+    // --- DỮ LIỆU CÂU HỎI (GIỮ NGUYÊN) ---
     const questions = [
-        // --- PHẦN 1: TRẮC NGHIỆM (12 CÂU) ---
+        // PHẦN 1: TRẮC NGHIỆM (12 CÂU)
         { type: 'mcq', q: 'Câu 1: Hàm số $F(x)$ là một nguyên hàm của hàm số $f(x)$ trên khoảng $K$ nếu:', options: ['A. $F\'(x) = -f(x)$', 'B. $f\'(x) = F(x)$', 'C. $F\'(x) = f(x)$', 'D. $F\'(x) = f\'(x)$'], ans: 2 },
         { type: 'mcq', q: 'Câu 2: Họ tất cả các nguyên hàm của hàm số $f(x) = x^3$ là:', options: ['A. $3x^2 + C$', 'B. $\\frac{x^4}{4} + C$', 'C. $x^4 + C$', 'D. $\\frac{x^3}{3} + C$'], ans: 1 },
         { type: 'mcq', q: 'Câu 3: Tìm nguyên hàm của hàm số $f(x) = e^x + 1$.', options: ['A. $e^x + x + C$', 'B. $e^x + C$', 'C. $e^x - x + C$', 'D. $xe^x + C$'], ans: 0 },
@@ -98,7 +101,7 @@
         { type: 'mcq', q: 'Câu 11: Khẳng định nào SAI?', options: ['A. $\\int 0 dx = C$', 'B. $\\int dx = x + C$', 'C. $\\int x^n dx = \\frac{x^{n+1}}{n+1} + C$ với mọi $n$', 'D. $\\int k dx = kx + C$'], ans: 2 },
         { type: 'mcq', q: 'Câu 12: Tìm họ nguyên hàm của $f(x) = \\frac{1}{\\cos^2 x}$.', options: ['A. $\\tan x + C$', 'B. $-\\tan x + C$', 'C. $\\cot x + C$', 'D. $-\\cot x + C$'], ans: 0 },
 
-        // --- PHẦN 2: ĐÚNG SAI (4 CÂU) ---
+        // PHẦN 2: ĐÚNG SAI (4 CÂU)
         { type: 'tf', q: 'Câu 13: Cho $f(x) = 4x^3 - 2x + 1$. Xét các khẳng định:', items: [
             {sub: 'a) $F(x) = x^4 - x^2 + x$ là một nguyên hàm.', ans: 'T'},
             {sub: 'b) $G(x) = x^4 - x^2 + x + 2024$ cũng là nguyên hàm.', ans: 'T'},
@@ -124,7 +127,7 @@
             {sub: 'd) $F(\\pi/4) = 1$ với $F(x)=-\\cot x+2$.', ans: 'T'}
         ]},
 
-        // --- PHẦN 3: TRẢ LỜI NGẮN (6 CÂU) ---
+        // PHẦN 3: TRẢ LỜI NGẮN (6 CÂU)
         { type: 'short', q: 'Câu 17: Tìm $C$ biết $F(x)$ của $4x^3+1$ qua $M(1;5)$.', ans: '3' },
         { type: 'short', q: 'Câu 18: Chi phí $MC(x)=6x+50$, phí cố định 1000. Tính chi phí tại $x=10$.', ans: '1800' },
         { type: 'short', q: 'Câu 19: Vi khuẩn $N\'(t)=100e^t$, ban đầu 200 con. Đạt 1300 con sau bao nhiêu phút? (Làm tròn đơn vị)', ans: '2' }, 
@@ -135,54 +138,36 @@
 
     // --- LOGIC CHƯƠNG TRÌNH ---
     const quizBody = document.getElementById('quiz-body');
-    let timerDuration = 90 * 60; // 90 phút
+    let timerDuration = 90 * 60; 
 
     function initQuiz() {
         let html = '';
         questions.forEach((q, index) => {
             html += `<div class="question-block" id="q-${index}">`;
             
-            // Render Câu hỏi MCQ
             if(q.type === 'mcq') {
                 html += `<div class="question-title">${q.q}</div><div class="options">`;
                 q.options.forEach((opt, i) => {
                     html += `<label><input type="radio" name="q${index}" value="${i}"> ${opt}</label>`;
                 });
                 html += `</div><div class="feedback" id="fb-${index}">Đáp án đúng: ${q.options[q.ans]}</div>`;
-            } 
-            
-            // Render Câu hỏi TF
-            else if (q.type === 'tf') {
+            } else if (q.type === 'tf') {
                 html += `<div class="question-title">${q.q}</div>`;
                 html += `<table class="tf-table"><tr><th>Mệnh đề</th><th>Đ</th><th>S</th></tr>`;
                 q.items.forEach((item, subIndex) => {
-                    html += `<tr>
-                        <td>${item.sub}</td>
-                        <td class="center"><input type="radio" name="q${index}_${subIndex}" value="T"></td>
-                        <td class="center"><input type="radio" name="q${index}_${subIndex}" value="F"></td>
-                    </tr>`;
+                    html += `<tr><td>${item.sub}</td><td class="center"><input type="radio" name="q${index}_${subIndex}" value="T"></td><td class="center"><input type="radio" name="q${index}_${subIndex}" value="F"></td></tr>`;
                 });
                 html += `</table><div class="feedback" id="fb-${index}">Đáp án: ${q.items.map(i => i.ans).join(', ')}</div>`;
-            }
-
-            // Render Câu hỏi Short Answer
-            else if (q.type === 'short') {
+            } else if (q.type === 'short') {
                 html += `<div class="question-title">${q.q}</div>`;
                 html += `<input type="text" id="in-${index}" placeholder="Nhập kết quả...">`;
                 html += `<div class="feedback" id="fb-${index}">Đáp án đúng: ${q.ans}</div>`;
             }
-
             html += `</div>`;
         });
         
-        // Đưa nội dung vào trang
         quizBody.innerHTML = html;
-        
-        // QUAN TRỌNG: Yêu cầu MathJax hiển thị lại công thức sau khi nội dung đã được chèn
-        if(window.MathJax && MathJax.typesetPromise) {
-            MathJax.typesetPromise();
-        }
-
+        if(window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
         startTimer();
     }
 
@@ -205,12 +190,18 @@
     }
 
     function submitQuiz() {
+        // Kiểm tra xem đã nhập tên chưa
+        const name = document.getElementById('hs-name').value;
+        const className = document.getElementById('hs-class').value;
+        if(!name || !className) {
+            alert("Em vui lòng điền đầy đủ Họ tên và Lớp trước khi nộp bài!");
+            return;
+        }
+
         clearInterval(window.quizTimer); 
-        document.getElementById('btn-submit').style.display = 'none'; 
-        document.getElementById('result-area').style.display = 'block';
-        
-        document.getElementById('res-name').innerText = document.getElementById('hs-name').value || "Chưa nhập tên";
-        document.getElementById('res-class').innerText = document.getElementById('hs-class').value || "--";
+        const btn = document.getElementById('btn-submit');
+        btn.disabled = true;
+        btn.innerText = "ĐANG GỬI ĐIỂM..."; // Thông báo đang gửi
 
         let score = 0;
         let totalPoints = 0;
@@ -225,41 +216,51 @@
                 if(selected && parseInt(selected.value) === q.ans) {
                     score++;
                     block.innerHTML += `<div class="correct-ans">Đúng (+1đ)</div>`;
-                } else {
-                    block.innerHTML += `<div class="wrong-ans">Sai</div>`;
-                }
-            }
-            else if(q.type === 'tf') {
+                } else { block.innerHTML += `<div class="wrong-ans">Sai</div>`; }
+            } else if(q.type === 'tf') {
                 q.items.forEach((item, subIndex) => {
                     totalPoints += 0.25;
                     const selected = document.querySelector(`input[name="q${index}_${subIndex}"]:checked`);
-                    if(selected && selected.value === item.ans) {
-                        score += 0.25;
-                    }
+                    if(selected && selected.value === item.ans) score += 0.25;
                 });
-            }
-            else if(q.type === 'short') {
+            } else if(q.type === 'short') {
                 totalPoints++;
                 const input = document.getElementById(`in-${index}`).value.trim();
                 if(input === q.ans || input.replace(',', '.') === q.ans) {
                     score++;
                     block.innerHTML += `<div class="correct-ans">Đúng (+1đ)</div>`;
-                } else {
-                    block.innerHTML += `<div class="wrong-ans">Sai</div>`;
-                }
+                } else { block.innerHTML += `<div class="wrong-ans">Sai</div>`; }
             }
         });
 
+        // HIỂN THỊ KẾT QUẢ CHO HỌC SINH
+        document.getElementById('result-area').style.display = 'block';
+        document.getElementById('res-name').innerText = name;
+        document.getElementById('res-class').innerText = className;
         document.getElementById('score-display').innerText = `${score} / ${totalPoints}`;
-        window.scrollTo(0, 0);
         
-        // Render lại MathJax lần nữa cho các thông báo Đúng/Sai (nếu có công thức)
-        if(window.MathJax && MathJax.typesetPromise) {
-            MathJax.typesetPromise();
+        // GỬI ĐIỂM VỀ GOOGLE SHEET (ẨN)
+        if(GOOGLE_SCRIPT_URL.startsWith('http')) {
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', // Quan trọng: chế độ no-cors để gửi được từ GitHub
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: name, class: className, score: score + "/" + totalPoints })
+            }).then(() => {
+                btn.innerText = "ĐÃ NỘP BÀI THÀNH CÔNG";
+            }).catch(err => {
+                console.error('Lỗi gửi điểm:', err);
+                btn.innerText = "LỖI GỬI ĐIỂM (Hãy chụp màn hình)";
+            });
+        } else {
+             btn.innerText = "ĐÃ NỘP BÀI (Chưa kết nối Sheet)";
         }
+
+        document.getElementById('btn-submit').style.display = 'none'; // Ẩn nút nộp
+        window.scrollTo(0, 0);
+        if(window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
     }
 
-    // Khởi chạy
     initQuiz();
 </script>
 
