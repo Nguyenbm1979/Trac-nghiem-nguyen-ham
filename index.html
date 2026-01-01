@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kiểm Tra Nguyên Hàm - Đề 1</title>
+    <title>Bài Kiểm Tra Nguyên Hàm 12</title>
     <script>
     window.MathJax = {
       tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
@@ -14,20 +14,73 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; background-color: #f4f4f9; padding: 20px; max-width: 900px; margin: 0 auto; }
-        .header-info { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; background-color: #f4f4f9; padding: 0; margin: 0; }
+        
+        /* MÀN HÌNH CHỜ */
+        .welcome-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 9999; display: flex; justify-content: center; align-items: center;
+            overflow-y: auto; padding: 20px;
+        }
+        .welcome-card {
+            background: white; width: 100%; max-width: 600px;
+            padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        .welcome-card h1 { color: #2c3e50; margin-bottom: 10px; }
+        .input-group { margin: 25px 0; text-align: left; }
+        .input-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #444; }
+        .input-group input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box; }
+        .btn-start {
+            background: #42b983; color: white; border: none; padding: 15px 40px;
+            font-size: 20px; border-radius: 30px; cursor: pointer; font-weight: bold;
+            transition: transform 0.2s; width: 100%;
+        }
+        .btn-start:hover { transform: scale(1.02); background: #3aa876; }
+
+        /* GIAO DIỆN CHÍNH */
+        #main-interface { display: none; padding: 20px; max-width: 900px; margin: 0 auto; }
+        
+        .header-info { background: white; padding: 15px 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; margin-bottom: 20px; }
         .timer { font-size: 24px; font-weight: bold; color: #d9534f; }
-        .student-form input { padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-right: 10px; width: 200px; }
-        .quiz-container { background: white; padding: 30px; margin-top: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .student-info-display { font-weight: bold; color: #2c3e50; }
+        
+        .quiz-container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .question-block { margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
-        .question-title { font-weight: bold; color: #2c3e50; margin-bottom: 15px; font-size: 1.1em; }
+        .question-title { font-weight: bold; color: #2c3e50; margin-bottom: 10px; font-size: 1.15em; }
+        
+        /* CSS CHO PHẦN TIÊU ĐỀ (MÔ PHỎNG LATEX FBOX COLOR) */
+        .part-header {
+            color: #00796b; /* Màu xanh ngọc đậm (Blue+Green) */
+            border: 2px solid #00796b; /* Viền hộp */
+            background-color: #e0f2f1; /* Nền nhạt bên trong */
+            padding: 10px 20px;
+            margin: 40px 0 20px 0;
+            display: inline-block; /* Để khung bao quanh chữ vừa vặn */
+            border-radius: 5px;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: bold;
+            text-transform: uppercase;
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.1); /* Hiệu ứng nổi nhẹ */
+            width: 100%; /* Đầy chiều ngang nếu muốn, hoặc bỏ đi để co theo chữ */
+            box-sizing: border-box;
+        }
+
+        .question-image { text-align: center; margin: 15px 0; }
+        .question-image img { max-width: 100%; max-height: 400px; border: 1px solid #ddd; border-radius: 5px; }
+
         mjx-container { font-size: 115% !important; }
         .options label { display: block; margin-bottom: 10px; cursor: pointer; padding: 8px; border-radius: 5px; transition: background 0.2s; }
         .options label:hover { background-color: #f0f8ff; }
+        
         .tf-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .tf-table th, .tf-table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        .btn-submit { display: block; width: 100%; padding: 15px; background: #42b983; color: white; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; margin-top: 20px; font-weight: bold; }
-        .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
+        
+        .btn-submit { display: block; width: 100%; padding: 15px; background: #3498db; color: white; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; margin-top: 20px; font-weight: bold; }
+        .btn-submit:hover { background: #2980b9; }
+        
+        /* KẾT QUẢ */
         .result-box { display: none; background: #e8f5e9; border: 2px solid #4caf50; padding: 20px; border-radius: 8px; margin-top: 20px; text-align: center; }
         .result-score { font-size: 32px; font-weight: bold; color: #2e7d32; margin: 10px 0; }
         .correct-ans { color: #2e7d32; font-weight: bold; background: #e8f5e9; padding: 5px; display: inline-block; margin-top: 5px; border: 1px solid #a5d6a7; border-radius: 4px;}
@@ -38,324 +91,199 @@
 </head>
 <body>
 
-    <div class="header-info">
-        <div>
-            <h2>Kiểm tra: Nguyên Hàm (90 phút)</h2>
-            <div class="student-form">
-                <input type="text" id="hs-name" placeholder="Họ và tên học sinh">
-                <input type="text" id="hs-class" placeholder="Lớp (VD: 12A1)">
+    <div class="welcome-overlay" id="welcome-screen">
+        <div class="welcome-card">
+            <h1>BÀI KIỂM TRA NGUYÊN HÀM 12</h1>
+            <p>Giáo viên: <b>Thầy Nguyễn Bình Nguyên</b></p>
+            <p>Thời gian: <b style="color:#d9534f">90 phút</b> | Số câu: <b>22 câu</b></p>
+            <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+            <p><i>"Chúc các em bình tĩnh, tự tin và làm bài đạt kết quả cao nhất!"</i></p>
+
+            <div class="input-group">
+                <label>Họ và tên học sinh (*)</label>
+                <input type="text" id="input-name" placeholder="Nhập họ tên...">
             </div>
+            <div class="input-group">
+                <label>Lớp (*)</label>
+                <input type="text" id="input-class" placeholder="Ví dụ: 12A1">
+            </div>
+            <button class="btn-start" onclick="startQuizNow()">BẮT ĐẦU LÀM BÀI</button>
         </div>
-        <div class="timer" id="timer">90:00</div>
     </div>
 
-    <div id="result-area" class="result-box">
-        <h3>KẾT QUẢ BÀI LÀM</h3>
-        <p>Học sinh: <span id="res-name" style="font-weight:bold"></span> - Lớp: <span id="res-class" style="font-weight:bold"></span></p>
-        <div class="result-score" id="score-display">0 / 0</div>
-        <div id="submit-status" style="margin-top:10px; font-style:italic;"></div>
-        <p>Kéo xuống dưới để xem đáp án chi tiết và lời giải.</p>
-    </div>
+    <div id="main-interface">
+        <div class="header-info">
+            <div class="student-info-display">
+                <span id="display-name">HS</span> - <span id="display-class">Lớp</span>
+            </div>
+            <div class="timer" id="timer">90:00</div>
+        </div>
 
-    <div class="quiz-container" id="quiz-body"><p style="text-align:center">Đang tải dữ liệu đề thi...</p></div>
-    <button class="btn-submit" onclick="submitQuiz()" id="btn-submit">NỘP BÀI & XEM ĐIỂM</button>
+        <div id="result-area" class="result-box">
+            <h3>KẾT QUẢ BÀI LÀM</h3>
+            <div class="result-score" id="score-display">0 / 0</div>
+            <div id="submit-status" style="margin-top:10px; font-style:italic;"></div>
+            <p>Kéo xuống dưới để xem đáp án chi tiết.</p>
+        </div>
+
+        <div class="quiz-container" id="quiz-body"></div>
+
+        <button class="btn-submit" onclick="checkBeforeSubmit()" id="btn-submit">NỘP BÀI</button>
+    </div>
 
 <script>
-    // ============================================================
-    // 👇 LINK GOOGLE SCRIPT CỦA BẠN 👇
+    // 👇 LINK GOOGLE SCRIPT CỦA BẠN (GIỮ NGUYÊN) 👇
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw9AvPfuJ53SMG-AIdP9SBL6LThFM-r8DRphGwSqRutArucIK5jxf4BxzTHY2SIBJE/exec'; 
-    // ============================================================
 
-    // --- DỮ LIỆU CÂU HỎI (Được chuyển đổi từ file LaTeX Đề 1) ---
+    // DỮ LIỆU CÂU HỎI
     const questions = [
-        // --- PHẦN 1: TRẮC NGHIỆM ---
-        {
-            type: 'mcq',
-            q: 'Câu 1: Họ nguyên hàm của hàm số $f(x)=x^3$ là',
-            options: ['$4x^4+C$', '$3x^2+C$', '$x^4+C$', '$\\dfrac{1}{4}x^4+C$'],
-            ans: 3,
-            explain: 'Ta có $\\displaystyle\\int x^3\\mathrm{\\,d}x=\\dfrac{1}{4}x^4+C$.'
-        },
-        {
-            type: 'mcq',
-            q: 'Câu 2: Tìm nguyên hàm của hàm số $ f(x)=2\\sin x$.',
-            options: ['$\\displaystyle\\int 2\\sin x\\mathrm{\\,d}x=-2\\cos x+C$', '$\\displaystyle\\int 2\\sin x\\mathrm{\\,d}x=2\\cos x+C$', '$\\displaystyle\\int 2\\sin x\\mathrm{\\,d}x=\\sin^2x+C$', '$\\displaystyle\\int 2\\sin x\\mathrm{\\,d}x=\\sin 2x+C$'],
-            ans: 0,
-            explain: 'Ta có $\\displaystyle\\int 2\\sin x\\mathrm{\\,d}x=2\\displaystyle\\int \\sin x \\mathrm{\\,d}x=-2\\cos x+C$.'
-        },
-        {
-            type: 'mcq',
-            q: 'Câu 3: Họ nguyên hàm của hàm số $f(x)=\\mathrm{e}^x+x$ là',
-            options: ['$\\mathrm{e}^x+1+C$', '$\\mathrm{e}^x+x^2+C$', '$\\mathrm{e}^x+\\dfrac{1}{2}{x^2}+C$', '$\\dfrac{1}{x+1}{\\mathrm{e}^x}+\\dfrac{1}{2}{x^2}+C$'],
-            ans: 2,
-            explain: 'Ta có $\\displaystyle\\int \\left(\\mathrm{e}^x+x\\right) \\mathrm{\\,d}x=\\displaystyle\\int \\mathrm{e}^x \\mathrm{\\,d}x+\\displaystyle\\int x \\mathrm{\\,d}x=\\mathrm{e}^x+\\dfrac{x^2}{2}+C$.'
-        },
-        {
-            type: 'mcq',
-            q: 'Câu 4: Họ nguyên hàm của hàm số $y=x^2-3x+\\dfrac{1}{x}$ là',
-            options: ['$\\dfrac{x^3}{3}-\\dfrac{3x^2}{2}-\\ln\\left|x\\right|+C$', '$\\dfrac{x^3}{3}-\\dfrac{3x^2}{2}+\\ln x+C$', '$\\dfrac{x^3}{3}-\\dfrac{3x^2}{2}+\\ln\\left|x\\right|+C$', '$\\dfrac{x^3}{3}-\\dfrac{3x^2}{2}+\\dfrac{1}{x^2}+C$'],
-            ans: 2,
-            explain: 'Ta có $\\displaystyle\\int \\left(x^2-3x+\\dfrac{1}{x}\\right) \\mathrm{\\,d}x=\\dfrac{x^3}{3}-\\dfrac{3x^2}{2}+\\ln\\left|x\\right|+C$.'
-        },
-        {
-            type: 'mcq',
-            q: 'Câu 5: Tìm nguyên hàm của hàm số $f(x)=\\dfrac{x^4+2}{x^2}$.',
-            options: ['$\\dfrac{x^3}{3}-\\dfrac{1}{x}+C$', '$\\dfrac{x^3}{3}+\\dfrac{2}{x}+C$', '$\\dfrac{x^3}{3}+\\dfrac{1}{x}+C$', '$\\dfrac{x^3}{3}-\\dfrac{2}{x}+C$'],
-            ans: 3,
-            explain: 'Ta có $\\displaystyle\\int \\dfrac{x^4+2}{x^2} \\mathrm{\\,d}x=\\displaystyle\\int \\left(x^2+\\dfrac{2}{x^2}\\right) \\mathrm{\\,d}x=\\dfrac{x^3}{3}-\\dfrac{2}{x}+C$.'
-        },
-        {
-            type: 'mcq',
-            q: 'Câu 6: Cho hàm số $ f(x)=1-\\dfrac{1}{\\cos^2 x}$. Khẳng định nào dưới đây đúng?',
-            options: ['$x+\\tan x+C$', '$x+\\cot x+C$', '$x-\\tan x+C$', '$x-\\cot x+C$'],
-            ans: 2,
-            explain: 'Ta có $\\displaystyle\\int f(x) \\mathrm{\\,d}x=\\displaystyle\\int \\left(1-\\dfrac{1}{\\cos^2x}\\right)\\mathrm{\\,d}x=x-\\tan x+C$.'
-        },
-        {
-            type: 'mcq',
-            q: 'Câu 7: Họ nguyên hàm của hàm số $f(x)=\\cos x+6x$ là',
-            options: ['$\\sin x+3x^2+C$', '$-\\sin x+3x^2+C$', '$\\sin x+6x^2+C$', '$-\\sin x+C$'],
-            ans: 0,
-            explain: 'Ta có $\\displaystyle\\int f(x)\\mathrm{\\,d}x=\\displaystyle\\int \\left(\\cos x+6x\\right)\\mathrm{\\,d}x=\\sin x+3x^2+C$.'
-        },
-        {
-            type: 'mcq',
-            q: 'Câu 8: $\\displaystyle\\int f(x)\\mathrm{\\,d}x=4x^3+x^2+C$ thì hàm số $f(x)$ bằng',
-            options: ['$f(x)=x^4+\\dfrac{x^3}{3}+Cx$', '$f(x)=12x^2+2x+C$', '$f(x)=12x^2+2x$', '$f(x)=x^4+\\dfrac{x^3}{3}$'],
-            ans: 2,
-            explain: 'Ta có $ f(x)=F\'(x)=\\left(4x^3+x^2+C\\right)\'=12x^2+2x$.'
-        },
-        {
-            type: 'mcq',
-            q: 'Câu 9: Hàm số $F(x)=2x+3^x-1$ là nguyên hàm của hàm số nào trong các hàm số sau',
-            options: ['$f(x)=2+3^x\\ln 3$', '$f(x)=x^2+\\dfrac{3^x}{\\ln 3}-x+C$', '$f(x)=x^2+\\dfrac{3^x}{\\ln 3}-x$', '$f(x)=2+3^x\\ln 3+C$'],
-            ans: 0,
-            explain: 'Ta có $ f(x)=F\'(x)\\Rightarrow f(x)=\\left(2x+3^x-1\\right)\'=2+3^x\\ln 3$.'
-        },
-        {
-            type: 'mcq',
-            q: 'Câu 10: Cho $\\displaystyle\\int \\ln x \\mathrm{\\,d}x=F(x)+C$. Khẳng định nào dưới đây đúng?',
-            options: ['$F\'(x)=\\dfrac{1}{x}$', '$F\'(x)=\\dfrac{1}{x}+C$', '$F\'(x)=\\ln x$', '$F\'(x)=\\ln x+1$'],
-            ans: 2,
-            explain: 'Theo định nghĩa nguyên hàm: Đạo hàm của nguyên hàm chính là hàm số dưới dấu tích phân. $F\'(x) = \\ln x$.'
-        },
-        {
-            type: 'mcq',
-            q: 'Câu 11: Cho $F(x)$ là một nguyên hàm của hàm số $f(x)=\\mathrm{e}^x+2x$ thỏa mãn $F(0)=\\dfrac{3}{2}$. Tìm $F(x)$.',
-            options: ['$F(x)=\\mathrm{e}^x+x^2+\\dfrac{1}{2}$', '$F(x)=\\mathrm{e}^x+x^2+\\dfrac{5}{2}$', '$F(x)=\\mathrm{e}^x+x^2+\\dfrac{3}{2}$', '$F(x)=2\\mathrm{e}^x+x^2-\\dfrac{1}{2}$'],
-            ans: 0,
-            explain: '$F(x)=\\mathrm{e}^x+x^2+C$. $F(0)=1+C=\\dfrac{3}{2} \\Rightarrow C=\\dfrac{1}{2}$.'
-        },
-        {
-            type: 'mcq',
-            q: 'Câu 12: Một viên đạn được bắn thẳng đứng lên trên. $v(t)=160-9{,}8t$ (m/s). Độ cao của viên đạn sau $t=10$ giây là',
-            options: ['$620$ m', '$1\\,240$ m', '$555$ m', '$1\\,110$ m'],
-            ans: 3,
-            explain: '$S(t) = 160t - 4.9t^2$. $S(10) = 1600 - 490 = 1110$ m.'
-        },
+        // --- PHẦN 1 (12 CÂU) ---
+        { type: 'mcq', q: 'Câu 1: Họ nguyên hàm của hàm số $f(x)=x^3$ là', options: ['$4x^4+C$', '$3x^2+C$', '$x^4+C$', '$\\dfrac{1}{4}x^4+C$'], ans: 3, explain: 'Ta có $\\displaystyle\\int x^3\\mathrm{\\,d}x=\\dfrac{1}{4}x^4+C$.' },
+        { type: 'mcq', q: 'Câu 2: Tìm nguyên hàm của hàm số $ f(x)=2\\sin x$.', options: ['$\\displaystyle\\int 2\\sin x\\mathrm{\\,d}x=-2\\cos x+C$', '$\\displaystyle\\int 2\\sin x\\mathrm{\\,d}x=2\\cos x+C$', '$\\displaystyle\\int 2\\sin x\\mathrm{\\,d}x=\\sin^2x+C$', '$\\displaystyle\\int 2\\sin x\\mathrm{\\,d}x=\\sin 2x+C$'], ans: 0, explain: 'Nguyên hàm sin là -cos.' },
+        { type: 'mcq', q: 'Câu 3: Họ nguyên hàm của hàm số $f(x)=\\mathrm{e}^x+x$ là', options: ['$\\mathrm{e}^x+1+C$', '$\\mathrm{e}^x+x^2+C$', '$\\mathrm{e}^x+\\dfrac{1}{2}{x^2}+C$', '$\\dfrac{1}{x+1}{\\mathrm{e}^x}+\\dfrac{1}{2}{x^2}+C$'], ans: 2, explain: '$\\int (e^x+x)dx = e^x + x^2/2 + C$' },
+        { type: 'mcq', q: 'Câu 4: Họ nguyên hàm của hàm số $y=x^2-3x+\\dfrac{1}{x}$ là', options: ['$\\dfrac{x^3}{3}-\\dfrac{3x^2}{2}-\\ln\\left|x\\right|+C$', '$\\dfrac{x^3}{3}-\\dfrac{3x^2}{2}+\\ln x+C$', '$\\dfrac{x^3}{3}-\\dfrac{3x^2}{2}+\\ln\\left|x\\right|+C$', '$\\dfrac{x^3}{3}-\\dfrac{3x^2}{2}+\\dfrac{1}{x^2}+C$'], ans: 2, explain: 'Nguyên hàm 1/x là ln|x|.' },
+        { type: 'mcq', q: 'Câu 5: Tìm nguyên hàm của hàm số $f(x)=\\dfrac{x^4+2}{x^2}$.', options: ['$\\dfrac{x^3}{3}-\\dfrac{1}{x}+C$', '$\\dfrac{x^3}{3}+\\dfrac{2}{x}+C$', '$\\dfrac{x^3}{3}+\\dfrac{1}{x}+C$', '$\\dfrac{x^3}{3}-\\dfrac{2}{x}+C$'], ans: 3, explain: 'Tách thành $x^2 + 2x^{-2}$.' },
+        { type: 'mcq', q: 'Câu 6: Cho hàm số $ f(x)=1-\\dfrac{1}{\\cos^2 x}$. Khẳng định nào đúng?', options: ['$x+\\tan x+C$', '$x+\\cot x+C$', '$x-\\tan x+C$', '$x-\\cot x+C$'], ans: 2, explain: 'Nguyên hàm $1/\\cos^2x$ là $\\tan x$.' },
+        { type: 'mcq', q: 'Câu 7: Họ nguyên hàm của hàm số $f(x)=\\cos x+6x$ là', options: ['$\\sin x+3x^2+C$', '$-\\sin x+3x^2+C$', '$\\sin x+6x^2+C$', '$-\\sin x+C$'], ans: 0, explain: '$\\int \\cos x = \\sin x$.' },
+        { type: 'mcq', q: 'Câu 8: $\\displaystyle\\int f(x)\\mathrm{\\,d}x=4x^3+x^2+C$ thì hàm số $f(x)$ bằng', options: ['$f(x)=x^4+\\dfrac{x^3}{3}+Cx$', '$f(x)=12x^2+2x+C$', '$f(x)=12x^2+2x$', '$f(x)=x^4+\\dfrac{x^3}{3}$'], ans: 2, explain: 'Đạo hàm của $4x^3+x^2$.' },
+        { type: 'mcq', q: 'Câu 9: Hàm số $F(x)=2x+3^x-1$ là nguyên hàm của hàm số nào?', options: ['$f(x)=2+3^x\\ln 3$', '$f(x)=x^2+\\dfrac{3^x}{\\ln 3}-x+C$', '$f(x)=x^2+\\dfrac{3^x}{\\ln 3}-x$', '$f(x)=2+3^x\\ln 3+C$'], ans: 0, explain: 'Đạo hàm $3^x$ là $3^x \\ln 3$.' },
+        { type: 'mcq', q: 'Câu 10: Cho $\\displaystyle\\int \\ln x \\mathrm{\\,d}x=F(x)+C$. Khẳng định đúng?', options: ['$F\'(x)=\\dfrac{1}{x}$', '$F\'(x)=\\dfrac{1}{x}+C$', '$F\'(x)=\\ln x$', '$F\'(x)=\\ln x+1$'], ans: 2, explain: '$F\'(x)$ chính là hàm dưới dấu tích phân.' },
+        { type: 'mcq', q: 'Câu 11: Cho $F(x)$ là một nguyên hàm của $f(x)=\\mathrm{e}^x+2x$ thỏa mãn $F(0)=\\dfrac{3}{2}$. Tìm $F(x)$.', options: ['$F(x)=\\mathrm{e}^x+x^2+\\dfrac{1}{2}$', '$F(x)=\\mathrm{e}^x+x^2+\\dfrac{5}{2}$', '$F(x)=\\mathrm{e}^x+x^2+\\dfrac{3}{2}$', '$F(x)=2\\mathrm{e}^x+x^2-\\dfrac{1}{2}$'], ans: 0, explain: '$1 + C = 3/2 \\Rightarrow C = 1/2$.' },
+        { type: 'mcq', q: 'Câu 12: Một viên đạn được bắn lên $v(t)=160-9{,}8t$. Độ cao sau $t=10$ giây là', options: ['$620$ m', '$1\\,240$ m', '$555$ m', '$1\\,110$ m'], ans: 3, explain: 'Thay $t=10$ vào nguyên hàm.' },
 
-        // --- PHẦN 2: ĐÚNG SAI ---
-        {
-            type: 'tf',
-            q: 'Câu 13: Cho hàm số $y=h(x)$ có đạo hàm $h\'(x)=3x^2$ và hàm số $y=g(x)$ có đạo hàm $g\'(x)=\\mathrm{e}^x$.',
-            items: [
-                {sub: 'Hàm số $y=h(x)=6x+C_1$, với $C_1\\in \\mathbb{R}$', ans: 'F'},
-                {sub: 'Hàm số $y=g(x)=\\mathrm{e}^x+C_2$, với $C_2\\in \\mathbb{R}$', ans: 'T'},
-                {sub: '$ I=\\displaystyle\\int \\left[xh\'(x)+2025\\right]\\mathrm{\\,d}x=\\dfrac{3}{4}{x^4}+2025x+C$', ans: 'T'},
-                {sub: 'Cho $ f\'(x)=3x^2+\\mathrm{e}^x+m-1$. Cho $f(0)=2$; $ f(1)=2\\mathrm{e}$ thì giá trị của $m\\in (1;2)$', ans: 'T'}
-            ],
-            explain: 'a) Sai vì nguyên hàm của $3x^2$ là $x^3$.'
-        },
-        {
-            type: 'tf',
-            q: 'Câu 14: Cho các hàm số $g(x)=\\sin x$ , $h(x)=\\cos x$.',
-            items: [
-                {sub: '$\\displaystyle\\int \\left[2g(x)-3h(x)\\right]\\mathrm{\\,d}x=3\\displaystyle\\int g(x)\\mathrm{\\,d}x-2\\displaystyle\\int h(x)\\mathrm{\\,d}x$', ans: 'F'},
-                {sub: 'Một nguyên của hàm số $g(x)$ là $-\\cos x$', ans: 'T'},
-                {sub: 'Họ nguyên của hàm số $h(x)+2\\sqrt{x}$ là $\\sin x+\\dfrac{3}{2}\\sqrt{x^3}+C$', ans: 'F'},
-                {sub: 'Họ nguyên hàm của hàm số $f(x)=g(x)\\cdot h^2(x)$ là $F(x)=-\\dfrac{1}{3}\\cos^3 x+C$', ans: 'T'}
-            ],
-            explain: 'a) Sai hệ số. c) Sai, phải là $\\frac{4}{3}x\\sqrt{x}$.'
-        },
-        {
-            type: 'tf',
-            q: 'Câu 15: Cho các hàm số $g(x)=\\dfrac{1}{x^2}$, $h(x)=\\ln (x+3)$.',
-            items: [
-                {sub: 'Biết $G(x)$ là một nguyên hàm của $g(x)$ và $ G(1)=1$. Khi đó $ G(2)=-\\dfrac{1}{2}$', ans: 'F'},
-                {sub: '$ J=\\displaystyle\\int \\left[h(x)+\\ln\\dfrac{1}{x+3}+2025\\right]\\mathrm{\\,d}x=2025x+C$', ans: 'T'},
-                {sub: '$I=\\displaystyle\\int x\\cdot h\'(x)\\mathrm{\\,d}x=x-\\ln (x+3)+C$ với $C\\in \\mathbb{R}$', ans: 'F'},
-                {sub: 'Giả sử $F(x)$ là một nguyên hàm của $f(x)=\\dfrac{x+3}{g(x)}$ và $F(1)=\\dfrac{1}{4}$. Khi đó $F(-1)=-\\dfrac{7}{4}$', ans: 'T'}
-            ],
-            explain: 'a) Sai, tính ra $G(2)=1.5$.'
-        },
-        {
-            type: 'tf',
-            q: 'Câu 16: Cho các hàm số $g(x)=\\mathrm{e}^{\\dfrac{x}{2}}$, $h(x)=2x^3+5x^2-2x+4$.',
-            items: [
-                {sub: '$\\displaystyle\\int \\left[2g(x)+3h(x)\\right]\\mathrm{\\,d}x=2\\displaystyle\\int g(x)\\mathrm{\\,d}x+3\\displaystyle\\int h(x)\\mathrm{\\,d}x$', ans: 'T'},
-                {sub: 'Một nguyên của hàm số $3\\cdot g^2(x)$ là $3\\mathrm{e}^x$', ans: 'T'},
-                {sub: 'Họ nguyên của hàm số $h(x)$ là $\\dfrac{1}{4}{x^3}+\\dfrac{5}{3}{x^3}-x^2+C$', ans: 'F'},
-                {sub: 'Biết $\\displaystyle\\int g^4(x)\\cdot h(x)\\mathrm{\\,d}x=(a{x^3}+b{x^2}+cx+d)\\mathrm{e}^{2x}+C$. Khi đó $ a+b+c+d=3$', ans: 'T'}
-            ],
-            explain: 'c) Sai vì nguyên hàm của $2x^3$ là $\\frac{1}{2}x^4$.'
-        },
+        // --- PHẦN 2 (4 CÂU ĐÚNG SAI) ---
+        { type: 'tf', q: 'Câu 13: Cho hàm số $y=h(x)$ có đạo hàm $h\'(x)=3x^2$ và hàm số $y=g(x)$ có đạo hàm $g\'(x)=\\mathrm{e}^x$.', items: [{sub: 'Hàm số $y=h(x)=6x+C_1$', ans: 'F'}, {sub: 'Hàm số $y=g(x)=\\mathrm{e}^x+C_2$', ans: 'T'}, {sub: '$ I=\\displaystyle\\int \\left[xh\'(x)+2025\\right]\\mathrm{\\,d}x=\\dfrac{3}{4}{x^4}+2025x+C$', ans: 'T'}, {sub: 'Cho $ f\'(x)=3x^2+\\mathrm{e}^x+m-1$. Cho $f(0)=2; f(1)=2\\mathrm{e}$ thì $m\\in (1;2)$', ans: 'T'}], explain: 'Chi tiết trong file đáp án.' },
+        { type: 'tf', q: 'Câu 14: Cho các hàm số $g(x)=\\sin x$ , $h(x)=\\cos x$.', items: [{sub: '$\\displaystyle\\int \\left[2g(x)-3h(x)\\right]\\mathrm{\\,d}x=3\\displaystyle\\int g(x)\\mathrm{\\,d}x-2\\displaystyle\\int h(x)\\mathrm{\\,d}x$', ans: 'F'}, {sub: 'Một nguyên của hàm số $g(x)$ là $-\\cos x$', ans: 'T'}, {sub: 'Họ nguyên của $h(x)+2\\sqrt{x}$ là $\\sin x+\\dfrac{3}{2}\\sqrt{x^3}+C$', ans: 'F'}, {sub: 'Họ nguyên hàm của $f(x)=g(x)\\cdot h^2(x)$ là $F(x)=-\\dfrac{1}{3}\\cos^3 x+C$', ans: 'T'}], explain: 'Chi tiết trong file đáp án.' },
+        { type: 'tf', q: 'Câu 15: Cho các hàm số $g(x)=\\dfrac{1}{x^2}$, $h(x)=\\ln (x+3)$.', items: [{sub: 'Biết $G(x)$ là một nguyên hàm của $g(x)$ và $ G(1)=1$. Khi đó $ G(2)=-\\dfrac{1}{2}$', ans: 'F'}, {sub: '$ J=\\displaystyle\\int \\left[h(x)+\\ln\\dfrac{1}{x+3}+2025\\right]\\mathrm{\\,d}x=2025x+C$', ans: 'T'}, {sub: '$I=\\displaystyle\\int x\\cdot h\'(x)\\mathrm{\\,d}x=x-\\ln (x+3)+C$', ans: 'F'}, {sub: 'Giả sử $F(1)=\\dfrac{1}{4}$ thì $F(-1)=-\\dfrac{7}{4}$', ans: 'T'}], explain: 'Chi tiết trong file đáp án.' },
+        { type: 'tf', q: 'Câu 16: Cho các hàm số $g(x)=\\mathrm{e}^{\\dfrac{x}{2}}$, $h(x)=2x^3+5x^2-2x+4$.', items: [{sub: '$\\displaystyle\\int \\left[2g(x)+3h(x)\\right]\\mathrm{\\,d}x=2\\displaystyle\\int g(x)\\mathrm{\\,d}x+3\\displaystyle\\int h(x)\\mathrm{\\,d}x$', ans: 'T'}, {sub: 'Một nguyên của hàm số $3\\cdot g^2(x)$ là $3\\mathrm{e}^x$', ans: 'T'}, {sub: 'Họ nguyên của $h(x)$ là $\\dfrac{1}{4}{x^3}+\\dfrac{5}{3}{x^3}-x^2+C$', ans: 'F'}, {sub: 'Biết $\\displaystyle\\int g^4(x)\\cdot h(x)\\mathrm{\\,d}x=(a{x^3}+b{x^2}+cx+d)\\mathrm{e}^{2x}+C$ thì $ a+b+c+d=3$', ans: 'T'}], explain: 'Chi tiết trong file đáp án.' },
 
-        // --- PHẦN 3: TRẢ LỜI NGẮN ---
-        {
-            type: 'short',
-            q: 'Câu 17: Cho $F(x)$ là một nguyên hàm của hàm $f(x)=\\dfrac{\\cos 2x}{\\sin x+\\cos x}$ thỏa mãn $F(0)=1$. Tính $F(\\pi)$.',
-            ans: '-1',
-            explain: '$F(x)=\\sin x + \\cos x$. $F(\\pi) = -1$.'
-        },
-        {
-            type: 'short',
-            q: 'Câu 18: $F(x)$ là một nguyên hàm của hàm số $f(x)=2^x$, thỏa mãn $ F(0)=\\dfrac{1}{\\ln 2}$. Biểu thức $ F(0)+F(1)+\\ldots+F(2024)=\\dfrac{a^b-c}{\\ln a}$. Tính $ T=a+b-2c$.',
-            ans: '2025',
-            explain: 'Tính được $a=2, b=2025, c=1$. $T = 2+2025-2 = 2025$.'
-        },
-        {
-            type: 'short',
-            q: 'Câu 19: $F(x)$ là nguyên hàm của $f(x)=\\dfrac{(3x-1)^2}{x^2}$, đồ thị $y=F(x)$ đi qua $M(1;-2)$. Tính $F\\left(\\mathrm{e}^2\\right)$ (làm tròn đến hàng phần chục).',
-            ans: '44,4', // Chấp nhận cả 44.4 trong code xử lý
-            explain: '$F(x)=9x-6\\ln|x|-1/x-10$. Kết quả xấp xỉ 44,4.'
-        },
-        {
-            type: 'short',
-            q: 'Câu 20: Ô tô chạy $90$ km/h, đạp phanh chậm dần $v(t)=-\\dfrac{25}{4}t+25$ (m/s). Quãng đường từ lúc phát hiện chướng ngại vật đến khi dừng hẳn là bao nhiêu mét?',
-            ans: '100',
-            explain: 'Quãng đường phản xạ: $25 \\times 2 = 50m$. Quãng đường phanh: $\\int_0^4 v(t)dt = 50m$. Tổng = 100m.'
-        },
-        {
-            type: 'short',
-            q: 'Câu 21: Vi khuẩn tăng trưởng $P\'(t)=k\\sqrt{t}$. Ban đầu 500 con, sau 1 ngày 600 con. Tính số lượng sau 9 ngày.',
-            ans: '3200',
-            explain: '$P(t)=150t\\sqrt{t} + 500$ (sau khi tìm k). $P(9) = 3200$.'
-        },
-        {
-            type: 'short',
-            q: 'Câu 22: Cây cà chua cao 5cm. Tốc độ lớn $ v(t)=-0{,}1t^3+t^2$. Chiều cao khi cây phát triển nhanh nhất là bao nhiêu? (làm tròn đến hàng phần chục).',
-            ans: '54,4',
-            explain: '$v(t)$ max tại $t=20/3$. $h(20/3) \\approx 54,4$ cm.'
-        }
+        // --- PHẦN 3 (6 CÂU TRẢ LỜI NGẮN) ---
+        { type: 'short', q: 'Câu 17: Cho $F(x)$ là một nguyên hàm của hàm $f(x)=\\dfrac{\\cos 2x}{\\sin x+\\cos x}$ thỏa mãn $F(0)=1$. Tính $F(\\pi)$.', ans: '-1', explain: '-1' },
+        { type: 'short', q: 'Câu 18: $F(x)$ là một nguyên hàm của hàm số $f(x)=2^x$, thỏa mãn $ F(0)=\\dfrac{1}{\\ln 2}$. Tính $ T=a+b-2c$.', ans: '2025', explain: '2025' },
+        { type: 'short', q: 'Câu 19: $F(x)$ là nguyên hàm của $f(x)=\\dfrac{(3x-1)^2}{x^2}$, đồ thị $y=F(x)$ đi qua $M(1;-2)$. Tính $F\\left(\\mathrm{e}^2\\right)$.', ans: '44,4', explain: '44,4' },
+        { type: 'short', q: 'Câu 20: Ô tô chạy $90$ km/h, đạp phanh chậm dần. Quãng đường từ lúc phát hiện chướng ngại vật đến khi dừng hẳn là bao nhiêu mét?', ans: '100', explain: '100' },
+        { type: 'short', q: 'Câu 21: Vi khuẩn tăng trưởng $P\'(t)=k\\sqrt{t}$. Ban đầu 500 con, sau 1 ngày 600 con. Tính số lượng sau 9 ngày.', ans: '3200', explain: '3200' },
+        { type: 'short', q: 'Câu 22: Cây cà chua cao 5cm. Tốc độ lớn $ v(t)=-0{,}1t^3+t^2$. Chiều cao max là bao nhiêu?', ans: '54,4', explain: '54,4' }
     ];
 
-    // --- LOGIC XỬ LÝ ---
+    // LOGIC CHƯƠNG TRÌNH
     const quizBody = document.getElementById('quiz-body');
     let timerDuration = 90 * 60; 
+    let studentName = '', studentClass = '', timerInterval = null;
 
     function initQuiz() {
-        try {
-            let html = '';
-            questions.forEach((q, index) => {
-                html += `<div class="question-block" id="q-${index}">`;
-                
-                if(q.type === 'mcq') {
-                    html += `<div class="question-title">${q.q}</div><div class="options">`;
-                    q.options.forEach((opt, i) => html += `<label><input type="radio" name="q${index}" value="${i}"> ${opt}</label>`);
-                    html += `</div>`;
-                    html += `<div class="feedback"><b>Đáp án đúng:</b> ${q.options[q.ans]}<br><i>${q.explain}</i></div>`;
-                } 
-                else if (q.type === 'tf') {
-                    html += `<div class="question-title">${q.q}</div><table class="tf-table"><tr><th>Mệnh đề</th><th>Đ</th><th>S</th></tr>`;
-                    q.items.forEach((item, subIndex) => html += `<tr><td>${item.sub}</td><td style="text-align:center"><input type="radio" name="q${index}_${subIndex}" value="T"></td><td style="text-align:center"><input type="radio" name="q${index}_${subIndex}" value="F"></td></tr>`);
-                    html += `</table>`;
-                    html += `<div class="feedback"><b>Đáp án:</b> ${q.items.map(i => i.ans).join(', ')}<br><i>${q.explain}</i></div>`;
-                } 
-                else if (q.type === 'short') {
-                    html += `<div class="question-title">${q.q}</div><input type="text" id="in-${index}" placeholder="Nhập kết quả...">`;
-                    html += `<div class="feedback"><b>Đáp án đúng:</b> ${q.ans}<br><i>${q.explain}</i></div>`;
-                }
-                html += `</div>`;
-            });
-            quizBody.innerHTML = html;
-            if(window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
-            startTimer();
-        } catch (e) { console.error(e); }
+        let html = '';
+        questions.forEach((q, index) => {
+            // --- TẠO TIÊU ĐỀ PHẦN (THEO YÊU CẦU TRANG TRÍ MỚI) ---
+            if (index === 0) {
+                html += `<div class="part-header">PHẦN 1. Trắc nghiệm 4 phương án lựa chọn</div>`;
+            } else if (index === 12) { // Bắt đầu câu 13
+                html += `<div class="part-header">PHẦN 2. Trắc nghiệm chọn đúng sai</div>`;
+            } else if (index === 16) { // Bắt đầu câu 17
+                html += `<div class="part-header">PHẦN 3. Trắc nghiệm trả lời ngắn</div>`;
+            }
+            // -----------------------------------------------------
+
+            html += `<div class="question-block" id="q-${index}">`;
+            html += `<div class="question-title">${q.q}</div>`;
+            if(q.img) html += `<div class="question-image"><img src="${q.img}" alt="Hình câu ${index+1}"></div>`;
+
+            if(q.type === 'mcq') {
+                html += `<div class="options">`;
+                q.options.forEach((opt, i) => html += `<label><input type="radio" name="q${index}" value="${i}"> ${opt}</label>`);
+                html += `</div><div class="feedback"><b>Đáp án đúng:</b> ${q.options[q.ans]}<br><i>${q.explain}</i></div>`;
+            } else if (q.type === 'tf') {
+                html += `<table class="tf-table"><tr><th>Mệnh đề</th><th>Đ</th><th>S</th></tr>`;
+                q.items.forEach((item, subIndex) => html += `<tr><td>${item.sub}</td><td style="text-align:center"><input type="radio" name="q${index}_${subIndex}" value="T"></td><td style="text-align:center"><input type="radio" name="q${index}_${subIndex}" value="F"></td></tr>`);
+                html += `</table><div class="feedback"><b>Đáp án:</b> ${q.items.map(i => i.ans).join(', ')}<br><i>${q.explain}</i></div>`;
+            } else if (q.type === 'short') {
+                html += `<input type="text" id="in-${index}" placeholder="Nhập kết quả..."><div class="feedback"><b>Đáp án đúng:</b> ${q.ans}<br><i>${q.explain}</i></div>`;
+            }
+            html += `</div>`;
+        });
+        quizBody.innerHTML = html;
+        if(window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
     }
 
-    function startTimer() {
+    function startQuizNow() {
+        const nameInput = document.getElementById('input-name').value.trim();
+        const classInput = document.getElementById('input-class').value.trim();
+        if(!nameInput || !classInput) { alert('Em vui lòng nhập đầy đủ Họ tên và Lớp!'); return; }
+        
+        studentName = nameInput; studentClass = classInput;
+        document.getElementById('display-name').textContent = studentName;
+        document.getElementById('display-class').textContent = studentClass;
+        document.getElementById('welcome-screen').style.display = 'none';
+        document.getElementById('main-interface').style.display = 'block';
+        
         const display = document.getElementById('timer');
-        const timerInterval = setInterval(() => {
+        timerInterval = setInterval(() => {
             let m = parseInt(timerDuration / 60, 10);
             let s = parseInt(timerDuration % 60, 10);
             display.textContent = (m<10?"0"+m:m) + ":" + (s<10?"0"+s:s);
             if (--timerDuration < 0) { clearInterval(timerInterval); submitQuiz(); }
         }, 1000);
-        window.quizTimer = timerInterval; 
+    }
+
+    function checkBeforeSubmit() {
+        let unanswered = [];
+        questions.forEach((q, index) => {
+            let done = false;
+            if (q.type === 'mcq') { if (document.querySelector(`input[name="q${index}"]:checked`)) done = true; } 
+            else if (q.type === 'tf') { 
+                let c = 0; q.items.forEach((it, sub) => { if(document.querySelector(`input[name="q${index}_${sub}"]:checked`)) c++; });
+                if(c === q.items.length) done = true;
+            } 
+            else if (q.type === 'short') { if (document.getElementById(`in-${index}`).value.trim().length > 0) done = true; }
+            if (!done) unanswered.push(index + 1);
+        });
+
+        if (unanswered.length > 0) {
+            if (confirm("Em chưa hoàn thành các câu: " + unanswered.join(", ") + ".\n\nEm có chắc chắn muốn nộp bài luôn không?")) submitQuiz();
+        } else {
+            if (confirm("Em đã làm xong hết. Em có chắc chắn muốn nộp bài không?")) submitQuiz();
+        }
     }
 
     function submitQuiz() {
-        const name = document.getElementById('hs-name').value;
-        const className = document.getElementById('hs-class').value;
-        if(!name || !className) { alert("Vui lòng nhập Họ tên và Lớp!"); return; }
-
-        clearInterval(window.quizTimer);
+        clearInterval(timerInterval);
         const btn = document.getElementById('btn-submit');
-        btn.disabled = true;
-        btn.innerText = "ĐANG CHẤM VÀ GỬI ĐIỂM...";
+        btn.disabled = true; btn.innerText = "ĐANG CHẤM VÀ GỬI ĐIỂM...";
 
         let score = 0, total = 0;
         questions.forEach((q, index) => {
             const block = document.getElementById(`q-${index}`);
             block.classList.add('show-feedback');
-            
             if(q.type === 'mcq') {
-                total++;
-                const sel = document.querySelector(`input[name="q${index}"]:checked`);
-                if(sel && parseInt(sel.value) === q.ans) { 
-                    score++; 
-                    block.insertAdjacentHTML('beforeend', '<div class="correct-ans">Đúng (+1đ)</div>'); 
-                } else { 
-                    block.insertAdjacentHTML('beforeend', '<div class="wrong-ans">Sai</div>'); 
-                }
-            } 
-            else if(q.type === 'tf') {
+                total++; const sel = document.querySelector(`input[name="q${index}"]:checked`);
+                if(sel && parseInt(sel.value) === q.ans) { score++; block.insertAdjacentHTML('beforeend', '<div class="correct-ans">Đúng (+1đ)</div>'); }
+                else block.insertAdjacentHTML('beforeend', '<div class="wrong-ans">Sai</div>');
+            } else if(q.type === 'tf') {
                 q.items.forEach((item, sub) => {
-                    total+=0.25;
-                    const sel = document.querySelector(`input[name="q${index}_${sub}"]:checked`);
+                    total+=0.25; const sel = document.querySelector(`input[name="q${index}_${sub}"]:checked`);
                     if(sel && sel.value === item.ans) score+=0.25;
                 });
-            } 
-            else if(q.type === 'short') {
-                total++;
-                let val = document.getElementById(`in-${index}`).value.trim();
-                // Xử lý dấu phẩy thành dấu chấm để so sánh
-                let valNormalized = val.replace(',', '.');
-                let ansNormalized = q.ans.replace(',', '.');
-                
-                if(valNormalized === ansNormalized) { 
-                    score++; 
-                    block.insertAdjacentHTML('beforeend', '<div class="correct-ans">Đúng (+1đ)</div>'); 
-                } else { 
-                    block.insertAdjacentHTML('beforeend', '<div class="wrong-ans">Sai</div>'); 
-                }
+            } else if(q.type === 'short') {
+                total++; const val = document.getElementById(`in-${index}`).value.trim().replace(',', '.');
+                if(val === q.ans.replace(',', '.')) { score++; block.insertAdjacentHTML('beforeend', '<div class="correct-ans">Đúng (+1đ)</div>'); }
+                else block.insertAdjacentHTML('beforeend', '<div class="wrong-ans">Sai</div>');
             }
         });
 
         document.getElementById('result-area').style.display = 'block';
-        document.getElementById('res-name').innerText = name;
-        document.getElementById('res-class').innerText = className;
         document.getElementById('score-display').innerText = `${score} / ${total}`;
         const statusDiv = document.getElementById('submit-status');
 
         if(GOOGLE_SCRIPT_URL) {
             fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST', mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: name, class: className, score: score + "/" + total })
+                method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: studentName, class: studentClass, score: score + "/" + total })
             }).then(() => {
                 btn.innerText = "ĐÃ GỬI ĐIỂM THÀNH CÔNG";
-                statusDiv.innerText = "Dữ liệu đã được lưu vào hệ thống.";
-                statusDiv.style.color = "green";
-            }).catch(e => {
-                btn.innerText = "LỖI GỬI ĐIỂM";
-                statusDiv.innerText = "Không gửi được điểm. Hãy chụp màn hình!";
-                statusDiv.style.color = "red";
-            });
+                statusDiv.innerText = "Dữ liệu đã được lưu vào hệ thống."; statusDiv.style.color = "green";
+            }).catch(e => { btn.innerText = "LỖI GỬI ĐIỂM"; statusDiv.innerText = "Lỗi. Chụp màn hình gửi thầy!"; statusDiv.style.color = "red"; });
         }
-        
-        btn.style.display = 'none';
-        window.scrollTo(0,0);
+        btn.style.display = 'none'; window.scrollTo(0,0);
         if(window.MathJax) MathJax.typesetPromise();
     }
     
