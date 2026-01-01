@@ -2,86 +2,73 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Công Cụ Tạo Đề Thi Bảo Mật</title>
+    <title>Công Cụ Mã Hóa Đề Thi & Mật Khẩu</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <style>
-        body { font-family: sans-serif; padding: 30px; background: #f4f4f9; }
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f9; }
         .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         h1 { color: #2c3e50; text-align: center; }
-        textarea { width: 100%; height: 250px; padding: 10px; margin-top: 10px; border: 1px solid #ddd; font-family: monospace; font-size: 14px; }
+        textarea { width: 100%; height: 200px; padding: 10px; margin-top: 10px; border: 1px solid #ddd; font-family: monospace; font-size: 14px; }
         button { background: #27ae60; color: white; border: none; padding: 15px 30px; font-size: 18px; font-weight: bold; cursor: pointer; display: block; margin: 20px auto; border-radius: 5px; }
         button:hover { background: #219150; }
-        .note { background: #fff3cd; padding: 10px; border-left: 5px solid #ffc107; margin-bottom: 20px; }
+        .section { margin-bottom: 30px; padding: 20px; border: 1px solid #eee; border-radius: 8px; background: #fafafa; }
+        .section h3 { margin-top: 0; color: #d35400; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>CÔNG CỤ MÃ HÓA ĐỀ THI</h1>
-        
-        <div class="note">
-            <strong>Hướng dẫn:</strong><br>
-            1. Dán nội dung file dữ liệu đề thi (dạng <code>window.EXAM_DATA = ...</code>) vào ô bên dưới.<br>
-            2. Bấm nút <strong>"MÃ HÓA NGAY"</strong>.<br>
-            3. Copy kết quả ở ô dưới cùng và dán vào file <code>data/de-xx.js</code> trên GitHub.
+        <h1>CÔNG CỤ HỖ TRỢ GIÁO VIÊN</h1>
+
+        <div class="section">
+            <h3>1. Đặt Mật Khẩu Cho Đề Thi</h3>
+            <p>Nhập mật khẩu bạn muốn đặt (Ví dụ: 123456):</p>
+            <input type="text" id="passInput" placeholder="Nhập mật khẩu..." style="padding:10px; width:300px">
+            <button onclick="hashPass()" style="display:inline-block; margin:0 10px; padding:10px 20px; font-size:14px">Lấy Mã Hóa</button>
+            <br><br>
+            <strong>Copy dòng này dán vào file dữ liệu:</strong><br>
+            <input type="text" id="passOutput" readonly style="width:100%; padding:10px; background:#eee; border:1px solid #ccc; font-family:monospace">
         </div>
 
-        <h3>1. Dán Dữ Liệu Gốc (Chưa bảo mật) vào đây:</h3>
-        <textarea id="inputData" placeholder="Paste code window.EXAM_DATA = {...} vào đây..."></textarea>
-
-        <button onclick="encryptData()">🔒 MÃ HÓA NGAY</button>
-
-        <h3>2. Kết Quả (Đã bảo mật - Copy cái này):</h3>
-        <textarea id="outputData" readonly placeholder="Kết quả sẽ hiện ở đây..."></textarea>
+        <div class="section">
+            <h3>2. Mã Hóa Toàn Bộ Đề Thi</h3>
+            <textarea id="inputData" placeholder="Dán code window.EXAM_DATA = {...} vào đây..."></textarea>
+            <button onclick="encryptData()">🔒 MÃ HÓA ĐỀ THI</button>
+            <textarea id="outputData" readonly placeholder="Kết quả sẽ hiện ở đây..."></textarea>
+        </div>
     </div>
 
     <script>
-        function hash(input) {
-            // Hàm mã hóa giống hệt trong file thi.html
-            return CryptoJS.MD5(String(input).trim().toLowerCase()).toString();
+        function hash(input) { return CryptoJS.MD5(String(input).trim().toLowerCase()).toString(); }
+
+        // Hàm tạo mật khẩu
+        function hashPass() {
+            let p = document.getElementById('passInput').value;
+            if(!p) return alert("Chưa nhập mật khẩu!");
+            let hashed = hash(p);
+            // Tạo sẵn dòng code cho thầy copy
+            document.getElementById('passOutput').value = `"password": "${hashed}",`;
         }
 
+        // Hàm mã hóa đề thi
         function encryptData() {
             const raw = document.getElementById('inputData').value;
-            
-            // Dùng thủ thuật để biến chuỗi thành đối tượng JS
-            // Lưu ý: Code này chạy cục bộ trên trình duyệt của bạn nên an toàn.
             let dataObj;
             try {
-                // Tách lấy phần JSON bên trong window.EXAM_DATA = ...
                 const jsonPart = raw.substring(raw.indexOf('{'), raw.lastIndexOf('}') + 1);
-                // Dùng new Function để parse (vì JSON.parse không hiểu các key không có ngoặc kép)
                 const func = new Function("return " + jsonPart);
                 dataObj = func();
-            } catch (e) {
-                alert("Lỗi cú pháp! Hãy chắc chắn bạn copy đúng format window.EXAM_DATA = { ... };");
-                return;
-            }
+            } catch (e) { return alert("Lỗi cú pháp dữ liệu!"); }
 
-            // BẮT ĐẦU MÃ HÓA
             if(dataObj.questions) {
                 dataObj.questions.forEach(q => {
-                    // 1. Mã hóa câu MCQ
-                    if(q.type === 'mcq') {
-                        // ans đang là số (ví dụ: 1), đổi thành mã hóa của số đó
-                        q.ans = hash(q.ans); 
-                    }
-                    // 2. Mã hóa câu TF (Đúng Sai)
-                    else if(q.type === 'tf') {
-                        q.items.forEach(item => {
-                            item.ans = hash(item.ans); // 'T' -> mã hóa
-                        });
-                    }
-                    // 3. Mã hóa câu Short (Trả lời ngắn)
-                    else if(q.type === 'short') {
-                        q.ans = hash(q.ans); // '44.4' -> mã hóa
-                    }
+                    if(q.type === 'mcq') q.ans = hash(q.ans); 
+                    else if(q.type === 'tf') q.items.forEach(item => item.ans = hash(item.ans));
+                    else if(q.type === 'short') q.ans = hash(q.ans); 
                 });
             }
-
-            // Xuất kết quả
             const finalString = "window.EXAM_DATA = " + JSON.stringify(dataObj, null, 4) + ";";
             document.getElementById('outputData').value = finalString;
-            alert("Đã mã hóa xong! Hãy copy kết quả ở ô dưới.");
+            alert("Đã mã hóa xong!");
         }
     </script>
 </body>
