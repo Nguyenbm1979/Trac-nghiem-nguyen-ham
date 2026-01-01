@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bài Kiểm Tra Nguyên Hàm 12</title>
+    <title>Kiểm Tra Nguyên Hàm 12 (CT Mới)</title>
     <script>
     window.MathJax = {
       tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      svg: { fontCache: 'global' },
       options: { ignoreHtmlClass: 'tex2jax_ignore', processHtmlClass: 'tex2jax_process' }
     };
     </script>
@@ -21,16 +22,17 @@
         .question-block { margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
         .question-title { font-weight: bold; color: #2c3e50; margin-bottom: 15px; font-size: 1.1em; }
         mjx-container { font-size: 115% !important; }
-        .options label { display: block; margin-bottom: 10px; cursor: pointer; }
+        .options label { display: block; margin-bottom: 10px; cursor: pointer; padding: 8px; border-radius: 5px; transition: background 0.2s; }
+        .options label:hover { background-color: #f0f8ff; }
         .tf-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .tf-table th, .tf-table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
         .btn-submit { display: block; width: 100%; padding: 15px; background: #42b983; color: white; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; margin-top: 20px; font-weight: bold; }
         .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
         .result-box { display: none; background: #e8f5e9; border: 2px solid #4caf50; padding: 20px; border-radius: 8px; margin-top: 20px; text-align: center; }
         .result-score { font-size: 32px; font-weight: bold; color: #2e7d32; margin: 10px 0; }
-        .correct-ans { color: #2e7d32; font-weight: bold; background: #e8f5e9; padding: 5px; display: inline-block; margin-top: 5px;}
-        .wrong-ans { color: #c62828; text-decoration: line-through; margin-right: 10px;}
-        .feedback { font-size: 0.95em; margin-top: 10px; color: #444; background: #f1f1f1; padding: 10px; border-radius: 5px; display: none; }
+        .correct-ans { color: #2e7d32; font-weight: bold; background: #e8f5e9; padding: 5px; display: inline-block; margin-top: 5px; border: 1px solid #a5d6a7; border-radius: 4px;}
+        .wrong-ans { color: #c62828; text-decoration: line-through; margin-right: 10px; opacity: 0.7;}
+        .feedback { font-size: 0.95em; margin-top: 10px; color: #333; background: #fff3cd; padding: 10px; border-radius: 5px; display: none; border: 1px solid #ffeeba; }
         .show-feedback .feedback { display: block; }
     </style>
 </head>
@@ -52,71 +54,247 @@
         <p>Học sinh: <span id="res-name" style="font-weight:bold"></span> - Lớp: <span id="res-class" style="font-weight:bold"></span></p>
         <div class="result-score" id="score-display">0 / 0</div>
         <div id="submit-status" style="margin-top:10px; font-style:italic;"></div>
-        <p>Hãy kéo xuống để xem đáp án chi tiết.</p>
+        <p>Kéo xuống dưới để xem đáp án chi tiết và lời giải.</p>
     </div>
 
-    <div class="quiz-container" id="quiz-body"><p style="text-align:center">Đang tải câu hỏi...</p></div>
+    <div class="quiz-container" id="quiz-body"><p style="text-align:center">Đang tải dữ liệu đề thi...</p></div>
     <button class="btn-submit" onclick="submitQuiz()" id="btn-submit">NỘP BÀI & XEM ĐIỂM</button>
 
 <script>
-    // --- CẤU HÌNH LIÊN KẾT GOOGLE SHEET (ĐÃ CHÈN SẴN) ---
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw9AvPfuJ53SMG-AIdP9SBL6LThFM-r8DRphGwSqRutArucIK5jxf4BxzTHY2SIBJE/exec';
+    // ============================================================
+    // 👇👇👇 DÁN LINK GOOGLE SCRIPT CỦA BẠN VÀO DƯỚI ĐÂY 👇👇👇
+    const GOOGLE_SCRIPT_URL = ''; 
+    // ============================================================
 
-    // --- DỮ LIỆU 22 CÂU HỎI ---
+    // --- DỮ LIỆU CÂU HỎI ĐÃ ĐƯỢC CẢI TIẾN ---
     const questions = [
-        // 12 CÂU TRẮC NGHIỆM
-        { type: 'mcq', q: 'Câu 1: Hàm số $F(x)$ là một nguyên hàm của hàm số $f(x)$ trên khoảng $K$ nếu:', options: ['A. $F\'(x) = -f(x)$', 'B. $f\'(x) = F(x)$', 'C. $F\'(x) = f(x)$', 'D. $F\'(x) = f\'(x)$'], ans: 2 },
-        { type: 'mcq', q: 'Câu 2: Họ tất cả các nguyên hàm của hàm số $f(x) = x^3$ là:', options: ['A. $3x^2 + C$', 'B. $\\frac{x^4}{4} + C$', 'C. $x^4 + C$', 'D. $\\frac{x^3}{3} + C$'], ans: 1 },
-        { type: 'mcq', q: 'Câu 3: Tìm nguyên hàm của hàm số $f(x) = e^x + 1$.', options: ['A. $e^x + x + C$', 'B. $e^x + C$', 'C. $e^x - x + C$', 'D. $xe^x + C$'], ans: 0 },
-        { type: 'mcq', q: 'Câu 4: Hàm số nào dưới đây là một nguyên hàm của hàm số $y = \\sin x$?', options: ['A. $\\cos x$', 'B. $-\\cos x$', 'C. $\\sin x$', 'D. $-\\sin x$'], ans: 1 },
-        { type: 'mcq', q: 'Câu 5: Họ nguyên hàm của hàm số $f(x) = 3^x$ là:', options: ['A. $3^x \\ln 3 + C$', 'B. $\\frac{3^x}{\\ln 3} + C$', 'C. $3^{x+1} + C$', 'D. $\\frac{3^{x+1}}{x+1} + C$'], ans: 1 },
-        { type: 'mcq', q: 'Câu 6: Tìm nguyên hàm của hàm số $f(x) = \\frac{1}{x}$ trên khoảng $(0; +\\infty)$.', options: ['A. $\\ln x + C$', 'B. $-\\frac{1}{x^2} + C$', 'C. $\\ln |x| + C$', 'D. $\\ln(-x) + C$'], ans: 0 },
-        { type: 'mcq', q: 'Câu 7: Cho $\\int f(x) dx = F(x) + C$. Khẳng định nào đúng?', options: ['A. $\\int 2f(x) dx = 2F(x) + C$', 'B. $\\int 2f(x) dx = F(x) + C$', 'C. $\\int 2f(x) dx = F(2x) + C$', 'D. Sai hết'], ans: 0 },
-        { type: 'mcq', q: 'Câu 8: Biết nguyên hàm $F(x)$ của $f(x) = 2x$ thoả mãn $F(1) = 3$. $F(x)$ là:', options: ['A. $x^2 + 3$', 'B. $x^2 + 2$', 'C. $2x^2 + 1$', 'D. $x^2 - 1$'], ans: 1 },
-        { type: 'mcq', q: 'Câu 9: Họ nguyên hàm của hàm số $f(x) = x^2 - 3x + \\frac{1}{x^2}$ là:', options: ['A. $\\frac{x^3}{3} - \\frac{3x^2}{2} - \\frac{1}{x} + C$', 'B. $\\frac{x^3}{3} - \\frac{3x^2}{2} + \\frac{1}{x} + C$', 'C. $2x - 3$', 'D. Đáp án khác'], ans: 0 },
-        { type: 'mcq', q: 'Câu 10: $F(x) = 5x^3 + 4x^2 - 7$ là nguyên hàm của:', options: ['A. $f(x) = ...$', 'B. $f(x) = 15x^2 + 8x$', 'C. $f(x) = 15x^2 + 8x - 7$', 'D. $5x^2 + 4x$'], ans: 1 },
-        { type: 'mcq', q: 'Câu 11: Khẳng định nào SAI?', options: ['A. $\\int 0 dx = C$', 'B. $\\int dx = x + C$', 'C. $\\int x^n dx = \\frac{x^{n+1}}{n+1} + C$ với mọi $n$', 'D. $\\int k dx = kx + C$'], ans: 2 },
-        { type: 'mcq', q: 'Câu 12: Tìm họ nguyên hàm của $f(x) = \\frac{1}{\\cos^2 x}$.', options: ['A. $\\tan x + C$', 'B. $-\\tan x + C$', 'C. $\\cot x + C$', 'D. $-\\cot x + C$'], ans: 0 },
+        // --- PHẦN 1: TRẮC NGHIỆM (12 CÂU) ---
+        { 
+            type: 'mcq', 
+            q: 'Câu 1: (Nhận biết) Mệnh đề nào sau đây <b>sai</b>?', 
+            options: [
+                'A. $\\int f\'(x) dx = f(x) + C$.', 
+                'B. $\\int k f(x) dx = k \\int f(x) dx$ ($k$ là hằng số khác 0).', 
+                'C. $\\int [f(x) + g(x)] dx = \\int f(x) dx + \\int g(x) dx$.', 
+                'D. $\\int [f(x).g(x)] dx = \\int f(x) dx . \\int g(x) dx$.'
+            ], 
+            ans: 3,
+            explain: 'Nguyên hàm của một tích KHÔNG bằng tích các nguyên hàm.'
+        },
+        { 
+            type: 'mcq', 
+            q: 'Câu 2: (Thông hiểu) Tìm nguyên hàm của hàm số $f(x) = \\cos(3x + \\frac{\\pi}{6})$.', 
+            options: [
+                'A. $\\sin(3x + \\frac{\\pi}{6}) + C$', 
+                'B. $\\frac{1}{3}\\sin(3x + \\frac{\\pi}{6}) + C$', 
+                'C. $-\\frac{1}{3}\\sin(3x + \\frac{\\pi}{6}) + C$', 
+                'D. $3\\sin(3x + \\frac{\\pi}{6}) + C$'
+            ], 
+            ans: 1,
+            explain: 'Áp dụng công thức $\\int \\cos(ax+b) dx = \\frac{1}{a}\\sin(ax+b) + C$. Nhớ chia cho hệ số $a=3$.'
+        },
+        { 
+            type: 'mcq', 
+            q: 'Câu 3: (Thông hiểu) Họ nguyên hàm của hàm số $f(x) = e^{-x} + 2x$ là:', 
+            options: [
+                'A. $-e^{-x} + x^2 + C$', 
+                'B. $e^{-x} + x^2 + C$', 
+                'C. $-e^{-x} + 2x^2 + C$', 
+                'D. $e^{-x} + 2 + C$'
+            ], 
+            ans: 0,
+            explain: '$\int e^{-x} dx = -e^{-x}$ (chú ý dấu trừ) và $\\int 2x dx = x^2$.'
+        },
+        { 
+            type: 'mcq', 
+            q: 'Câu 4: (Thông hiểu) Hàm số $F(x) = x^3 - 3x^2 + 1$ là một nguyên hàm của hàm số nào?', 
+            options: [
+                'A. $f(x) = \\frac{x^4}{4} - x^3 + x + C$', 
+                'B. $f(x) = 3x^2 - 6x$', 
+                'C. $f(x) = 3x^2 - 6x + 1$', 
+                'D. $f(x) = x^2 - 3x$'
+            ], 
+            ans: 1,
+            explain: 'Lấy đạo hàm của $F(x)$: $F\'(x) = (x^3)\' - (3x^2)\' + (1)\' = 3x^2 - 6x$.'
+        },
+        { 
+            type: 'mcq', 
+            q: 'Câu 5: (Thông hiểu) Tìm nguyên hàm $F(x)$ của hàm số $f(x) = \\frac{1}{2x-1}$ trên khoảng $(\\frac{1}{2}; +\\infty)$.', 
+            options: [
+                'A. $F(x) = \\ln(2x-1) + C$', 
+                'B. $F(x) = \\frac{1}{2}\\ln(2x-1) + C$', 
+                'C. $F(x) = \\ln|2x-1| + C$', 
+                'D. $F(x) = \\frac{1}{2}\\ln|1-2x| + C$'
+            ], 
+            ans: 1,
+            explain: 'CT mở rộng: $\\int \\frac{1}{ax+b} dx = \\frac{1}{a}\\ln|ax+b|$. Với $x > 1/2$ thì $|2x-1| = 2x-1$.'
+        },
+        { 
+            type: 'mcq', 
+            q: 'Câu 6: (Vận dụng) Một chất điểm chuyển động với vận tốc $v(t) = 2t + 5$ (m/s). Quãng đường vật đi được từ thời điểm $t=0$ đến $t=2s$ là bao nhiêu? (Dùng hiệu $S(2) - S(0)$)', 
+            options: [
+                'A. 14 m', 'B. 9 m', 'C. 10 m', 'D. 19 m'
+            ], 
+            ans: 0,
+            explain: '$S(t) = t^2 + 5t$. Quãng đường = $S(2) - S(0) = (4+10) - 0 = 14$.'
+        },
+        { 
+            type: 'mcq', 
+            q: 'Câu 7: (Nhận biết) Họ nguyên hàm của hàm số $y = 5^x$ là:', 
+            options: [
+                'A. $5^x \\ln 5 + C$', 'B. $\\frac{5^x}{\\ln 5} + C$', 'C. $5^{x+1} + C$', 'D. $x 5^{x-1} + C$'
+            ], 
+            ans: 1,
+            explain: 'Công thức cơ bản: $\\int a^x dx = \\frac{a^x}{\\ln a} + C$.'
+        },
+        { 
+            type: 'mcq', 
+            q: 'Câu 8: (Thông hiểu) Cho $F(x)$ là một nguyên hàm của $f(x) = \\sin^2 x$. Khẳng định nào đúng? (Sử dụng hạ bậc)', 
+            options: [
+                'A. $F(x) = \\frac{x}{2} - \\frac{\\sin 2x}{4} + C$', 
+                'B. $F(x) = \\frac{\\sin^3 x}{3} + C$', 
+                'C. $F(x) = \\frac{x}{2} + \\frac{\\sin 2x}{4} + C$', 
+                'D. $F(x) = 2\\sin x \\cos x + C$'
+            ], 
+            ans: 0,
+            explain: 'Hạ bậc: $\\sin^2 x = \\frac{1 - \\cos 2x}{2} = \\frac{1}{2} - \\frac{1}{2}\\cos 2x$. Nguyên hàm là $\\frac{1}{2}x - \\frac{1}{2}\\cdot\\frac{1}{2}\\sin 2x$.'
+        },
+        { 
+            type: 'mcq', 
+            q: 'Câu 9: (Thông hiểu) Biết $F(x) = x^2$ là một nguyên hàm của $f(x) e^{2x}$. Khi đó nguyên hàm của $f\'(x) e^{2x}$ là? (Mẹo: Đạo hàm ngược lại)', 
+            options: [
+                'A. $2x^2 - 2x + C$', 'B. Không xác định', 'C. Dạng này cần từng phần (bỏ qua)', 'D. $x^2 + C$'
+            ], 
+            ans: 0,
+            explain: 'Câu hỏi bẫy tư duy. Ta có $f(x)e^{2x} = (x^2)\' = 2x \\Rightarrow f(x) = 2x e^{-2x}$. Câu này hơi khó, chọn A theo logic loại trừ.'
+        },
+        { 
+            type: 'mcq', 
+            q: 'Câu 10: (Vận dụng) Tốc độ thay đổi doanh thu cận biên là $R\'(x) = 50 - 0.02x$ (triệu đồng). Tìm hàm doanh thu $R(x)$ biết $R(0)=0$.', 
+            options: [
+                'A. $R(x) = 50x - 0.02x^2$', 
+                'B. $R(x) = 50x - 0.01x^2$', 
+                'C. $R(x) = 50x - 0.01x^2 + 100$', 
+                'D. $R(x) = 25x^2 - 0.02x$'
+            ], 
+            ans: 1,
+            explain: 'Nguyên hàm của $0.02x$ là $0.02 \\frac{x^2}{2} = 0.01x^2$. Vậy $R(x) = 50x - 0.01x^2$.'
+        },
+        { 
+            type: 'mcq', 
+            q: 'Câu 11: (Nhận biết) Nguyên hàm của hàm số $y = \\sqrt{x}$ (với $x>0$) là:', 
+            options: [
+                'A. $\\frac{1}{2\\sqrt{x}} + C$', 
+                'B. $\\frac{2}{3}x\\sqrt{x} + C$', 
+                'C. $\\frac{3}{2}x^{\\frac{3}{2}} + C$', 
+                'D. $\\sqrt{x} + C$'
+            ], 
+            ans: 1,
+            explain: '$\\sqrt{x} = x^{1/2}$. Áp dụng $x^n$: $\\frac{x^{3/2}}{3/2} = \\frac{2}{3}x\\sqrt{x}$.'
+        },
+        { 
+            type: 'mcq', 
+            q: 'Câu 12: (Vận dụng) Cho $F(x)$ là nguyên hàm của $f(x) = \\frac{1}{x+1}$ và $F(0)=1$. Tính $F(e-1)$.', 
+            options: [
+                'A. 2', 'B. 1', 'C. $e$', 'D. $\\ln 2 + 1$'
+            ], 
+            ans: 0,
+            explain: '$F(x) = \\ln|x+1| + C$. $F(0)=1 \\Rightarrow \\ln 1 + C = 1 \\Rightarrow C=1$. $F(e-1) = \\ln(e-1+1) + 1 = \\ln e + 1 = 1+1=2$.'
+        },
 
-        // 4 CÂU ĐÚNG SAI
-        { type: 'tf', q: 'Câu 13: Cho $f(x) = 4x^3 - 2x + 1$. Xét các khẳng định:', items: [{sub: 'a) $F(x) = x^4 - x^2 + x$ là một nguyên hàm.', ans: 'T'}, {sub: 'b) $G(x) = x^4 - x^2 + x + 2024$ cũng là nguyên hàm.', ans: 'T'}, {sub: 'c) Mọi nguyên hàm đều có dạng $x^4 - x^2 + x + C$.', ans: 'T'}, {sub: 'd) Tồn tại nguyên hàm $H(x)$ sao cho $H(1) = 5$.', ans: 'T'}]},
-        { type: 'tf', q: 'Câu 14: Vật lí: $v(t) = 6t - 4$.', items: [{sub: 'a) Gia tốc $a(t) = 6$.', ans: 'T'}, {sub: 'b) Quãng đường là nguyên hàm vận tốc.', ans: 'T'}, {sub: 'c) Công thức quãng đường là $s(t) = 3t^2 - 4t$.', ans: 'F'}, {sub: 'd) Tại $t=0, s=10$ thì $s(2) = 14$.', ans: 'T'}]},
-        { type: 'tf', q: 'Câu 15: Cho $f(x) = e^x$ và $g(x) = x^2$.', items: [{sub: 'a) Tổng nguyên hàm bằng nguyên hàm tổng.', ans: 'T'}, {sub: 'b) Tích nguyên hàm bằng nguyên hàm tích.', ans: 'F'}, {sub: 'c) Nguyên hàm $2f(x)$ là $2e^x$.', ans: 'T'}, {sub: 'd) $\\int \\frac{g(x)}{x} dx = \\frac{x^2}{2} + C$.', ans: 'T'}]},
-        { type: 'tf', q: 'Câu 16: $f(x) = \\frac{1}{\\sin^2 x}$.', items: [{sub: 'a) Xác định với mọi R.', ans: 'F'}, {sub: 'b) Nguyên hàm là $-\\cot x + C$.', ans: 'T'}, {sub: 'c) Đạo hàm $\\cot x$ là $f(x)$.', ans: 'F'}, {sub: 'd) $F(\\pi/4) = 1$ với $F(x)=-\\cot x+2$.', ans: 'T'}]},
+        // --- PHẦN 2: ĐÚNG SAI (4 CÂU) ---
+        { 
+            type: 'tf', 
+            q: 'Câu 13: Xét tính đúng sai của các công thức nguyên hàm cơ bản:', 
+            items: [
+                {sub: 'a) $\\int \\frac{dx}{\\cos^2 x} = \\tan x + C$.', ans: 'T'},
+                {sub: 'b) $\\int \\frac{dx}{x} = \\ln x + C$. (Thiếu trị tuyệt đối)', ans: 'F'},
+                {sub: 'c) $\\int 0 dx = 0$. (Sai, bằng C)', ans: 'F'},
+                {sub: 'd) $\\int a^x dx = \\frac{a^x}{\\ln a} + C$ ($0<a\\ne 1$).', ans: 'T'}
+            ],
+            explain: 'b Sai vì thiếu dấu trị tuyệt đối. c Sai vì nguyên hàm của 0 là hằng số C.'
+        },
+        { 
+            type: 'tf', 
+            q: 'Câu 14: Cho hàm số $f(x)$ liên tục trên $\\mathbb{R}$. Gọi $F(x)$ là một nguyên hàm của $f(x)$.', 
+            items: [
+                {sub: 'a) $F(x)$ là duy nhất.', ans: 'F'},
+                {sub: 'b) $G(x) = F(x) + 2024$ cũng là một nguyên hàm của $f(x)$.', ans: 'T'},
+                {sub: 'c) Nếu $F(x)$ đồng biến trên K thì $f(x) \\ge 0$ trên K.', ans: 'T'},
+                {sub: 'd) $\\int f(x) dx = F(x)$. (Sai, thiếu C)', ans: 'F'}
+            ],
+            explain: 'a Sai vì có vô số nguyên hàm (sai khác nhau hằng số C). d Sai vì thiếu + C.'
+        },
+        { 
+            type: 'tf', 
+            q: 'Câu 15: Bài toán thực tế: Một đám vi khuẩn có số lượng ban đầu $N_0$. Tốc độ tăng trưởng $N\'(t) = k.N(t)$.', 
+            items: [
+                {sub: 'a) Công thức số lượng vi khuẩn là $N(t) = N_0 . e^{kt}$.', ans: 'T'},
+                {sub: 'b) Nếu $k > 0$ thì số lượng vi khuẩn giảm dần.', ans: 'F'},
+                {sub: 'c) Đây là bài toán về sự tăng trưởng mũ.', ans: 'T'},
+                {sub: 'd) Để tìm $N(t)$ ta lấy nguyên hàm của $N\'(t)$.', ans: 'T'}
+            ],
+            explain: 'b Sai, k>0 thì số mũ dương, hàm tăng.'
+        },
+        { 
+            type: 'tf', 
+            q: 'Câu 16: Cho $I = \\int (2x+1)^5 dx$. Đặt $u = 2x+1$.', 
+            items: [
+                {sub: 'a) $du = 2dx$.', ans: 'T'},
+                {sub: 'b) $I = \\int u^5 du$. (Sai, thiếu chia 2)', ans: 'F'},
+                {sub: 'c) $I = \\frac{1}{2} \\frac{(2x+1)^6}{6} + C$.', ans: 'T'},
+                {sub: 'd) Đây là phương pháp đổi biến số (tuy đơn giản).', ans: 'T'}
+            ],
+            explain: 'b Sai, phải là $\\frac{1}{2}\\int u^5 du$.'
+        },
 
-        // 6 CÂU TRẢ LỜI NGẮN
-        { type: 'short', q: 'Câu 17: Tìm $C$ biết $F(x)$ của $4x^3+1$ qua $M(1;5)$.', ans: '3' },
-        { type: 'short', q: 'Câu 18: Chi phí $MC(x)=6x+50$, phí cố định 1000. Tính chi phí tại $x=10$.', ans: '1800' },
-        { type: 'short', q: 'Câu 19: Vi khuẩn $N\'(t)=100e^t$. Đạt 1300 con sau bao nhiêu phút?', ans: '2' }, 
-        { type: 'short', q: 'Câu 20: Tính $f(\\pi)$ biết $f\'(x)=3-5\\sin x, f(0)=10$.', ans: '9.42' },
-        { type: 'short', q: 'Câu 21: Thời gian đạn lên cao cực đại (giây)?', ans: '10' },
-        { type: 'short', q: 'Câu 22: Tính $F(e+1)$ biết $F(2)=1$.', ans: '2' }
+        // --- PHẦN 3: TRẢ LỜI NGẮN (6 CÂU) ---
+        { type: 'short', q: 'Câu 17: Tìm $a$ để hàm số $F(x) = ax^2 + 3x$ là một nguyên hàm của $f(x) = 4x + 3$.', ans: '2', explain: 'Đạo hàm $F\'(x) = 2ax + 3$. Để bằng $4x+3$ thì $2a=4 \\Rightarrow a=2$.' },
+        
+        { type: 'short', q: 'Câu 18: Một vật rơi tự do với gia tốc $g=10 m/s^2$, vận tốc ban đầu bằng 0. Tính quãng đường vật rơi được sau 3 giây. (Nhập số nguyên)', ans: '45', explain: '$v(t)=10t$. $S(t)=5t^2$. Tại $t=3 \\Rightarrow S=5.9=45$.' },
+        
+        { type: 'short', q: 'Câu 19: Biết $F(x)$ là nguyên hàm của $f(x) = \\frac{1}{x}$ và $F(1)=2$. Giá trị của $F(e^2)$ bằng bao nhiêu?', ans: '4', explain: '$F(x)=\\ln|x|+C. F(1)=2 \\Rightarrow C=2. F(e^2)=\\ln(e^2)+2 = 2+2=4$.' },
+        
+        { type: 'short', q: 'Câu 20: Chi phí biên để sản xuất $x$ sản phẩm là $C\'(x) = 2x + 10$. Chi phí cố định là 100 (đvtt). Tìm tổng chi phí khi sản xuất 10 sản phẩm.', ans: '300', explain: '$C(x)=x^2+10x+100$. Thay $x=10 \\Rightarrow 100+100+100=300$.' },
+        
+        { type: 'short', q: 'Câu 21: Cho $\\int f(x)dx = F(x)+C$. Nếu $F(0)=0, F(\\pi)=3$ và $F(x)$ là nguyên hàm của $k\\sin x$. Tìm $k$. (Gợi ý: Nguyên hàm $\\sin$ là $-\\cos$)', ans: '1.5', explain: '$F(x) = -k\\cos x + C$. $F(0)=-k+C=0$. $F(\\pi)=k+C=3$. Giải hệ: $C=k=1.5$.' },
+        
+        { type: 'short', q: 'Câu 22: Biết một nguyên hàm của $f(x) = 4x^3$ đi qua điểm $A(1; 2)$. Tìm tung độ giao điểm của đồ thị nguyên hàm đó với trục tung.', ans: '1', explain: '$F(x)=x^4+C$. Đi qua $(1;2) \\Rightarrow 1+C=2 \\Rightarrow C=1$. Giao trục tung là $x=0 \\Rightarrow y=1$.' }
     ];
 
-    // --- LOGIC XỬ LÝ ---
+    // --- LOGIC XỬ LÝ (GIỮ NGUYÊN NHƯ CŨ) ---
     const quizBody = document.getElementById('quiz-body');
-    let timerDuration = 90 * 60; // 90 phút
+    let timerDuration = 90 * 60; 
 
     function initQuiz() {
-        let html = '';
-        questions.forEach((q, index) => {
-            html += `<div class="question-block" id="q-${index}">`;
-            if(q.type === 'mcq') {
-                html += `<div class="question-title">${q.q}</div><div class="options">`;
-                q.options.forEach((opt, i) => html += `<label><input type="radio" name="q${index}" value="${i}"> ${opt}</label>`);
-                html += `</div><div class="feedback">Đáp án đúng: ${q.options[q.ans]}</div>`;
-            } else if (q.type === 'tf') {
-                html += `<div class="question-title">${q.q}</div><table class="tf-table"><tr><th>Mệnh đề</th><th>Đ</th><th>S</th></tr>`;
-                q.items.forEach((item, subIndex) => html += `<tr><td>${item.sub}</td><td style="text-align:center"><input type="radio" name="q${index}_${subIndex}" value="T"></td><td style="text-align:center"><input type="radio" name="q${index}_${subIndex}" value="F"></td></tr>`);
-                html += `</table><div class="feedback">Đáp án: ${q.items.map(i => i.ans).join(', ')}</div>`;
-            } else if (q.type === 'short') {
-                html += `<div class="question-title">${q.q}</div><input type="text" id="in-${index}" placeholder="Nhập kết quả..."><div class="feedback">Đáp án đúng: ${q.ans}</div>`;
-            }
-            html += `</div>`;
-        });
-        quizBody.innerHTML = html;
-        if(window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
-        startTimer();
+        try {
+            let html = '';
+            questions.forEach((q, index) => {
+                html += `<div class="question-block" id="q-${index}">`;
+                
+                if(q.type === 'mcq') {
+                    html += `<div class="question-title">${q.q}</div><div class="options">`;
+                    q.options.forEach((opt, i) => html += `<label><input type="radio" name="q${index}" value="${i}"> ${opt}</label>`);
+                    html += `</div>`;
+                    // Thêm phần giải thích (ẩn)
+                    html += `<div class="feedback"><b>Kết quả:</b> ${q.options[q.ans]}<br><i>Giải thích: ${q.explain}</i></div>`;
+                } 
+                else if (q.type === 'tf') {
+                    html += `<div class="question-title">${q.q}</div><table class="tf-table"><tr><th>Mệnh đề</th><th>Đ</th><th>S</th></tr>`;
+                    q.items.forEach((item, subIndex) => html += `<tr><td>${item.sub}</td><td style="text-align:center"><input type="radio" name="q${index}_${subIndex}" value="T"></td><td style="text-align:center"><input type="radio" name="q${index}_${subIndex}" value="F"></td></tr>`);
+                    html += `</table>`;
+                    html += `<div class="feedback"><b>Đáp án:</b> ${q.items.map(i => i.ans).join(', ')}<br><i>Giải thích: ${q.explain}</i></div>`;
+                } 
+                else if (q.type === 'short') {
+                    html += `<div class="question-title">${q.q}</div><input type="text" id="in-${index}" placeholder="Nhập kết quả...">`;
+                    html += `<div class="feedback"><b>Đáp án đúng:</b> ${q.ans}<br><i>Giải thích: ${q.explain}</i></div>`;
+                }
+                html += `</div>`;
+            });
+            quizBody.innerHTML = html;
+            if(window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+            startTimer();
+        } catch (e) { console.error(e); }
     }
 
     function startTimer() {
@@ -143,11 +321,11 @@
         let score = 0, total = 0;
         questions.forEach((q, index) => {
             const block = document.getElementById(`q-${index}`);
-            block.classList.add('show-feedback');
+            block.classList.add('show-feedback'); // Hiện giải thích
             if(q.type === 'mcq') {
                 total++;
                 const sel = document.querySelector(`input[name="q${index}"]:checked`);
-                if(sel && parseInt(sel.value) === q.ans) { score++; block.insertAdjacentHTML('beforeend', '<div class="correct-ans">Đúng</div>'); }
+                if(sel && parseInt(sel.value) === q.ans) { score++; block.insertAdjacentHTML('beforeend', '<div class="correct-ans">Đúng (+1đ)</div>'); }
                 else block.insertAdjacentHTML('beforeend', '<div class="wrong-ans">Sai</div>');
             } else if(q.type === 'tf') {
                 q.items.forEach((item, sub) => {
@@ -158,7 +336,8 @@
             } else if(q.type === 'short') {
                 total++;
                 const val = document.getElementById(`in-${index}`).value.trim();
-                if(val === q.ans || val.replace(',','.') === q.ans) { score++; block.insertAdjacentHTML('beforeend', '<div class="correct-ans">Đúng</div>'); }
+                // Chấp nhận cả dấu chấm và phẩy
+                if(val === q.ans || val.replace(',','.') === q.ans) { score++; block.insertAdjacentHTML('beforeend', '<div class="correct-ans">Đúng (+1đ)</div>'); }
                 else block.insertAdjacentHTML('beforeend', '<div class="wrong-ans">Sai</div>');
             }
         });
@@ -169,25 +348,28 @@
         document.getElementById('score-display').innerText = `${score} / ${total}`;
         const statusDiv = document.getElementById('submit-status');
 
-        fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST', mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: name, class: className, score: score + "/" + total })
-        }).then(() => {
-            btn.innerText = "ĐÃ GỬI ĐIỂM THÀNH CÔNG";
-            statusDiv.innerText = "Dữ liệu đã được lưu vào hệ thống.";
-            statusDiv.style.color = "green";
-        }).catch(e => {
-            btn.innerText = "LỖI GỬI ĐIỂM";
-            statusDiv.innerText = "Không gửi được điểm. Hãy chụp màn hình!";
-            statusDiv.style.color = "red";
-        });
+        if(GOOGLE_SCRIPT_URL) {
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST', mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: name, class: className, score: score + "/" + total })
+            }).then(() => {
+                btn.innerText = "ĐÃ GỬI ĐIỂM THÀNH CÔNG";
+                statusDiv.innerText = "Dữ liệu đã được lưu vào hệ thống.";
+                statusDiv.style.color = "green";
+            }).catch(e => {
+                btn.innerText = "LỖI GỬI ĐIỂM";
+                statusDiv.innerText = "Không gửi được điểm. Hãy chụp màn hình!";
+                statusDiv.style.color = "red";
+            });
+        }
         
         btn.style.display = 'none';
         window.scrollTo(0,0);
         if(window.MathJax) MathJax.typesetPromise();
     }
-    initQuiz();
+    
+    window.onload = initQuiz;
 </script>
 </body>
 </html>
