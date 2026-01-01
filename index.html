@@ -4,8 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bài Kiểm Tra Nguyên Hàm 12</title>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']], // Cho phép dùng dấu $ để kẹp công thức
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+    </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; background-color: #f4f4f9; padding: 20px; max-width: 900px; margin: 0 auto; }
         .header-info { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
@@ -14,23 +27,30 @@
         .student-form input { padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-right: 10px; width: 200px; }
         .quiz-container { background: white; padding: 30px; margin-top: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .question-block { margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
-        .question-title { font-weight: bold; color: #2c3e50; margin-bottom: 10px; }
-        .options label { display: block; margin-bottom: 8px; cursor: pointer; }
+        
+        /* Chỉnh font chữ câu hỏi và công thức to hơn */
+        .question-title { font-weight: bold; color: #2c3e50; margin-bottom: 15px; font-size: 1.1em; }
+        mjx-container { font-size: 115% !important; } /* Phóng to công thức toán */
+
+        .options label { display: block; margin-bottom: 10px; cursor: pointer; padding: 5px 0; }
+        .options label:hover { background-color: #f9f9f9; }
+        
         .tf-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        .tf-table th, .tf-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        .tf-table th, .tf-table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
         .tf-table th { background-color: #f8f9fa; text-align: center; }
         .tf-table td.center { text-align: center; width: 60px; }
-        .btn-submit { display: block; width: 100%; padding: 15px; background: #42b983; color: white; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; margin-top: 20px; }
+        
+        .btn-submit { display: block; width: 100%; padding: 15px; background: #42b983; color: white; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; margin-top: 20px; font-weight: bold; }
         .btn-submit:hover { background: #3aa876; }
         
         /* Kết quả */
         .result-box { display: none; background: #e8f5e9; border: 2px solid #4caf50; padding: 20px; border-radius: 8px; margin-top: 20px; text-align: center; }
-        .result-score { font-size: 28px; font-weight: bold; color: #2e7d32; }
+        .result-score { font-size: 32px; font-weight: bold; color: #2e7d32; margin: 10px 0; }
         
         /* Trạng thái đúng sai */
-        .correct-ans { color: #2e7d32; font-weight: bold; background: #e8f5e9; padding: 2px 5px; border-radius: 4px; }
-        .wrong-ans { color: #c62828; text-decoration: line-through; }
-        .feedback { font-size: 0.9em; margin-top: 5px; color: #666; font-style: italic; display: none; }
+        .correct-ans { color: #2e7d32; font-weight: bold; background: #e8f5e9; padding: 5px 10px; border-radius: 4px; display: inline-block; margin-top: 5px;}
+        .wrong-ans { color: #c62828; text-decoration: line-through; margin-right: 10px;}
+        .feedback { font-size: 0.95em; margin-top: 10px; color: #444; background: #f1f1f1; padding: 10px; border-radius: 5px; display: none; }
         .show-feedback .feedback { display: block; }
     </style>
 </head>
@@ -49,21 +69,23 @@
 
     <div id="result-area" class="result-box">
         <h3>KẾT QUẢ BÀI LÀM</h3>
-        <p>Học sinh: <span id="res-name"></span> - Lớp: <span id="res-class"></span></p>
+        <p>Học sinh: <span id="res-name" style="font-weight:bold"></span> - Lớp: <span id="res-class" style="font-weight:bold"></span></p>
         <div class="result-score" id="score-display">0 / 0</div>
-        <p>Hãy kéo xuống để xem chi tiết đáp án.</p>
+        <p>Hãy kéo xuống dưới để xem chi tiết đáp án đúng/sai.</p>
     </div>
 
     <div class="quiz-container" id="quiz-body">
-        </div>
+        <p style="text-align:center">Đang tải câu hỏi...</p>
+    </div>
 
     <button class="btn-submit" onclick="submitQuiz()" id="btn-submit">NỘP BÀI & XEM ĐIỂM</button>
 
 <script>
-    // DỮ LIỆU CÂU HỎI (Bạn có thể sửa nội dung trong dấu ngoặc '' ở đây)
+    // --- DỮ LIỆU CÂU HỎI ---
+    // (Lưu ý: Với công thức Toán trong chuỗi JS, dấu gạch chéo cần nhân đôi. Ví dụ: \\int thay vì \int)
     const questions = [
         // --- PHẦN 1: TRẮC NGHIỆM (12 CÂU) ---
-        { type: 'mcq', q: 'Câu 1: Hàm số $F(x)$ là một nguyên hàm của hàm số $f(x)$ trên khoảng $K$ nếu:', options: ['A. $F\'(x) = -f(x)$', 'B. $f\'(x) = F(x)$', 'C. $F\'(x) = f(x)$', 'D. $F\'(x) = f\'(x)$'], ans: 2 }, // Index 0=A, 1=B, 2=C...
+        { type: 'mcq', q: 'Câu 1: Hàm số $F(x)$ là một nguyên hàm của hàm số $f(x)$ trên khoảng $K$ nếu:', options: ['A. $F\'(x) = -f(x)$', 'B. $f\'(x) = F(x)$', 'C. $F\'(x) = f(x)$', 'D. $F\'(x) = f\'(x)$'], ans: 2 },
         { type: 'mcq', q: 'Câu 2: Họ tất cả các nguyên hàm của hàm số $f(x) = x^3$ là:', options: ['A. $3x^2 + C$', 'B. $\\frac{x^4}{4} + C$', 'C. $x^4 + C$', 'D. $\\frac{x^3}{3} + C$'], ans: 1 },
         { type: 'mcq', q: 'Câu 3: Tìm nguyên hàm của hàm số $f(x) = e^x + 1$.', options: ['A. $e^x + x + C$', 'B. $e^x + C$', 'C. $e^x - x + C$', 'D. $xe^x + C$'], ans: 0 },
         { type: 'mcq', q: 'Câu 4: Hàm số nào dưới đây là một nguyên hàm của hàm số $y = \\sin x$?', options: ['A. $\\cos x$', 'B. $-\\cos x$', 'C. $\\sin x$', 'D. $-\\sin x$'], ans: 1 },
@@ -105,7 +127,7 @@
         // --- PHẦN 3: TRẢ LỜI NGẮN (6 CÂU) ---
         { type: 'short', q: 'Câu 17: Tìm $C$ biết $F(x)$ của $4x^3+1$ qua $M(1;5)$.', ans: '3' },
         { type: 'short', q: 'Câu 18: Chi phí $MC(x)=6x+50$, phí cố định 1000. Tính chi phí tại $x=10$.', ans: '1800' },
-        { type: 'short', q: 'Câu 19: Vi khuẩn $N\'(t)=100e^t$, ban đầu 200 con. Đạt 1300 con sau bao nhiêu phút? (Làm tròn đơn vị)', ans: '2' }, // Chấp nhận 2
+        { type: 'short', q: 'Câu 19: Vi khuẩn $N\'(t)=100e^t$, ban đầu 200 con. Đạt 1300 con sau bao nhiêu phút? (Làm tròn đơn vị)', ans: '2' }, 
         { type: 'short', q: 'Câu 20: Tính $f(\\pi)$ biết $f\'(x)=3-5\\sin x, f(0)=10$. (Làm tròn 2 số thập phân)', ans: '9.42' },
         { type: 'short', q: 'Câu 21: Thời gian đạn lên cao cực đại (giây)? ($v_0=98, g=-9.8$)', ans: '10' },
         { type: 'short', q: 'Câu 22: Tính $F(e+1)$ biết $F(x)$ là nguyên hàm $\\frac{1}{x-1}, F(2)=1$.', ans: '2' }
@@ -120,7 +142,7 @@
         questions.forEach((q, index) => {
             html += `<div class="question-block" id="q-${index}">`;
             
-            // Xử lý MCQ
+            // Render Câu hỏi MCQ
             if(q.type === 'mcq') {
                 html += `<div class="question-title">${q.q}</div><div class="options">`;
                 q.options.forEach((opt, i) => {
@@ -129,7 +151,7 @@
                 html += `</div><div class="feedback" id="fb-${index}">Đáp án đúng: ${q.options[q.ans]}</div>`;
             } 
             
-            // Xử lý True/False
+            // Render Câu hỏi TF
             else if (q.type === 'tf') {
                 html += `<div class="question-title">${q.q}</div>`;
                 html += `<table class="tf-table"><tr><th>Mệnh đề</th><th>Đ</th><th>S</th></tr>`;
@@ -143,7 +165,7 @@
                 html += `</table><div class="feedback" id="fb-${index}">Đáp án: ${q.items.map(i => i.ans).join(', ')}</div>`;
             }
 
-            // Xử lý Short Answer
+            // Render Câu hỏi Short Answer
             else if (q.type === 'short') {
                 html += `<div class="question-title">${q.q}</div>`;
                 html += `<input type="text" id="in-${index}" placeholder="Nhập kết quả...">`;
@@ -152,7 +174,15 @@
 
             html += `</div>`;
         });
+        
+        // Đưa nội dung vào trang
         quizBody.innerHTML = html;
+        
+        // QUAN TRỌNG: Yêu cầu MathJax hiển thị lại công thức sau khi nội dung đã được chèn
+        if(window.MathJax && MathJax.typesetPromise) {
+            MathJax.typesetPromise();
+        }
+
         startTimer();
     }
 
@@ -171,16 +201,14 @@
                 submitQuiz();
             }
         }, 1000);
-        // Lưu interval để clear khi nộp sớm (nếu cần)
         window.quizTimer = timerInterval; 
     }
 
     function submitQuiz() {
-        clearInterval(window.quizTimer); // Dừng đồng hồ
-        document.getElementById('btn-submit').style.display = 'none'; // Ẩn nút nộp
+        clearInterval(window.quizTimer); 
+        document.getElementById('btn-submit').style.display = 'none'; 
         document.getElementById('result-area').style.display = 'block';
         
-        // Hiện thông tin HS
         document.getElementById('res-name').innerText = document.getElementById('hs-name').value || "Chưa nhập tên";
         document.getElementById('res-class').innerText = document.getElementById('hs-class').value || "--";
 
@@ -191,8 +219,6 @@
             const block = document.getElementById(`q-${index}`);
             block.classList.add('show-feedback');
             
-            let isCorrect = false;
-
             if(q.type === 'mcq') {
                 totalPoints++;
                 const selected = document.querySelector(`input[name="q${index}"]:checked`);
@@ -200,11 +226,10 @@
                     score++;
                     block.innerHTML += `<div class="correct-ans">Đúng (+1đ)</div>`;
                 } else {
-                    block.innerHTML += `<div class="wrong-ans" style="color:red">Sai</div>`;
+                    block.innerHTML += `<div class="wrong-ans">Sai</div>`;
                 }
             }
             else if(q.type === 'tf') {
-                // Mỗi ý đúng tính 0.25 điểm
                 q.items.forEach((item, subIndex) => {
                     totalPoints += 0.25;
                     const selected = document.querySelector(`input[name="q${index}_${subIndex}"]:checked`);
@@ -216,20 +241,22 @@
             else if(q.type === 'short') {
                 totalPoints++;
                 const input = document.getElementById(`in-${index}`).value.trim();
-                // So sánh tương đối (bỏ khoảng trắng)
                 if(input === q.ans || input.replace(',', '.') === q.ans) {
                     score++;
                     block.innerHTML += `<div class="correct-ans">Đúng (+1đ)</div>`;
                 } else {
-                    block.innerHTML += `<div class="wrong-ans" style="color:red">Sai</div>`;
+                    block.innerHTML += `<div class="wrong-ans">Sai</div>`;
                 }
             }
         });
 
         document.getElementById('score-display').innerText = `${score} / ${totalPoints}`;
-        
-        // Cuộn lên đầu để xem kết quả
         window.scrollTo(0, 0);
+        
+        // Render lại MathJax lần nữa cho các thông báo Đúng/Sai (nếu có công thức)
+        if(window.MathJax && MathJax.typesetPromise) {
+            MathJax.typesetPromise();
+        }
     }
 
     // Khởi chạy
