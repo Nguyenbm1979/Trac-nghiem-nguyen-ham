@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Trắc nghiệm Nguyên Hàm</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="Bài kiểm tra trắc nghiệm Toán">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+</head>
+<body>
+  <div id="app">Đang tải dữ liệu...</div>
+  <script>
+    window.$docsify = {
+      name: 'Toán Thầy Nguyên', // Đổi tên hiển thị ở góc trái
+      repo: '', // Có thể để trống
+      loadSidebar: false, // Tạm tắt menu bên trái cho đơn giản
+      subMaxLevel: 2,
+      // Cấu hình MathJax để hiển thị công thức Toán
+      latex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    }
+  </script>
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-latex@0"></script>
+</body>
+</html>
