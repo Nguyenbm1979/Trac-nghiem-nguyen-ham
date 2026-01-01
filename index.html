@@ -3,42 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ngân Hàng Đề Thi - Thầy Nguyên</title>
+    <title>Cổng Thi Trực Tuyến</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
         
         /* HEADER */
-        .header { background: white; padding: 40px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 40px; border-bottom: 5px solid #009688; }
-        .header h1 { color: #00796b; margin: 0; text-transform: uppercase; letter-spacing: 1px; }
-        .header p { color: #666; margin-top: 10px; font-size: 1.1em; }
+        .header { background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 30px; border-bottom: 5px solid #009688; }
+        .header h1 { color: #00796b; margin: 0; text-transform: uppercase; }
+        .header p { color: #666; margin-top: 10px; }
 
-        /* TIÊU ĐỀ CHƯƠNG */
-        .section-title { color: #004d40; font-weight: 800; font-size: 1.2em; margin: 30px 0 15px 0; padding-left: 10px; border-left: 4px solid #d81b60; text-transform: uppercase; }
-
+        /* KHUNG CHỨA MÔN HỌC */
+        .subject-section { background: white; border-radius: 15px; padding: 25px; margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+        
+        /* TIÊU ĐỀ MÔN (TOÁN, SỬ) */
+        .subject-title { font-size: 1.5em; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .math-color { color: #1565c0; border-color: #1565c0; } /* Màu xanh cho Toán */
+        .hist-color { color: #c62828; border-color: #c62828; } /* Màu đỏ cho Sử */
+        
+        /* TIÊU ĐỀ LỚP (Lớp 10, 11...) */
+        .grade-title { font-size: 1.1em; font-weight: bold; color: #455a64; margin: 20px 0 10px 0; padding-left: 10px; border-left: 4px solid #78909c; }
+        
         /* LƯỚI ĐỀ THI */
-        .exam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .exam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
         
-        /* THẺ ĐỀ THI */
+        /* THẺ BÀI THI */
         .exam-card { 
-            background: white; padding: 25px; border-radius: 12px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-decoration: none; color: #333; 
-            transition: transform 0.2s, box-shadow 0.2s; border: 1px solid transparent; 
-            display: flex; flex-direction: column; justify-content: space-between;
+            background: #fafafa; border: 1px solid #eee; padding: 15px; border-radius: 10px; 
+            text-decoration: none; color: #333; transition: 0.2s; display: flex; flex-direction: column; 
         }
-        .exam-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,150,136,0.15); border-color: #009688; }
-        
-        .exam-name { font-weight: bold; font-size: 1.15em; color: #263238; margin-bottom: 5px; }
-        .exam-meta { font-size: 0.9em; color: #78909c; margin-bottom: 15px; }
-        
-        .btn-vao-thi { 
-            background-color: #e0f2f1; color: #00796b; padding: 8px 15px; 
-            border-radius: 6px; text-align: center; font-weight: bold; font-size: 0.9em; 
-            margin-top: auto; 
+        .exam-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-color: #aaa; background: white; }
+        .exam-name { font-weight: bold; font-size: 1em; margin-bottom: 5px; }
+        .exam-meta { font-size: 0.85em; color: #888; margin-bottom: 10px; }
+        .btn-vao { 
+            margin-top: auto; padding: 8px; border-radius: 5px; text-align: center; font-weight: bold; font-size: 0.9em; 
         }
-        .exam-card:hover .btn-vao-thi { background-color: #009688; color: white; }
+        
+        /* Màu nút bấm cho từng môn */
+        .btn-math { background: #e3f2fd; color: #1565c0; }
+        .exam-card:hover .btn-math { background: #1565c0; color: white; }
+        
+        .btn-hist { background: #ffebee; color: #c62828; }
+        .exam-card:hover .btn-hist { background: #c62828; color: white; }
 
-        .footer { text-align: center; margin-top: 60px; color: #90a4ae; font-size: 0.85em; }
+        .empty-msg { font-style: italic; color: #aaa; font-size: 0.9em; padding: 10px; }
     </style>
 </head>
 <body>
@@ -46,43 +54,67 @@
 <div class="container">
     <div class="header">
         <h1>NGÂN HÀNG ĐỀ THI TRỰC TUYẾN</h1>
-        <p>Giáo viên: Thầy Nguyễn Bình Nguyên - THPT Bình Minh</p>
+        <p>Giáo viên: Thầy Nguyễn Bình Nguyên</p>
     </div>
 
-    <div class="section-title">CHƯƠNG 4: NGUYÊN HÀM - TÍCH PHÂN</div>
-    <div class="exam-grid">
-        
-        <a href="thi.html?id=de-01" class="exam-card">
-            <div>
-                <div class="exam-name">Đề ôn tập Nguyên hàm số 01</div>
+    <div class="subject-section">
+        <div class="subject-title math-color">📚 MÔN TOÁN HỌC</div>
+
+        <div class="grade-title">Toán 12 (Ôn thi THPT)</div>
+        <div class="exam-grid">
+            <a href="thi.html?id=de-01" class="exam-card">
+                <div class="exam-name">Đề Nguyên Hàm số 01</div>
                 <div class="exam-meta">22 câu | 90 phút</div>
-            </div>
-            <div class="btn-vao-thi">LÀM BÀI NGAY</div>
-        </a>
+                <div class="btn-vao btn-math">LÀM BÀI</div>
+            </a>
+            <a href="thi.html?id=de-02" class="exam-card">
+                <div class="exam-name">Đề Nguyên Hàm số 02</div>
+                <div class="exam-meta">22 câu | 90 phút</div>
+                <div class="btn-vao btn-math">LÀM BÀI</div>
+            </a>
+        </div>
 
-        <a href="thi.html?id=de-02" class="exam-card">
-    <div>
-        <div class="exam-name">Đề ôn tập Nguyên hàm số 02</div>
-        <div class="exam-meta">22 câu | 90 phút</div>
+        <div class="grade-title">Toán 11</div>
+        <div class="exam-grid">
+            <a href="#" class="exam-card" style="opacity:0.6; cursor:default">
+                <div class="exam-name">Đề Giới Hạn (Sắp ra mắt)</div>
+                <div class="exam-meta">...</div>
+                <div class="btn-vao btn-math">CHỜ CẬP NHẬT</div>
+            </a>
+        </div>
+
+        <div class="grade-title">Toán 10</div>
+        <div class="exam-grid">
+            <div class="empty-msg">Chưa có đề thi nào.</div>
+        </div>
+
+        <div class="grade-title" style="border-left-color: #fbc02d; color: #f57f17;">🏆 Toán Học Sinh Giỏi</div>
+        <div class="exam-grid">
+             <div class="empty-msg">Đang biên soạn đề chuyên đề...</div>
+        </div>
     </div>
-    <div class="btn-vao-thi">LÀM BÀI NGAY</div>
-</a>
 
+
+    <div class="subject-section">
+        <div class="subject-title hist-color">🏛️ MÔN LỊCH SỬ</div>
+
+        <div class="grade-title">Lịch Sử 12</div>
+        <div class="exam-grid">
+            <a href="thi.html?id=su-12-01" class="exam-card">
+                <div class="exam-name">Đề Sử 12 - Bài 1</div>
+                <div class="exam-meta">40 câu | 50 phút</div>
+                <div class="btn-vao btn-hist">LÀM BÀI</div>
+            </a>
+        </div>
+
+        <div class="grade-title">Lịch Sử 10</div>
+        <div class="exam-grid">
+            <div class="empty-msg">Chưa có đề thi nào.</div>
+        </div>
     </div>
 
-    <div class="section-title">ĐỀ THI THỬ THPT QUỐC GIA</div>
-    <div class="exam-grid">
-        <a href="#" class="exam-card" style="opacity: 0.6; cursor: default;">
-            <div>
-                <div class="exam-name">Đề thi thử Lần 1</div>
-                <div class="exam-meta">Đang cập nhật...</div>
-            </div>
-            <div class="btn-vao-thi">SẮP RA MẮT</div>
-        </a>
-    </div>
-
-    <div class="footer">
-        &copy; 2024 Thầy Nguyễn Bình Nguyên. Hệ thống thi trắc nghiệm Online.
+    <div style="text-align:center; color:#999; margin-top:40px; font-size:0.8em">
+        &copy; 2026 Hệ thống thi trắc nghiệm - Thầy Nguyên
     </div>
 </div>
 
