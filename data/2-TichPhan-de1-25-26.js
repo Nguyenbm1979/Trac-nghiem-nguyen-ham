@@ -218,7 +218,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "tf",
-            "q": "Nếu hàm số $y=f(x)$ có đạo hàm là hàm liên tục trên $\\mathbb{R}$ và $\\displaystyle\\int f(x) \\mathrm{\\,d}x=F(x)+C$, các số thực $a$, $b$ với $a<b$.",
+            "q": "Nếu hàm số $y=f(x)$ có đạo hàm là hàm liên tục trên $\\mathbb{R}$ và $\\displaystyle\\int f(x) \\mathrm{\\,d}x=F(x)+C$, với $a<b$.",
             "items": [
                 {
                     "sub": "$\\displaystyle\\int\\limits_a^b f(x) \\mathrm{\\,d} x=F(a)-F(b)$",
