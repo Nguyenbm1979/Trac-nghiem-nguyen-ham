@@ -1,5 +1,12 @@
 window.EXAM_LIST = [
     {
+        "id": "2-De-minh-hoa-TN2025-BGD",
+        "title": "Đề minh họa TN 2025, Bộ Giáo Dục",
+        "subject": "Toan",
+        "grade": "12",
+        "time": 90
+    },
+    {
         "id": "2-TichPhan-de1-25-26",
         "title": "Ôn tập Tích Phân, Đề Số 1",
         "subject": "Toan",
