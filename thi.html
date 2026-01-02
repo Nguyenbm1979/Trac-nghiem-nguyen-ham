@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Làm Bài Thi (v3.7 Debug)</title>
+    <title>Làm Bài Thi (v3.8 Fix Lỗi MathJax)</title>
     
     <script>
     window.MathJax = {
-        loader: { load: ['[tex]/noerrors'] },
-        tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], packages: {'[+]': ['noerrors']} },
-        svg: { fontCache: 'global' },
-        startup: { typeset: false }
+        tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+        svg: { fontCache: 'global' }
+        // Đã xóa dòng tắt tự động để MathJax tự xử lý khi tải xong
     };
     </script>
-    <script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
     <style>
@@ -21,28 +20,23 @@
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #f0f2f5; margin: 0; color: #212529; line-height: 1.5; font-size: 16px; }
         .container { max-width: 800px; margin: 0 auto; padding: 10px; padding-bottom: 80px; }
         
-        /* HEADER MOBILE */
         .header-bar { background: white; padding: 10px 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.08); border-top: 4px solid #009688; }
         .timer { font-size: 20px; color: #d32f2f; font-weight: 700; font-family: monospace; background: #ffebee; padding: 4px 10px; border-radius: 6px; }
         .student-info { font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60%; }
 
-        /* CÂU HỎI */
         .question-block { background: white; padding: 15px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .q-label { color: #d81b60; font-weight: 800; font-size: 1.1em; margin-right: 5px; }
         .q-content { font-weight: 600; color: #333; word-wrap: break-word; }
         .question-image img { max-width: 100%; height: auto; border-radius: 8px; margin-top: 10px; border: 1px solid #eee; }
-        mjx-container { overflow-x: auto; overflow-y: hidden; max-width: 100%; } 
-
+        
         /* ĐÁP ÁN */
         .options-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
         .option-item { display: flex; align-items: flex-start; background: #f8f9fa; border: 1px solid #dee2e6; padding: 12px; border-radius: 8px; cursor: pointer; transition: background 0.2s; min-height: 44px; }
         .option-item:active { background: #e2e6ea; } 
         .option-item input[type="radio"] { margin-top: 4px; margin-right: 10px; transform: scale(1.3); flex-shrink: 0; }
         .opt-letter { font-weight: 800; color: #00796b; margin-right: 8px; flex-shrink: 0; }
-        .opt-text { word-break: break-word; }
         .option-item:has(input:checked) { border-color: #009688; background: #e0f2f1; box-shadow: inset 0 0 0 1px #009688; }
 
-        /* BẢNG ĐÚNG SAI */
         .tf-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 15px; }
         .tf-table th { background: #eee; padding: 8px; text-align: center; }
         .tf-table td { padding: 10px 5px; border-bottom: 1px solid #eee; }
@@ -54,7 +48,6 @@
         .solution-title { font-weight: bold; text-decoration: underline; display: block; margin-bottom: 5px; }
         .btn-submit { background: #007bff; color: white; padding: 16px; width: 100%; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; box-shadow: 0 4px 12px rgba(0,123,255,0.3); }
 
-        /* MÀN HÌNH CHỜ & LOADING */
         .loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 2000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .error-log { margin-top: 20px; color: red; font-family: monospace; text-align: left; background: #fff0f0; padding: 15px; border-radius: 8px; max-width: 90%; border: 1px solid red; display:none;}
         
@@ -63,7 +56,7 @@
         .welcome-card input { width: 100%; padding: 14px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; display: block; }
         .welcome-card label { display: block; text-align: left; margin-bottom: 5px; font-weight: bold; color: #555; }
         .btn-start { background: #d81b60; color: white; border: none; padding: 16px; width: 100%; border-radius: 50px; font-size: 18px; font-weight: bold; margin-top: 10px; }
-
+        
         .result-box { display: none; background: white; padding: 30px 20px; text-align: center; border-radius: 15px; margin-top: 20px; border-top: 5px solid #28a745; }
         .correct-ans { color: #155724; background: #d4edda; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.9em; display: inline-block; margin-top: 6px; }
         .wrong-ans { color: #721c24; background: #f8d7da; padding: 4px 8px; border-radius: 4px; font-size: 0.9em; display: inline-block; margin-top: 6px; }
@@ -114,7 +107,6 @@
     const urlParams = new URLSearchParams(window.location.search);
     const examId = urlParams.get('id');
 
-    // --- BỘ BẮT LỖI CÚ PHÁP (QUAN TRỌNG) ---
     window.onerror = function(msg, url, lineNo, columnNo, error) {
         if (url && (url.includes(examId) || url.includes('data/'))) {
             const errDiv = document.getElementById('error-debug');
@@ -134,9 +126,7 @@
 
     if(examId) {
         const script = document.createElement('script'); 
-        // THÊM TIMESTAMP ĐỂ ÉP TẢI FILE MỚI NHẤT (FIX CACHE)
-        script.src = `data/${examId}.js?v=` + new Date().getTime();
-        
+        script.src = `data/${examId}.js?v=` + new Date().getTime(); // Anti-cache
         script.onload = () => {
             if(window.EXAM_DATA) {
                 rawQuestions = window.EXAM_DATA.questions;
@@ -168,6 +158,7 @@
         currentQuestions = [...part1, ...part2, ...part3];
         renderQuestions();
     }
+    
     function renderQuestions() {
         const LABELS = ['A', 'B', 'C', 'D'];
         let html = '';
@@ -192,8 +183,14 @@
             html += `</div>`;
         });
         document.getElementById('quiz-body').innerHTML = html;
-        if(window.MathJax) MathJax.typesetPromise().catch((err) => console.log(err));
+        
+        // --- ĐÂY LÀ ĐOẠN KHẮC PHỤC LỖI DÒNG 195 ---
+        // Chỉ gọi typesetPromise nếu MathJax đã tải xong
+        if(window.MathJax && window.MathJax.typesetPromise) {
+            MathJax.typesetPromise().catch((err) => console.log('MathJax chưa sẵn sàng, sẽ tự load sau.'));
+        }
     }
+    
     function startQuiz() {
         const name = document.getElementById('s-name').value.trim();
         const cls = document.getElementById('s-class').value.trim();
@@ -247,7 +244,7 @@
         });
         totalScore = Math.round(totalScore*100)/100; maxScore = Math.round(maxScore*100)/100;
         document.getElementById('result-area').style.display = 'block'; document.getElementById('final-score').innerText = `${totalScore} / ${maxScore}`; window.scrollTo(0,0);
-        if(window.MathJax) MathJax.typesetPromise();
+        if(window.MathJax && window.MathJax.typesetPromise) MathJax.typesetPromise();
         if(GOOGLE_SCRIPT_URL) { fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ name: document.getElementById('s-name').value, class: document.getElementById('s-class').value, score: totalScore + "/" + maxScore, exam: window.EXAM_DATA.title }) }); }
     }
 </script>
