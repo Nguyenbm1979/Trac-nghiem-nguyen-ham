@@ -11,12 +11,13 @@
         
         /* BỘ LỌC */
         .filter-bar { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-        select { padding: 10px; border: 1px solid #ddd; border-radius: 5px; flex: 1; min-width: 120px; font-size: 16px; }
+        select { padding: 12px; border: 1px solid #ddd; border-radius: 8px; flex: 1; min-width: 150px; font-size: 16px; outline: none; }
+        select:focus { border-color: #009688; }
         
-        /* DANH SÁCH ĐỀ */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: 0.2s; border-top: 4px solid #ddd; position: relative; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+        /* GRID DANH SÁCH */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+        .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.3s; border-top: 5px solid #ddd; display: flex; flex-direction: column; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         
         /* MÀU SẮC THEO MÔN */
         .Sub-Toan { border-color: #1976d2; } .Tag-Toan { background: #e3f2fd; color: #1976d2; }
@@ -26,17 +27,17 @@
         .Sub-Dia { border-color: #00796b; } .Tag-Dia { background: #e0f2f1; color: #00796b; }
         .Sub-Anh { border-color: #303f9f; } .Tag-Anh { background: #e8eaf6; color: #303f9f; }
 
-        .card h3 { margin: 10px 0; font-size: 1.1em; color: #333; height: 50px; overflow: hidden; }
-        .info { font-size: 0.9em; color: #666; display: flex; justify-content: space-between; margin-bottom: 15px; }
-        .tag { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
-        .btn { display: block; width: 100%; padding: 10px; background: #009688; color: white; text-align: center; border-radius: 5px; text-decoration: none; font-weight: bold; transition: 0.2s; }
-        .btn:hover { background: #00796b; }
+        .card h3 { margin: 15px 0; font-size: 1.2em; color: #333; line-height: 1.4; flex-grow: 1; }
+        .info { font-size: 0.9em; color: #666; display: flex; justify-content: space-between; margin-bottom: 20px; background: #f8f9fa; padding: 10px; border-radius: 6px; }
+        .tag { padding: 5px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; text-transform: uppercase; }
+        .btn { display: block; width: 100%; padding: 12px; background: #009688; color: white; text-align: center; border-radius: 8px; text-decoration: none; font-weight: bold; transition: 0.2s; }
+        .btn:hover { background: #00796b; box-shadow: 0 4px 10px rgba(0,150,136,0.3); }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>📚 NGÂN HÀNG ĐỀ THI</h1>
+    <h1>📚 NGÂN HÀNG ĐỀ THI TRỰC TUYẾN</h1>
     
     <div class="filter-bar">
         <select id="f-subject" onchange="renderExams()">
@@ -62,59 +63,63 @@
     <div id="exam-grid" class="grid">Đang tải danh sách đề thi...</div>
 </div>
 
-<script src="data/list.js?v=1"></script> 
-
 <script>
+    // Ép buộc tải lại file list.js mới nhất từ GitHub để tránh lưu cache cũ
+    const script = document.createElement('script');
+    script.src = "data/list.js?v=" + new Date().getTime();
+    document.head.appendChild(script);
+
+    script.onload = function() {
+        renderExams();
+    };
+
     function renderExams() {
         const container = document.getElementById('exam-grid');
         const subFilter = document.getElementById('f-subject').value;
         const gradeFilter = document.getElementById('f-grade').value;
         
-        if (!window.EXAM_LIST) {
-            container.innerHTML = "<p style='text-align:center; color:red'>❌ Chưa tìm thấy file data/list.js</p>";
+        if (!window.EXAM_LIST || window.EXAM_LIST.length === 0) {
+            container.innerHTML = "<p style='text-align:center; width:100%; color:#666;'>Chưa có đề thi nào trong danh sách.</p>";
             return;
         }
 
         let html = '';
-        let count = 0;
+        let hasContent = false;
 
-        window.EXAM_LIST.forEach(ex => {
-            // Lọc dữ liệu
+        // Hiển thị đề mới nhất lên đầu (đảo ngược mảng)
+        const displayList = [...window.EXAM_LIST].reverse();
+
+        displayList.forEach(ex => {
             if (subFilter !== 'all' && ex.subject !== subFilter) return;
             if (gradeFilter !== 'all' && ex.grade !== gradeFilter) return;
 
-            // Xử lý hiển thị
             let subName = getSubName(ex.subject);
             let cssClass = `Sub-${ex.subject}`;
             let tagClass = `Tag-${ex.subject}`;
 
             html += `
             <div class="card ${cssClass}">
-                <div style="display:flex; justify-content:space-between">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
                     <span class="tag ${tagClass}">${subName}</span>
                     <span class="tag" style="background:#eee; color:#555">Khối ${ex.grade}</span>
                 </div>
                 <h3>${ex.title}</h3>
                 <div class="info">
                     <span>⏳ ${ex.time} phút</span>
-                    <span>📝 ID: ${ex.id}</span>
+                    <span>🆔 ${ex.id}</span>
                 </div>
                 <a href="thi.html?id=${ex.id}" class="btn">VÀO THI NGAY</a>
             </div>`;
-            count++;
+            hasContent = true;
         });
 
-        if(count === 0) html = "<p style='text-align:center; width:100%'>Không tìm thấy đề thi nào phù hợp.</p>";
-        container.innerHTML = html;
+        container.innerHTML = hasContent ? html : "<p style='text-align:center; width:100%; color:#666;'>Không tìm thấy đề thi nào phù hợp với bộ lọc.</p>";
     }
 
     function getSubName(code) {
-        const map = { 'Toan':'Toán', 'Ly':'Vật Lý', 'Hoa':'Hóa Học', 'Sinh':'Sinh', 'Su':'Lịch Sử', 'Dia':'Địa Lý', 'Anh':'Tiếng Anh', 'GDCD':'GDCD' };
+        const map = { 'Toan':'Toán', 'Ly':'Vật Lý', 'Hoa':'Hóa Học', 'Sinh':'Sinh Học', 'Su':'Lịch Sử', 'Dia':'Địa Lý', 'Anh':'Tiếng Anh', 'GDCD':'GDCD' };
         return map[code] || code;
     }
-
-    // Chạy lần đầu
-    setTimeout(renderExams, 500); // Đợi file list.js load xong
 </script>
 
 </body>
