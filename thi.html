@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Làm Bài Thi (v3.1 Stable)</title>
+    <title>Làm Bài Thi (v3.2 Updated)</title>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
     <style>
-        /* CSS GIAO DIỆN (GIỮ NGUYÊN) */
+        /* CSS GIAO DIỆN */
         body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; color: #333; line-height: 1.6; }
         .container { max-width: 900px; margin: 0 auto; padding: 20px; }
         .loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 10000; display: flex; justify-content: center; align-items: center; color: #009688; font-size: 18px; font-weight: bold;}
@@ -76,7 +76,9 @@
     <button class="btn-submit" onclick="if(confirm('Nộp bài?')) submitQuiz()" id="btn-submit">NỘP BÀI</button>
 </div>
 <script>
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwqCgitWSaFUcEIn8eO7ovoVfpGK1iGqxQOZIQKJj38Y-UbHK3XU_7MTRX4epbvDkEJ/exec'; 
+    // 👇👇👇 ĐÂY LÀ LINK MỚI CỦA BẠN ĐÃ ĐƯỢC CẬP NHẬT 👇👇👇
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwlsAhI7NdHZhaOulVx0otepQkj8VijTm_g1lQjZaUBvffzC5uLb2IRyjhgnJdm4Wvg/exec'; 
+    
     let rawQuestions=[], currentQuestions=[], timerDuration=0, timerInterval;
     function hash(input) { return CryptoJS.MD5(String(input).trim().toLowerCase()).toString(); }
     const urlParams = new URLSearchParams(window.location.search);
@@ -137,29 +139,18 @@
         document.getElementById('quiz-body').innerHTML = html;
         if(window.MathJax) MathJax.typesetPromise();
     }
-    
-    // --- HÀM KIỂM TRA MẬT KHẨU "THÔNG MINH" ---
     function startQuiz() {
         const name = document.getElementById('s-name').value.trim();
         const cls = document.getElementById('s-class').value.trim();
         if(!name || !cls) return alert("Vui lòng nhập Họ tên và Lớp!");
-
         if(window.EXAM_DATA.password) {
             const inputPass = document.getElementById('s-pass').value.trim();
             const configPass = window.EXAM_DATA.password;
-            
-            // LOGIC KIỂM TRA KÉP (V3.1)
             let isMatch = false;
-            // Cách 1: So sánh MÃ HÓA (Chuẩn)
             if(hash(inputPass) === configPass) isMatch = true;
-            // Cách 2: So sánh VĂN BẢN THƯỜNG (Dự phòng nếu thầy lỡ nhập pass chưa mã hóa vào file)
             if(inputPass === configPass) isMatch = true;
-
-            if(!isMatch) {
-                return alert("MẬT KHẨU KHÔNG ĐÚNG!\nThầy vui lòng kiểm tra lại:\n1. Có bật Caps Lock không?\n2. Có gõ sai ký tự nào không?");
-            }
+            if(!isMatch) return alert("MẬT KHẨU KHÔNG ĐÚNG!");
         }
-
         document.getElementById('d-name').innerText = name;
         document.getElementById('d-class').innerText = cls;
         document.getElementById('welcome-screen').style.display = 'none';
@@ -170,8 +161,6 @@
             if(--timerDuration < 0) { clearInterval(timerInterval); submitQuiz(); }
         }, 1000);
     }
-
-    // --- HÀM CHẤM ĐIỂM (GIỮ NGUYÊN TỪ V3.0) ---
     function submitQuiz() {
         clearInterval(timerInterval);
         document.getElementById('btn-submit').style.display = 'none';
