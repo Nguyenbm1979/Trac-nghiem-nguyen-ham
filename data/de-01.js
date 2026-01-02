@@ -1,17 +1,18 @@
 window.EXAM_DATA = {
     "title": "Kiểm Tra Nguyên Hàm Số 1 (90 phút)",
     "description": "22 Câu hỏi | Thời gian: 90 phút | Chủ đề: Nguyên hàm cơ bản & Vận dụng",
-    "time": 90, 
+    "time": 90,
     "password": "98eb45b771496fe725ae4e0177604c36",
     "questions": [
-        // --- PHẦN 1: TRẮC NGHIỆM (12 CÂU) ---
+        // --- CÂU 1 ---
         {
             type: 'mcq',
-            q: 'Câu 1: Họ nguyên hàm của hàm số $f(x)=x^3$ là',
-            options: ['$4x^4+C$', '$3x^2+C$', '$x^4+C$', '$\\dfrac{1}{4}x^4+C$'],
+            q: 'Câu 1: Họ nguyên hàm của hàm số $f(x)=x^3$ là:',
+            options: ['$x^4+C$', '$3x^2+C$', '$x^4+C$', '$\\dfrac{1}{4}x^4+C$'],
             ans: 3,
-            explain: 'Ta có $\\displaystyle\\int x^3\\mathrm{\\,d}x=\\dfrac{1}{4}x^4+C$.'
+            explain: 'Ta có $\\displaystyle\\int x^3\\mathrm{\\,}d x=\\dfrac{1}{4}x^4+C$.'
         },
+        // --- CÂU 2 ---
         {
             type: 'mcq',
             q: 'Câu 2: Tìm nguyên hàm của hàm số $ f(x)=2\\sin x$.',
