@@ -8,17 +8,17 @@ window.EXAM_DATA = {
         {
             type: 'mcq',
             q: 'Câu 1: Họ nguyên hàm của hàm số $f(x)=x^3$ là:',
-            options: ['$x^4+C$', '$3x^2+C$', '$x^4+C$', '$\\dfrac{1}{4}x^4+C$'],
+            options: ['$4x^4+C$', '$3x^2+C$', '$x^4+C$', '$\\dfrac{1}{4}x^4+C$'],
             ans: 3,
             explain: 'Ta có $\\displaystyle\\int x^3\\mathrm{\\,}d x=\\dfrac{1}{4}x^4+C$.'
         },
         // --- CÂU 2 ---
         {
             type: 'mcq',
-            q: 'Câu 2: Tìm nguyên hàm của hàm số $ f(x)=2\\sin x$.',
-            options: ['$\\displaystyle\\int 2\\sin x\\mathrm{\\,d}x=-2\\cos x+C$', '$\\displaystyle\\int 2\\sin x\\mathrm{\\,d}x=2\\cos x+C$', '$\\displaystyle\\int 2\\sin x\\mathrm{\\,d}x=\\sin^2x+C$', '$\\displaystyle\\int 2\\sin x\\mathrm{\\,d}x=\\sin 2x+C$'],
+            q: 'Câu 2: Tìm nguyên hàm của hàm số $f(x)=2\\sin x$.',
+            options: ['$\\displaystyle\\int 2\\sin x\\mathrm{\\,}dx=-2\\cos x+C$', '$\\displaystyle\\int 2\\sin x\\mathrm{\\,}dx=2\\cos x+C$', '$\\displaystyle\\int 2\\sin x\\mathrm{\\,}dx=-2\\sin x+C$', '$\\displaystyle\\int 2\\sin x\\mathrm{\\,}dx=\\sin^2 x+C$'],
             ans: 0,
-            explain: 'Ta có $\\displaystyle\\int 2\\sin x\\mathrm{\\,d}x=2\\displaystyle\\int \\sin x \\mathrm{\\,d}x=-2\\cos x+C$.'
+            explain: 'Ta có $\\displaystyle\\int 2\\sin x\\mathrm{\\,}d x=2\\displaystyle\\int \\sin x \\mathrm{\\,}d x=-2\\cos x+C$.'
         },
         {
             type: 'mcq',
