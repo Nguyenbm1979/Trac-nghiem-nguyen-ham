@@ -4,7 +4,7 @@ window.EXAM_DATA = {
     "time": 90,
     "password": "98eb45b771496fe725ae4e0177604c36",
     "questions": [
-        // --- CÂU 1 ---
+        // --- PHẦN 1: TRẮC NGHIỆM (12 CÂU) ---
         {
             type: 'mcq',
             q: 'Câu 1: Họ nguyên hàm của hàm số $f(x)=x^3$ là:',
@@ -12,7 +12,6 @@ window.EXAM_DATA = {
             ans: 3,
             explain: 'Ta có $\\displaystyle\\int x^3\\mathrm{\\,}d x=\\dfrac{1}{4}x^4+C$.'
         },
-        // --- CÂU 2 ---
         {
             type: 'mcq',
             q: 'Câu 2: Tìm nguyên hàm của hàm số $f(x)=2\\sin x$.',
@@ -153,7 +152,7 @@ window.EXAM_DATA = {
         {
             type: 'short',
             q: 'Câu 19: $F(x)$ là nguyên hàm của $f(x)=\\dfrac{(3x-1)^2}{x^2}$, đồ thị $y=F(x)$ đi qua $M(1;-2)$. Tính $F\\left(\\mathrm{e}^2\\right)$ (làm tròn đến hàng phần chục).',
-            ans: '44,4', 
+            ans: '44,4',
             explain: '$F(x)=9x-6\\ln|x|-1/x-10$. Kết quả xấp xỉ 44,4.'
         },
         {
