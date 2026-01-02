@@ -3,9 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Làm Bài Thi (v3.3 Ổn Định)</title>
-    <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <title>Làm Bài Thi (v3.4 Siêu Tốc)</title>
+    
+    <script>
+    window.MathJax = {
+        loader: { load: ['[tex]/noerrors'] },
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            packages: {'[+]': ['noerrors']}
+        },
+        svg: {
+            fontCache: 'global'
+        },
+        startup: {
+            typeset: false // Tắt tự động chạy để ta kiểm soát bằng tay cho nhanh
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
     <style>
@@ -17,9 +33,14 @@
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: white; z-index: 10000; 
             display: flex; flex-direction: column; justify-content: center; align-items: center; 
-            color: #009688; font-size: 18px; font-weight: bold;
+            transition: opacity 0.5s; /* Hiệu ứng mờ dần */
         }
-        
+        .spinner {
+            border: 5px solid #f3f3f3; border-top: 5px solid #009688; border-radius: 50%;
+            width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 15px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
         /* GIAO DIỆN CHÍNH */
         .welcome-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #00695c 0%, #004d40 100%); z-index: 9999; display: flex; justify-content: center; align-items: center; padding: 15px; display: none; }
         .welcome-card { background: white; width: 100%; max-width: 480px; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
@@ -65,7 +86,8 @@
 <body>
 
 <div class="loading" id="loading">
-    <div id="loading-text">⏳ Đang tải dữ liệu...</div>
+    <div class="spinner"></div>
+    <div id="loading-text" style="color:#009688; font-weight:bold">Đang tải dữ liệu...</div>
 </div>
 
 <div class="welcome-overlay" id="welcome-screen">
@@ -97,7 +119,6 @@
 </div>
 
 <script>
-    // 👇👇👇 LINK SCRIPT MỚI CỦA THẦY 👇👇👇
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwlsAhI7NdHZhaOulVx0otepQkj8VijTm_g1lQjZaUBvffzC5uLb2IRyjhgnJdm4Wvg/exec'; 
 
     let rawQuestions=[], currentQuestions=[], timerDuration=0, timerInterval;
@@ -106,44 +127,37 @@
     const urlParams = new URLSearchParams(window.location.search);
     const examId = urlParams.get('id');
 
-    // TIMEOUT CHECK: Nếu 5 giây không tải được thì báo lỗi
+    // Tự động báo lỗi nếu quá 5 giây
     setTimeout(function() {
         const loadingDiv = document.getElementById('loading');
-        if (loadingDiv && loadingDiv.style.display !== 'none') {
-            document.getElementById('loading-text').innerHTML = 
-                `<span style="color:red">⚠️ KHÔNG TẢI ĐƯỢC ĐỀ THI!</span><br><br>
-                 Có thể do:<br>
-                 1. File dữ liệu <b>data/${examId}.js</b> bị lỗi cú pháp (thiếu dấu phẩy, dấu ngoặc).<br>
-                 2. Tên file trên GitHub không khớp với link.<br><br>
-                 <i>Thầy vui lòng kiểm tra lại file data trên GitHub.</i>`;
+        if (loadingDiv && loadingDiv.style.opacity !== '0') {
+             document.getElementById('loading-text').innerHTML = `<span style="color:red">⚠️ Lỗi: Kiểm tra lại file data/${examId}.js</span>`;
         }
-    }, 5000); // 5000ms = 5 giây
+    }, 8000);
 
     if(examId) {
         const script = document.createElement('script'); 
         script.src = `data/${examId}.js`;
-        
         script.onload = () => {
             if(window.EXAM_DATA) {
                 rawQuestions = window.EXAM_DATA.questions;
                 timerDuration = window.EXAM_DATA.time * 60;
                 document.getElementById('exam-title').innerText = window.EXAM_DATA.title;
                 document.getElementById('exam-desc').innerText = window.EXAM_DATA.description;
+                if(window.EXAM_DATA.password) document.getElementById('pass-area').style.display = 'block';
                 
-                if(window.EXAM_DATA.password) {
-                    document.getElementById('pass-area').style.display = 'block';
-                }
-
                 prepareQuestions();
-                document.getElementById('loading').style.display='none'; 
+
+                // ⚡️ SPEED BOOST: Tắt màn hình loading NGAY LẬP TỨC
+                const ld = document.getElementById('loading');
+                ld.style.opacity = '0';
+                setTimeout(() => { ld.style.display='none'; }, 500); // Ẩn hẳn sau 0.5s
                 document.getElementById('welcome-screen').style.display='flex';
             }
         };
-        script.onerror = () => { /* Để Timeout xử lý báo lỗi */ }; 
+        script.onerror = () => { document.getElementById('loading-text').innerHTML = "❌ Không tìm thấy file đề!"; }; 
         document.head.appendChild(script);
-    } else { 
-        document.getElementById('loading-text').innerText = "Chưa chọn ID đề thi trên đường link."; 
-    }
+    } else { document.getElementById('loading-text').innerText = "Chưa chọn đề thi."; }
 
     function shuffle(array) { for (let i=array.length-1; i>0; i--) { const j=Math.floor(Math.random()*(i+1)); [array[i], array[j]]=[array[j], array[i]]; } return array; }
 
@@ -191,7 +205,11 @@
             html += `</div>`;
         });
         document.getElementById('quiz-body').innerHTML = html;
-        if(window.MathJax) MathJax.typesetPromise();
+        
+        // ⚡️ RENDER MATH SAU CÙNG (Không chặn UI)
+        if(window.MathJax) {
+            MathJax.typesetPromise().catch((err) => console.log('MathJax error:', err));
+        }
     }
 
     function startQuiz() {
@@ -202,11 +220,9 @@
         if(window.EXAM_DATA.password) {
             const inputPass = document.getElementById('s-pass').value.trim();
             const configPass = window.EXAM_DATA.password;
-            
             let isMatch = false;
             if(hash(inputPass) === configPass) isMatch = true;
             if(inputPass === configPass) isMatch = true;
-
             if(!isMatch) return alert("MẬT KHẨU KHÔNG ĐÚNG!");
         }
 
@@ -271,7 +287,7 @@
         document.getElementById('result-area').style.display = 'block';
         document.getElementById('final-score').innerText = `${totalScore} / ${maxScore}`;
         window.scrollTo(0,0);
-        if(window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+        if(window.MathJax) MathJax.typesetPromise();
         
         if(GOOGLE_SCRIPT_URL) {
             fetch(GOOGLE_SCRIPT_URL, {
