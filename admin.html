@@ -3,227 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Công Cụ Soạn Đề Thi (Admin Tool)</title>
+    <title>Công Cụ Soạn Đề Thi (v4.0 Lite)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #eceff1; padding: 20px; color: #37474f; }
-        .container { max-width: 1000px; margin: 0 auto; }
+        body { font-family: Arial, sans-serif; background: #f0f0f0; padding: 20px; color: #333; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         
-        /* CARD STYLE */
-        .card { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-top: 4px solid #009688; }
-        h2 { margin-top: 0; color: #00796b; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        
-        /* FORM ELEMENTS */
+        h1 { color: #00796b; text-align: center; border-bottom: 2px solid #00796b; padding-bottom: 10px; }
+        h3 { background: #e0f2f1; padding: 10px; border-left: 5px solid #00796b; margin-top: 30px; }
+
         .form-group { margin-bottom: 15px; }
-        label { font-weight: bold; display: block; margin-bottom: 5px; color: #455a64; }
-        input[type="text"], input[type="number"], textarea, select { 
-            width: 100%; padding: 10px; border: 1px solid #cfd8dc; border-radius: 4px; box-sizing: border-box; font-size: 14px; 
-        }
-        textarea { height: 80px; resize: vertical; }
-        
-        /* GRID LAYOUT */
-        .row { display: flex; gap: 15px; }
-        .col { flex: 1; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; }
+        input, textarea, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
+        textarea { height: 70px; font-family: monospace; }
 
-        /* TOOLBAR */
-        .toolbar { position: sticky; top: 10px; z-index: 100; background: rgba(255,255,255,0.9); padding: 10px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; gap: 10px; backdrop-filter: blur(5px); margin-bottom: 20px; }
-        .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: white; display: flex; align-items: center; gap: 5px; }
-        .btn-mcq { background: #1976d2; }
-        .btn-tf { background: #f57c00; }
-        .btn-short { background: #7b1fa2; }
-        .btn-save { background: #2e7d32; margin-left: auto; }
-        .btn-danger { background: #c62828; }
-        
-        /* QUESTION BOX */
-        .q-box { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; background: #fafafa; border-radius: 6px; position: relative; }
-        .q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: bold; color: #555; }
-        .q-type-badge { padding: 3px 8px; border-radius: 4px; font-size: 12px; color: white; text-transform: uppercase; }
-        .bg-mcq { background: #1976d2; } .bg-tf { background: #f57c00; } .bg-short { background: #7b1fa2; }
+        /* THANH CÔNG CỤ */
+        .toolbar { position: sticky; top: 0; background: #fff; padding: 10px 0; border-bottom: 1px solid #ddd; z-index: 100; display: flex; gap: 10px; flex-wrap: wrap; }
+        button { padding: 10px 20px; cursor: pointer; font-weight: bold; color: white; border: none; border-radius: 4px; font-size: 14px; }
+        .btn-mcq { background: #2196F3; }
+        .btn-tf { background: #FF9800; }
+        .btn-short { background: #9C27B0; }
+        .btn-save { background: #4CAF50; margin-left: auto; }
+        .btn-del { background: #F44336; padding: 5px 10px; margin-left: 10px; }
 
-        /* OPTIONS GRID */
+        /* KHUNG CÂU HỎI */
+        .q-box { border: 1px solid #ccc; padding: 15px; margin-bottom: 15px; background: #fafafa; border-radius: 5px; }
+        .q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: bold; }
+        .badge { padding: 3px 8px; color: white; border-radius: 3px; font-size: 12px; margin-right: 5px; }
+        
+        /* CHECKBOX */
         .opt-row { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
-        .opt-check { transform: scale(1.5); cursor: pointer; }
-        
-        /* PREVIEW JSON */
-        #output-area { background: #263238; color: #80cbc4; font-family: monospace; padding: 15px; border-radius: 6px; width: 100%; height: 200px; margin-top: 10px; }
+        input[type="radio"] { width: 20px; height: 20px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1 style="text-align:center; color:#00695c">ADMIN TOOL - SOẠN ĐỀ THI</h1>
+    <h1>CÔNG CỤ SOẠN ĐỀ THI</h1>
 
-    <div class="card">
-        <h2>1. Thông Tin Đề Thi</h2>
-        <div class="row">
-            <div class="col">
-                <div class="form-group">
-                    <label>Mã Đề (Tên file, ví dụ: de-02)</label>
-                    <input type="text" id="exam-id" placeholder="de-02" onkeyup="updateFileName()">
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label>Tiêu Đề Hiển Thị</label>
-                    <input type="text" id="exam-title" placeholder="Kiểm tra 15 phút...">
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label>Thời gian (phút)</label>
-                    <input type="number" id="exam-time" value="45">
-                </div>
-            </div>
+    <h3>1. Cấu Hình Đề Thi</h3>
+    <div style="display:flex; gap:15px">
+        <div style="flex:1">
+            <label>Mã Đề (Tên file)</label>
+            <input type="text" id="exam-id" placeholder="Ví dụ: de-02">
         </div>
-        <div class="form-group">
-            <label>Mô tả đề thi</label>
-            <input type="text" id="exam-desc" placeholder="Số câu, nội dung kiến thức...">
+        <div style="flex:2">
+            <label>Tiêu Đề (Hiển thị cho HS)</label>
+            <input type="text" id="exam-title" placeholder="Kiểm tra 1 tiết...">
         </div>
-        
-        <div class="row" style="background:#f1f8e9; padding:10px; border-radius:6px">
-            <div class="col">
-                <label>Mật Khẩu (Nhập chữ thường)</label>
-                <input type="text" id="raw-pass" placeholder="Nhập mật khẩu..." oninput="hashPass()">
-            </div>
-            <div class="col">
-                <label>Mã Hóa MD5 (Tự động)</label>
-                <input type="text" id="hashed-pass" readonly style="background:#e0e0e0; color:#555">
-            </div>
+        <div style="flex:1">
+            <label>Thời gian (phút)</label>
+            <input type="number" id="exam-time" value="45">
         </div>
+    </div>
+    
+    <div class="form-group" style="margin-top:10px">
+        <label>Mô tả đề thi</label>
+        <input type="text" id="exam-desc" placeholder="Nội dung, phạm vi kiến thức...">
+    </div>
 
-        <div class="row" style="margin-top:15px">
-            <div class="col"><label>Điểm câu Trắc nghiệm</label><input type="number" id="score-mcq" value="0.25" step="0.05"></div>
-            <div class="col"><label>Điểm câu Đúng/Sai (Max)</label><input type="number" id="score-tf" value="1.0" step="0.1"></div>
-            <div class="col"><label>Điểm câu Trả lời ngắn</label><input type="number" id="score-short" value="0.5" step="0.1"></div>
+    <div style="background:#fff3e0; padding:15px; border-radius:5px; margin-top:15px">
+        <label>Tạo Mật Khẩu (Nếu cần)</label>
+        <div style="display:flex; gap:10px">
+            <input type="text" id="raw-pass" placeholder="Nhập mật khẩu chữ thường..." oninput="createPass()">
+            <input type="text" id="hashed-pass" placeholder="Mã hóa MD5 sẽ hiện ở đây..." readonly style="background:#eee; color:#666">
         </div>
     </div>
 
+    <h3>2. Cấu Hình Điểm Số</h3>
+    <div style="display:flex; gap:15px">
+        <div style="flex:1"><label>Điểm Trắc nghiệm (1 câu)</label><input type="number" id="score-mcq" value="0.25"></div>
+        <div style="flex:1"><label>Điểm Đúng/Sai (Tối đa)</label><input type="number" id="score-tf" value="1.0"></div>
+        <div style="flex:1"><label>Điểm Trả lời ngắn (1 câu)</label><input type="number" id="score-short" value="0.5"></div>
+    </div>
+
+    <h3>3. Soạn Câu Hỏi</h3>
     <div class="toolbar">
-        <button class="btn btn-mcq" onclick="addQuestion('mcq')"><i class="fas fa-list-ul"></i> Thêm Trắc Nghiệm</button>
-        <button class="btn btn-tf" onclick="addQuestion('tf')"><i class="fas fa-check-square"></i> Thêm Đúng/Sai</button>
-        <button class="btn btn-short" onclick="addQuestion('short')"><i class="fas fa-pen"></i> Thêm Trả Lời Ngắn</button>
-        <button class="btn btn-save" onclick="generateFile()"><i class="fas fa-download"></i> TẢI FILE ĐỀ THI (.JS)</button>
+        <button class="btn-mcq" onclick="addQ('mcq')">➕ Trắc Nghiệm</button>
+        <button class="btn-tf" onclick="addQ('tf')">➕ Đúng/Sai</button>
+        <button class="btn-short" onclick="addQ('short')">➕ Trả Lời Ngắn</button>
+        <button class="btn-save" onclick="exportFile()">💾 TẢI FILE CODE (.JS)</button>
     </div>
 
-    <div id="questions-container"></div>
-
+    <div id="q-container" style="margin-top:20px"></div>
 </div>
 
 <script>
+    // Kiểm tra thư viện mã hóa
+    window.onload = function() {
+        if(typeof CryptoJS === 'undefined') {
+            alert("Cảnh báo: Máy tính chưa kết nối mạng hoặc không tải được thư viện mã hóa!\nChức năng tạo mật khẩu có thể không hoạt động.");
+        }
+    }
+
     let questions = [];
 
-    // --- HÀM MÃ HÓA MẬT KHẨU ---
-    function hashPass() {
-        const raw = document.getElementById('raw-pass').value.trim();
-        if(raw) {
-            document.getElementById('hashed-pass').value = CryptoJS.MD5(raw).toString();
+    function createPass() {
+        let p = document.getElementById('raw-pass').value.trim();
+        if(p && typeof CryptoJS !== 'undefined') {
+            document.getElementById('hashed-pass').value = CryptoJS.MD5(p).toString();
         } else {
             document.getElementById('hashed-pass').value = "";
         }
     }
 
-    // --- CẬP NHẬT TÊN FILE ---
-    function updateFileName() {
-        let name = document.getElementById('exam-id').value.trim();
-        // Tự động bỏ đuôi .js nếu lỡ nhập
-        if(name.endsWith('.js')) name = name.replace('.js','');
+    function addQ(type) {
+        let id = Date.now();
+        questions.push({ id: id, type: type });
+        render();
+        // Cuộn xuống câu hỏi mới
+        setTimeout(() => document.getElementById('q-'+id).scrollIntoView({behavior: "smooth"}), 100);
     }
 
-    // --- THÊM CÂU HỎI MỚI ---
-    function addQuestion(type) {
-        const id = Date.now();
-        const qObj = { id, type };
-        questions.push(qObj);
-        renderQuestions();
-    }
-
-    // --- XÓA CÂU HỎI ---
-    function removeQuestion(id) {
-        if(confirm("Bạn có chắc muốn xóa câu này?")) {
+    function removeQ(id) {
+        if(confirm("Xóa câu này?")) {
             questions = questions.filter(q => q.id !== id);
-            renderQuestions();
+            render();
         }
     }
 
-    // --- VẼ GIAO DIỆN CÂU HỎI ---
-    function renderQuestions() {
-        const container = document.getElementById('questions-container');
-        container.innerHTML = "";
-
-        questions.forEach((q, index) => {
-            let html = `<div class="q-box" id="q-${q.id}">
+    function render() {
+        let html = '';
+        questions.forEach((q, idx) => {
+            let badgeColor = q.type=='mcq'?'#2196F3':(q.type=='tf'?'#FF9800':'#9C27B0');
+            let typeName = q.type=='mcq'?'Trắc Nghiệm':(q.type=='tf'?'Đúng/Sai':'Trả Lời Ngắn');
+            
+            html += `<div class="q-box" id="q-${q.id}">
                 <div class="q-header">
-                    <span><span class="q-type-badge bg-${q.type}">${getTypeName(q.type)}</span> Câu ${index + 1}</span>
-                    <button class="btn btn-danger" style="padding:5px 10px; font-size:12px" onclick="removeQuestion(${q.id})"><i class="fas fa-trash"></i></button>
+                    <span style="color:${badgeColor}">● Câu ${idx+1} [${typeName}]</span>
+                    <button class="btn-del" onclick="removeQ(${q.id})">Xóa</button>
                 </div>
                 <div class="form-group">
-                    <label>Nội dung câu hỏi (Có thể dùng LaTeX $...$)</label>
-                    <textarea id="content-${q.id}" placeholder="Nhập đề bài..."></textarea>
+                    <textarea id="content-${q.id}" placeholder="Nhập đề bài (Hỗ trợ LaTeX $...$)"></textarea>
                 </div>`;
 
-            // Giao diện riêng cho từng loại
+            // GIAO DIỆN TÙY BIẾN THEO LOẠI
             if(q.type === 'mcq') {
-                html += `<label>Các phương án (Tích chọn đáp án ĐÚNG)</label>`;
-                ['A', 'B', 'C', 'D'].forEach((label, idx) => {
+                html += `<div style="background:#e3f2fd; padding:10px; border-radius:4px; margin-bottom:10px">
+                    <label>Nhập 4 đáp án và tích vào đáp án đúng:</label>`;
+                ['A','B','C','D'].forEach((lbl, i) => {
                     html += `<div class="opt-row">
-                        <input type="radio" name="ans-${q.id}" class="opt-check" value="${idx}">
-                        <span style="font-weight:bold">${label}.</span>
-                        <input type="text" id="opt-${q.id}-${idx}" placeholder="Nhập đáp án ${label}...">
+                        <input type="radio" name="ans-${q.id}" value="${i}">
+                        <b>${lbl}.</b>
+                        <input type="text" id="opt-${q.id}-${i}" placeholder="Nội dung đáp án ${lbl}...">
                     </div>`;
                 });
-            } 
-            else if (q.type === 'tf') {
-                html += `<label>Các mệnh đề (Chọn Đúng/Sai)</label>
-                         <table style="width:100%; margin-bottom:10px">
-                            <tr><th>Nội dung mệnh đề</th><th width="80">Đúng</th><th width="80">Sai</th></tr>`;
-                [0, 1, 2, 3].forEach(idx => {
+                html += `</div>`;
+            } else if(q.type === 'tf') {
+                html += `<div style="background:#fff3e0; padding:10px; border-radius:4px; margin-bottom:10px">
+                    <label>Nhập 4 mệnh đề và chọn Đúng (T) / Sai (F):</label>
+                    <table width="100%"><tr><th>Nội dung</th><th width="50">Đ</th><th width="50">S</th></tr>`;
+                [0,1,2,3].forEach(i => {
                     html += `<tr>
-                        <td><input type="text" id="tf-sub-${q.id}-${idx}" placeholder="Mệnh đề ${idx+1}..."></td>
-                        <td align="center"><input type="radio" name="tf-ans-${q.id}-${idx}" value="T"></td>
-                        <td align="center"><input type="radio" name="tf-ans-${q.id}-${idx}" value="F"></td>
+                        <td><input type="text" id="tf-sub-${q.id}-${i}" placeholder="Mệnh đề ${i+1}..."></td>
+                        <td align="center"><input type="radio" name="tf-${q.id}-${i}" value="T"></td>
+                        <td align="center"><input type="radio" name="tf-${q.id}-${i}" value="F" checked></td>
                     </tr>`;
                 });
-                html += `</table>`;
-            }
-            else if (q.type === 'short') {
-                html += `<div class="form-group">
-                    <label>Đáp án đúng (Số hoặc Chữ)</label>
-                    <input type="text" id="short-ans-${q.id}" placeholder="Ví dụ: 2025 hoặc -5/2...">
+                html += `</table></div>`;
+            } else {
+                html += `<div style="background:#f3e5f5; padding:10px; border-radius:4px; margin-bottom:10px">
+                    <label>Đáp án đúng (Số hoặc Chữ):</label>
+                    <input type="text" id="short-${q.id}" placeholder="Ví dụ: 2025">
                 </div>`;
             }
 
             html += `<div class="form-group">
-                        <label>Lời giải chi tiết</label>
-                        <textarea id="explain-${q.id}" style="height:50px" placeholder="Giải thích..."></textarea>
-                     </div>
-                </div>`;
-            
-            container.insertAdjacentHTML('beforeend', html);
+                <textarea id="explain-${q.id}" style="height:50px" placeholder="Nhập lời giải chi tiết..."></textarea>
+            </div></div>`;
         });
-        
-        // Restore values (giữ lại dữ liệu đã nhập khi render lại) - Có thể nâng cấp sau
-        // Ở phiên bản đơn giản này, ta chưa restore data khi thêm/xóa để code gọn nhẹ.
-        // Thầy nhập xong 1 câu rồi hẵng thêm câu mới để tránh mất chữ nhé.
+        document.getElementById('q-container').innerHTML = html;
     }
 
-    function getTypeName(type) {
-        if(type==='mcq') return 'Trắc Nghiệm';
-        if(type==='tf') return 'Đúng/Sai';
-        if(type==='short') return 'Trả Lời Ngắn';
-    }
-
-    // --- TẠO VÀ TẢI FILE .JS ---
-    function generateFile() {
-        const examId = document.getElementById('exam-id').value.trim() || 'de-moi';
-        
+    function exportFile() {
         // Thu thập dữ liệu
-        const finalData = {
+        let examId = document.getElementById('exam-id').value.trim() || 'de-moi';
+        if(examId.endsWith('.js')) examId = examId.replace('.js','');
+
+        let data = {
             title: document.getElementById('exam-title').value,
             description: document.getElementById('exam-desc').value,
-            time: parseInt(document.getElementById('exam-time').value),
-            password: document.getElementById('hashed-pass').value || "",
+            time: parseInt(document.getElementById('exam-time').value) || 45,
+            password: document.getElementById('hashed-pass').value,
             scores: {
                 mcq: parseFloat(document.getElementById('score-mcq').value),
                 tf: parseFloat(document.getElementById('score-tf').value),
@@ -232,44 +194,39 @@
             questions: []
         };
 
-        // Duyệt qua các câu hỏi để lấy dữ liệu từ ô nhập
+        // Duyệt từng câu hỏi để lấy nội dung
         questions.forEach(q => {
-            const qContent = document.getElementById(`content-${q.id}`).value;
-            const explain = document.getElementById(`explain-${q.id}`).value;
-            
-            let qData = { type: q.type, q: qContent, explain: explain };
+            let qObj = {
+                type: q.type,
+                q: document.getElementById(`content-${q.id}`).value,
+                explain: document.getElementById(`explain-${q.id}`).value
+            };
 
             if(q.type === 'mcq') {
-                qData.options = [];
-                for(let i=0; i<4; i++) {
-                    qData.options.push(document.getElementById(`opt-${q.id}-${i}`).value);
-                }
-                const checked = document.querySelector(`input[name="ans-${q.id}"]:checked`);
-                qData.ans = checked ? parseInt(checked.value) : 0;
-            }
+                qObj.options = [];
+                for(let i=0; i<4; i++) qObj.options.push(document.getElementById(`opt-${q.id}-${i}`).value);
+                let checked = document.querySelector(`input[name="ans-${q.id}"]:checked`);
+                qObj.ans = checked ? parseInt(checked.value) : 0;
+            } 
             else if(q.type === 'tf') {
-                qData.items = [];
+                qObj.items = [];
                 for(let i=0; i<4; i++) {
-                    const sub = document.getElementById(`tf-sub-${q.id}-${i}`).value;
-                    const checked = document.querySelector(`input[name="tf-ans-${q.id}-${i}"]:checked`);
-                    const ans = checked ? checked.value : 'F'; // Mặc định là Sai nếu quên chọn
-                    qData.items.push({ sub: sub, ans: ans });
+                    let sub = document.getElementById(`tf-sub-${q.id}-${i}`).value;
+                    let ans = document.querySelector(`input[name="tf-${q.id}-${i}"]:checked`).value;
+                    qObj.items.push({sub: sub, ans: ans});
                 }
+            } 
+            else {
+                qObj.ans = document.getElementById(`short-${q.id}`).value;
             }
-            else if(q.type === 'short') {
-                qData.ans = document.getElementById(`short-ans-${q.id}`).value;
-            }
-
-            finalData.questions.push(qData);
+            data.questions.push(qObj);
         });
 
-        // Tạo nội dung file JS
-        const fileContent = `window.EXAM_DATA = ${JSON.stringify(finalData, null, 4)};`;
-
-        // Tải file về máy
-        const blob = new Blob([fileContent], { type: "text/javascript" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
+        // TẠO FILE VÀ TẢI VỀ
+        let content = `window.EXAM_DATA = ${JSON.stringify(data, null, 4)};`;
+        let blob = new Blob([content], { type: "text/javascript;charset=utf-8" });
+        let url = URL.createObjectURL(blob);
+        let a = document.createElement("a");
         a.href = url;
         a.download = `${examId}.js`;
         document.body.appendChild(a);
