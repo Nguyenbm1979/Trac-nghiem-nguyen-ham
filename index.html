@@ -3,120 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cổng Thi Trực Tuyến</title>
+    <title>Ngân Hàng Đề Thi Trực Tuyến</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
         .container { max-width: 1000px; margin: 0 auto; }
+        h1 { text-align: center; color: #00796b; margin-bottom: 30px; text-transform: uppercase; }
         
-        /* HEADER */
-        .header { background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 30px; border-bottom: 5px solid #009688; }
-        .header h1 { color: #00796b; margin: 0; text-transform: uppercase; }
-        .header p { color: #666; margin-top: 10px; }
+        /* BỘ LỌC */
+        .filter-bar { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        select { padding: 10px; border: 1px solid #ddd; border-radius: 5px; flex: 1; min-width: 120px; font-size: 16px; }
+        
+        /* DANH SÁCH ĐỀ */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: 0.2s; border-top: 4px solid #ddd; position: relative; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+        
+        /* MÀU SẮC THEO MÔN */
+        .Sub-Toan { border-color: #1976d2; } .Tag-Toan { background: #e3f2fd; color: #1976d2; }
+        .Sub-Ly { border-color: #7b1fa2; } .Tag-Ly { background: #f3e5f5; color: #7b1fa2; }
+        .Sub-Hoa { border-color: #c2185b; } .Tag-Hoa { background: #fce4ec; color: #c2185b; }
+        .Sub-Su { border-color: #e64a19; } .Tag-Su { background: #fbe9e7; color: #e64a19; }
+        .Sub-Dia { border-color: #00796b; } .Tag-Dia { background: #e0f2f1; color: #00796b; }
+        .Sub-Anh { border-color: #303f9f; } .Tag-Anh { background: #e8eaf6; color: #303f9f; }
 
-        /* KHUNG CHỨA MÔN HỌC */
-        .subject-section { background: white; border-radius: 15px; padding: 25px; margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
-        
-        /* TIÊU ĐỀ MÔN (TOÁN, SỬ) */
-        .subject-title { font-size: 1.5em; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        .math-color { color: #1565c0; border-color: #1565c0; } /* Màu xanh cho Toán */
-        .hist-color { color: #c62828; border-color: #c62828; } /* Màu đỏ cho Sử */
-        
-        /* TIÊU ĐỀ LỚP (Lớp 10, 11...) */
-        .grade-title { font-size: 1.1em; font-weight: bold; color: #455a64; margin: 20px 0 10px 0; padding-left: 10px; border-left: 4px solid #78909c; }
-        
-        /* LƯỚI ĐỀ THI */
-        .exam-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
-        
-        /* THẺ BÀI THI */
-        .exam-card { 
-            background: #fafafa; border: 1px solid #eee; padding: 15px; border-radius: 10px; 
-            text-decoration: none; color: #333; transition: 0.2s; display: flex; flex-direction: column; 
-        }
-        .exam-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-color: #aaa; background: white; }
-        .exam-name { font-weight: bold; font-size: 1em; margin-bottom: 5px; }
-        .exam-meta { font-size: 0.85em; color: #888; margin-bottom: 10px; }
-        .btn-vao { 
-            margin-top: auto; padding: 8px; border-radius: 5px; text-align: center; font-weight: bold; font-size: 0.9em; 
-        }
-        
-        /* Màu nút bấm cho từng môn */
-        .btn-math { background: #e3f2fd; color: #1565c0; }
-        .exam-card:hover .btn-math { background: #1565c0; color: white; }
-        
-        .btn-hist { background: #ffebee; color: #c62828; }
-        .exam-card:hover .btn-hist { background: #c62828; color: white; }
-
-        .empty-msg { font-style: italic; color: #aaa; font-size: 0.9em; padding: 10px; }
+        .card h3 { margin: 10px 0; font-size: 1.1em; color: #333; height: 50px; overflow: hidden; }
+        .info { font-size: 0.9em; color: #666; display: flex; justify-content: space-between; margin-bottom: 15px; }
+        .tag { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .btn { display: block; width: 100%; padding: 10px; background: #009688; color: white; text-align: center; border-radius: 5px; text-decoration: none; font-weight: bold; transition: 0.2s; }
+        .btn:hover { background: #00796b; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">
-        <h1>NGÂN HÀNG ĐỀ THI TRỰC TUYẾN</h1>
-        <p>Giáo viên: Thầy Nguyễn Bình Nguyên</p>
+    <h1>📚 NGÂN HÀNG ĐỀ THI</h1>
+    
+    <div class="filter-bar">
+        <select id="f-subject" onchange="renderExams()">
+            <option value="all">-- Tất cả các môn --</option>
+            <option value="Toan">Toán Học</option>
+            <option value="Ly">Vật Lý</option>
+            <option value="Hoa">Hóa Học</option>
+            <option value="Sinh">Sinh Học</option>
+            <option value="Su">Lịch Sử</option>
+            <option value="Dia">Địa Lý</option>
+            <option value="Anh">Tiếng Anh</option>
+            <option value="GDCD">GDCD</option>
+        </select>
+        <select id="f-grade" onchange="renderExams()">
+            <option value="all">-- Tất cả các khối --</option>
+            <option value="12">Lớp 12</option>
+            <option value="11">Lớp 11</option>
+            <option value="10">Lớp 10</option>
+            <option value="12OT">Ôn Thi THPT</option>
+        </select>
     </div>
 
-    <div class="subject-section">
-        <div class="subject-title math-color">📚 MÔN TOÁN HỌC</div>
-
-        <div class="grade-title">Toán 12 (Ôn thi THPT)</div>
-        <div class="exam-grid">
-            <a href="thi.html?id=de-01" class="exam-card">
-                <div class="exam-name">Đề Nguyên Hàm số 01</div>
-                <div class="exam-meta">22 câu | 90 phút</div>
-                <div class="btn-vao btn-math">LÀM BÀI</div>
-            </a>
-            <a href="thi.html?id=de-02" class="exam-card">
-                <div class="exam-name">Đề Nguyên Hàm số 02</div>
-                <div class="exam-meta">22 câu | 90 phút</div>
-                <div class="btn-vao btn-math">LÀM BÀI</div>
-            </a>
-        </div>
-
-        <div class="grade-title">Toán 11</div>
-        <div class="exam-grid">
-            <a href="#" class="exam-card" style="opacity:0.6; cursor:default">
-                <div class="exam-name">Đề Giới Hạn (Sắp ra mắt)</div>
-                <div class="exam-meta">...</div>
-                <div class="btn-vao btn-math">CHỜ CẬP NHẬT</div>
-            </a>
-        </div>
-
-        <div class="grade-title">Toán 10</div>
-        <div class="exam-grid">
-            <div class="empty-msg">Chưa có đề thi nào.</div>
-        </div>
-
-        <div class="grade-title" style="border-left-color: #fbc02d; color: #f57f17;">🏆 Toán Học Sinh Giỏi</div>
-        <div class="exam-grid">
-             <div class="empty-msg">Đang biên soạn đề chuyên đề...</div>
-        </div>
-    </div>
-
-
-    <div class="subject-section">
-        <div class="subject-title hist-color">🏛️ MÔN LỊCH SỬ</div>
-
-        <div class="grade-title">Lịch Sử 12</div>
-        <div class="exam-grid">
-            <a href="thi.html?id=su-12-01" class="exam-card">
-                <div class="exam-name">Đề Sử 12 - Bài 1</div>
-                <div class="exam-meta">40 câu | 50 phút</div>
-                <div class="btn-vao btn-hist">LÀM BÀI</div>
-            </a>
-        </div>
-
-        <div class="grade-title">Lịch Sử 10</div>
-        <div class="exam-grid">
-            <div class="empty-msg">Chưa có đề thi nào.</div>
-        </div>
-    </div>
-
-    <div style="text-align:center; color:#999; margin-top:40px; font-size:0.8em">
-        &copy; 2026 Hệ thống thi trắc nghiệm - Thầy Nguyên
-    </div>
+    <div id="exam-grid" class="grid">Đang tải danh sách đề thi...</div>
 </div>
+
+<script src="data/list.js?v=1"></script> 
+
+<script>
+    function renderExams() {
+        const container = document.getElementById('exam-grid');
+        const subFilter = document.getElementById('f-subject').value;
+        const gradeFilter = document.getElementById('f-grade').value;
+        
+        if (!window.EXAM_LIST) {
+            container.innerHTML = "<p style='text-align:center; color:red'>❌ Chưa tìm thấy file data/list.js</p>";
+            return;
+        }
+
+        let html = '';
+        let count = 0;
+
+        window.EXAM_LIST.forEach(ex => {
+            // Lọc dữ liệu
+            if (subFilter !== 'all' && ex.subject !== subFilter) return;
+            if (gradeFilter !== 'all' && ex.grade !== gradeFilter) return;
+
+            // Xử lý hiển thị
+            let subName = getSubName(ex.subject);
+            let cssClass = `Sub-${ex.subject}`;
+            let tagClass = `Tag-${ex.subject}`;
+
+            html += `
+            <div class="card ${cssClass}">
+                <div style="display:flex; justify-content:space-between">
+                    <span class="tag ${tagClass}">${subName}</span>
+                    <span class="tag" style="background:#eee; color:#555">Khối ${ex.grade}</span>
+                </div>
+                <h3>${ex.title}</h3>
+                <div class="info">
+                    <span>⏳ ${ex.time} phút</span>
+                    <span>📝 ID: ${ex.id}</span>
+                </div>
+                <a href="thi.html?id=${ex.id}" class="btn">VÀO THI NGAY</a>
+            </div>`;
+            count++;
+        });
+
+        if(count === 0) html = "<p style='text-align:center; width:100%'>Không tìm thấy đề thi nào phù hợp.</p>";
+        container.innerHTML = html;
+    }
+
+    function getSubName(code) {
+        const map = { 'Toan':'Toán', 'Ly':'Vật Lý', 'Hoa':'Hóa Học', 'Sinh':'Sinh', 'Su':'Lịch Sử', 'Dia':'Địa Lý', 'Anh':'Tiếng Anh', 'GDCD':'GDCD' };
+        return map[code] || code;
+    }
+
+    // Chạy lần đầu
+    setTimeout(renderExams, 500); // Đợi file list.js load xong
+</script>
 
 </body>
 </html>
