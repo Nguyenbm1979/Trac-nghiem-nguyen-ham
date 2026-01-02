@@ -1,5 +1,12 @@
 window.EXAM_LIST = [
     {
+        "id": "2-TichPhan-de1-25-26",
+        "title": "Ôn tập Tích Phân, Đề Số 1",
+        "subject": "Toan",
+        "grade": "12",
+        "time": 60
+    },
+    {
         "id": "2-HK1-THPT-BinhMinh25-26",
         "title": "Đề Kiểm Tra Cuối Kì I, Năm học 2025-2026",
         "subject": "Toan",
