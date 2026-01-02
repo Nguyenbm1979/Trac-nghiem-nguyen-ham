@@ -3,52 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Làm Bài Thi (v3.2 Updated)</title>
+    <title>Làm Bài Thi (v3.3 Ổn Định)</title>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
     <style>
-        /* CSS GIAO DIỆN */
         body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; color: #333; line-height: 1.6; }
         .container { max-width: 900px; margin: 0 auto; padding: 20px; }
-        .loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 10000; display: flex; justify-content: center; align-items: center; color: #009688; font-size: 18px; font-weight: bold;}
+        
+        /* MÀN HÌNH LOADING */
+        .loading { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: white; z-index: 10000; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            color: #009688; font-size: 18px; font-weight: bold;
+        }
+        
+        /* GIAO DIỆN CHÍNH */
         .welcome-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #00695c 0%, #004d40 100%); z-index: 9999; display: flex; justify-content: center; align-items: center; padding: 15px; display: none; }
         .welcome-card { background: white; width: 100%; max-width: 480px; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
         .input-group { margin: 15px 0; text-align: left; } 
         .input-group label { font-weight: 600; color: #555; display: block; margin-bottom: 5px; }
         .input-group input { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
         .btn-start { background: linear-gradient(to right, #d81b60, #ad1457); color: white; border: none; padding: 15px 50px; border-radius: 50px; cursor: pointer; width: 100%; font-size: 18px; font-weight: bold; margin-top: 20px; }
+        
         #main-interface { display: none; padding-bottom: 80px; }
         .header-bar { background: white; padding: 15px 25px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 10px; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-top: 5px solid #009688; }
         .timer { font-size: 26px; color: #d32f2f; font-weight: 800; font-family: monospace; background: #ffebee; padding: 5px 15px; border-radius: 5px; }
+        
         .question-block { background: white; padding: 30px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #eee; }
         .q-label { color: #d81b60; font-weight: 900; font-size: 1.1em; margin-right: 8px; text-transform: uppercase; }
         .q-content { font-weight: 600; font-size: 1.1em; color: #2c3e50; }
         .question-image img { max-width: 100%; border-radius: 8px; margin-top: 15px; border: 1px solid #ddd; }
+        
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
         .option-item { display: flex; align-items: flex-start; background: #fafafa; border: 2px solid #e0e0e0; padding: 12px 15px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
         .option-item:hover { background: #e0f2f1; border-color: #80cbc4; }
         .option-item input[type="radio"] { margin-top: 5px; transform: scale(1.2); }
         .opt-letter { font-weight: 900; color: #00695c; margin: 0 10px; min-width: 25px; }
         .option-item:has(input:checked) { border-color: #009688; background: #e0f2f1; box-shadow: 0 0 0 1px #009688; }
+        
         .tf-table { width: 100%; border-collapse: collapse; margin-top: 15px; border-radius: 8px; overflow: hidden; border: 1px solid #ddd; }
         .tf-table th { background: #eee; padding: 12px; text-align: center; }
         .tf-table td { padding: 12px; border-bottom: 1px solid #eee; }
         .short-input { width: 100%; max-width: 300px; padding: 10px; border: 2px solid #bdbdbd; border-radius: 6px; font-size: 16px; margin-top: 10px; }
+        
         .part-header { background: linear-gradient(to right, #00796b, #004d40); color: white; padding: 12px 20px; margin: 40px 0 20px 0; font-weight: bold; border-radius: 8px; text-transform: uppercase; }
         .solution-box { display: none; margin-top: 20px; padding: 20px; background-color: #e8f5e9; border-left: 5px solid #2e7d32; border-radius: 4px; color: #1b5e20; font-size: 0.95em; }
         .solution-title { font-weight: bold; text-transform: uppercase; margin-bottom: 10px; display: block; color: #2e7d32; text-decoration: underline; }
+        
         .btn-submit { background: #1565c0; color: white; padding: 18px; width: 100%; border: none; border-radius: 12px; font-size: 20px; font-weight: bold; cursor: pointer; margin-top: 30px; }
         .result-box { display: none; background: white; padding: 40px; text-align: center; border-radius: 15px; margin-top: 20px; border-top: 5px solid #43a047; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .correct-ans { color: #2e7d32; background: #c8e6c9; padding: 5px 10px; border-radius: 4px; font-weight: bold; display: inline-block; margin-top: 8px; border: 1px solid #81c784; }
         .wrong-ans { color: #c62828; background: #ffcdd2; padding: 5px 10px; border-radius: 4px; display: inline-block; margin-top: 8px; border: 1px solid #e57373; }
         .partial-score { color: #f57f17; background: #ffe082; padding: 5px 10px; border-radius: 4px; font-weight: bold; margin-top: 8px; display: inline-block; }
+        
         @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
-<div class="loading" id="loading">Đang tải dữ liệu...</div>
+
+<div class="loading" id="loading">
+    <div id="loading-text">⏳ Đang tải dữ liệu...</div>
+</div>
+
 <div class="welcome-overlay" id="welcome-screen">
     <div class="welcome-card">
         <h1 id="exam-title">BÀI KIỂM TRA</h1>
@@ -63,6 +82,7 @@
         <button class="btn-start" onclick="startQuiz()">VÀO LÀM BÀI</button>
     </div>
 </div>
+
 <div class="container" id="main-interface">
     <div class="header-bar">
         <div class="student-info"><strong id="d-name">...</strong> | <span id="d-class">...</span></div>
@@ -75,46 +95,76 @@
     <div id="quiz-body"></div>
     <button class="btn-submit" onclick="if(confirm('Nộp bài?')) submitQuiz()" id="btn-submit">NỘP BÀI</button>
 </div>
+
 <script>
-    // 👇👇👇 ĐÂY LÀ LINK MỚI CỦA BẠN ĐÃ ĐƯỢC CẬP NHẬT 👇👇👇
+    // 👇👇👇 LINK SCRIPT MỚI CỦA THẦY 👇👇👇
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwlsAhI7NdHZhaOulVx0otepQkj8VijTm_g1lQjZaUBvffzC5uLb2IRyjhgnJdm4Wvg/exec'; 
-    
+
     let rawQuestions=[], currentQuestions=[], timerDuration=0, timerInterval;
     function hash(input) { return CryptoJS.MD5(String(input).trim().toLowerCase()).toString(); }
+
     const urlParams = new URLSearchParams(window.location.search);
     const examId = urlParams.get('id');
+
+    // TIMEOUT CHECK: Nếu 5 giây không tải được thì báo lỗi
+    setTimeout(function() {
+        const loadingDiv = document.getElementById('loading');
+        if (loadingDiv && loadingDiv.style.display !== 'none') {
+            document.getElementById('loading-text').innerHTML = 
+                `<span style="color:red">⚠️ KHÔNG TẢI ĐƯỢC ĐỀ THI!</span><br><br>
+                 Có thể do:<br>
+                 1. File dữ liệu <b>data/${examId}.js</b> bị lỗi cú pháp (thiếu dấu phẩy, dấu ngoặc).<br>
+                 2. Tên file trên GitHub không khớp với link.<br><br>
+                 <i>Thầy vui lòng kiểm tra lại file data trên GitHub.</i>`;
+        }
+    }, 5000); // 5000ms = 5 giây
+
     if(examId) {
-        const script = document.createElement('script'); script.src = `data/${examId}.js`;
+        const script = document.createElement('script'); 
+        script.src = `data/${examId}.js`;
+        
         script.onload = () => {
             if(window.EXAM_DATA) {
                 rawQuestions = window.EXAM_DATA.questions;
                 timerDuration = window.EXAM_DATA.time * 60;
                 document.getElementById('exam-title').innerText = window.EXAM_DATA.title;
                 document.getElementById('exam-desc').innerText = window.EXAM_DATA.description;
-                if(window.EXAM_DATA.password) document.getElementById('pass-area').style.display = 'block';
+                
+                if(window.EXAM_DATA.password) {
+                    document.getElementById('pass-area').style.display = 'block';
+                }
+
                 prepareQuestions();
-                document.getElementById('loading').style.display='none'; document.getElementById('welcome-screen').style.display='flex';
+                document.getElementById('loading').style.display='none'; 
+                document.getElementById('welcome-screen').style.display='flex';
             }
         };
-        script.onerror = () => { alert("Lỗi tải đề thi!"); }; document.head.appendChild(script);
-    } else { document.getElementById('loading').innerText = "Chưa chọn đề thi."; }
+        script.onerror = () => { /* Để Timeout xử lý báo lỗi */ }; 
+        document.head.appendChild(script);
+    } else { 
+        document.getElementById('loading-text').innerText = "Chưa chọn ID đề thi trên đường link."; 
+    }
+
     function shuffle(array) { for (let i=array.length-1; i>0; i--) { const j=Math.floor(Math.random()*(i+1)); [array[i], array[j]]=[array[j], array[i]]; } return array; }
+
     function prepareQuestions() {
         let allQ = JSON.parse(JSON.stringify(rawQuestions));
         let part1 = allQ.filter(q => q.type === 'mcq');
         let part2 = allQ.filter(q => q.type === 'tf');
         let part3 = allQ.filter(q => q.type === 'short');
+        
         shuffle(part1); shuffle(part2); shuffle(part3);
         part1.forEach(q => { let indices = q.options.map((_, i) => i); shuffle(indices); q.shuffledIndices = indices; });
         part2.forEach(q => shuffle(q.items));
-        if(part1.length) part1[0].isPartHeader = "PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn. Thí sinh trả lời từ câu 1 đến câu 12. Mỗi
-câu hỏi thí sinh chỉ chọn một phương án.";
-        if(part2.length) part2[0].isPartHeader = "PHẦN II. Trắc nghiệm lựa chọn đúng sai. Thí sinh trả lời từ câu 1 đến câu 4. Trong mỗi ý a), b),
-c), d) ở mỗi câu, thí sinh chọn đúng hoặc sai.";
-        if(part3.length) part3[0].isPartHeader = "PHẦN III. Trắc nghiệm trả lời ngắn. Thí sinh trả lời từ câu 1 đến câu 6";
+
+        if(part1.length) part1[0].isPartHeader = "PHẦN 1. Trắc nghiệm (Mỗi câu 0,25đ)";
+        if(part2.length) part2[0].isPartHeader = "PHẦN 2. Đúng/Sai (Điểm bậc thang)";
+        if(part3.length) part3[0].isPartHeader = "PHẦN 3. Trả lời ngắn (Mỗi câu 0,5đ)";
+
         currentQuestions = [...part1, ...part2, ...part3];
         renderQuestions();
     }
+
     function renderQuestions() {
         const LABELS = ['A', 'B', 'C', 'D'];
         let html = '';
@@ -124,6 +174,7 @@ c), d) ở mỗi câu, thí sinh chọn đúng hoặc sai.";
             let qText = q.q.includes(':') ? q.q.substring(q.q.indexOf(':') + 1) : q.q;
             html += `<div style="margin-bottom:15px"><span class="q-label">Câu ${idx+1}:</span> <span class="q-content">${qText}</span></div>`;
             if(q.img) html += `<div class="question-image"><img src="${q.img}"></div>`;
+            
             if(q.type === 'mcq') {
                 html += `<div class="options-grid">`;
                 q.shuffledIndices.forEach((originalIndex, displayIndex) => {
@@ -135,24 +186,30 @@ c), d) ở mỗi câu, thí sinh chọn đúng hoặc sai.";
                 q.items.forEach((it, sIdx) => { html += `<tr><td>${it.sub}</td><td align="center"><input type="radio" name="q${idx}_${sIdx}" value="T"></td><td align="center"><input type="radio" name="q${idx}_${sIdx}" value="F"></td></tr>`; });
                 html += `</table>`;
             } else if(q.type === 'short') { html += `<input type="text" class="short-input" id="in-${idx}" placeholder="Nhập kết quả...">`; }
+            
             html += `<div class="solution-box" id="sol-${idx}"><span class="solution-title">LỜI GIẢI CHI TIẾT:</span>${q.explain ? q.explain : "Không có lời giải chi tiết."}</div>`;
             html += `</div>`;
         });
         document.getElementById('quiz-body').innerHTML = html;
         if(window.MathJax) MathJax.typesetPromise();
     }
+
     function startQuiz() {
         const name = document.getElementById('s-name').value.trim();
         const cls = document.getElementById('s-class').value.trim();
         if(!name || !cls) return alert("Vui lòng nhập Họ tên và Lớp!");
+
         if(window.EXAM_DATA.password) {
             const inputPass = document.getElementById('s-pass').value.trim();
             const configPass = window.EXAM_DATA.password;
+            
             let isMatch = false;
             if(hash(inputPass) === configPass) isMatch = true;
             if(inputPass === configPass) isMatch = true;
+
             if(!isMatch) return alert("MẬT KHẨU KHÔNG ĐÚNG!");
         }
+
         document.getElementById('d-name').innerText = name;
         document.getElementById('d-class').innerText = cls;
         document.getElementById('welcome-screen').style.display = 'none';
@@ -163,6 +220,7 @@ c), d) ở mỗi câu, thí sinh chọn đúng hoặc sai.";
             if(--timerDuration < 0) { clearInterval(timerInterval); submitQuiz(); }
         }, 1000);
     }
+
     function submitQuiz() {
         clearInterval(timerInterval);
         document.getElementById('btn-submit').style.display = 'none';
@@ -171,6 +229,7 @@ c), d) ở mỗi câu, thí sinh chọn đúng hoặc sai.";
             const block = document.getElementById(`q-${idx}`);
             const solBox = document.getElementById(`sol-${idx}`);
             if(solBox) solBox.style.display = 'block';
+
             if(q.type === 'mcq') {
                 maxScore += 0.25;
                 const sel = document.querySelector(`input[name="q${idx}"]:checked`);
@@ -206,12 +265,14 @@ c), d) ở mỗi câu, thí sinh chọn đúng hoặc sai.";
                 else block.insertAdjacentHTML('beforeend', `<div class="wrong-ans">Sai. Đáp án đúng: ${q.ans}</div>`);
             }
         });
+
         totalScore = Math.round(totalScore*100)/100;
         maxScore = Math.round(maxScore*100)/100;
         document.getElementById('result-area').style.display = 'block';
         document.getElementById('final-score').innerText = `${totalScore} / ${maxScore}`;
         window.scrollTo(0,0);
         if(window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+        
         if(GOOGLE_SCRIPT_URL) {
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST', mode: 'no-cors', headers: {'Content-Type': 'application/json'},
