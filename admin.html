@@ -4,67 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Tool v5.3 (Super Import)</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="[https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js](https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js)"></script>
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #eceff1; padding: 20px; color: #37474f; }
         .container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
         h1 { color: #00695c; text-align: center; margin-bottom: 20px; border-bottom: 2px solid #b2dfdb; padding-bottom: 15px; }
         
-        /* CẤU HÌNH GITHUB */
         .github-config { background: #e3f2fd; border: 1px solid #90caf9; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
         .github-config input { width: 100%; padding: 8px; margin-bottom: 5px; border: 1px solid #bbdefb; border-radius: 4px; }
         
-        /* TAB CHỨC NĂNG */
         .tab-bar { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
         .tab-btn { padding: 10px 20px; background: #f5f5f5; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; color: #666; transition: 0.2s; }
         .tab-btn.active { background: #00796b; color: white; }
-        .section { display: none; }
-        .section.active { display: block; }
+        .section { display: none; } .section.active { display: block; }
 
-        /* VÙNG NHẬP LIỆU */
         .paste-area textarea { width: 100%; height: 120px; border: 2px solid #c8e6c9; padding: 10px; font-family: monospace; font-size: 13px; color: #2e7d32; border-radius: 6px; }
         .paste-area textarea:focus { outline: none; border-color: #4caf50; }
         
-        /* INPUT FORM */
         .row { display: flex; gap: 15px; margin-bottom: 15px; } .col { flex: 1; }
         label { font-weight: 600; display: block; margin-bottom: 5px; font-size: 0.9em; color: #455a64; }
         input, select { width: 100%; padding: 10px; border: 1px solid #cfd8dc; border-radius: 6px; }
         
-        /* MẬT KHẨU */
         .pass-box { background: #fff8e1; border: 1px solid #ffe0b2; padding: 15px; border-radius: 8px; margin: 20px 0; }
-
-        /* BUTTONS */
         .toolbar { margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; text-align: right; }
         button { padding: 12px 25px; cursor: pointer; font-weight: bold; color: white; border: none; border-radius: 6px; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        button:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
-        .btn-green { background: #2e7d32; } .btn-red { background: #c62828; } .btn-blue { background: #1565c0; }
+        button:hover { transform: translateY(-2px); }
+        .btn-green { background: #2e7d32; } .btn-red { background: #c62828; } 
 
-        /* PREVIEW CÂU HỎI */
-        .q-box { border-left: 4px solid #009688; background: #f1f8e9; padding: 10px; margin-bottom: 8px; font-size: 0.9em; border-radius: 0 4px 4px 0; }
+        .q-box { border: 1px solid #eee; padding: 10px; margin-bottom: 5px; background: #fff; border-radius: 4px; font-size: 0.9em; }
+        .q-badge { display: inline-block; padding: 2px 6px; border-radius: 4px; color: white; font-size: 11px; margin-right: 5px; }
         #log-area { display: none; margin-top: 20px; padding: 15px; background: #263238; color: #80cbc4; font-family: monospace; border-radius: 8px; white-space: pre-wrap; }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>ADMIN TOOL v5.3</h1>
+    <h1>ADMIN TOOL v5.3 (Fix Import)</h1>
 
     <div class="github-config">
         <div class="row">
-            <div class="col"><label>GitHub Username</label><input type="text" id="gh-user"></div>
-            <div class="col"><label>Repository Name</label><input type="text" id="gh-repo"></div>
+            <div class="col"><label>Username</label><input type="text" id="gh-user"></div>
+            <div class="col"><label>Repository</label><input type="text" id="gh-repo"></div>
         </div>
         <label>GitHub Token (ghp_...)</label><input type="password" id="gh-token">
     </div>
 
     <div class="tab-bar">
-        <button class="tab-btn active" onclick="switchTab('create')">📝 TẠO ĐỀ MỚI</button>
+        <button class="tab-btn active" onclick="switchTab('create')">📝 TẠO ĐỀ & IMPORT</button>
         <button class="tab-btn" onclick="switchTab('delete')">🗑️ QUẢN LÝ FILE</button>
     </div>
 
     <div id="sec-create" class="section active">
         <div class="paste-area">
-            <label>1. Dán Code từ Gemini (Máy sẽ tự lọc rác)</label>
-            <textarea id="json-input" placeholder='Dán đoạn mã [...] vào đây. Đừng lo nếu dính chữ thừa!'></textarea>
+            <label>1. Dán Code từ Gemini (Tự động lọc rác & sửa lỗi)</label>
+            <textarea id="json-input" placeholder='Dán đoạn mã [...] vào đây.'></textarea>
             <button class="btn-green" style="margin-top:10px; width:100%" onclick="importSmart()">⚡ PHÂN TÍCH & NẠP DỮ LIỆU</button>
             <div id="import-status" style="margin-top:10px; font-weight:bold; color:#d32f2f"></div>
         </div>
@@ -78,7 +70,7 @@
             <div class="col"><label>Thời gian (phút)</label><input type="number" id="exam-time" value="45"></div>
         </div>
         <div class="row">
-            <div class="col"><label>Mã Đề (Viết liền không dấu)</label><input type="text" id="exam-id" placeholder="de-su-hk1"></div>
+            <div class="col"><label>Mã Đề (ID)</label><input type="text" id="exam-id" placeholder="de-toan-hk1"></div>
             <div class="col" style="flex:2"><label>Tiêu Đề Hiển Thị</label><input type="text" id="exam-title" placeholder="Kiểm tra..."></div>
         </div>
 
@@ -86,30 +78,30 @@
             <div class="row" style="margin-bottom:0">
                 <div class="col" style="flex:1">
                     <label>🔑 Mật Khẩu Đề Thi (Để trống nếu không cần)</label>
-                    <input type="text" id="exam-pass" placeholder="Nhập pass vào đây..." oninput="hashPass()">
+                    <input type="text" id="exam-pass" placeholder="Nhập pass..." oninput="hashPass()">
                 </div>
                 <div class="col" style="flex:1">
-                    <label>Mã Hóa MD5 (Hệ thống tự tạo)</label>
+                    <label>Mã Hóa MD5</label>
                     <input type="text" id="exam-pass-hash" readonly style="background:#eee; color:#777">
                 </div>
             </div>
         </div>
 
         <div style="margin-top:20px">
-            <label>Danh sách câu hỏi đã nhận diện:</label>
+            <label>Danh sách câu hỏi:</label>
             <div id="q-container" style="max-height:300px; overflow-y:auto; border:1px solid #ddd; padding:10px; background:#fff; border-radius:6px">
-                <div style="text-align:center; color:#999; padding:20px">Chưa có câu hỏi. Hãy dán code và bấm Nạp.</div>
+                <div style="text-align:center; color:#999; padding:20px">Chưa có dữ liệu.</div>
             </div>
         </div>
 
         <div class="toolbar">
-            <button class="btn-red" style="font-size:1.1em" onclick="uploadSystem()">🚀 ĐĂNG ĐỀ LÊN HỆ THỐNG</button>
+            <button class="btn-red" onclick="uploadSystem()">🚀 ĐĂNG ĐỀ LÊN HỆ THỐNG</button>
         </div>
     </div>
 
     <div id="sec-delete" class="section">
         <div style="background:#ffebee; border:2px solid #ef5350; padding:30px; border-radius:8px; text-align:center">
-            <h3 style="color:#c62828">⚠️ XÓA ĐỀ THI VĨNH VIỄN</h3>
+            <h3 style="color:#c62828">⚠️ XÓA ĐỀ THI</h3>
             <p>Nhập Mã Đề (ID) cần xóa (Ví dụ: <code>de-01</code>)</p>
             <input type="text" id="del-id" placeholder="Nhập mã đề..." style="width:300px; padding:12px; font-size:16px">
             <br><br>
@@ -121,7 +113,6 @@
 </div>
 
 <script>
-    // --- KHỞI TẠO ---
     window.onload = function() {
         if(localStorage.getItem('gh-user')) document.getElementById('gh-user').value = localStorage.getItem('gh-user');
         if(localStorage.getItem('gh-repo')) document.getElementById('gh-repo').value = localStorage.getItem('gh-repo');
@@ -144,58 +135,38 @@
         else document.getElementById('exam-pass-hash').value = "";
     }
 
-    // --- IMPORT SIÊU THÔNG MINH ---
     let questions = [];
-    
     function importSmart() {
         let text = document.getElementById('json-input').value.trim();
         if(!text) return alert("Thầy chưa dán nội dung vào ô trống!");
 
-        // 1. TÌM KIẾM ĐOẠN MẢNG [...] TRONG MỚ BÙI NHÙI
-        // Giúp loại bỏ các chữ thừa như "Here is the code:", "```json", v.v.
+        // LỌC RÁC: Chỉ lấy nội dung từ dấu [ đến dấu ] cuối cùng
         let start = text.indexOf('[');
         let end = text.lastIndexOf(']');
-        
-        if(start === -1 || end === -1) {
-            // Thử tìm object {...} nếu dán nhầm object đơn
-            start = text.indexOf('{');
-            end = text.lastIndexOf('}');
-        }
-
         if(start !== -1 && end !== -1 && end > start) {
             text = text.substring(start, end + 1);
         } else {
-            // Nếu không tìm thấy ngoặc, cứ để nguyên thử vận may
+            // Nếu không tìm thấy mảng, thử tìm object
+            start = text.indexOf('{');
+            end = text.lastIndexOf('}');
+            if(start !== -1 && end !== -1 && end > start) text = text.substring(start, end + 1);
         }
 
         try {
-            // 2. DÙNG HÀM EVAL AN TOÀN ĐỂ ĐỌC JS OBJECT
-            // (Chấp nhận cả trường hợp thiếu ngoặc kép ở key)
+            // Dùng Function thay vì JSON.parse để chấp nhận lỗi cú pháp nhỏ (thiếu ngoặc kép key)
             let data = new Function("return " + text)(); 
+            
+            if(Array.isArray(data)) questions = data;
+            else if(data.questions) questions = data.questions;
+            else throw new Error("Không tìm thấy dữ liệu câu hỏi");
 
-            // 3. CHUẨN HÓA DỮ LIỆU
-            if(Array.isArray(data)) {
-                questions = data;
-            } else if(data.questions && Array.isArray(data.questions)) {
-                questions = data.questions;
-                if(data.title) document.getElementById('exam-title').value = data.title;
-            } else {
-                throw new Error("Không tìm thấy danh sách câu hỏi hợp lệ");
-            }
-
-            // 4. GÁN ID & RENDER
             questions.forEach(q => q.id = Date.now() + Math.random());
             
-            let countMCQ = questions.filter(q=>q.type==='mcq').length;
-            let countTF = questions.filter(q=>q.type==='tf').length;
-            let countShort = questions.filter(q=>q.type==='short').length;
-            
-            document.getElementById('import-status').innerHTML = `✅ ĐÃ NẠP THÀNH CÔNG: ${questions.length} CÂU <br><span style="color:#555; font-size:0.9em; font-weight:normal">(TN: ${countMCQ} | Đ/S: ${countTF} | Điền: ${countShort})</span>`;
+            document.getElementById('import-status').innerHTML = `✅ ĐÃ NẠP THÀNH CÔNG: ${questions.length} CÂU`;
             render();
-
         } catch (e) {
             document.getElementById('import-status').innerText = "❌ Lỗi: " + e.message;
-            alert("Không đọc được dữ liệu! Thầy hãy chắc chắn đoạn code dán vào có chứa dấu ngoặc vuông [...] chứa các câu hỏi.");
+            alert("Lỗi dữ liệu! Hãy chắc chắn thầy đã copy đoạn mã có chứa [...] từ Gemini.");
         }
     }
 
@@ -204,14 +175,21 @@
         questions.forEach((q, idx) => {
             let color = q.type=='mcq'?'#1976d2':(q.type=='tf'?'#f57c00':'#7b1fa2');
             let txt = q.type=='mcq'?'TN':(q.type=='tf'?'Đ/S':'Điền');
-            html += `<div class="q-box" style="border-left-color:${color}">
-                <b style="color:${color}">[${txt}] Câu ${idx+1}:</b> ${q.q ? q.q.substring(0,80) : '...'}...
+            html += `<div class="q-box" style="border-left: 3px solid ${color}">
+                <span class="q-badge" style="background:${color}">${txt}</span>
+                <b>Câu ${idx+1}:</b> ${q.q ? q.q.substring(0,80) : '...'}...
             </div>`;
         });
         document.getElementById('q-container').innerHTML = html;
     }
 
-    // --- UPLOAD LÊN GITHUB ---
+    // --- UPLOAD ---
+    function log(msg) {
+        const div = document.getElementById('log-area');
+        div.style.display = 'block';
+        div.innerHTML += msg + "\n";
+    }
+    
     async function uploadSystem() {
         saveConfig();
         const user = document.getElementById('gh-user').value.trim();
@@ -219,65 +197,43 @@
         const token = document.getElementById('gh-token').value.trim();
         const examId = document.getElementById('exam-id').value.trim();
         
-        if(!user || !repo || !token || !examId) return alert("Vui lòng điền đủ: User, Repo, Token và Mã Đề!");
-        if(questions.length === 0) return alert("Chưa có câu hỏi nào để đăng!");
+        if(!user || !repo || !token || !examId) return alert("Thiếu thông tin kết nối hoặc Mã đề!");
+        if(questions.length === 0) return alert("Chưa có câu hỏi!");
 
-        log("⏳ Đang kết nối GitHub...");
-
+        log("⏳ Đang xử lý...");
         const examData = {
             title: document.getElementById('exam-title').value,
             subject: document.getElementById('exam-subject').value,
             grade: document.getElementById('exam-grade').value,
             time: parseInt(document.getElementById('exam-time').value),
             password: document.getElementById('exam-pass-hash').value,
-            scores: { mcq: 0.25, tf: 1.0, short: 0.5 }, // Cấu hình điểm mặc định
+            scores: { mcq: 0.25, tf: 1.0, short: 0.5 },
             questions: questions
         };
 
         try {
-            // UPLOAD FILE ĐỀ
-            log(`➤ Đang tạo file data/${examId}.js...`);
             await uploadFile(user, repo, token, `data/${examId}.js`, `window.EXAM_DATA = ${JSON.stringify(examData, null, 4)};`);
-            
-            // CẬP NHẬT MENU
-            log(`➤ Đang cập nhật menu danh sách...`);
             await updateList(user, repo, token, examId, examData, 'add');
-            
-            log("✅ THÀNH CÔNG! ĐỀ THI ĐÃ LÊN SÓNG.");
+            log("✅ THÀNH CÔNG!");
             alert("Đã đăng đề thành công!");
-        } catch(e) { 
-            log("❌ LỖI: " + e.message); 
-            if(e.message.includes("401") || e.message.includes("404")) alert("Lỗi kết nối! Kiểm tra lại Token hoặc Tên Repository.");
-        }
+        } catch(e) { log("❌ LỖI: " + e.message); }
     }
 
     async function deleteExam() {
         saveConfig();
         const id = document.getElementById('del-id').value.trim();
-        if(!id) return alert("Chưa nhập mã đề!");
-        if(!confirm("Thầy chắc chắn muốn xóa đề này?")) return;
-
+        if(!id || !confirm("Xóa đề này?")) return;
         const user = document.getElementById('gh-user').value.trim();
         const repo = document.getElementById('gh-repo').value.trim();
         const token = document.getElementById('gh-token').value.trim();
-
+        
         log("⏳ Đang xóa...");
         try {
-            log(`➤ Xóa file data/${id}.js...`);
             await deleteFile(user, repo, token, `data/${id}.js`);
-            log(`➤ Xóa khỏi menu...`);
             await updateList(user, repo, token, id, null, 'remove');
-            log(`✅ ĐÃ XÓA XONG.`);
-            alert("Đã xóa thành công!");
-            document.getElementById('del-id').value = '';
+            log("✅ ĐÃ XÓA.");
+            alert("Đã xóa xong!");
         } catch(e) { log("❌ LỖI: " + e.message); }
-    }
-
-    // --- HÀM HỖ TRỢ ---
-    function log(msg) {
-        const div = document.getElementById('log-area');
-        div.style.display = 'block';
-        div.innerHTML += msg + "\n";
     }
 
     async function uploadFile(user, repo, token, path, content) {
@@ -285,39 +241,34 @@
         let sha = null;
         let check = await fetch(url, { headers: {Authorization: `token ${token}`} });
         if(check.ok) sha = (await check.json()).sha;
-
         let res = await fetch(url, {
             method: 'PUT',
             headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: "Update via AdminTool", content: btoa(unescape(encodeURIComponent(content))), sha: sha })
+            body: JSON.stringify({ message: "Update", content: btoa(unescape(encodeURIComponent(content))), sha: sha })
         });
-        if(!res.ok) throw new Error(`Lỗi ghi file ${path} (${res.status})`);
+        if(!res.ok) throw new Error("Lỗi ghi file (Kiểm tra Token)");
     }
 
     async function deleteFile(user, repo, token, path) {
         const url = `https://api.github.com/repos/${user}/${repo}/contents/${path}`;
         let check = await fetch(url, { headers: {Authorization: `token ${token}`} });
-        if(!check.ok) { log(`⚠️ File ${path} không tồn tại.`); return; }
+        if(!check.ok) return;
         let json = await check.json();
-        await fetch(url, {
-            method: 'DELETE',
-            headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: "Delete via AdminTool", sha: json.sha })
-        });
+        await fetch(url, { method: 'DELETE', headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ message: "Delete", sha: json.sha }) });
     }
 
     async function updateList(user, repo, token, id, data, action) {
         const url = `https://api.github.com/repos/${user}/${repo}/contents/data/list.js`;
         let getRes = await fetch(url, { headers: {Authorization: `token ${token}`} });
-        if(!getRes.ok) throw new Error("Không tìm thấy file list.js");
-        
-        let json = await getRes.json();
-        let oldContent = decodeURIComponent(escape(atob(json.content)));
-        let jsonStr = oldContent.replace(/window\.EXAM_LIST\s*=\s*/, '').trim();
-        if(jsonStr.endsWith(';')) jsonStr = jsonStr.slice(0,-1);
-        
         let list = [];
-        try { list = new Function("return " + jsonStr)(); } catch(e){}
+        let sha = null;
+        if(getRes.ok) {
+            let json = await getRes.json();
+            sha = json.sha;
+            let content = decodeURIComponent(escape(atob(json.content)));
+            let jsonStr = content.replace(/window\.EXAM_LIST\s*=\s*/, '').trim().replace(/;$/, '');
+            try { list = new Function("return " + jsonStr)(); } catch(e){}
+        }
 
         if(action === 'add') {
             list = list.filter(x => x.id !== id);
@@ -330,7 +281,7 @@
         await fetch(url, {
             method: 'PUT',
             headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: "Update List", content: btoa(unescape(encodeURIComponent(newContent))), sha: json.sha })
+            body: JSON.stringify({ message: "Update List", content: btoa(unescape(encodeURIComponent(newContent))), sha: sha })
         });
     }
 </script>
