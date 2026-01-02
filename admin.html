@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Tool v6.0 (Smart Import + Image Manager)</title>
+    <title>Admin Tool v6.0 (Final)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #eceff1; padding: 20px; color: #37474f; }
@@ -31,17 +31,18 @@
         .pass-box { background: #fff8e1; border: 1px solid #ffe0b2; padding: 15px; border-radius: 8px; margin: 20px 0; }
         
         /* CÂU HỎI & ẢNH */
-        .q-box { border: 1px solid #e0e0e0; padding: 15px; margin-bottom: 15px; background: #fff; border-radius: 8px; border-left: 4px solid #ddd; }
+        .q-box { border: 1px solid #e0e0e0; padding: 15px; margin-bottom: 15px; background: #fff; border-radius: 8px; border-left: 4px solid #ddd; position: relative; }
         .q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .q-badge { padding: 3px 8px; border-radius: 4px; color: white; font-size: 11px; font-weight: bold; text-transform: uppercase; }
         
-        /* TRÌNH QUẢN LÝ ẢNH */
-        .img-control { margin-top: 10px; padding: 10px; background: #fafafa; border: 1px dashed #bdbdbd; border-radius: 6px; display: flex; align-items: center; gap: 15px; }
-        .btn-upload { background: #546e7a; color: white; padding: 6px 12px; font-size: 13px; border-radius: 4px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: 0.2s; }
-        .btn-upload:hover { background: #455a64; }
+        /* TRÌNH QUẢN LÝ ẢNH (New) */
+        .img-control { margin-top: 10px; padding: 10px; background: #f1f8e9; border: 1px dashed #a5d6a7; border-radius: 6px; display: flex; align-items: center; gap: 15px; }
+        .btn-upload { background: #2e7d32; color: white; padding: 6px 12px; font-size: 13px; border-radius: 4px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .btn-upload:hover { background: #1b5e20; }
         .btn-upload input { display: none; }
-        .img-preview { max-height: 80px; border-radius: 4px; border: 1px solid #eee; display: none; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .upload-status { font-size: 0.85em; font-style: italic; }
+        
+        .img-preview { max-height: 100px; border-radius: 4px; border: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.2); display: none; }
+        .upload-status { font-size: 0.85em; font-weight: bold; }
 
         .toolbar { margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; text-align: right; }
         button { padding: 12px 25px; cursor: pointer; font-weight: bold; color: white; border: none; border-radius: 6px; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
@@ -71,8 +72,8 @@
     <div id="sec-create" class="section active">
         <div class="paste-area">
             <label>1. Dán Code từ Gemini (Máy sẽ tự lọc rác)</label>
-            <textarea id="json-input" placeholder='Dán đoạn mã [...] vào đây.'></textarea>
-            <button class="btn-green" style="margin-top:10px; width:100%" onclick="importSmart()">⚡ PHÂN TÍCH & NẠP DỮ LIỆU</button>
+            <textarea id="json-input" placeholder='Dán đoạn mã [...] vào đây. Đừng lo về lỗi cú pháp!'></textarea>
+            <button class="btn-green" style="margin-top:10px; width:100%" onclick="importSmart()">⚡ 1. PHÂN TÍCH & NẠP CÂU HỎI</button>
             <div id="import-status" style="margin-top:10px; font-weight:bold; color:#d32f2f"></div>
         </div>
 
@@ -103,14 +104,16 @@
         </div>
 
         <div style="margin-top:20px">
-            <label style="font-size:1.1em; color:#00796b">3. Danh sách câu hỏi & Thêm ảnh</label>
+            <label style="font-size:1.1em; color:#00796b">3. Danh sách câu hỏi (Thêm ảnh tại đây)</label>
             <div id="q-container" style="margin-top:10px">
-                <div style="text-align:center; color:#999; padding:20px; background:#f9f9f9; border-radius:6px">Chưa có dữ liệu.</div>
+                <div style="text-align:center; color:#999; padding:20px; background:#f9f9f9; border-radius:6px">
+                    Chưa có dữ liệu. Hãy dán code và bấm nút <b>NẠP CÂU HỎI</b> ở trên.
+                </div>
             </div>
         </div>
 
         <div class="toolbar">
-            <button class="btn-red" onclick="uploadSystem()">🚀 ĐĂNG ĐỀ LÊN HỆ THỐNG</button>
+            <button class="btn-red" onclick="uploadSystem()">🚀 4. ĐĂNG ĐỀ LÊN HỆ THỐNG</button>
         </div>
     </div>
 
@@ -150,29 +153,29 @@
         document.getElementById('exam-pass-hash').value = p ? CryptoJS.MD5(p).toString() : "";
     }
 
-    // 2. NHẬP LIỆU THÔNG MINH (Smart Import)
+    // 2. NHẬP LIỆU THÔNG MINH
     let questions = [];
     function importSmart() {
         let text = document.getElementById('json-input').value.trim();
         if(!text) return alert("Thầy chưa dán nội dung vào ô trống!");
 
-        // Lọc rác: Chỉ lấy nội dung từ dấu [ ... ]
         let start = text.indexOf('[');
         let end = text.lastIndexOf(']');
         if(start === -1 || end === -1) { 
-            // Fallback: Tìm object { ... }
             start = text.indexOf('{'); end = text.lastIndexOf('}'); 
         }
         if(start !== -1 && end > start) text = text.substring(start, end + 1);
 
         try {
-            // Dùng Function để parse lỏng (chấp nhận lỗi cú pháp nhỏ)
             let data = new Function("return " + text)(); 
             questions = Array.isArray(data) ? data : (data.questions || []);
             
             if(questions.length === 0) throw new Error("Không tìm thấy câu hỏi");
 
-            questions.forEach(q => q.id = Date.now() + Math.random());
+            // Giữ lại ảnh cũ nếu có (khi nạp lại)
+            questions.forEach(q => {
+                if(!q.id) q.id = Date.now() + Math.random();
+            });
             
             document.getElementById('import-status').innerHTML = `✅ ĐÃ NẠP THÀNH CÔNG: ${questions.length} CÂU`;
             render();
@@ -182,7 +185,7 @@
         }
     }
 
-    // 3. HIỂN THỊ CÂU HỎI & NÚT UPLOAD ẢNH
+    // 3. HIỂN THỊ & QUẢN LÝ ẢNH (New v6.0)
     function render() {
         let html = '';
         questions.forEach((q, idx) => {
@@ -192,20 +195,22 @@
             // Trạng thái ảnh
             let imgDisplay = q.img ? 'block' : 'none';
             let statusColor = q.img ? 'green' : '#666';
-            let statusText = q.img ? '✅ Đã có ảnh' : 'Chưa có ảnh';
+            let statusText = q.img ? '✅ Đã có ảnh' : 'Chưa có ảnh (Bấm để chọn)';
 
             html += `<div class="q-box" style="border-left-color:${color}">
                 <div class="q-header">
                     <div><span class="q-badge" style="background:${color}">${txt}</span> <b>Câu ${idx+1}</b></div>
                 </div>
-                <div style="margin-bottom:10px">${q.q ? q.q.substring(0, 150) : '...'}...</div>
+                <div style="margin-bottom:10px; font-weight:500">${q.q ? q.q.substring(0, 150) : '...'}...</div>
                 
                 <div class="img-control">
                     <label class="btn-upload">
-                        📷 Chọn Ảnh
+                        📷 Chọn Ảnh Minh Họa
                         <input type="file" accept="image/*" onchange="handleImageUpload(this, ${idx})">
                     </label>
-                    <span id="status-${idx}" class="upload-status" style="color:${statusColor}">${statusText}</span>
+                    <div style="flex:1">
+                        <span id="status-${idx}" class="upload-status" style="color:${statusColor}">${statusText}</span>
+                    </div>
                     <img src="${q.img || ''}" id="preview-${idx}" class="img-preview" style="display:${imgDisplay}">
                 </div>
             </div>`;
@@ -213,7 +218,7 @@
         document.getElementById('q-container').innerHTML = html;
     }
 
-    // 4. XỬ LÝ UPLOAD ẢNH (New v6.0)
+    // 4. XỬ LÝ UPLOAD ẢNH LÊN GITHUB
     async function handleImageUpload(input, idx) {
         saveConfig();
         const file = input.files[0];
@@ -224,14 +229,14 @@
         const token = document.getElementById('gh-token').value.trim();
         const examId = document.getElementById('exam-id').value.trim() || 'temp';
 
-        if(!user || !repo || !token) return alert("Vui lòng nhập cấu hình GitHub ở trên trước!");
+        if(!user || !repo || !token) return alert("Vui lòng nhập Username, Repo và Token ở trên cùng trước!");
 
         const statusSpan = document.getElementById(`status-${idx}`);
-        statusSpan.innerText = "⏳ Đang tải lên...";
+        statusSpan.innerText = "⏳ Đang tải lên GitHub...";
         statusSpan.style.color = "#f57c00";
 
         const extension = file.name.split('.').pop();
-        // Đặt tên file duy nhất: IDDe-CauSo-ThoiGian.ext
+        // Tên file duy nhất: IDDe-CauSo-ThoiGian
         const newName = `${examId}-q${idx+1}-${Date.now()}.${extension}`;
         const path = `images/${newName}`;
 
@@ -239,7 +244,7 @@
         reader.onload = async function(e) {
             const contentBase64 = e.target.result.split(',')[1];
             try {
-                // Upload lên GitHub
+                // 1. Upload lên GitHub
                 const url = `https://api.github.com/repos/${user}/${repo}/contents/${path}`;
                 const res = await fetch(url, {
                     method: 'PUT',
@@ -247,19 +252,19 @@
                     body: JSON.stringify({ message: `Img Q${idx+1}`, content: contentBase64 })
                 });
 
-                if(!res.ok) throw new Error("Lỗi Upload");
+                if(!res.ok) throw new Error("Lỗi Upload (Kiểm tra Token)");
 
-                // Cập nhật dữ liệu
-                const webLink = `images/${newName}`; // Link tương đối
-                const rawLink = `https://raw.githubusercontent.com/${user}/${repo}/main/${path}`; // Link xem trước
+                // 2. Lưu link
+                const rawLink = `https://raw.githubusercontent.com/${user}/${repo}/main/${path}`; // Link xem ngay
+                const webLink = `images/${newName}`; // Link lưu database
                 
-                questions[idx].img = webLink; 
+                questions[idx].img = webLink; // Cập nhật dữ liệu câu hỏi
 
-                // Update UI
+                // 3. Hiển thị
                 const imgPreview = document.getElementById(`preview-${idx}`);
                 imgPreview.src = rawLink; 
                 imgPreview.style.display = 'block';
-                statusSpan.innerText = "✅ Đã tải lên";
+                statusSpan.innerText = "✅ Đã tải lên thành công!";
                 statusSpan.style.color = "green";
 
             } catch(err) {
