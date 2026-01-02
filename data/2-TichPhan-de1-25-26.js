@@ -12,11 +12,11 @@ window.EXAM_DATA = {
     "questions": [
         {
             "type": "mcq",
-            "q": "Biết $\\displaystyle\\displaystyle\\int\\limits f(x) \\mathrm{\\,d} x=F(x)+C$. Trong các khẳng định sau, khẳng định nào đúng?",
+            "q": "Biết $\\displaystyle\\int\\limits f(x) \\mathrm{\\,d} x=F(x)+C$. Trong các khẳng định sau, khẳng định nào đúng?",
             "options": [
-                "$\\displaystyle\\displaystyle\\int\\limits\\limits_a^b f(x) \\mathrm{\\,d} x=F(b) \\cdot F(a)$",
-                "$\\displaystyle\\displaystyle\\int\\limits\\limits_a^b f(x) \\mathrm{\\,d}x=F(a)-F(b)$",
-                "$\\displaystyle\\displaystyle\\int\\limits\\limits_a^b f(x) \\mathrm{\\,d}x=F(b)-F(a)$",
+                "$\\displaystyle\\int\\limits\\limits_a^b f(x) \\mathrm{\\,d} x=F(b) \\cdot F(a)$",
+                "$\\displaystyle\\int\\limits\\limits_a^b f(x) \\mathrm{\\,d}x=F(a)-F(b)$",
+                "$\\displaystyle\\int\\limits\\limits_a^b f(x) \\mathrm{\\,d}x=F(b)-F(a)$",
                 "$\\displaystyle\\displaystyle\\int\\limits\\limits_a^b f(x) \\mathrm{\\,d} x=F(b)+F(a)$"
             ],
             "ans": 2,
@@ -218,7 +218,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "tf",
-            "q": "Cho các số thực $a$, $b$ với $a<b$. Nếu hàm số $y=f(x)$ có đạo hàm là hàm liên tục trên $\\mathbb{R}$ và $\\displaystyle\\int\\limits f(x) \\mathrm{\\,d} x=F(x)+C$.",
+            "q": "Cho các số thực $a$, $b$ với $a<b$. Nếu hàm số $y=f(x)$ có đạo hàm là hàm liên tục trên $\\mathbb{R}$ và $\\displaystyle\\int\\limits f(x) \\mathrm{\\,d}x=F(x)+C$.",
             "items": [
                 {
                     "sub": "$\\displaystyle\\int\\limits_a^b f(x) \\mathrm{\\,d} x=F(a)-F(b)$",
