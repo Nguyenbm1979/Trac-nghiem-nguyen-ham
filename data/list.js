@@ -1,5 +1,12 @@
 window.EXAM_LIST = [
     {
+        "id": "2-HK1-THPT-BinhMinh25-26",
+        "title": "Đề Kiểm Tra Cuối Kì I, Năm học 2025-2026",
+        "subject": "Toan",
+        "grade": "12",
+        "time": 75
+    },
+    {
         "id": "de-toan12-ontapnguyenham-2-25-26",
         "title": "Ôn tập nguyên hàm, đề số 2, năm 2025-2026",
         "subject": "Toan",
