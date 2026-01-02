@@ -107,9 +107,11 @@
         shuffle(part1); shuffle(part2); shuffle(part3);
         part1.forEach(q => { let indices = q.options.map((_, i) => i); shuffle(indices); q.shuffledIndices = indices; });
         part2.forEach(q => shuffle(q.items));
-        if(part1.length) part1[0].isPartHeader = "PHẦN 1. Trắc nghiệm (Mỗi câu 0,25đ)";
-        if(part2.length) part2[0].isPartHeader = "PHẦN 2. Đúng/Sai (Điểm bậc thang)";
-        if(part3.length) part3[0].isPartHeader = "PHẦN 3. Trả lời ngắn (Mỗi câu 0,5đ)";
+        if(part1.length) part1[0].isPartHeader = "PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn. Thí sinh trả lời từ câu 1 đến câu 12. Mỗi
+câu hỏi thí sinh chỉ chọn một phương án.";
+        if(part2.length) part2[0].isPartHeader = "PHẦN II. Trắc nghiệm lựa chọn đúng sai. Thí sinh trả lời từ câu 1 đến câu 4. Trong mỗi ý a), b),
+c), d) ở mỗi câu, thí sinh chọn đúng hoặc sai.";
+        if(part3.length) part3[0].isPartHeader = "PHẦN III. Trắc nghiệm trả lời ngắn. Thí sinh trả lời từ câu 1 đến câu 6";
         currentQuestions = [...part1, ...part2, ...part3];
         renderQuestions();
     }
