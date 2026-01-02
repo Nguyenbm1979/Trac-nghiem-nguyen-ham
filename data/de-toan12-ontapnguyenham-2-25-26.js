@@ -4,277 +4,277 @@ window.EXAM_DATA = {
     "time": 90,
     "password": "0441cc2e91e078d08f103804b422feea",
     "questions": [
-        {
-            "type": "mcq",
-            "q": "Câu 1: Họ nguyên hàm của hàm số $f(x)=3x^2+1$ là:",
-            "options": [
-                "$x^3+C$",
-                "$\\dfrac{x^3}{3}+x+C$",
-                "$6x+C$",
-                "$x^3+x+C$"
-            ],
-            "ans": "eccbc87e4b5ce2fe28308fd9f2a7baf3",
-            "explain": "Ta có $\\displaystyle\\int(3x^2+1)\\mathrm{d}x=x^3+x+C$."
-        },
-        {
-            "type": "mcq",
-            "q": "Câu 2: Hàm số nào sau đây là một nguyên hàm của hàm số $y=12x^5$?",
-            "options": [
-                "$y=12x^4$",
-                "$y=60x^4$",
-                "$y=12x^6+5$",
-                "$y=2x^6+3$"
-            ],
-            "ans": "eccbc87e4b5ce2fe28308fd9f2a7baf3",
-            "explain": "Ta có $\\displaystyle\\int{12x^5\\mathrm{d}\\,x}=12\\cdot\\dfrac{x^6}{6}+C=2x^6+C$. Với $C=3$ ta có đáp án D."
-        },
-        {
-            "type": "mcq",
-            "q": "Câu 3: Tìm họ nguyên hàm $F(x)$ của hàm số $f(x)=\\dfrac{1}{x}$.",
-            "options": [
-                "$F(x)=\\ln \\left| x \\right|+C$",
-                "$F(x)=\\ln x+C$",
-                "$F(x)=\\ln \\left| x \\right|$",
-                "$F(x)=-\\dfrac{1}{x^2}+C$"
-            ],
-            "ans": "cfcd208495d565ef66e7dff9f98764da",
-            "explain": "Công thức cơ bản: $\\displaystyle\\int{\\frac{1}{x}\\mathrm{d}\\,x}=\\ln \\left| x \\right|+C$."
-        },
-        {
-            "type": "mcq",
-            "q": "Câu 4: Mệnh đề nào \\textbf{sai} trong các mệnh đề sau?",
-            "options": [
-                "$\\displaystyle\\int\\cos x\\,\\mathrm{d}x=\\sin x+C$",
-                "$\\displaystyle\\int \\sin x \\, \\mathrm{d}x=\\cos x+C$",
-                "$\\displaystyle\\int{\\dfrac{1}{\\cos^2x}\\, \\mathrm{d}x=\\tan x+C}$",
-                "$\\displaystyle\\int{\\dfrac{1}{\\sin^2x}\\, \\mathrm{d}x=-\\cot x+C}$"
-            ],
-            "ans": "c4ca4238a0b923820dcc509a6f75849b",
-            "explain": "Sai vì $\\displaystyle\\int \\sin x \\, \\mathrm{d}x=-\\cos x+C$."
-        },
-        {
-            "type": "mcq",
-            "q": "Câu 5: Tìm nguyên hàm của hàm số $f(x)=7^x$.",
-            "options": [
-                "$\\displaystyle\\int 7^x\\mathrm{d}\\,x=\\dfrac{7^{x+1}}{x+1}+C$",
-                "$\\displaystyle\\int 7^x\\mathrm{d}\\,x=7^x\\ln 7+C$",
-                "$\\displaystyle\\int 7^x \\mathrm{d}\\,x=\\dfrac{7^x}{\\ln 7}+C$",
-                "$\\displaystyle\\int 7^x\\mathrm{d}\\,x=7^{x+1}+C$"
-            ],
-            "ans": "c81e728d9d4c2f636f067f89cc14862c",
-            "explain": "Áp dụng công thức $\\displaystyle\\int a^x\\mathrm{d}\\,x=\\dfrac{a^x}{\\ln a}+C$."
-        },
-        {
-            "type": "mcq",
-            "q": "Câu 6: Nguyên hàm của hàm số $F(x)=2^x+x$ là:",
-            "options": [
-                "$2^x+\\dfrac{x^2}{2}+C$",
-                "$2^x+x^2+C$",
-                "$\\dfrac{2^x}{\\ln 2}+x^2+C$",
-                "$\\dfrac{2^x}{\\ln 2}+\\dfrac{x^2}{2}+C$"
-            ],
-            "ans": "eccbc87e4b5ce2fe28308fd9f2a7baf3",
-            "explain": "Ta có $\\displaystyle\\int (2^x+x)\\,\\mathrm{d}\\,x=\\dfrac{2^x}{\\ln 2}+\\dfrac{1}{2} x^2+C$."
-        },
-        {
-            "type": "mcq",
-            "q": "Câu 7: $\\displaystyle\\int (3^x+4^x)\\mathrm{d}\\,x$ bằng:",
-            "options": [
-                "$\\dfrac{3^x}{\\ln 3}+\\dfrac{4^x}{\\ln 4}+C$",
-                "$\\dfrac{3^x}{\\ln 4}+\\dfrac{4^x}{\\ln 3}+C$",
-                "$\\dfrac{4^x}{\\ln 3}-\\dfrac{3^x}{\\ln 4}+C$",
-                "$\\dfrac{3^x}{\\ln 3}-\\dfrac{4^x}{\\ln 4}+C$"
-            ],
-            "ans": "cfcd208495d565ef66e7dff9f98764da",
-            "explain": "Nguyên hàm của tổng bằng tổng các nguyên hàm."
-        },
-        {
-            "type": "mcq",
-            "q": "Câu 8: Họ nguyên hàm của hàm số $f(x)=\\mathrm{e}^x+2x$ là:",
-            "options": [
-                "$\\dfrac{1}{x+1}\\mathrm{e}^x+x^2+C$",
-                "$\\mathrm{e}^x+2x^2+C$",
-                "$\\mathrm{e}^x+x^2+C$",
-                "$\\mathrm{e}^x+\\dfrac{1}{2} x^2+C$"
-            ],
-            "ans": "c81e728d9d4c2f636f067f89cc14862c",
-            "explain": "Ta có $\\displaystyle\\int(\\mathrm{e}^x+2x)\\mathrm{d}\\,x=\\mathrm{e}^x+x^2+C$."
-        },
-        {
-            "type": "mcq",
-            "q": "Câu 9: Trong các mệnh đề sau, mệnh đề nào \\textbf{sai}?",
-            "options": [
-                "$\\displaystyle\\int\\sin x\\mathrm{d}x=\\cos x+C$",
-                "$\\displaystyle\\int 2x\\mathrm{d}x=x^2+C$",
-                "$\\displaystyle\\int \\mathrm{e}^x\\mathrm{d}x=\\mathrm{e}^x+C$",
-                "$\\displaystyle\\int \\dfrac{1}{x}\\mathrm{d}x=\\ln \\left| x \\right|+C$"
-            ],
-            "ans": "cfcd208495d565ef66e7dff9f98764da",
-            "explain": "Sai vì nguyên hàm của sin(x) là -cos(x)."
-        },
-        {
-            "type": "mcq",
-            "q": "Câu 10: Khẳng định nào sau đây là \\textbf{sai}?",
-            "options": [
-                "Mọi hàm số $f(x)$ liên tục trên đoạn $[a;b]$ đều có nguyên hàm trên đoạn $[a;b]$",
-                "$\\displaystyle\\int x^\\alpha \\mathrm{d}x=\\dfrac{x^{\\alpha +1}}{\\alpha +1}+C$ ($C$ là hằng số, $\\alpha $ là hằng số)",
-                "$\\displaystyle\\int \\mathrm{e}^x\\mathrm{d}x=\\mathrm{e}^x+C$ ($C$ là hằng số)",
-                "$\\displaystyle\\int{\\dfrac{1}{x}\\mathrm{d}x=\\ln \\left| x \\right|+C}$ ($C$ là hằng số) với $x\\ne 0$"
-            ],
-            "ans": "c4ca4238a0b923820dcc509a6f75849b",
-            "explain": "Công thức lũy thừa chỉ đúng khi $\\alpha \\ne -1$."
-        },
-        {
-            "type": "mcq",
-            "q": "Câu 11: Hàm số nào dưới đây là một nguyên hàm của hàm số $f(x)=\\sqrt{x}-1$ trên $(0;+\\infty)$?",
-            "options": [
-                "$F(x)=\\dfrac{1}{2\\sqrt{x}}$",
-                "$F(x)=\\dfrac{1}{2\\sqrt{x}}-x$",
-                "$F(x)=\\dfrac{2}{3}\\sqrt[3]{x^2}-x+1$",
-                "$F(x)=\\dfrac{2}{3}\\sqrt{x^3}-x+2$"
-            ],
-            "ans": "eccbc87e4b5ce2fe28308fd9f2a7baf3",
-            "explain": "$\\sqrt{x} = x^{1/2}$ nguyên hàm là $\\frac{2}{3}x^{3/2} = \\frac{2}{3}\\sqrt{x^3}$."
-        },
-        {
-            "type": "mcq",
-            "q": "Câu 12: Một vật chuyển động với gia tốc $a(t)=\\dfrac{3}{t+1}$ (m/s$^2$), vận tốc ban đầu là $6$(m/s). Vận tốc tại giây thứ 8 là:",
-            "options": [
-                "$12{,}6$ (m/s)",
-                "$12{,}2$ (m/s)",
-                "$6{,}6$ (m/s)",
-                "$12{,}4$ (m/s)"
-            ],
-            "ans": "cfcd208495d565ef66e7dff9f98764da",
-            "explain": "$v(t) = 3\\ln(t+1) + 6$. $v(8) = 3\\ln(9) + 6 \\approx 12.6$."
-        },
-        {
-            "type": "tf",
-            "q": "Câu 13: Cho hàm số $f(x)=\\sin \\dfrac{x}{2}$ và hàm số $g(x)=\\cos \\dfrac{x}{2}$.",
-            "items": [
-                {
-                    "sub": "$F(x)=2\\cos \\dfrac{x}{2}$ là một nguyên hàm của hàm số $f(x)$",
-                    "ans": "8fa14cdd754f91cc6554c9e71929cce7"
-                },
-                {
-                    "sub": "$G(x)=2\\sin \\dfrac{x}{2}+\\dfrac{1}{2}$ là một nguyên hàm của hàm số $g(x)$",
-                    "ans": "e358efa489f58062f10dd7316b65649e"
-                },
-                {
-                    "sub": "$\\displaystyle\\int \\left[ f(x)-g(x) \\right]^2 \\mathrm{d}x=x+\\cos x+C$",
-                    "ans": "8fa14cdd754f91cc6554c9e71929cce7"
-                },
-                {
-                    "sub": "$\\displaystyle\\int \\dfrac{1}{[2f(x)\\cdot g(x)]^2}\\mathrm{d}x=-\\cot x+C$",
-                    "ans": "e358efa489f58062f10dd7316b65649e"
-                }
-            ],
-            "explain": "a) Sai dấu (phải là trừ). c) Sai vì kết quả là $x - \\cos x$."
-        },
-        {
-            "type": "tf",
-            "q": "Câu 14: Cho hàm số $f(x)=\\dfrac{1}{x}$ và $F(x)=\\ln x+C_1$, $G(x)=\\ln(-x)+C_2$.",
-            "items": [
-                {
-                    "sub": "Trên $(0;+\\infty)$, một nguyên hàm của hàm số $f(x)$ là $H(x)=\\ln (x)+e$",
-                    "ans": "e358efa489f58062f10dd7316b65649e"
-                },
-                {
-                    "sub": "Trên $(-\\infty ;0)$, nguyên hàm của hàm số $f(x)$ là $G(x)$",
-                    "ans": "e358efa489f58062f10dd7316b65649e"
-                },
-                {
-                    "sub": "Trên $(0;+\\infty)$, nguyên hàm của hàm số $f(x)$ là $F(x)$",
-                    "ans": "e358efa489f58062f10dd7316b65649e"
-                },
-                {
-                    "sub": "$\\displaystyle\\int \\left[ f(x)+f^2(x) \\right]\\mathrm{d}x=\\ln(3\\left| x \\right|)-\\dfrac{1}{x}+C$",
-                    "ans": "e358efa489f58062f10dd7316b65649e"
-                }
-            ],
-            "explain": "Tất cả các mệnh đề đều Đúng."
-        },
-        {
-            "type": "tf",
-            "q": "Câu 15: Cho hàm số $f(x)=\\cos x$ và hàm số $g(x)=\\sin x$.",
-            "items": [
-                {
-                    "sub": "$F(x)=\\sin x+\\mathrm{e}$ là một nguyên hàm của hàm số $f(x)$ trên $\\mathbb{R}$",
-                    "ans": "e358efa489f58062f10dd7316b65649e"
-                },
-                {
-                    "sub": "$G(x)={\\mathrm{e}^{-\\cos x}}+\\ln 3$ là một nguyên hàm của hàm số $\\mathrm{e}^{g(x)}$ trên $\\mathbb{R}$",
-                    "ans": "8fa14cdd754f91cc6554c9e71929cce7"
-                },
-                {
-                    "sub": "$\\displaystyle\\int \\left[ 5f(x)+6g(x) \\right]\\mathrm{d}x=5\\sin x-6\\cos x+C$",
-                    "ans": "e358efa489f58062f10dd7316b65649e"
-                },
-                {
-                    "sub": "$\\displaystyle\\int \\left[ 2+\\left( \\frac{g(x)}{F(x)} \\right)^2 \\right]\\mathrm{d}x=x+\\tan x+C$ (Sửa F(x) thành f(x) trong đề)",
-                    "ans": "e358efa489f58062f10dd7316b65649e"
-                }
-            ],
-            "explain": "b) Sai đạo hàm."
-        },
-        {
-            "type": "tf",
-            "q": "Câu 16: Cho hàm số $f(x)=3^{2x}$ và hàm số $g(x)=\\tan x$.",
-            "items": [
-                {
-                    "sub": "$F(x)=\\dfrac{3^{2x}\\ln3}{2}$ là một nguyên hàm của hàm số $f(x)$",
-                    "ans": "8fa14cdd754f91cc6554c9e71929cce7"
-                },
-                {
-                    "sub": "$G(x)=-\\ln (3\\cos x)$ là một nguyên hàm của hàm số $g(x)$",
-                    "ans": "e358efa489f58062f10dd7316b65649e"
-                },
-                {
-                    "sub": "$\\displaystyle\\int 3f(x)\\mathrm{d}x=\\dfrac{3^{2x+1}}{\\ln 9}+C$",
-                    "ans": "e358efa489f58062f10dd7316b65649e"
-                },
-                {
-                    "sub": "$\\displaystyle\\int [f(x)+g(x)^2]\\mathrm{d}x =\\dfrac{9^x}{2\\ln3}-x+\\tan x+C$",
-                    "ans": "e358efa489f58062f10dd7316b65649e"
-                }
-            ],
-            "explain": "a) Sai, phải chia cho ln3."
-        },
-        {
-            "type": "short",
-            "q": "Câu 17: Giả sử $f(1)=1$ và $f'(x)\\sqrt[3]{x^{-1}}=1$. Tính $4f(8)$.",
-            "ans": "67c6a1e7ce56d3d6fa748ab6d9af3fd7",
-            "explain": "$f(x) = \\frac{3}{4}x^{4/3} - 1/4$. Thay số tính ra 47."
-        },
-        {
-            "type": "short",
-            "q": "Câu 18: Ô tô chạy $10$ m/s thì hãm phanh $v(t)=10-2t$. Tính quãng đường trong 8 giây cuối (xe dừng sau 5s).",
-            "ans": "b53b3a3d6ab90ce0268229151c9bde11",
-            "explain": "Xe chạy 3s đều (30m) + 5s chậm dần (25m) = 55m."
-        },
-        {
-            "type": "short",
-            "q": "Câu 19: $F(x)$ là nguyên hàm của $f(x)=3^{2x+1} 2^{1+3x}$, $F(0)=\\dfrac{8}{\\ln 72}$. Tính $F(-2)$ (làm tròn đến hàng phần trăm).",
-            "ans": "7a7763d4618eb5666515c04dd53a3c08",
-            "explain": "$F(x) = 6 \\frac{72^x}{\\ln 72} + C$. Tính ra xấp xỉ 0.47."
-        },
-        {
-            "type": "short",
-            "q": "Câu 20: Đạn bắn lên với $v(t)=170-9{,}8t$ từ độ cao 1.5m. Tìm độ cao lớn nhất (làm tròn đến hàng đơn vị).",
-            "ans": "97275a23ca44226c9964043c8462be96",
-            "explain": "Tìm t khi v=0, thay vào hàm độ cao h(t)."
-        },
-        {
-            "type": "short",
-            "q": "Câu 21: Nhiệt độ nước giảm theo $T'(t)$. Tính nhiệt độ sau 40 phút (làm tròn đến hàng phần chục).",
-            "ans": "53641cc5d60e1d420abcc04014011896",
-            "explain": "Giải phương trình vi phân/nguyên hàm mũ."
-        },
-        {
-            "type": "short",
-            "q": "Câu 22: Doanh thu biên $M_R(x)=40-0{,}1x$. Tính doanh thu khi bán 500 chip (tỉ đồng).",
-            "ans": "0d640498fb206f2d67e1829ba976d945",
-            "explain": "Tích phân từ 0 đến 500. Kết quả 7500 triệu = 7.5 tỉ."
-        }
-    ]
+    {
+    "type": "mcq",
+    "q": "Họ nguyên hàm của hàm số $f(x)=3x^2+1$ là",
+    "options": [
+      "$x^3+C$",
+      "$\\dfrac{x^3}{3}+x+C$",
+      "$6x+C$",
+      "$x^3+x+C$"
+    ],
+    "ans": 3,
+    "explain": "$\\displaystyle\\int(3x^2+1)\\mathrm{d}x=x^3+x+C$."
+  },
+  {
+    "type": "mcq",
+    "q": "Hàm số nào sau đây là một nguyên hàm của hàm số $y=12x^5$?",
+    "options": [
+      "$y=12x^4$",
+      "$y=60x^4$",
+      "$y=12x^6+5$",
+      "$y=2x^6+3$"
+    ],
+    "ans": 3,
+    "explain": "Ta có $\\displaystyle\\int{12x^5\\mathrm{d}\\,x}=12\\cdot\\dfrac{x^6}{6}+C=2x^6+C$."
+  },
+  {
+    "type": "mcq",
+    "q": "Tìm họ nguyên hàm $F(x)$ của hàm số $f(x)=\\dfrac{1}{x}$.",
+    "options": [
+      "$F(x)=\\ln \\left| x \\right|+C$",
+      "$F(x)=\\ln x+C$",
+      "$F(x)=\\ln \\left| x \\right|$",
+      "$F(x)=-\\dfrac{1}{x^2}+C$"
+    ],
+    "ans": 0,
+    "explain": "Áp dụng công thức nguyên hàm của hàm số ta có $\\displaystyle\\int{\\frac{1}{x}\\mathrm{d}\\,x}=\\ln \\left| x \\right|+C$."
+  },
+  {
+    "type": "mcq",
+    "q": "Mệnh đề nào \\textbf{sai} trong các mệnh đề sau?",
+    "options": [
+      " $\\displaystyle\\int\\cos x\\,\\mathrm{d}x=\\sin x+C$",
+      "$\\displaystyle\\int \\sin x \\, \\mathrm{d}x=\\cos x+C$",
+      "$\\displaystyle\\int{\\dfrac{1}{\\cos^2x}\\, \\mathrm{d}x=\\tan x+C}$",
+      "$\\displaystyle\\int{\\dfrac{1}{\\sin^2x}\\, \\mathrm{d}x=-\\cot x+C}$"
+    ],
+    "ans": 1,
+    "explain": "Từ bảng nguyên hàm của các hàm cơ bản suy ra $\\displaystyle\\int \\sin x \\, \\mathrm{d}x=\\cos x+C$ sai"
+  },
+  {
+    "type": "mcq",
+    "q": "Tìm nguyên hàm của hàm số $f(x)=7^x$.",
+    "options": [
+      "$\\displaystyle\\int 7^x\\mathrm{d}\\,x=\\dfrac{7^{x+1}}{x+1}+C$",
+      "$\\displaystyle\\int 7^x\\mathrm{d}\\,x=7^x\\ln 7+C$",
+      "$\\displaystyle\\int 7^x \\mathrm{d}\\,x=\\dfrac{7^x}{\\ln 7}+C$",
+      "$\\displaystyle\\int 7^x\\mathrm{d}\\,x=7^{x+1}+C$"
+    ],
+    "ans": 2,
+    "explain": "Áp dụng công thức nguyên $\\displaystyle\\int a^x\\mathrm{d}\\,x=\\dfrac{a^x}{\\ln a}+C \\Rightarrow \\displaystyle  \\int 7^x\\mathrm{d}\\,x=\\dfrac{7^x}{\\ln 7}+C$."
+  },
+  {
+    "type": "mcq",
+    "q": "Nguyên hàm của hàm số $F(x)=2^x+x$ là",
+    "options": [
+      " $2^x+\\dfrac{x^2}{2}+C$",
+      "$2^x+x^2+C$",
+      "$\\dfrac{2^x}{\\ln 2}+x^2+C$",
+      "$\\dfrac{2^x}{\\ln 2}+\\dfrac{x^2}{2}+C$"
+    ],
+    "ans": 3,
+    "explain": "Ta có $\\displaystyle\\int (2^x+x)\\,\\mathrm{d}\\,x=\\dfrac{2^x}{\\ln 2}+\\dfrac{1}{2} x^2+C$."
+  },
+  {
+    "type": "mcq",
+    "q": "$\\displaystyle\\int (3^x+4^x)\\mathrm{d}\\,x$ bằng",
+    "options": [
+      "$\\dfrac{3^x}{\\ln 3}+\\dfrac{4^x}{\\ln 4}+C$",
+      "$\\dfrac{3^x}{\\ln 4}+\\dfrac{4^x}{\\ln 3}+C$",
+      "$\\dfrac{4^x}{\\ln 3}-\\dfrac{3^x}{\\ln 4}+C$",
+      "$\\dfrac{3^x}{\\ln 3}-\\dfrac{4^x}{\\ln 4}+C$"
+    ],
+    "ans": 0,
+    "explain": "Áp dụng công thức $\\displaystyle\\int a^x\\,\\mathrm{d}x=\\frac{a^x}{\\ln a}+C$.\\\\\n\t\tTa có $\\displaystyle\\int(3^x+4^x)\\mathrm{d}\\,x\n\t\t=\\int 3^x\\mathrm{d}\\,x+\\int 4^x\\mathrm{d}\\,x=\\dfrac{3^x}{\\ln 3}+\\dfrac{4^x}{\\ln 4}+C$."
+  },
+  {
+    "type": "mcq",
+    "q": "Họ nguyên hàm của hàm số $f(x)=\\mathrm{e}^x+2x$ là",
+    "options": [
+      " $\\dfrac{1}{x+1}\\mathrm{e}^x+x^2+C$",
+      "$\\mathrm{e}^x+2x^2+C$",
+      "$\\mathrm{e}^x+x^2+C$",
+      "$\\mathrm{e}^x+\\dfrac{1}{2} x^2+C$"
+    ],
+    "ans": 2,
+    "explain": "Ta có $\\displaystyle\\int(\\mathrm{e}^x+2x)\\mathrm{d}\\,x=\\int\\mathrm{e}^x\\mathrm{d}\\,x+\\int 2x\\mathrm{d}\\,x=\\mathrm{e}^x+x^2+C$."
+  },
+  {
+    "type": "mcq",
+    "q": "Trong các mệnh đề sau, mệnh đề nào \\textbf{sai}?",
+    "options": [
+      "$\\displaystyle\\int\\sin x\\mathrm{d}x=\\cos x+C$",
+      "$\\displaystyle\\int 2x\\mathrm{d}x=x^2+C$",
+      "$\\displaystyle\\int \\mathrm{e}^x\\mathrm{d}x=\\mathrm{e}^x+C$",
+      "$\\displaystyle\\int \\dfrac{1}{x}\\mathrm{d}x=\\ln \\left| x \\right|+C$"
+    ],
+    "ans": 0,
+    "explain": "$\\displaystyle\\int{\\sin x\\mathrm{d}x}=-\\cos x+C$."
+  },
+  {
+    "type": "mcq",
+    "q": "Khẳng định nào sau đây là \\textbf{sai}?",
+    "options": [
+      " Mọi hàm số $f(x)$ liên tục trên đoạn $[a;b]$ đều có nguyên hàm trên đoạn $[a;b]$",
+      "$\\displaystyle\\int x^\\alpha \\mathrm{d}x=\\dfrac{x^{\\alpha +1}}{\\alpha +1}+C$ ($C$ là hằng số, $\\alpha $ là hằng số)",
+      "$\\displaystyle\\int \\mathrm{e}^x\\mathrm{d}x=\\mathrm{e}^x+C$ ($C$ là hằng số)",
+      "$\\displaystyle\\int{\\dfrac{1}{x}\\mathrm{d}x=\\ln \\left| x \\right|+C}$ ($C$ là hằng số) với $x\\ne 0$"
+    ],
+    "ans": 1,
+    "explain": "$\\displaystyle\\int x^{\\alpha} \\mathrm{d}\\,x=\\dfrac{x^{\\alpha +1}}{\\alpha +1}+C$ ($C$ là hằng số, $\\alpha $ là hằng số và $\\alpha \\ne -1$)."
+  },
+  {
+    "type": "mcq",
+    "q": "Hàm số nào dưới đây là một nguyên hàm của hàm số $f(x)=\\sqrt{x}-1$ trên $(0;+\\infty)$?",
+    "options": [
+      "$F(x)=\\dfrac{1}{2\\sqrt{x}}$",
+      "$F(x)=\\dfrac{1}{2\\sqrt{x}}-x$",
+      "$F(x)=\\dfrac{2}{3}\\sqrt[3]{x^2}-x+1$",
+      "$F(x)=\\dfrac{2}{3}\\sqrt{x^3}-x+2$"
+    ],
+    "ans": 3,
+    "explain": "Ta có : $\\displaystyle\\int (\\sqrt{x}-1)\\mathrm{d}x=\\frac{2}{3}\\sqrt{x^3}-x+C$."
+  },
+  {
+    "type": "mcq",
+    "q": "Một vật chuyển động với gia tốc $a(t)=\\dfrac{3}{t+1}$ (m/s$^2$), trong đó $t$ là khoảng thời gian tính từ thời điểm ban đầu. Vận tốc ban đầu của vật là $6$(m/s). Hỏi vận tốc của vật tại giây thứ $8$ là bao nhiêu?",
+    "options": [
+      "$12{,}6$ (m/s)",
+      "$12{,}2$ (m/s)",
+      "$6{,}6$ (m/s)",
+      "$12{,}4$ (m/s)"
+    ],
+    "ans": 0,
+    "explain": "Vận tốc của vật tại thời điểm t được tính theo công thức\n\t\t$$v(t)=\\int a(t)\\mathrm{d}t=\\displaystyle \\int \\dfrac{3}{t+1}\\mathrm{d} t=3\\ln (t+1)+C.$$\n\t\tDo vận tốc ban đầu của vật bằng $6$ (m/s) nên ta có:\n\t\t$$v(0)=3\\ln (0+1)+C=6\\Rightarrow C=6\\Rightarrow v(t)=3\\ln (t+1)+6.$$\n\t\tVận tốc chuyển động của vật tại giây thứ $8$ là:\n\t\t$$v(8)=3\\ln (8+1)+6=3\\ln 9+6\\approx 12{,}6 \\text{ (m/s)}.$$"
+  },
+  {
+    "type": "tf",
+    "q": "Cho hàm số $f(x)=\\sin \\dfrac{x}{2}$ và hàm số $g(x)=\\cos \\dfrac{x}{2}$ .",
+    "items": [
+      {
+        "sub": "$F(x)=2\\cos \\dfrac{x}{2}$  là một nguyên hàm của hàm số $f(x)$",
+        "ans": "F"
+      },
+      {
+        "sub": "$G(x)=2\\sin \\dfrac{x}{2}+\\dfrac{1}{2}$  là một nguyên hàm của hàm số $g(x)$",
+        "ans": "T"
+      },
+      {
+        "sub": "$\\displaystyle\\int \\left[ f(x)-g(x) \\right]^2 \\mathrm{d}x=x+\\cos x+C$ ($C$ là một hằng số)",
+        "ans": "F"
+      },
+      {
+        "sub": "$\\displaystyle\\int \\dfrac{1}{[2f(x)\\cdot g(x)]^2}\\mathrm{d}x=-\\cot x+C$ ($C$ là một hằng số)",
+        "ans": "T"
+      }
+    ],
+    "explain": "\\begin{itemchoice}\n\t\\itemch Vì $F'(x)=-\\sin \\dfrac{x}{2},\\forall x\\in R$ nên  $F(x)=2\\cos \\dfrac{x}{2}$  không là một nguyên hàm của hàm số $F(x)$ trên $\\mathbb{R}$.  Sai\n\t\\itemch Vì $G'(x)=\\cos \\dfrac{x}{2}, \\forall x\\in \\mathbb{R}$ nên  $G(x)=2\\sin \\dfrac{x}{2}+\\dfrac{1}{2}$ là một nguyên hàm của hàm số $g(x)$ trên $R$.  Đúng\n\t\\itemch $\\displaystyle\\int [f(x)-g(x)]^2\\mathrm{d}x=\\int \\left( \\sin\\dfrac{x}{2}-\\cos\\frac{x}{2} \\right)^2\\mathrm{d}x=\\int \\left(\\sin ^2\\frac{x}{2}+2\\sin\\frac{x}{2}\\cos\\frac{x}{2}+\\cos^2\\frac{x}{2}\\right)\\mathrm{d}x=\\int( 1+\\sin x )\\mathrm{d}x=x-\\cos x+C$.  Sai\n\t\\itemch $\\displaystyle\\int \\frac{1}{[2f(x)\\cdot g(x)]^2}\\mathrm{d}x=\\int \\frac{1}{(2\\sin\\frac{x}{2}\\cos\\frac{x}{2})^2}\\mathrm{d}x=\\int \\frac{1}{\\sin^2 x}\\mathrm{d}x=-\\cot x+C$.  Đúng\n\t\\end{itemchoice}"
+  },
+  {
+    "type": "tf",
+    "q": "Cho hàm số $f(x)=\\dfrac{1}{x}$ và $F(x)=\\ln x+C_1$, $G(x)=\\ln(-x)+C_2$ ($C_1,C_2$ là các hằng số).",
+    "items": [
+      {
+        "sub": "Trên $(0;+\\infty)$, một nguyên hàm của hàm số $f(x)$ là $H(x)=\\ln (x)+e$",
+        "ans": "T"
+      },
+      {
+        "sub": "Trên $(-\\infty ;0)$, nguyên hàm của hàm số $f(x)$ là $G(x)$",
+        "ans": "T"
+      },
+      {
+        "sub": "Trên $(0;+\\infty)$, nguyên hàm của hàm số $f(x)$ là $F(x)$",
+        "ans": "T"
+      },
+      {
+        "sub": "$\\displaystyle\\int \\left[ f(x)+f^2(x) \\right]\\mathrm{d}x=\\ln(3\\left| x \\right|)-\\dfrac{1}{x}+C$ ($C$ là một hằng số)",
+        "ans": "T"
+      }
+    ],
+    "explain": "\\begin{itemchoice}\n\\itemch Vì $H'(x)=\\dfrac{1}{x}=F(x),\\forall x\\in (0;+\\infty)$ nên $H(x)$ là một nguyên hàm của hàm số $F(x)$ trên ($0,+\\infty $).  Đúng\n\\itemch $\\displaystyle\\int f(x)\\mathrm{d}x=\\int \\frac{1}{x}\\mathrm{d}x=\\ln \\left( \\left| x \\right| \\right)+C_2=\\ln(-x)+C_2,\\forall x\\in (-\\infty ;0)$.  Đúng\n\\itemch $\\displaystyle\\int f(x)\\mathrm{d}x=\\int \\frac{1}{x}\\mathrm{d}x=\\ln \\left( \\left| x \\right| \\right)+C_1=\\ln x+C_1,\\forall x\\in( 0;+\\infty)$.  Đúng\n\\itemch $\\displaystyle\\int \\left[ f(x)+f^2(x) \\right]\\mathrm{d}x=\\int \\left( \\frac{1}{x}+\\frac{1}{x^2} \\right)\\mathrm{d}x=\\ln(\\left| x \\right|)-\\frac{1}{x}+C_3=\\ln \\left( \\left| x \\right| \\right)-\\frac{1}{x}+\\ln 3+C=\\ln( 3\\left| x \\right|)-\\frac{1}{x}+C$.  Đúng \n\t\\end{itemchoice}"
+  },
+  {
+    "type": "tf",
+    "q": "Cho hàm số $f(x)=\\cos x$ và hàm số $g(x)=\\sin x$.",
+    "items": [
+      {
+        "sub": "$F(x)=\\sin x+\\mathrm{e}$ là một nguyên hàm của hàm số $f(x)$ trên $\\mathbb{R}$",
+        "ans": "T"
+      },
+      {
+        "sub": "$G(x)={\\mathrm{e}^{-\\cos x}}+\\ln 3$ là một nguyên hàm của hàm số $\\mathrm{e}^{g(x)}$ trên $\\mathbb{R}$",
+        "ans": "F"
+      },
+      {
+        "sub": "$\\displaystyle\\int \\left[ 5f(x)+6g(x) \\right]\\mathrm{d}x=5\\sin x-6\\cos x+C$, ($C$ là một hằng số)",
+        "ans": "T"
+      },
+      {
+        "sub": "$\\displaystyle\\int \\left[ 2+\\left( \\frac{g(x)}{F(x)} \\right)^2 \\right]\\mathrm{d}x=x+\\tan x+C$, ($C$ là một hằng số)",
+        "ans": "T"
+      }
+    ],
+    "explain": "\\begin{itemchoice}\n\\itemch Vì $F'(x)=\\cos x=f(x),\\forall x\\in \\mathbb{R}$ nên $(x)$ là một nguyên hàm của hàm số $f(x)$ trên \\mathbb{R}$.  Đúng\n\\itemch Vì $G'(x)=\\sin x \\mathrm{e}^{-\\cos x}\\ne \\mathrm{e}^{\\sin x}, \\forall x\\in \\mathbb{R}$ nên $G(x)$ không là một nguyên hàm của hàm số $\\mathrm{e}^{g(x)}$ trên $\\mathbb{R}$. Sai\n\\itemch $\\displaystyle\\int \\left[ 5f(x)+6g(x) \\right]\\mathrm{d}x=\\int \\left( 5\\cos x+6\\sin x \\right)\\mathrm{d}x=5\\sin x-6\\cos x+C$.  Đúng\n\\itemch $\\displaystyle\\int \\left[ 2+\\left( \\frac{g(x)}{f(x)} \\right)^2 \\right]\\mathrm{d}x=\\int \\left(2+\\frac{\\sin^2 x}{\\cos^2 x}\\right)\\mathrm{d}x=\\int \\left( 1+\\frac{\\sin^2 x+\\cos^2 x}{\\cos^2 x} \\right)\\mathrm{d}x\\\\\n=\\int \\left( 1+\\frac{1}{\\cos^2 x} \\right)\\mathrm{d}x=x+\\tan x+C$.  Đúng\n\t\\end{itemchoice}"
+  },
+  {
+    "type": "tf",
+    "q": "Cho hàm số $f(x)=3^{2x}$ và hàm số $g(x)=\\tan x$.",
+    "items": [
+      {
+        "sub": "$F(x)=\\dfrac{3^{2x}\\ln3}{2}$  là một nguyên hàm của hàm số $f(x)$ trên $\\mathbb{R}$",
+        "ans": "F"
+      },
+      {
+        "sub": "$G(x)=-\\ln (3\\cos x)$ là một nguyên hàm của hàm số $g(x)$ trên $\\left( -\\dfrac{\\pi}{2};\\dfrac{\\pi}{2} \\right)$",
+        "ans": "T"
+      },
+      {
+        "sub": "$\\displaystyle\\int 3f(x)\\mathrm{d}x=\\dfrac{3^{2x+1}}{\\ln 9}+C$, ($C$ là một hằng số)",
+        "ans": "T"
+      },
+      {
+        "sub": "$\\displaystyle\\int [f(x)+g(x)^2]\\mathrm{d}x =\\dfrac{9^x}{2\\ln3}-x+\\tan x+C$, ($C$ là một hằng số)",
+        "ans": "T"
+      }
+    ],
+    "explain": "\\begin{itemchoice}\n\\itemch Vì $F'(x)=\\dfrac{2\\cdot 3^{2x}\\cdot\\ln^23}{2}=3^{2x}\\cdot \\ln^2 3\\ne f(x),\\forall x\\in \\mathbb{R}$ nên $f(x)$ không là một nguyên hàm của hàm số $F(x)$ trên $\\mathbb{R}$.  Sai\n\\itemch Vì $G'(x)=-\\dfrac{-3\\sin x}{3\\cos x}=\\tan x=g(x),\\forall x\\in \\left( -\\dfrac{\\pi }{2};\\dfrac{\\pi }{2} \\right)$ nên $G(x)$ là một nguyên hàm của hàm số $g(x)$ trên $\\left( -\\dfrac{\\pi }{2};\\dfrac{\\pi }{2} \\right)$.  Đúng\n\\itemch $\\displaystyle\\int 3f(x)\\mathrm{d}x=\\int 3\\cdot 3^{2x}\\mathrm{d}x=3\\cdot 9^x\\mathrm{d}x=3\\cdot\\dfrac{9^x}{\\ln9}+C=\\dfrac{3\\cdot3^{2x}}{\\ln9}+C=\\dfrac{3^{2x+1}}{\\ln9}+C$.  Đúng\n\\itemch $\\displaystyle\\int \\left[f(x)+g(x)^2\\right]\\mathrm{d}x=\\int \\left( 3^{2x}+\\tan^2x\\right)\\mathrm{d}x=\\int \\left(9^x-1+1+\\tan ^2\\right)\\mathrm{d}x\\\\\n=\\int \\left(9^x-1+\\dfrac{1}{\\cos^2 x}\\right)\\mathrm{d}x\n=\\dfrac{9^x}{\\ln9}-x+\\tan x+C=\\dfrac{9^x}{2\\ln3}-x+\\tan x+C$.  Đúng\n\t\\end{itemchoice}"
+  },
+  {
+    "type": "short",
+    "q": "Giả sử hàm số $y=f(x)$ liên tục và thỏa mãn: $f(1)=1$ và $f'(x)\\sqrt[3]{x^{-1}}=1$, với mọi $x>0$. Tính $4f(8)$.",
+    "ans": "47",
+    "explain": "Ta có $f'(x)=\\dfrac{1}{\\sqrt[3]{x^{-1}}}=\\dfrac{1}{x^{-\\tfrac{1}{3}}}=x^{\\tfrac{1}{3}}$\\\\\n\t\t$\\Rightarrow F(x)=\\displaystyle\\int f'(x)\\mathrm{d}x= \\int x^{\\tfrac{1}{3}}\\mathrm{d}x=\\dfrac{3}{4}x^{\\frac{4}{3}}+C=\\frac{3}{4}\\sqrt[3]{x^4}+C$.\\\\\n\t\t$f(1)=1\\Rightarrow \\dfrac{3}{4}+C=1\\Rightarrow C=-\\dfrac{1}{4}.\\\\\n\t\t\\Rightarrow f(x)=\\dfrac{3}{4}\\sqrt[3]{x^4}-\\dfrac{1}{4}$\\\\\n\t\t$\\Rightarrow 4f(8)=47$."
+  },
+  {
+    "type": "short",
+    "q": "Một ô tô đang chạy với vận tốc $10$(m/s) thì người lái xe đạp phanh. Từ thời điểm đó, ô tô chuyển động chậm dần đều với vận tốc $v(t)=10-2t$ (m/s), trong đó $t$ là khoảng thời gian tính bằng giây kể từ lúc đạp phanh. Tính quãng đường ô tô di chuyển được trong $8$ giây cuối cùng.",
+    "ans": "55",
+    "explain": "Chọn mốc thời gian và gốc tọa độ lúc ô tô bắt đầu đạp phanh. Suy ra $t=0;\\,s=0$.\\\\\n\t$s(t)=\\displaystyle \\int v(t)\\mathrm{d}t=\\int (10-2t)\\mathrm{d}t=10t-t^2+C$.\\\\\n\t$s(0)=0\\Rightarrow C=0 \\Rightarrow s(t)=10t-t^2$.\\ \n\tÔ tô dừng hẳn khi $v(t)=0\\Leftrightarrow 10-2t=0\\Leftrightarrow t=5$.\\\\\n\tTrong $8$ giây cuối:\n\t\\begin{itemize}\n\t\t\\item ô tô chuyển động đều với vận tốc $10$(m/s) trong $3$ giây đầu.\n\t\t\\item ô tô chuyển động chậm dần đều trong $5$ giây cuối.\n\t\\end{itemize}\n\tQuãng đường ô tô di chuyển là: $s=3\\cdot 10+10\\cdot 5-5^2=55$ m."
+  },
+  {
+    "type": "short",
+    "q": "Gọi $F(x)$ là một nguyên hàm của hàm số $f(x)=3^{2x+1} 2^{1+3x}$, biết $F(0)=\\dfrac{8}{\\ln 72}$. Tính $F(-2)$. (làm tròn kết quả đến hàng phần trăm).",
+    "ans": "0{,}47",
+    "explain": "Ta có:\\\\\n\t\t$F(x)=\\displaystyle \\int{\\left(3^{2x+1}\\cdot 2^{1+3x} \\right)}\\mathrm{d}x=\\int\\left(3\\cdot3^{2x}\\cdot2\\cdot2^{3x}\\right)\\mathrm{d}x=\\int\\left(6\\cdot9^x\\cdot8^x \\right)\\mathrm{d}x\\\\\n\t\t=6\\int 72^x\\mathrm{d}x=6\\cdot\\dfrac{72^x}{\\ln 72}+C$.\\\\\n\t\tTheo giả thiết, $F(0)=\\dfrac{8}{\\ln 72}\\Rightarrow 6\\cdot\\dfrac{72^0}{\\ln 72}+C=\\dfrac{8}{\\ln 72}\\Rightarrow C=\\dfrac{2}{\\ln 72}$\\\\\n\t\t$\\Rightarrow F(x)=6\\cdot\\dfrac{{{72}^{x}}}{\\ln 72}+\\dfrac{2}{\\ln 72}\\Rightarrow F\\left( -2 \\right)=6\\cdot \\dfrac{72^{-2}}{\\ln 72}+\\dfrac{2}{\\ln 72}\\approx 0{,}47$."
+  },
+  {
+    "type": "short",
+    "q": "Một viên đạn được bắn thẳng đứng lên từ độ cao $1{,}5$ mét so với mặt đất. Giả sử tại thời điểm $t$ giây (coi $t=0$ là thời điểm viên đạn được bắn lên), vận tốc của nó được cho bởi $v(t)=170-9{,}8\\,t\\,\\left( \\text{m/s} \\right)$. Tìm độ cao lớn nhất của viên đạn (làm tròn kết quả đến hàng đơn vị).",
+    "ans": "1476",
+    "explain": "Gọi $h(t)$ là độ cao của viên đạn tại thời điểm $t$ giây sau khi bắn. Ta có:\\\\\n\t\t$h(t)=\\displaystyle \\int v(t)\\mathrm{d}t=\\int{(170-9{,}8t)}\\mathrm{d}t=170t-4{,}9t^2+C$.\\\\\n\t\tTừ giả thiết suy ra: $h\\left( 0 \\right)=1,5\\Rightarrow C=1{,}5\\Rightarrow h(t)=170t-4{,}9t^2+1,5$.\\\\\n\t\tViên đạn đạt độ cao lớn nhất khi $v(t)=0\\Leftrightarrow 170-9,8\\,t\\,=0\\Leftrightarrow t=\\dfrac{850}{49}$.\\\\\n\t\tKhi đó, độ cao lớn nhất của viên đạn là:\\\\\n\t\t$h\\left(\\dfrac{850}{49}\\right)=170 \\cdot\\dfrac{850}{49}-4{,}9\\left( \\dfrac{850}{49} \\right)^2+1{,}5=\\dfrac{144647}{98}\\approx 1476$ (m)."
+  },
+  {
+    "type": "short",
+    "q": "Một chiếc cốc chứa nước ở $95^\\circ$ C được đặt trong phòng có nhiệt độ ${{20}^{0}}C$. Theo định luật làm mát của Newton, nhiệt độ của nước trong cốc sau $t$ phút (xem $t=0$ là thời điểm nước ở $95^\\circ$ C là một hàm số $(t)$. Tốc độ giảm nhiệt độ của nước trong cốc tại thời điểm t phút được xác định bởi $T'(t)=\\left(-\\dfrac{3}{2} \\mathrm\\mathrm{e}^{-\\tfrac{t}{50}}\\right)^\\circ$ C/phút). Tính nhiệt độ của nước tại thời điểm $t=40$ phút (làm tròn kết quả đến hàng phần chục).",
+    "ans": "53{,}7",
+    "explain": "Ta có:\\\\\n$\\displaystyle T(t)=\\int T'(t)\\mathrm{d}t\n=\\int\\left( -\\frac{3}{2}\\mathrm{e}^{-\\tfrac{t}{50}} \\right)\\mathrm{d}t\n=-\\frac{3}{2}\\int\\left({\\mathrm{e}^{-\\tfrac{1}{50}}} \\right)^t\\mathrm{d}t\\\\\n=-\\frac{3}{2}\\cdot\\frac{\\left(\\mathrm{e}^{-\\tfrac{1}{50}} \\right)^t}{\\ln \\left(\\mathrm{e}^{-\\tfrac{1}{50}}\\right)}+C\n=75\\left(\\mathrm{e}^{-\\frac{1}{50}}\\right)^t+C$.\\\\\n\t\tVì $t=0$ là thời điểm nước ở $95^\\circ$ C nên $T(0)=95\\Rightarrow 75\\left(\\mathrm{e}^{-\\tfrac{1}{50}} \\right)^\\circ+C=95\\Rightarrow C=20$.\\ \n\t\tSuy ra $T(t)=75\\left(\\mathrm{e}^{-\\frac{1}{50}} \\right)^t+20$.\\\\\n\t\tDo đó, nhiệt độ của nước tại thời điểm $t=40$ phút là: \\\\\n\t\t$T(40)=75\\left(\\mathrm{e}^{-\\tfrac{1}{50}} \\right)^{40}+20\\approx 53{,}7 ^\\circ$ C."
+  },
+  {
+    "type": "short",
+    "q": "Doanh thu bán hàng của một công ty khi bán một loại sản phẩm là số tiền $R(x)$ (triệu đồng) thu được khi $x$ đơn vị sản phẩm được bán ra. Tốc độ biến động (thay đổi) của doanh thu khi $x$ đơn vị sản phẩm đã được bán là hàm số $M_R(x)=R'(x)$. Một công ty công nghệ cho biết, tốc độ biến đổi của doanh thu khi bán một loại con chip của hãng được cho bởi $M_R(x)=40-0{,}1x$, ở đó $x$ là số lượng chip đã bán. Hỏi doanh thu của công ty khi đã bán 500 con chip bằng bao nhiêu tỉ đồng?",
+    "ans": "7{,}5",
+    "explain": "Vì $R'(x)=M_R(x)$ nên doanh thu $R(x)$ là một nguyên hàm của $M_R(x)$.\\\\\n\t\tTa có: $R(x)=\\displaystyle \\int M_R(x) \\mathrm{d}x=\\int{(40-0{,}1x)}\\mathrm{d}x=40x-0{,}05 x^2+C$.\\\\\n\t\tKhi $x=0$, tức là chưa bán chip nào thì doanh thu sẽ bằng $0$ (triệu đồng), nên $R\\left( 0 \\right)=0\\Rightarrow C=0$.\\\\\n\t\tSuy ra $R(x)=40x-0{,}05 x^2$.\\\\\n\t\tDo đó, doanh thu của công ty khi đã bán 500 con chip là:\\\\\n\t\t$R(500)=40\\cdot 500-0{,}05\\cdot 500^2=7500$ (triệu đồng) $=7{,}5$ (tỉ đồng)."
+  }
+]
 };
