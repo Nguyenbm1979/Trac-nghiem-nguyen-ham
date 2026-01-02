@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công Cụ Soạn Đề Thi (Admin Tool)</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #eceff1; padding: 20px; color: #37474f; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        
+        /* CARD STYLE */
+        .card { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-top: 4px solid #009688; }
+        h2 { margin-top: 0; color: #00796b; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        
+        /* FORM ELEMENTS */
+        .form-group { margin-bottom: 15px; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; color: #455a64; }
+        input[type="text"], input[type="number"], textarea, select { 
+            width: 100%; padding: 10px; border: 1px solid #cfd8dc; border-radius: 4px; box-sizing: border-box; font-size: 14px; 
+        }
+        textarea { height: 80px; resize: vertical; }
+        
+        /* GRID LAYOUT */
+        .row { display: flex; gap: 15px; }
+        .col { flex: 1; }
+
+        /* TOOLBAR */
+        .toolbar { position: sticky; top: 10px; z-index: 100; background: rgba(255,255,255,0.9); padding: 10px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; gap: 10px; backdrop-filter: blur(5px); margin-bottom: 20px; }
+        .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: white; display: flex; align-items: center; gap: 5px; }
+        .btn-mcq { background: #1976d2; }
+        .btn-tf { background: #f57c00; }
+        .btn-short { background: #7b1fa2; }
+        .btn-save { background: #2e7d32; margin-left: auto; }
+        .btn-danger { background: #c62828; }
+        
+        /* QUESTION BOX */
+        .q-box { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; background: #fafafa; border-radius: 6px; position: relative; }
+        .q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: bold; color: #555; }
+        .q-type-badge { padding: 3px 8px; border-radius: 4px; font-size: 12px; color: white; text-transform: uppercase; }
+        .bg-mcq { background: #1976d2; } .bg-tf { background: #f57c00; } .bg-short { background: #7b1fa2; }
+
+        /* OPTIONS GRID */
+        .opt-row { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
+        .opt-check { transform: scale(1.5); cursor: pointer; }
+        
+        /* PREVIEW JSON */
+        #output-area { background: #263238; color: #80cbc4; font-family: monospace; padding: 15px; border-radius: 6px; width: 100%; height: 200px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 style="text-align:center; color:#00695c">ADMIN TOOL - SOẠN ĐỀ THI</h1>
+
+    <div class="card">
+        <h2>1. Thông Tin Đề Thi</h2>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Mã Đề (Tên file, ví dụ: de-02)</label>
+                    <input type="text" id="exam-id" placeholder="de-02" onkeyup="updateFileName()">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Tiêu Đề Hiển Thị</label>
+                    <input type="text" id="exam-title" placeholder="Kiểm tra 15 phút...">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Thời gian (phút)</label>
+                    <input type="number" id="exam-time" value="45">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Mô tả đề thi</label>
+            <input type="text" id="exam-desc" placeholder="Số câu, nội dung kiến thức...">
+        </div>
+        
+        <div class="row" style="background:#f1f8e9; padding:10px; border-radius:6px">
+            <div class="col">
+                <label>Mật Khẩu (Nhập chữ thường)</label>
+                <input type="text" id="raw-pass" placeholder="Nhập mật khẩu..." oninput="hashPass()">
+            </div>
+            <div class="col">
+                <label>Mã Hóa MD5 (Tự động)</label>
+                <input type="text" id="hashed-pass" readonly style="background:#e0e0e0; color:#555">
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:15px">
+            <div class="col"><label>Điểm câu Trắc nghiệm</label><input type="number" id="score-mcq" value="0.25" step="0.05"></div>
+            <div class="col"><label>Điểm câu Đúng/Sai (Max)</label><input type="number" id="score-tf" value="1.0" step="0.1"></div>
+            <div class="col"><label>Điểm câu Trả lời ngắn</label><input type="number" id="score-short" value="0.5" step="0.1"></div>
+        </div>
+    </div>
+
+    <div class="toolbar">
+        <button class="btn btn-mcq" onclick="addQuestion('mcq')"><i class="fas fa-list-ul"></i> Thêm Trắc Nghiệm</button>
+        <button class="btn btn-tf" onclick="addQuestion('tf')"><i class="fas fa-check-square"></i> Thêm Đúng/Sai</button>
+        <button class="btn btn-short" onclick="addQuestion('short')"><i class="fas fa-pen"></i> Thêm Trả Lời Ngắn</button>
+        <button class="btn btn-save" onclick="generateFile()"><i class="fas fa-download"></i> TẢI FILE ĐỀ THI (.JS)</button>
+    </div>
+
+    <div id="questions-container"></div>
+
+</div>
+
+<script>
+    let questions = [];
+
+    // --- HÀM MÃ HÓA MẬT KHẨU ---
+    function hashPass() {
+        const raw = document.getElementById('raw-pass').value.trim();
+        if(raw) {
+            document.getElementById('hashed-pass').value = CryptoJS.MD5(raw).toString();
+        } else {
+            document.getElementById('hashed-pass').value = "";
+        }
+    }
+
+    // --- CẬP NHẬT TÊN FILE ---
+    function updateFileName() {
+        let name = document.getElementById('exam-id').value.trim();
+        // Tự động bỏ đuôi .js nếu lỡ nhập
+        if(name.endsWith('.js')) name = name.replace('.js','');
+    }
+
+    // --- THÊM CÂU HỎI MỚI ---
+    function addQuestion(type) {
+        const id = Date.now();
+        const qObj = { id, type };
+        questions.push(qObj);
+        renderQuestions();
+    }
+
+    // --- XÓA CÂU HỎI ---
+    function removeQuestion(id) {
+        if(confirm("Bạn có chắc muốn xóa câu này?")) {
+            questions = questions.filter(q => q.id !== id);
+            renderQuestions();
+        }
+    }
+
+    // --- VẼ GIAO DIỆN CÂU HỎI ---
+    function renderQuestions() {
+        const container = document.getElementById('questions-container');
+        container.innerHTML = "";
+
+        questions.forEach((q, index) => {
+            let html = `<div class="q-box" id="q-${q.id}">
+                <div class="q-header">
+                    <span><span class="q-type-badge bg-${q.type}">${getTypeName(q.type)}</span> Câu ${index + 1}</span>
+                    <button class="btn btn-danger" style="padding:5px 10px; font-size:12px" onclick="removeQuestion(${q.id})"><i class="fas fa-trash"></i></button>
+                </div>
+                <div class="form-group">
+                    <label>Nội dung câu hỏi (Có thể dùng LaTeX $...$)</label>
+                    <textarea id="content-${q.id}" placeholder="Nhập đề bài..."></textarea>
+                </div>`;
+
+            // Giao diện riêng cho từng loại
+            if(q.type === 'mcq') {
+                html += `<label>Các phương án (Tích chọn đáp án ĐÚNG)</label>`;
+                ['A', 'B', 'C', 'D'].forEach((label, idx) => {
+                    html += `<div class="opt-row">
+                        <input type="radio" name="ans-${q.id}" class="opt-check" value="${idx}">
+                        <span style="font-weight:bold">${label}.</span>
+                        <input type="text" id="opt-${q.id}-${idx}" placeholder="Nhập đáp án ${label}...">
+                    </div>`;
+                });
+            } 
+            else if (q.type === 'tf') {
+                html += `<label>Các mệnh đề (Chọn Đúng/Sai)</label>
+                         <table style="width:100%; margin-bottom:10px">
+                            <tr><th>Nội dung mệnh đề</th><th width="80">Đúng</th><th width="80">Sai</th></tr>`;
+                [0, 1, 2, 3].forEach(idx => {
+                    html += `<tr>
+                        <td><input type="text" id="tf-sub-${q.id}-${idx}" placeholder="Mệnh đề ${idx+1}..."></td>
+                        <td align="center"><input type="radio" name="tf-ans-${q.id}-${idx}" value="T"></td>
+                        <td align="center"><input type="radio" name="tf-ans-${q.id}-${idx}" value="F"></td>
+                    </tr>`;
+                });
+                html += `</table>`;
+            }
+            else if (q.type === 'short') {
+                html += `<div class="form-group">
+                    <label>Đáp án đúng (Số hoặc Chữ)</label>
+                    <input type="text" id="short-ans-${q.id}" placeholder="Ví dụ: 2025 hoặc -5/2...">
+                </div>`;
+            }
+
+            html += `<div class="form-group">
+                        <label>Lời giải chi tiết</label>
+                        <textarea id="explain-${q.id}" style="height:50px" placeholder="Giải thích..."></textarea>
+                     </div>
+                </div>`;
+            
+            container.insertAdjacentHTML('beforeend', html);
+        });
+        
+        // Restore values (giữ lại dữ liệu đã nhập khi render lại) - Có thể nâng cấp sau
+        // Ở phiên bản đơn giản này, ta chưa restore data khi thêm/xóa để code gọn nhẹ.
+        // Thầy nhập xong 1 câu rồi hẵng thêm câu mới để tránh mất chữ nhé.
+    }
+
+    function getTypeName(type) {
+        if(type==='mcq') return 'Trắc Nghiệm';
+        if(type==='tf') return 'Đúng/Sai';
+        if(type==='short') return 'Trả Lời Ngắn';
+    }
+
+    // --- TẠO VÀ TẢI FILE .JS ---
+    function generateFile() {
+        const examId = document.getElementById('exam-id').value.trim() || 'de-moi';
+        
+        // Thu thập dữ liệu
+        const finalData = {
+            title: document.getElementById('exam-title').value,
+            description: document.getElementById('exam-desc').value,
+            time: parseInt(document.getElementById('exam-time').value),
+            password: document.getElementById('hashed-pass').value || "",
+            scores: {
+                mcq: parseFloat(document.getElementById('score-mcq').value),
+                tf: parseFloat(document.getElementById('score-tf').value),
+                short: parseFloat(document.getElementById('score-short').value)
+            },
+            questions: []
+        };
+
+        // Duyệt qua các câu hỏi để lấy dữ liệu từ ô nhập
+        questions.forEach(q => {
+            const qContent = document.getElementById(`content-${q.id}`).value;
+            const explain = document.getElementById(`explain-${q.id}`).value;
+            
+            let qData = { type: q.type, q: qContent, explain: explain };
+
+            if(q.type === 'mcq') {
+                qData.options = [];
+                for(let i=0; i<4; i++) {
+                    qData.options.push(document.getElementById(`opt-${q.id}-${i}`).value);
+                }
+                const checked = document.querySelector(`input[name="ans-${q.id}"]:checked`);
+                qData.ans = checked ? parseInt(checked.value) : 0;
+            }
+            else if(q.type === 'tf') {
+                qData.items = [];
+                for(let i=0; i<4; i++) {
+                    const sub = document.getElementById(`tf-sub-${q.id}-${i}`).value;
+                    const checked = document.querySelector(`input[name="tf-ans-${q.id}-${i}"]:checked`);
+                    const ans = checked ? checked.value : 'F'; // Mặc định là Sai nếu quên chọn
+                    qData.items.push({ sub: sub, ans: ans });
+                }
+            }
+            else if(q.type === 'short') {
+                qData.ans = document.getElementById(`short-ans-${q.id}`).value;
+            }
+
+            finalData.questions.push(qData);
+        });
+
+        // Tạo nội dung file JS
+        const fileContent = `window.EXAM_DATA = ${JSON.stringify(finalData, null, 4)};`;
+
+        // Tải file về máy
+        const blob = new Blob([fileContent], { type: "text/javascript" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${examId}.js`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+</script>
+
+</body>
+</html>
