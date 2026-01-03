@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Tool v11.0 (Image Manager)</title>
+    <title>Admin Tool v11.1 (Full Management)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -27,44 +27,41 @@
         .tab-btn.active { background: #00796b; color: white; }
         .section { display: none; } .section.active { display: block; }
 
-        /* CONFIG */
+        /* DANH SÁCH FILE (NEW) */
+        .file-list { display: flex; flex-direction: column; gap: 10px; }
+        .file-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #fafafa; border: 1px solid #ddd; border-radius: 6px; }
+        .file-item:hover { background: #f0f4c3; border-color: #cddc39; }
+        .file-name { font-weight: bold; color: #333; }
+        .file-size { color: #888; font-size: 0.9em; margin-right: 15px; }
+
+        /* CÁC STYLE CŨ (GIỮ NGUYÊN) */
         .config-box { background: #e3f2fd; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #90caf9; }
         .row { display: flex; gap: 15px; margin-bottom: 10px; } .col { flex: 1; }
         input, select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         label { font-weight: 600; font-size: 0.9em; display: block; margin-bottom: 3px; }
-
-        /* EDITOR & IMAGE LIST */
         .q-item { border: 1px solid #cfd8dc; margin-bottom: 30px; border-radius: 8px; overflow: hidden; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .q-toolbar { background: #f5f5f5; padding: 10px 15px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; }
         .q-body { display: flex; border-bottom: 1px solid #eee; }
         .column { flex: 1; padding: 15px; display: flex; flex-direction: column; gap: 15px; }
         .col-left { border-right: 1px solid #eee; background: #fafafa; }
         .col-right { background: #fff; }
-        
-        /* IMAGE MANAGER STYLES */
-        .img-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; margin-top: 15px; }
-        .img-card { border: 1px solid #ddd; border-radius: 6px; padding: 10px; text-align: center; background: #fff; position: relative; transition: 0.2s; }
-        .img-card:hover { box-shadow: 0 4px 10px rgba(0,0,0,0.1); transform: translateY(-2px); }
-        .img-thumb { width: 100%; height: 100px; object-fit: contain; margin-bottom: 5px; border: 1px solid #eee; }
-        .img-name { font-size: 0.8em; color: #555; word-break: break-all; height: 35px; overflow: hidden; }
-        .btn-del-img { background: #c62828; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; margin-top: 5px; width: 100%; }
-
-        /* SMART TEXTAREA */
         .mini-toolbar { display: flex; gap: 5px; margin-bottom: 5px; }
         .tool-btn { padding: 5px 10px; border: 1px solid #ccc; background: white; cursor: pointer; border-radius: 3px; font-weight: bold; min-width: 30px; }
         .smart-textarea { width: 100%; height: 100px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-family: monospace; resize: vertical; box-sizing: border-box; }
         .smart-textarea:focus { border-color: #009688; outline: none; }
-        
         .preview-box { padding: 10px; border: 1px dashed #ccc; border-radius: 4px; min-height: 50px; background: white; }
         .preview-img { max-width: 100%; height: auto; display: block; margin: 10px auto; border: 1px solid #ddd; }
         .img-status { font-size: 0.85em; margin-top: 5px; display: flex; align-items: center; gap: 5px; }
         .img-badge { background: #e0f2f1; color: #00695c; padding: 2px 6px; border-radius: 3px; font-size: 0.8em; }
-
         .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: white; }
         .btn-green { background: #2e7d32; } .btn-blue { background: #1565c0; } .btn-red { background: #c62828; } .btn-gray { background: #607d8b; }
-
         #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 99999; display: none; flex-direction: column; justify-content: center; align-items: center; color: white; }
         #log-text { margin-top: 15px; font-family: monospace; color: #80cbc4; white-space: pre-wrap; max-height: 300px; overflow-y: auto; text-align: left; width: 80%; background: #263238; padding: 15px; border-radius: 8px; }
+        .img-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; margin-top: 15px; }
+        .img-card { border: 1px solid #ddd; border-radius: 6px; padding: 10px; text-align: center; background: #fff; position: relative; }
+        .img-thumb { width: 100%; height: 100px; object-fit: contain; margin-bottom: 5px; border: 1px solid #eee; }
+        .img-name { font-size: 0.8em; color: #555; word-break: break-all; height: 35px; overflow: hidden; }
+        .btn-del-img { background: #c62828; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; margin-top: 5px; width: 100%; }
     </style>
 </head>
 <body>
@@ -81,7 +78,7 @@
 </div>
 
 <div id="main-app">
-    <h1>HỆ THỐNG QUẢN TRỊ ĐỀ THI (v11.0)</h1>
+    <h1>HỆ THỐNG QUẢN TRỊ (v11.1)</h1>
 
     <div class="config-box">
         <div class="row">
@@ -94,7 +91,8 @@
 
     <div class="tab-bar">
         <button class="tab-btn active" onclick="switchTab('create')">📝 SOẠN ĐỀ THI</button>
-        <button class="tab-btn" onclick="switchTab('images')">📁 KHO ẢNH (QUẢN LÝ & XÓA)</button>
+        <button class="tab-btn" onclick="switchTab('images')">📷 KHO ẢNH</button>
+        <button class="tab-btn" onclick="switchTab('data')">📂 QUẢN LÝ ĐỀ THI</button>
     </div>
 
     <div id="sec-create" class="section active">
@@ -135,319 +133,154 @@
 
     <div id="sec-images" class="section">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
-            <h3>DANH SÁCH ẢNH TRÊN GITHUB (Thư mục /images)</h3>
-            <button class="btn btn-green" onclick="loadImagesFromGitHub()">🔄 Tải danh sách ảnh</button>
+            <h3>DANH SÁCH ẢNH (Thư mục /images)</h3>
+            <button class="btn btn-green" onclick="loadImagesFromGitHub()">🔄 Tải ảnh</button>
         </div>
-        <p id="img-loading" style="display:none; color:#00695c; font-style:italic">Đang kết nối GitHub để lấy danh sách...</p>
-        <div id="image-gallery" class="img-grid">
-            <div style="grid-column: 1/-1; text-align:center; color:#999; padding:20px">Bấm nút "Tải danh sách ảnh" để xem.</div>
+        <p id="img-loading" style="display:none; color:#00695c">Đang tải...</p>
+        <div id="image-gallery" class="img-grid"></div>
+    </div>
+
+    <div id="sec-data" class="section">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
+            <h3>DANH SÁCH FILE DỮ LIỆU (Thư mục /data)</h3>
+            <button class="btn btn-green" onclick="loadDataFiles()">🔄 Tải danh sách đề</button>
+        </div>
+        <div style="background:#fff3e0; padding:10px; margin-bottom:15px; border-radius:4px; font-size:0.9em; color:#e65100">
+            ⚠️ <b>Lưu ý:</b> Khi xóa file .js ở đây, hệ thống sẽ tự động xóa tên đề thi đó khỏi danh sách Menu (list.js).
+        </div>
+        <div id="data-list" class="file-list">
+            <div style="text-align:center; color:#999; padding:20px">Bấm nút "Tải danh sách đề" để xem.</div>
         </div>
     </div>
 </div>
 
 <script>
-    // --- 0. AUTH ---
-    const ADMIN_HASH = "e10adc3949ba59abbe56e057f20f883e"; // 123456
-    function checkAdmin() {
-        if(CryptoJS.MD5(document.getElementById('admin-pass-input').value).toString() === ADMIN_HASH) {
-            document.getElementById('login-screen').style.display='none';
-            document.getElementById('main-app').style.display='block';
-            sessionStorage.setItem('admin_ok','1');
-        } else document.getElementById('login-msg').style.display='block';
-    }
+    // --- AUTH ---
+    const ADMIN_HASH = "e10adc3949ba59abbe56e057f20f883e"; 
+    function checkAdmin() { if(CryptoJS.MD5(document.getElementById('admin-pass-input').value).toString()===ADMIN_HASH){document.getElementById('login-screen').style.display='none';document.getElementById('main-app').style.display='block';sessionStorage.setItem('admin_ok','1');}else document.getElementById('login-msg').style.display='block'; }
     if(sessionStorage.getItem('admin_ok')) checkAdmin();
 
-    // --- 1. CORE ---
-    function switchTab(t) {
-        document.querySelectorAll('.section').forEach(e=>e.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
-        document.getElementById('sec-'+t).classList.add('active');
-        event.target.classList.add('active');
-    }
-    let questions = [];
-    window.onload = () => { ['gh-user','gh-repo','gh-token'].forEach(id => { if(localStorage.getItem(id)) document.getElementById(id).value = localStorage.getItem(id); }); };
-    function saveConfig() { ['gh-user','gh-repo','gh-token'].forEach(id => localStorage.setItem(id, document.getElementById(id).value.trim())); alert("Đã lưu!"); }
-    function hashPass() { let p=document.getElementById('exam-pass').value.trim(); document.getElementById('exam-pass-hash').value = p?CryptoJS.MD5(p).toString():""; }
+    // --- CORE ---
+    function switchTab(t) { document.querySelectorAll('.section').forEach(e=>e.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active')); document.getElementById('sec-'+t).classList.add('active'); event.target.classList.add('active'); }
+    let questions=[]; window.onload=()=>{['gh-user','gh-repo','gh-token'].forEach(id=>{if(localStorage.getItem(id))document.getElementById(id).value=localStorage.getItem(id)});}
+    function saveConfig(){['gh-user','gh-repo','gh-token'].forEach(id=>localStorage.setItem(id,document.getElementById(id).value.trim()));alert("Đã lưu!");}
+    function hashPass(){let p=document.getElementById('exam-pass').value.trim();document.getElementById('exam-pass-hash').value=p?CryptoJS.MD5(p).toString():"";}
 
-    // --- 2. IMAGE MANAGER (NEW FEATURE) ---
-    async function loadImagesFromGitHub() {
-        const u = document.getElementById('gh-user').value.trim();
-        const r = document.getElementById('gh-repo').value.trim();
-        const t = document.getElementById('gh-token').value.trim();
-        if(!u||!r||!t) return alert("Vui lòng nhập cấu hình GitHub trước!");
-
-        document.getElementById('img-loading').style.display = 'block';
-        document.getElementById('image-gallery').innerHTML = '';
-
+    // --- DATA FILE MANAGER (NEW) ---
+    async function loadDataFiles() {
+        const u = document.getElementById('gh-user').value.trim(), r = document.getElementById('gh-repo').value.trim(), t = document.getElementById('gh-token').value.trim();
+        if(!u||!r||!t) return alert("Thiếu cấu hình!");
+        document.getElementById('data-list').innerHTML = '<div style="padding:20px; text-align:center">⏳ Đang tải...</div>';
         try {
-            const res = await fetch(`https://api.github.com/repos/${u}/${r}/contents/images`, {
-                headers: { Authorization: `token ${t}` }
-            });
-            if(!res.ok) throw new Error("Không tải được danh sách ảnh (Kiểm tra Token)");
-            
+            const res = await fetch(`https://api.github.com/repos/${u}/${r}/contents/data`, {headers:{Authorization:`token ${t}`}});
+            if(!res.ok) throw new Error("Lỗi tải danh sách");
             const files = await res.json();
-            document.getElementById('img-loading').style.display = 'none';
-
             let html = '';
             files.forEach(f => {
-                // Chỉ hiện file ảnh
-                if(f.name.match(/\.(png|jpg|jpeg|gif)$/i)) {
-                    html += `
-                    <div class="img-card" id="card-${f.sha}">
-                        <a href="${f.download_url}" target="_blank">
-                            <img src="${f.download_url}" class="img-thumb" loading="lazy">
-                        </a>
-                        <div class="img-name" title="${f.name}">${f.name}</div>
-                        <button class="btn-del-img" onclick="deleteImage('${f.path}', '${f.sha}', '${f.name}')">🗑️ Xóa ảnh</button>
+                if(f.name.endsWith('.js') && f.name !== 'list.js') {
+                    html += `<div class="file-item" id="file-${f.sha}">
+                        <div><span class="file-name">📄 ${f.name}</span> <span class="file-size">(${(f.size/1024).toFixed(1)} KB)</span></div>
+                        <button class="btn btn-red" style="padding:5px 10px; font-size:0.9em" onclick="deleteDataFile('${f.path}', '${f.sha}', '${f.name}')">🗑️ Xóa</button>
                     </div>`;
                 }
             });
-            
-            if(html === '') html = '<div style="grid-column: 1/-1; text-align:center">Thư mục images trống.</div>';
-            document.getElementById('image-gallery').innerHTML = html;
-
-        } catch (err) {
-            document.getElementById('img-loading').innerHTML = `<span style="color:red">Lỗi: ${err.message}</span>`;
-        }
+            document.getElementById('data-list').innerHTML = html || '<div style="padding:20px; text-align:center">Không có đề thi nào.</div>';
+        } catch(e) { document.getElementById('data-list').innerHTML = `<div style="color:red; text-align:center">${e.message}</div>`; }
     }
 
-    async function deleteImage(path, sha, name) {
-        if(!confirm(`Bạn chắc chắn muốn xóa ảnh: ${name}?`)) return;
+    async function deleteDataFile(path, sha, name) {
+        if(!confirm(`Xóa vĩnh viễn đề thi: ${name}?\nHành động này cũng sẽ xóa đề khỏi Menu.`)) return;
+        const u = document.getElementById('gh-user').value.trim(), r = document.getElementById('gh-repo').value.trim(), t = document.getElementById('gh-token').value.trim();
         
-        const u = document.getElementById('gh-user').value.trim();
-        const r = document.getElementById('gh-repo').value.trim();
-        const t = document.getElementById('gh-token').value.trim();
-
         try {
-            const res = await fetch(`https://api.github.com/repos/${u}/${r}/contents/${path}`, {
-                method: 'DELETE',
-                headers: { Authorization: `token ${t}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: `Delete ${name}`, sha: sha })
+            // 1. Xóa file .js
+            let res = await fetch(`https://api.github.com/repos/${u}/${r}/contents/${path}`, {
+                method: 'DELETE', headers: {Authorization:`token ${t}`, 'Content-Type':'application/json'},
+                body: JSON.stringify({message:`Del ${name}`, sha:sha})
             });
+            if(!res.ok) throw new Error("Không xóa được file.");
             
-            if(res.ok) {
-                // Xóa thẻ trên giao diện
-                document.getElementById(`card-${sha}`).remove();
-            } else {
-                alert("Lỗi khi xóa ảnh!");
-            }
-        } catch(e) { alert("Lỗi kết nối: " + e.message); }
+            // 2. Cập nhật list.js
+            let idToRemove = name.replace('.js', '');
+            await removeFromList(u, r, t, idToRemove);
+            
+            // Xóa UI
+            document.getElementById(`file-${sha}`).remove();
+            alert("Đã xóa thành công!");
+        } catch(e) { alert("Lỗi: " + e.message); }
     }
 
-    // --- 3. PARSER & EDITOR (GIỮ NGUYÊN TỪ V10) ---
-    function parseData() {
-        let text = document.getElementById('json-input').value.trim();
-        if(!text) return alert("Vui lòng dán code!");
-        let start = text.indexOf('['), end = text.lastIndexOf(']');
-        if(start === -1 || end === -1) { start = text.indexOf('{'); end = text.lastIndexOf('}'); }
-        if(start !== -1 && end > start) text = text.substring(start, end + 1);
-        try {
-            let data = new Function("return " + text)();
-            questions = Array.isArray(data) ? data : (data.questions || []);
-            questions.forEach(q => { 
-                q.id = Date.now() + Math.random(); 
-                q.imgQ = {file:null, url:null}; q.imgE = {file:null, url:null}; 
+    async function removeFromList(u,r,t,id) {
+        let url=`https://api.github.com/repos/${u}/${r}/contents/data/list.js`;
+        let k=await fetch(url,{headers:{Authorization:`token ${t}`}});
+        if(k.ok){
+            let j=await k.json();
+            let l=new Function("return "+decodeURIComponent(escape(atob(j.content))).replace(/window\.EXAM_LIST\s*=\s*/,'').replace(/;$/,''))();
+            let newList = l.filter(x => x.id !== id);
+            let c = btoa(unescape(encodeURIComponent(`window.EXAM_LIST = ${JSON.stringify(newList,null,4)};`)));
+            await fetch(url, {
+                method:'PUT', headers:{Authorization:`token ${t}`,'Content-Type':'application/json'},
+                body: JSON.stringify({message:"Update list (Del)", content:c, sha:j.sha})
             });
-            document.getElementById('editor-area').style.display = 'block';
-            renderEditor();
-        } catch(e) { alert("Lỗi code: " + e.message); }
+        }
     }
 
-    function renderEditor() {
-        const container = document.getElementById('questions-list');
-        container.innerHTML = "";
-        questions.forEach((q, idx) => {
-            let typeLabel = q.type=='mcq'?'TRẮC NGHIỆM':(q.type=='tf'?'ĐÚNG/SAI':'ĐIỀN KHUYẾT');
-            let html = `
-            <div class="q-item">
-                <div class="q-toolbar">
-                    <span style="font-weight:bold; color:#00695c">CÂU ${idx+1} [${typeLabel}]</span>
-                    <button class="btn btn-red" style="padding:5px 10px; font-size:12px" onclick="removeQ(${idx})">Xóa</button>
-                </div>
-                <div class="q-body">
-                    <div class="column col-left">
-                        <div>
-                            <label>Nội dung câu hỏi:</label>
-                            ${renderToolbar(idx, 'q')}
-                            <textarea id="txt-q-${idx}" class="smart-textarea" 
-                                oninput="updatePreview(${idx})"
-                                ondrop="handleDrop(event, ${idx}, 'q')" 
-                                ondragover="event.preventDefault(); this.classList.add('drag-over')"
-                                ondragleave="this.classList.remove('drag-over')"
-                                placeholder="Nhập câu hỏi...">${q.q}</textarea>
-                            <div class="img-status" id="status-q-${idx}"></div>
-                        </div>
-                        <div style="margin-top:10px; border-top:1px dashed #ccc; padding-top:10px">
-                            <label>Lời giải chi tiết:</label>
-                            ${renderToolbar(idx, 'e')}
-                            <textarea id="txt-e-${idx}" class="smart-textarea" 
-                                oninput="updatePreview(${idx})"
-                                ondrop="handleDrop(event, ${idx}, 'e')" 
-                                ondragover="event.preventDefault(); this.classList.add('drag-over')"
-                                ondragleave="this.classList.remove('drag-over')"
-                                placeholder="Nhập lời giải...">${q.explain || ''}</textarea>
-                            <div class="img-status" id="status-e-${idx}"></div>
-                        </div>
-                    </div>
-                    <div class="column col-right">
-                        <div class="preview-label">Xem trước Câu hỏi:</div>
-                        <div class="preview-box" id="preview-q-${idx}"></div>
-                        <div class="preview-label" style="margin-top:20px">Xem trước Lời giải:</div>
-                        <div class="preview-box" id="preview-e-${idx}" style="background:#e8f5e9"></div>
-                    </div>
-                </div>
-            </div>`;
-            container.insertAdjacentHTML('beforeend', html);
-            updatePreview(idx);
-        });
-    }
-
-    function renderToolbar(idx, field) {
-        return `<div class="mini-toolbar">
-            <button class="tool-btn" onclick="insertTag(${idx}, '${field}', '**', '**')" title="In đậm">B</button>
-            <button class="tool-btn" onclick="insertTag(${idx}, '${field}', '*', '*')" title="In nghiêng">I</button>
-            <button class="tool-btn" onclick="insertTag(${idx}, '${field}', '$', '$')" title="Công thức Toán">∑</button>
-            <label class="tool-btn" title="Chèn ảnh" style="cursor:pointer">📷 <input type="file" style="display:none" accept="image/*" onchange="handleFileSelect(this, ${idx}, '${field}')"></label>
-        </div>`;
-    }
-
-    function insertTag(idx, field, sTag, eTag) {
-        let el = document.getElementById(`txt-${field}-${idx}`);
-        let s = el.selectionStart, e = el.selectionEnd;
-        el.value = el.value.substring(0,s) + sTag + el.value.substring(s,e) + eTag + el.value.substring(e);
-        updatePreview(idx);
-    }
-    function handleDrop(e, idx, field) { e.preventDefault(); e.target.classList.remove('drag-over'); if(e.dataTransfer.files[0]) processImage(e.dataTransfer.files[0], idx, field); }
-    function handleFileSelect(input, idx, field) { if(input.files[0]) processImage(input.files[0], idx, field); }
-    function processImage(file, idx, field) {
-        let q = questions[idx]; let key = field === 'q' ? 'imgQ' : 'imgE'; if(!q[key]) q[key] = {};
-        q[key].file = file; q[key].url = URL.createObjectURL(file);
-        let el = document.getElementById(`txt-${field}-${idx}`);
-        if(!el.value.includes('[IMG]')) el.value += "\n[IMG]";
-        document.getElementById(`status-${field}-${idx}`).innerHTML = `<span class="img-badge">🖼️ ${file.name}</span>`;
-        updatePreview(idx);
-    }
-    function updatePreview(idx) {
-        let q = questions[idx];
-        q.q = document.getElementById(`txt-q-${idx}`).value; q.explain = document.getElementById(`txt-e-${idx}`).value;
-        let urlQ = (q.imgQ && q.imgQ.url) ? q.imgQ.url : q.img;
-        let urlE = (q.imgE && q.imgE.url) ? q.imgE.url : null;
-        let htmlQ = renderText(q.q, urlQ);
-        if(q.type==='mcq') htmlQ += `<div style="margin-top:10px; color:#555">` + q.options.map((o,i)=>`<b>${String.fromCharCode(65+i)}.</b> ${o}`).join('<br>') + `</div>`;
-        else if(q.type==='tf') htmlQ += `<table style="width:100%; border-collapse:collapse; margin-top:5px">` + q.items.map((it,i)=>`<tr><td style="border-bottom:1px solid #eee; padding:5px"><b>${i+1})</b> ${it.sub}</td><td style="font-weight:bold; color:${it.ans==='T'?'green':'red'}">${it.ans}</td></tr>`).join('') + `</table>`;
-        else if(q.type==='short') htmlQ += `<div style="color:#1565c0; font-weight:bold; margin-top:5px">ĐS: ${q.ans}</div>`;
-        document.getElementById(`preview-q-${idx}`).innerHTML = htmlQ;
-        document.getElementById(`preview-e-${idx}`).innerHTML = renderText(q.explain, urlE);
-        if(window.MathJax) MathJax.typesetPromise([document.getElementById(`preview-q-${idx}`), document.getElementById(`preview-e-${idx}`)]);
-    }
-    function renderText(txt, imgUrl) {
-        if(!txt) return "";
-        let h = txt.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\*(.*?)\*/g, '<i>$1</i>').replace(/\n/g, '<br>');
-        if(imgUrl) { let tag = `<img src="${imgUrl}" class="preview-img">`; h = h.includes('[IMG]') ? h.replace('[IMG]', tag) : h + `<br>${tag}`; }
-        return h.replace('[IMG]', '');
-    }
-    function removeQ(idx) { if(confirm("Xóa?")) { questions.splice(idx, 1); renderEditor(); } }
-
-    // --- 4. UPLOAD ---
-    async function publishExam() {
-        const u = document.getElementById('gh-user').value.trim();
-        const r = document.getElementById('gh-repo').value.trim();
-        const t = document.getElementById('gh-token').value.trim();
-        const eid = document.getElementById('exam-id').value.trim();
-        const secure = document.getElementById('secure-mode').checked;
-
-        if(!u || !r || !t || !eid) return alert("Thiếu thông tin!");
-        if(!confirm("Xuất bản?")) return;
-
-        const overlay = document.getElementById('loading-overlay');
-        const logBox = document.getElementById('log-text');
-        overlay.style.display = 'flex'; logBox.innerHTML = "⏳ Đang khởi tạo...";
-        function log(msg) { logBox.innerHTML += "\n" + msg; logBox.scrollTop = logBox.scrollHeight; }
-
+    // --- IMAGE MANAGER ---
+    async function loadImagesFromGitHub() {
+        const u=document.getElementById('gh-user').value, r=document.getElementById('gh-repo').value, t=document.getElementById('gh-token').value;
+        if(!u||!r||!t) return alert("Thiếu cấu hình!");
+        document.getElementById('img-loading').style.display='block'; document.getElementById('image-gallery').innerHTML='';
         try {
+            const res = await fetch(`https://api.github.com/repos/${u}/${r}/contents/images`, {headers:{Authorization:`token ${t}`}});
+            const files = await res.json();
+            document.getElementById('img-loading').style.display='none';
+            let html='';
+            files.forEach(f=>{ if(f.name.match(/\.(png|jpg|jpeg|gif)$/i)) html+=`<div class="img-card" id="card-${f.sha}"><a href="${f.download_url}" target="_blank"><img src="${f.download_url}" class="img-thumb" loading="lazy"></a><div class="img-name" title="${f.name}">${f.name}</div><button class="btn-del-img" onclick="deleteImage('${f.path}','${f.sha}','${f.name}')">🗑️ Xóa</button></div>`; });
+            document.getElementById('image-gallery').innerHTML = html||'<div style="grid-column:1/-1;text-align:center">Trống.</div>';
+        } catch(e) { document.getElementById('img-loading').innerHTML=`<span style="color:red">Lỗi: ${e.message}</span>`; }
+    }
+    async function deleteImage(p,s,n){ if(!confirm(`Xóa ảnh ${n}?`))return; const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value; await fetch(`https://api.github.com/repos/${u}/${r}/contents/${p}`,{method:'DELETE',headers:{Authorization:`token ${t}`,'Content-Type':'application/json'},body:JSON.stringify({message:`Del ${n}`,sha:s})}); document.getElementById(`card-${s}`).remove(); }
+
+    // --- EDITOR ---
+    function parseData(){let txt=document.getElementById('json-input').value.trim();if(!txt)return alert("Trống!");let s=txt.indexOf('['),e=txt.lastIndexOf(']');if(s!==-1&&e>s)txt=txt.substring(s,e+1);try{let d=new Function("return "+txt)();questions=Array.isArray(d)?d:(d.questions||[]);questions.forEach(q=>{q.id=Date.now()+Math.random();q.imgQ={};q.imgE={};});document.getElementById('editor-area').style.display='block';renderEditor();}catch(e){alert("Lỗi: "+e.message);}}
+    function renderEditor(){let c=document.getElementById('questions-list');c.innerHTML="";questions.forEach((q,i)=>{c.insertAdjacentHTML('beforeend',`<div class="q-item"><div class="q-toolbar"><span style="font-weight:bold;color:#00695c">CÂU ${i+1} [${q.type}]</span><button class="btn btn-red" style="padding:5px" onclick="removeQ(${i})">Xóa</button></div><div class="q-body"><div class="column col-left"><div><label>Câu hỏi:</label>${tb(i,'q')}<textarea id="tq${i}" class="smart-textarea" oninput="upd(${i})" ondrop="drop(event,${i},'q')" ondragover="event.preventDefault()" placeholder="Nhập câu hỏi...">${q.q}</textarea><div id="sq${i}" class="img-status"></div></div><div style="margin-top:10px;border-top:1px dashed #ccc;padding-top:10px"><label>Lời giải:</label>${tb(i,'e')}<textarea id="te${i}" class="smart-textarea" oninput="upd(${i})" ondrop="drop(event,${i},'e')" ondragover="event.preventDefault()" placeholder="Nhập lời giải...">${q.explain||''}</textarea><div id="se${i}" class="img-status"></div></div></div><div class="column col-right"><div class="preview-label">Xem trước:</div><div class="preview-box" id="pq${i}"></div><div class="preview-label" style="margin-top:20px">Lời giải:</div><div class="preview-box" id="pe${i}" style="background:#e8f5e9"></div></div></div></div>`);upd(i);});}
+    function tb(i,f){return `<div class="mini-toolbar"><button class="tool-btn" onclick="tag(${i},'${f}','**','**')">B</button><button class="tool-btn" onclick="tag(${i},'${f}','$','$')">∑</button><label class="tool-btn">📷<input type="file" style="display:none" accept="image/*" onchange="fileSel(this,${i},'${f}')"></label></div>`;}
+    function tag(i,f,s,e){let el=document.getElementById(`t${f}${i}`),v=el.value,st=el.selectionStart,en=el.selectionEnd;el.value=v.substring(0,st)+s+v.substring(st,en)+e+v.substring(en);upd(i);}
+    function drop(e,i,f){e.preventDefault();if(e.dataTransfer.files[0])procImg(e.dataTransfer.files[0],i,f);}
+    function fileSel(inp,i,f){if(inp.files[0])procImg(inp.files[0],i,f);}
+    function procImg(fl,i,f){let q=questions[i],k=f==='q'?'imgQ':'imgE';q[k].f=fl;q[k].u=URL.createObjectURL(fl);let el=document.getElementById(`t${f}${i}`);if(!el.value.includes('[IMG]'))el.value+="\n[IMG]";document.getElementById(`s${f}${i}`).innerHTML=`<span class="img-badge">🖼️ ${fl.name}</span>`;upd(i);}
+    function upd(i){let q=questions[i];q.q=document.getElementById(`tq${i}`).value;q.explain=document.getElementById(`te${i}`).value;let uQ=(q.imgQ&&q.imgQ.u)?q.imgQ.u:q.img,uE=(q.imgE&&q.imgE.u)?q.imgE.u:null;let hQ=rt(q.q,uQ);if(q.type==='mcq')hQ+=`<div style="margin-top:10px;color:#555">`+q.options.map((o,x)=>`<b>${String.fromCharCode(65+x)}.</b> ${o}`).join('<br>')+`</div>`;else if(q.type==='tf')hQ+=`<table style="width:100%;margin-top:5px">`+q.items.map((t,x)=>`<tr><td><b>${x+1})</b> ${t.sub}</td><td>${t.ans}</td></tr>`).join('')+`</table>`;else hQ+=`<div style="color:blue;font-weight:bold;margin-top:5px">ĐS: ${q.ans}</div>`;document.getElementById(`pq${i}`).innerHTML=hQ;document.getElementById(`pe${i}`).innerHTML=rt(q.explain,uE);if(window.MathJax)MathJax.typesetPromise([document.getElementById(`pq${i}`),document.getElementById(`pe${i}`)]);}
+    function rt(t,u){if(!t)return"";let h=t.replace(/\*\*(.*?)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>');if(u){let g=`<img src="${u}" class="preview-img">`;h=h.includes('[IMG]')?h.replace('[IMG]',g):h+`<br>${g}`;}return h.replace('[IMG]','');}
+    function removeQ(i){if(confirm("Xóa?")){questions.splice(i,1);renderEditor();}}
+
+    // --- UPLOAD ---
+    async function publishExam(){
+        const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value,id=document.getElementById('exam-id').value,sec=document.getElementById('secure-mode').checked;
+        if(!u||!r||!t||!id)return alert("Thiếu info!"); if(!confirm("Xuất bản?"))return;
+        const ov=document.getElementById('loading-overlay'),lb=document.getElementById('log-text');ov.style.display='flex';lb.innerHTML="⏳ Đang xử lý...";
+        function log(m){lb.innerHTML+="\n"+m;lb.scrollTop=lb.scrollHeight;}
+        try{
             saveConfig();
-            for (let i = 0; i < questions.length; i++) {
-                let q = questions[i];
-                if (q.imgQ && q.imgQ.file) {
-                    log(`➤ Upload ảnh câu ${i+1}...`);
-                    q.img = await uploadFile(u,r,t, `images/${eid}-q${i+1}-q-${Date.now()}.png`, q.imgQ.file, true);
-                    q.q = q.q.replace('[IMG]', '');
-                }
-                if (q.imgE && q.imgE.file) {
-                    log(`➤ Upload ảnh lời giải ${i+1}...`);
-                    let url = await uploadFile(u,r,t, `images/${eid}-q${i+1}-e-${Date.now()}.png`, q.imgE.file, true);
-                    let tag = `<div style="text-align:center"><img src="${url}" style="max-width:100%; border-radius:8px; margin:10px 0;"></div>`;
-                    q.explain = q.explain.includes('[IMG]') ? q.explain.replace('[IMG]', tag) : q.explain + tag;
-                }
-                if(q.imgQ) delete q.imgQ; if(q.imgE) delete q.imgE;
+            for(let i=0;i<questions.length;i++){
+                let q=questions[i];
+                if(q.imgQ&&q.imgQ.f){log(`Up ảnh câu ${i+1}...`);q.img=await upF(u,r,t,`images/${id}-q${i+1}-q-${Date.now()}.png`,q.imgQ.f,true);q.q=q.q.replace('[IMG]','');}
+                if(q.imgE&&q.imgE.f){log(`Up ảnh giải ${i+1}...`);let l=await upF(u,r,t,`images/${id}-q${i+1}-e-${Date.now()}.png`,q.imgE.f,true);let g=`<div style="text-align:center"><img src="${l}" style="max-width:100%;border-radius:8px;margin:10px 0"></div>`;q.explain=q.explain.includes('[IMG]')?q.explain.replace('[IMG]',g):q.explain+g;}
+                if(q.imgQ)delete q.imgQ;if(q.imgE)delete q.imgE;
             }
-
-            let finalQ = JSON.parse(JSON.stringify(questions));
-            if (secure) {
-                log("➤ Mã hóa đáp án...");
-                finalQ.forEach(q => {
-                    if(q.type==='mcq') q.ans=CryptoJS.MD5(String(q.ans)).toString();
-                    else if(q.type==='tf') q.items.forEach(it=>it.ans=CryptoJS.MD5(it.ans).toString());
-                    else if(q.type==='short') q.ans=CryptoJS.MD5(String(q.ans).trim().toLowerCase()).toString();
-                });
-            }
-
-            log(`➤ Tạo file dữ liệu...`);
-            const examData = {
-                title: document.getElementById('exam-title').value,
-                subject: document.getElementById('exam-subject').value,
-                grade: document.getElementById('exam-grade').value,
-                time: parseInt(document.getElementById('exam-time').value),
-                password: document.getElementById('exam-pass-hash').value,
-                encrypted: secure,
-                scores: { mcq: 0.25, tf: 1.0, short: 0.5 },
-                questions: finalQ
-            };
-            
-            let c = btoa(unescape(encodeURIComponent(`window.EXAM_DATA = ${JSON.stringify(examData, null, 4)};`)));
-            await uploadFile(u,r,t, `data/${eid}.js`, c, false);
-            
-            log(`➤ Cập nhật danh sách...`);
-            await updateList(u,r,t, eid, examData);
-
-            log(`🎉 THÀNH CÔNG!`);
-            alert("Đã xuất bản xong!");
-            setTimeout(() => { overlay.style.display = 'none'; }, 2000);
-
-        } catch (err) { 
-            log(`❌ LỖI: ${err.message}`); 
-            alert("Có lỗi! Xem chi tiết trong khung đen.");
-            setTimeout(() => { document.getElementById('loading-overlay').style.display='none'; }, 5000);
-        }
+            let fQ=JSON.parse(JSON.stringify(questions));
+            if(sec){log("Mã hóa...");fQ.forEach(q=>{if(q.type==='mcq')q.ans=CryptoJS.MD5(String(q.ans)).toString();else if(q.type==='tf')q.items.forEach(x=>x.ans=CryptoJS.MD5(x.ans).toString());else q.ans=CryptoJS.MD5(String(q.ans).trim().toLowerCase()).toString();});}
+            log("Tạo data...");
+            let dt={title:document.getElementById('exam-title').value,subject:document.getElementById('exam-subject').value,grade:document.getElementById('exam-grade').value,time:parseInt(document.getElementById('exam-time').value),password:document.getElementById('exam-pass-hash').value,encrypted:sec,scores:{mcq:0.25,tf:1.0,short:0.5},questions:fQ};
+            let c=btoa(unescape(encodeURIComponent(`window.EXAM_DATA = ${JSON.stringify(dt,null,4)};`)));
+            await upF(u,r,t,`data/${id}.js`,c,false);
+            log("Update list...");
+            await updateList(u,r,t,id,dt);
+            log("DONE!"); alert("Xong!"); setTimeout(()=>{ov.style.display='none'},2000);
+        }catch(e){log("LỖI: "+e.message);setTimeout(()=>{ov.style.display='none'},5000);}
     }
-
-    async function uploadFile(u, r, t, path, content, isFileObj) {
-        let sha = null;
-        try { let check = await fetch(`https://api.github.com/repos/${u}/${r}/contents/${path}`, {headers:{Authorization:`token ${t}`}}); if(check.ok) sha = (await check.json()).sha; } catch(e){}
-
-        let bodyData;
-        if(isFileObj) {
-            let b64 = await new Promise(resolve => { let fr = new FileReader(); fr.onload = () => resolve(fr.result.split(',')[1]); fr.readAsDataURL(content); });
-            bodyData = { message: "Up Img", content: b64 };
-        } else {
-            bodyData = { message: "Up Data", content: content };
-        }
-        if(sha) bodyData.sha = sha;
-
-        let res = await fetch(`https://api.github.com/repos/${u}/${r}/contents/${path}`, {
-            method: 'PUT', headers: { Authorization: `token ${t}`, 'Content-Type': 'application/json' }, body: JSON.stringify(bodyData)
-        });
-        if(!res.ok) { let err = await res.json(); throw new Error(`GitHub (${res.status}): ${err.message}`); }
-        return `https://raw.githubusercontent.com/${u}/${r}/main/${path}`;
-    }
-
-    async function updateList(u,r,t,id,d) {
-        let url=`https://api.github.com/repos/${u}/${r}/contents/data/list.js`, l=[], s=null;
-        try{let k=await fetch(url,{headers:{Authorization:`token ${t}`}});if(k.ok){let j=await k.json();s=j.sha;l=new Function("return "+decodeURIComponent(escape(atob(j.content))).replace(/window\.EXAM_LIST\s*=\s*/,'').replace(/;$/,''))();}}catch(e){}
-        l=l.filter(x=>x.id!==id); l.unshift({id:id, title:d.title, subject:d.subject, grade:d.grade, time:d.time});
-        let c = btoa(unescape(encodeURIComponent(`window.EXAM_LIST = ${JSON.stringify(l,null,4)};`)));
-        await uploadFile(u,r,t, `data/list.js`, c, false);
-    }
+    async function upF(u,r,t,p,c,isF){let s=null;try{let k=await fetch(`https://api.github.com/repos/${u}/${r}/contents/${p}`,{headers:{Authorization:`token ${t}`}});if(k.ok)s=(await k.json()).sha;}catch(e){}let b={message:"Up",content:isF?await toB64(c):c};if(s)b.sha=s;let rs=await fetch(`https://api.github.com/repos/${u}/${r}/contents/${p}`,{method:'PUT',headers:{Authorization:`token ${t}`,'Content-Type':'application/json'},body:JSON.stringify(b)});if(!rs.ok){let j=await rs.json();throw new Error(j.message);}return `https://raw.githubusercontent.com/${u}/${r}/main/${p}`;}
+    function toB64(f){return new Promise(r=>{let fr=new FileReader();fr.onload=()=>r(fr.result.split(',')[1]);fr.readAsDataURL(f);});}
+    async function updateList(u,r,t,id,d){let url=`https://api.github.com/repos/${u}/${r}/contents/data/list.js`,l=[],s=null;try{let k=await fetch(url,{headers:{Authorization:`token ${t}`}});if(k.ok){let j=await k.json();s=j.sha;l=new Function("return "+decodeURIComponent(escape(atob(j.content))).replace(/window\.EXAM_LIST\s*=\s*/,'').replace(/;$/,''))();}}catch(e){}l=l.filter(x=>x.id!==id);l.unshift({id:id,title:d.title,subject:d.subject,grade:d.grade,time:d.time});let c=btoa(unescape(encodeURIComponent(`window.EXAM_LIST = ${JSON.stringify(l,null,4)};`)));await upF(u,r,t,`data/list.js`,c,false);}
 </script>
 </body>
 </html>
