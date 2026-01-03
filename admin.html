@@ -3,64 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Tool v13.0 (Edit Mode)</title>
+    <title>Admin Tool v13.1 (Final Fix)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
     <style>
-        /* CSS CHUẨN (GIỮ NGUYÊN) */
+        /* GIAO DIỆN CHUẨN */
         body{font-family:'Segoe UI',sans-serif;background:#eceff1;padding:20px;color:#37474f;margin:0}
+        
+        /* LOGIN */
         #login-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:#263238;z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center}
-        .login-box{background:white;padding:40px;border-radius:10px;width:350px;text-align:center}
+        .login-box{background:white;padding:40px;border-radius:10px;width:350px;text-align:center;box-shadow: 0 10px 25px rgba(0,0,0,0.5);}
         .login-box input{width:100%;padding:12px;margin:20px 0;border:1px solid #ccc;border-radius:4px}
-        .login-btn{width:100%;padding:12px;background:#00695c;color:white;border:none;border-radius:4px;cursor:pointer;font-weight:bold}
+        .login-btn{width:100%;padding:12px;background:#00695c;color:white;border:none;border-radius:4px;cursor:pointer;font-weight:bold;transition:0.3s}
+        .login-btn:hover{background:#004d40}
+
+        /* MAIN APP */
         #main-app{display:none;max-width:1200px;margin:0 auto;background:white;padding:25px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.1)}
         h1{color:#00695c;text-align:center;border-bottom:3px solid #004d40;padding-bottom:10px}
+        
+        /* TABS */
         .tab-bar{display:flex;gap:10px;margin-bottom:20px;border-bottom:2px solid #eee;padding-bottom:10px}
         .tab-btn{padding:10px 20px;background:#f5f5f5;border:none;border-radius:6px;cursor:pointer;font-weight:bold;color:#666;transition:0.2s}
         .tab-btn.active{background:#00796b;color:white}
         .section{display:none}.section.active{display:block}
+        
+        /* CONFIG & INPUTS */
         .config-box{background:#e3f2fd;padding:15px;border-radius:8px;margin-bottom:20px;border:1px solid #90caf9}
         .row{display:flex;gap:15px;margin-bottom:10px}.col{flex:1}
         input,select{width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;box-sizing:border-box}
         label{font-weight:600;font-size:0.9em;display:block;margin-bottom:3px}
+        
+        /* EDITOR ITEMS */
         .q-item{border:1px solid #cfd8dc;margin-bottom:30px;border-radius:8px;overflow:hidden;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,0.05)}
         .q-toolbar{background:#f5f5f5;padding:10px 15px;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;align-items:center}
         .q-body{display:flex;border-bottom:1px solid #eee}
         .column{flex:1;padding:15px;display:flex;flex-direction:column;gap:15px}
         .col-left{border-right:1px solid #eee;background:#fafafa}.col-right{background:#fff}
+        
+        /* TOOLS */
         .mini-toolbar{display:flex;gap:5px;margin-bottom:5px}
         .tool-btn{padding:5px 10px;border:1px solid #ccc;background:white;cursor:pointer;border-radius:3px;font-weight:bold;min-width:30px}
         .smart-textarea{width:100%;height:100px;padding:10px;border:1px solid #ccc;border-radius:4px;font-family:monospace;resize:vertical;box-sizing:border-box}
         .smart-textarea:focus{border-color:#009688;outline:none}
+        
+        /* PREVIEW */
         .preview-box{padding:10px;border:1px dashed #ccc;border-radius:4px;min-height:50px;background:white}
         .preview-img{max-width:100%;height:auto;display:block;margin:10px auto;border:1px solid #ddd}
         .img-status{font-size:0.85em;margin-top:5px;display:flex;align-items:center;gap:5px}
         .img-badge{background:#e0f2f1;color:#00695c;padding:2px 6px;border-radius:3px;font-size:0.8em}
+        
+        /* BUTTONS */
         .btn{padding:10px 20px;border:none;border-radius:4px;cursor:pointer;font-weight:bold;color:white}
         .btn-green{background:#2e7d32}.btn-blue{background:#1565c0}.btn-red{background:#c62828}.btn-gray{background:#607d8b}
+        .btn-edit{background:#ff9800;color:white;border:none;padding:5px 15px;border-radius:4px;cursor:pointer;margin-right:10px;font-weight:bold}
+
+        /* LOADING & LOGS */
         #loading-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:99999;display:none;flex-direction:column;justify-content:center;align-items:center;color:white}
         #log-text{margin-top:15px;font-family:monospace;color:#80cbc4;white-space:pre-wrap;max-height:300px;overflow-y:auto;text-align:left;width:80%;background:#263238;padding:15px;border-radius:8px}
+        
+        /* LISTS */
         .img-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:15px;margin-top:15px}
         .img-card{border:1px solid #ddd;border-radius:6px;padding:10px;text-align:center;background:#fff}
         .img-thumb{width:100%;height:100px;object-fit:contain;margin-bottom:5px;border:1px solid #eee}
         .img-name{font-size:0.8em;color:#555;word-break:break-all;height:35px;overflow:hidden}
         .btn-del-img{background:#c62828;color:white;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:0.8em;margin-top:5px;width:100%}
+        
         .file-list{display:flex;flex-direction:column;gap:10px}
         .file-item{display:flex;justify-content:space-between;align-items:center;padding:15px;background:#fafafa;border:1px solid #ddd;border-radius:6px}
-        .btn-edit{background:#ff9800;color:white;border:none;padding:5px 15px;border-radius:4px;cursor:pointer;margin-right:10px;font-weight:bold}
     </style>
 </head>
 <body>
+
 <div id="loading-overlay"><div style="font-size: 50px;">🚀</div><h2 id="loading-title">ĐANG XỬ LÝ...</h2><div id="log-text"></div></div>
-<div id="login-screen"><div class="login-box"><h2 style="color:#00695c">ADMIN LOGIN</h2><input type="password" id="admin-pass-input" placeholder="Mật khẩu" onkeyup="if(event.key==='Enter')checkAdmin()"><button class="login-btn" onclick="checkAdmin()">ĐĂNG NHẬP</button><p id="login-msg" style="color:red;margin-top:10px;display:none">Sai mật khẩu!</p></div></div>
+
+<div id="login-screen">
+    <div class="login-box">
+        <h2 style="color:#00695c">ADMIN LOGIN</h2>
+        <input type="password" id="admin-pass-input" placeholder="Nhập mật khẩu" onkeyup="if(event.key==='Enter')checkAdmin()">
+        <button class="login-btn" onclick="checkAdmin()">ĐĂNG NHẬP</button>
+        <p id="login-msg" style="color:red;margin-top:10px;display:none">Sai mật khẩu!</p>
+    </div>
+</div>
 
 <div id="main-app">
-    <h1>HỆ THỐNG QUẢN TRỊ v13.0 (EDIT MODE)</h1>
+    <h1>HỆ THỐNG QUẢN TRỊ v13.1</h1>
+    
     <div class="config-box">
-        <div class="row"><div class="col"><label>Username</label><input type="text" id="gh-user"></div><div class="col"><label>Repository</label><input type="text" id="gh-repo"></div><div class="col"><label>Token</label><input type="password" id="gh-token"></div></div>
+        <div class="row">
+            <div class="col"><label>Username</label><input type="text" id="gh-user"></div>
+            <div class="col"><label>Repository</label><input type="text" id="gh-repo"></div>
+            <div class="col"><label>Token</label><input type="password" id="gh-token"></div>
+        </div>
         <div class="row"><div class="col"><button class="btn btn-gray" onclick="saveConfig()">💾 Lưu Cấu Hình</button></div></div>
     </div>
+
     <div class="tab-bar">
         <button class="tab-btn active" onclick="switchTab('create')">📝 SOẠN ĐỀ</button>
         <button class="tab-btn" onclick="switchTab('images')">📷 KHO ẢNH</button>
@@ -84,14 +122,16 @@
                 <div class="col"><label>🚫 Đóng đề lúc</label><input type="datetime-local" id="exam-end"></div>
             </div>
             <div class="row" style="margin-top:10px; background:#fff; padding:10px; border-radius:4px">
-                <div class="col"><input type="checkbox" id="secure-mode" style="width:20px;height:20px" checked><label for="secure-mode" style="display:inline;color:#c62828;font-weight:bold;margin-left:5px">🔒 MÃ HÓA ĐÁP ÁN</label></div>
+                <div class="col"><input type="checkbox" id="secure-mode" style="width:20px;height:20px" checked><label for="secure-mode" style="display:inline;color:#c62828;font-weight:bold;margin-left:5px">🔒 MÃ HÓA ĐÁP ÁN (Khuyên dùng)</label></div>
             </div>
         </div>
+
         <div style="margin-bottom:30px">
-            <label>📥 Dán code JSON từ Gemini (Hoặc bấm "Sửa" ở tab Quản lý):</label>
+            <label>📥 Nhập JSON từ Gemini hoặc Bấm "Sửa" ở tab Quản lý:</label>
             <textarea id="json-input" class="smart-textarea" style="height:80px;border:2px dashed #009688" placeholder='[{"type":"mcq",...}]'></textarea>
             <button class="btn btn-blue" style="width:100%;margin-top:10px" onclick="parseData()">⚡ PHÂN TÍCH & SOẠN THẢO</button>
         </div>
+
         <div id="editor-area" style="display:none">
             <h3 style="color:#2e7d32;border-bottom:2px solid #eee;padding-bottom:10px">📝 KHUNG CHỈNH SỬA</h3>
             <div id="questions-list"></div>
@@ -101,85 +141,161 @@
         </div>
     </div>
 
-    <div id="sec-images" class="section"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3>KHO ẢNH</h3><button class="btn btn-green" onclick="loadImagesFromGitHub()">🔄 Tải ảnh</button></div><p id="img-loading" style="display:none">Đang tải...</p><div id="image-gallery" class="img-grid"></div></div>
+    <div id="sec-images" class="section">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3>KHO ẢNH TRÊN GITHUB</h3><button class="btn btn-green" onclick="loadImagesFromGitHub()">🔄 Tải ảnh</button></div>
+        <p id="img-loading" style="display:none;color:#009688">Đang tải...</p>
+        <div id="image-gallery" class="img-grid"></div>
+    </div>
     
     <div id="sec-data" class="section">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3>QUẢN LÝ ĐỀ THI</h3><button class="btn btn-green" onclick="loadDataFiles()">🔄 Tải danh sách</button></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3>DANH SÁCH ĐỀ THI</h3><button class="btn btn-green" onclick="loadDataFiles()">🔄 Tải danh sách</button></div>
         <div id="data-list" class="file-list"></div>
     </div>
 </div>
 
 <script>
-    const ADMIN_HASH = "55ab43ebd8eb2635766c3944cb192e72"; // Mật khẩu mới của thầy
-    function checkAdmin(){if(CryptoJS.MD5(document.getElementById('admin-pass-input').value).toString()===ADMIN_HASH){document.getElementById('login-screen').style.display='none';document.getElementById('main-app').style.display='block';sessionStorage.setItem('admin_ok','1');}else document.getElementById('login-msg').style.display='block';}
+    // --- AUTHENTICATION ---
+    // Mật khẩu: Nguyen@#197@9
+    const ADMIN_HASH = "55ab43ebd8eb2635766c3944cb192e72"; 
+
+    function checkAdmin(){
+        if(CryptoJS.MD5(document.getElementById('admin-pass-input').value).toString()===ADMIN_HASH){
+            document.getElementById('login-screen').style.display='none';
+            document.getElementById('main-app').style.display='block';
+            sessionStorage.setItem('admin_ok','1');
+        } else {
+            document.getElementById('login-msg').style.display='block';
+        }
+    }
     if(sessionStorage.getItem('admin_ok')) checkAdmin();
 
-    function switchTab(t){document.querySelectorAll('.section').forEach(e=>e.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));document.getElementById('sec-'+t).classList.add('active');event.target.classList.add('active');}
-    let questions=[];window.onload=()=>{['gh-user','gh-repo','gh-token'].forEach(id=>{if(localStorage.getItem(id))document.getElementById(id).value=localStorage.getItem(id)});}
-    function saveConfig(){['gh-user','gh-repo','gh-token'].forEach(id=>localStorage.setItem(id,document.getElementById(id).value.trim()));alert("Đã lưu!");}
-    function hashPass(){let p=document.getElementById('exam-pass').value.trim();document.getElementById('exam-pass-hash').value=p?CryptoJS.MD5(p).toString():"";}
+    // --- CORE FUNCTIONS ---
+    function switchTab(t){
+        document.querySelectorAll('.section').forEach(e=>e.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+        document.getElementById('sec-'+t).classList.add('active');
+        event.target.classList.add('active');
+    }
 
-    // --- LOAD FILE ĐỂ SỬA (TÍNH NĂNG MỚI) ---
+    let questions=[];
+    window.onload=()=>{
+        ['gh-user','gh-repo','gh-token'].forEach(id=>{
+            if(localStorage.getItem(id)) document.getElementById(id).value=localStorage.getItem(id)
+        });
+    }
+
+    function saveConfig(){
+        ['gh-user','gh-repo','gh-token'].forEach(id=>localStorage.setItem(id,document.getElementById(id).value.trim()));
+        alert("Đã lưu cấu hình!");
+    }
+
+    function hashPass(){
+        let p=document.getElementById('exam-pass').value.trim();
+        document.getElementById('exam-pass-hash').value=p?CryptoJS.MD5(p).toString():"";
+    }
+
+    // --- HÀM LOAD FILE THÔNG MINH (PHIÊN BẢN MỚI NHẤT) ---
     async function loadExamToEdit(path, name) {
         const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value;
-        const ov=document.getElementById('loading-overlay'); ov.style.display='flex'; document.getElementById('log-text').innerText=`⏳ Đang tải đề: ${name}...`;
+        const ov=document.getElementById('loading-overlay'); 
+        ov.style.display='flex'; 
+        document.getElementById('log-text').innerText=`⏳ Đang tải và giải mã: ${name}...`;
 
         try {
             const res = await fetch(`https://api.github.com/repos/${u}/${r}/contents/${path}`, {headers:{Authorization:`token ${t}`}});
-            if(!res.ok) throw new Error("Không tải được file");
+            if(!res.ok) throw new Error("Không tải được file (Token lỗi hoặc file không tồn tại)");
             const json = await res.json();
             const content = decodeURIComponent(escape(atob(json.content)));
             
-            // Xử lý nội dung JS để lấy JSON
-            let jsonStr = content.replace(/window\.EXAM_DATA\s*=\s*/, '').replace(/;$/, '');
+            // 1. Cắt lấy JSON chuẩn (Fix lỗi ký tự thừa)
+            const firstBrace = content.indexOf('{');
+            const lastBrace = content.lastIndexOf('}');
+            if(firstBrace === -1) throw new Error("File hỏng (Không tìm thấy JSON)");
+            let jsonStr = content.substring(firstBrace, lastBrace + 1);
+            
             let data = JSON.parse(jsonStr);
 
-            // 1. Đổ dữ liệu vào Form
+            // 2. GIẢI MÃ NGƯỢC (ĐỂ SỬA)
+            if(data.encrypted) {
+                const HASH_MAP = {
+                    "cfcd208495d565ef66e7dff9f98764da": 0,   // A
+                    "c4ca4238a0b923820dcc509a6f75849b": 1,   // B
+                    "c81e728d9d4c2f636f067f89cc14862c": 2,   // C
+                    "eccbc87e4b5ce2fe28308fd9f2a7baf3": 3,   // D
+                    "b9ece18c950afbfa6b0fdbfa4ff731d3": "T", // Đúng
+                    "800618943025315f869e4e1f09471012": "F"  // Sai
+                };
+
+                (data.questions || []).forEach(q => {
+                    if(q.type === 'mcq' && HASH_MAP[q.ans] !== undefined) q.ans = HASH_MAP[q.ans];
+                    else if(q.type === 'tf') q.items.forEach(it => { if(HASH_MAP[it.ans]) it.ans = HASH_MAP[it.ans]; });
+                    else if(q.type === 'short') q.ans = ""; // Xóa trắng short answer vì ko dịch ngược được
+                });
+                console.log("Đã giải mã dữ liệu.");
+            }
+
+            // 3. Đổ dữ liệu vào Form
             document.getElementById('exam-id').value = name.replace('.js','');
-            document.getElementById('exam-title').value = data.title;
-            document.getElementById('exam-subject').value = data.subject;
-            document.getElementById('exam-grade').value = data.grade;
-            document.getElementById('exam-time').value = data.time;
+            document.getElementById('exam-title').value = data.title || "";
+            document.getElementById('exam-subject').value = data.subject || "Toan";
+            document.getElementById('exam-grade').value = data.grade || "12";
+            document.getElementById('exam-time').value = data.time || 45;
             document.getElementById('exam-pass-hash').value = data.password || "";
             document.getElementById('secure-mode').checked = data.encrypted;
             if(data.start) document.getElementById('exam-start').value = data.start;
             if(data.end) document.getElementById('exam-end').value = data.end;
 
-            // 2. Đổ câu hỏi vào Editor
-            questions = data.questions;
-            questions.forEach(q => { if(!q.imgQ) q.imgQ={}; if(!q.imgE) q.imgE={}; }); // Init img obj
+            // 4. Đổ câu hỏi vào Editor
+            questions = data.questions || [];
+            questions.forEach(q => { if(!q.imgQ) q.imgQ={}; if(!q.imgE) q.imgE={}; }); 
             renderEditor();
 
-            // 3. Chuyển tab
+            // 5. Chuyển giao diện
             ov.style.display='none';
-            switchTab('create');
-            document.querySelector('.tab-btn.active').classList.remove('active');
-            document.querySelectorAll('.tab-btn')[0].classList.add('active');
-            alert(`Đã tải xong đề "${data.title}". Hãy sửa và bấm Xuất bản để cập nhật.`);
+            switchTab('create'); 
+            window.scrollTo({ top: 0, behavior: 'smooth' });
 
-        } catch(e) { ov.style.display='none'; alert("Lỗi tải đề: " + e.message); }
+            if(data.encrypted && questions.some(q=>q.type==='short')) {
+                alert("LƯU Ý: Câu 'Trả lời ngắn' đã bị mã hóa. Thầy cần nhập lại đáp án mới cho các câu đó.");
+            }
+
+        } catch(e) { 
+            ov.style.display='none'; 
+            alert("❌ Lỗi: " + e.message); 
+        }
     }
 
-    // --- EDITOR ---
-    function parseData(){let t=document.getElementById('json-input').value.trim();if(!t)return alert("Trống!");let s=t.indexOf('['),e=t.lastIndexOf(']');if(s!==-1&&e>s)t=t.substring(s,e+1);try{let d=new Function("return "+t)();questions=Array.isArray(d)?d:(d.questions||[]);questions.forEach(q=>{q.id=Date.now()+Math.random();q.imgQ={};q.imgE={}});document.getElementById('editor-area').style.display='block';renderEditor();}catch(z){alert("Lỗi: "+z.message);}}
+    // --- EDITOR LOGIC ---
+    function parseData(){
+        let t=document.getElementById('json-input').value.trim();
+        if(!t)return alert("Trống!");
+        let s=t.indexOf('['),e=t.lastIndexOf(']');
+        if(s!==-1&&e>s)t=t.substring(s,e+1);
+        try{
+            let d=new Function("return "+t)();
+            questions=Array.isArray(d)?d:(d.questions||[]);
+            questions.forEach(q=>{q.id=Date.now()+Math.random();q.imgQ={};q.imgE={}});
+            document.getElementById('editor-area').style.display='block';
+            renderEditor();
+        }catch(z){alert("Lỗi: "+z.message);}
+    }
     
     function renderEditor(){
         let c=document.getElementById('questions-list');c.innerHTML="";
         questions.forEach((q,i)=>{
-            // RENDER LẠI CÁC Ô CHỌN ĐÁP ÁN ĐỂ SỬA
             let ansUI = "";
             if(q.type === 'mcq') {
                 ansUI = `<div style="margin-top:5px; background:#e0f7fa; padding:5px; border-radius:4px">
                     <label>Đáp án đúng:</label> 
                     <select id="ans-sel-${i}" onchange="updateAns(${i}, this.value)">
-                        <option value="0" ${checkSel(q.ans,0)}>A</option>
-                        <option value="1" ${checkSel(q.ans,1)}>B</option>
-                        <option value="2" ${checkSel(q.ans,2)}>C</option>
-                        <option value="3" ${checkSel(q.ans,3)}>D</option>
+                        <option value="0" ${q.ans==0?'selected':''}>A</option>
+                        <option value="1" ${q.ans==1?'selected':''}>B</option>
+                        <option value="2" ${q.ans==2?'selected':''}>C</option>
+                        <option value="3" ${q.ans==3?'selected':''}>D</option>
                     </select>
                 </div>`;
             } else if (q.type === 'short') {
-                ansUI = `<div style="margin-top:5px"><label>Đáp án đúng:</label> <input type="text" value="${q.ans}" onchange="questions[${i}].ans = this.value" style="width:200px"></div>`;
+                ansUI = `<div style="margin-top:5px"><label>Đáp án đúng:</label> <input type="text" value="${q.ans||''}" onchange="questions[${i}].ans = this.value" style="width:200px"></div>`;
             }
 
             c.insertAdjacentHTML('beforeend',`<div class="q-item"><div class="q-toolbar"><span style="font-weight:bold;color:#00695c">CÂU ${i+1}</span><button class="btn btn-red" style="padding:5px" onclick="removeQ(${i})">Xóa</button></div><div class="q-body"><div class="column col-left"><div><label>Câu hỏi:</label>${tb(i,'q')}<textarea id="tq${i}" class="smart-textarea" oninput="upd(${i})" ondrop="drop(event,${i},'q')" ondragover="event.preventDefault()">${q.q}</textarea><div id="sq${i}" class="img-status"></div>${ansUI}</div><div style="margin-top:10px;border-top:1px dashed #ccc;padding-top:10px"><label>Lời giải:</label>${tb(i,'e')}<textarea id="te${i}" class="smart-textarea" oninput="upd(${i})" ondrop="drop(event,${i},'e')" ondragover="event.preventDefault()">${q.explain||''}</textarea><div id="se${i}" class="img-status"></div></div></div><div class="column col-right"><div class="preview-label">Xem trước:</div><div class="preview-box" id="pq${i}"></div><div class="preview-label" style="margin-top:20px">Lời giải:</div><div class="preview-box" id="pe${i}" style="background:#e8f5e9"></div></div></div></div>`);upd(i);
@@ -187,12 +303,6 @@
         document.getElementById('editor-area').style.display='block';
     }
 
-    // Hàm hỗ trợ check selected khi load file cũ
-    function checkSel(val, opt) {
-        // Nếu file chưa mã hóa thì so sánh số, nếu đã mã hóa (chuỗi dài) thì không auto-select được (chấp nhận phải chọn lại)
-        if (val == opt) return "selected";
-        return ""; 
-    }
     function updateAns(idx, val) { questions[idx].ans = parseInt(val); }
 
     function tb(i,f){return `<div class="mini-toolbar"><button class="tool-btn" onclick="tag(${i},'${f}','**','**')">B</button><button class="tool-btn" onclick="tag(${i},'${f}','$','$')">∑</button><label class="tool-btn">📷<input type="file" style="display:none" accept="image/*" onchange="fileSel(this,${i},'${f}')"></label></div>`;}
@@ -204,7 +314,7 @@
     function rt(t,u){if(!t)return"";let h=t.replace(/\*\*(.*?)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>');if(u){let g=`<img src="${u}" class="preview-img">`;h=h.includes('[IMG]')?h.replace('[IMG]',g):h+`<br>${g}`;}return h.replace('[IMG]','');}
     function removeQ(i){if(confirm("Xóa?")){questions.splice(i,1);renderEditor();}}
 
-    // --- UPLOAD ---
+    // --- UPLOAD SYSTEM ---
     async function publishExam(){
         const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value,id=document.getElementById('exam-id').value;
         if(!u||!r||!t||!id)return alert("Thiếu info!"); if(!confirm("Xuất bản/Cập nhật?"))return;
@@ -246,7 +356,7 @@
     function toB64(f){return new Promise(r=>{let fr=new FileReader();fr.onload=()=>r(fr.result.split(',')[1]);fr.readAsDataURL(f);});}
     async function updateList(u,r,t,id,d){let url=`https://api.github.com/repos/${u}/${r}/contents/data/list.js`,l=[],s=null;try{let k=await fetch(url,{headers:{Authorization:`token ${t}`}});if(k.ok){let j=await k.json();s=j.sha;l=new Function("return "+decodeURIComponent(escape(atob(j.content))).replace(/window\.EXAM_LIST\s*=\s*/,'').replace(/;$/,''))();}}catch(e){}l=l.filter(x=>x.id!==id);l.unshift({id:id,title:d.title,subject:d.subject,grade:d.grade,time:d.time});let c=btoa(unescape(encodeURIComponent(`window.EXAM_LIST = ${JSON.stringify(l,null,4)};`)));await upF(u,r,t,`data/list.js`,c,false);}
     
-    // LOAD LIST
+    // --- LOAD LIST & FILES ---
     async function loadDataFiles(){const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value;if(!u||!r||!t)return alert("Thiếu info!");document.getElementById('data-list').innerHTML='Loading...';try{const res=await fetch(`https://api.github.com/repos/${u}/${r}/contents/data`,{headers:{Authorization:`token ${t}`}});const f=await res.json();let h='';f.forEach(x=>{if(x.name.endsWith('.js')&&x.name!=='list.js')h+=`<div class="file-item"><span>📄 ${x.name}</span><div><button class="btn-edit" onclick="loadExamToEdit('${x.path}','${x.name}')">✏️ Sửa</button><button class="btn btn-red" onclick="deleteDataFile('${x.path}','${x.sha}','${x.name}')">🗑️</button></div></div>`});document.getElementById('data-list').innerHTML=h||'Trống';}catch(e){alert(e.message);}}
     async function deleteDataFile(p,s,n){if(!confirm(`Xóa ${n}?`))return;const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value;await fetch(`https://api.github.com/repos/${u}/${r}/contents/${p}`,{method:'DELETE',headers:{Authorization:`token ${t}`,'Content-Type':'application/json'},body:JSON.stringify({message:`Del ${n}`,sha:s})});let id=n.replace('.js','');await removeFromList(u,r,t,id);alert("Xong!");loadDataFiles();}
     async function loadImagesFromGitHub(){const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value;if(!u||!r||!t)return alert("Thiếu info!");document.getElementById('img-loading').style.display='block';document.getElementById('image-gallery').innerHTML='';try{const res=await fetch(`https://api.github.com/repos/${u}/${r}/contents/images`,{headers:{Authorization:`token ${t}`}});const f=await res.json();document.getElementById('img-loading').style.display='none';let h='';f.forEach(x=>{if(x.name.match(/\.(png|jpg|jpeg|gif)$/i))h+=`<div class="img-card" id="c-${x.sha}"><a href="${x.download_url}" target="_blank"><img src="${x.download_url}" class="img-thumb"></a><div class="img-name">${x.name}</div><button class="btn-del-img" onclick="delImg('${x.path}','${x.sha}')">Xóa</button></div>`});document.getElementById('image-gallery').innerHTML=h||'Trống';}catch(e){alert(e.message);}}
