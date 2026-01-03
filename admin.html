@@ -400,7 +400,16 @@
             alert("Xuất bản xong!");
             setTimeout(() => { overlay.style.display = 'none'; }, 2000);
 
-        } catch (err) { log(`❌ LỖI: ${err.message}`); alert("Lỗi upload!"); }
+        } catch (err) { 
+            log(`❌ LỖI: ${err.message}`); 
+            alert("Có lỗi xảy ra! Vui lòng kiểm tra lại (Xem chi tiết trong khung đen).");
+            
+            // THÊM DÒNG NÀY ĐỂ TẮT MÀN HÌNH CHỜ KHI LỖI:
+            setTimeout(() => { 
+                document.getElementById('loading-overlay').style.display = 'none'; 
+            }, 3000); // Tự tắt sau 3 giây để thầy kịp đọc lỗi
+        }
+    }
     }
 
     async function uploadImgFile(user, repo, token, examId, qIdx, suffix, file) {
