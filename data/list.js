@@ -1,5 +1,12 @@
 window.EXAM_LIST = [
     {
+        "id": "2-Nguyenham-de2-25-26",
+        "title": "Ôn tập bài Nguyên Hàm, Đề Số 2, Năm 2025-2026",
+        "subject": "Toan",
+        "grade": "12",
+        "time": 60
+    },
+    {
         "id": "2-Nguyenham-de1-25-26",
         "title": "Ôn tập bài Nguyên Hàm, Đề Số 1, Năm 2025-2026",
         "subject": "Toan",
