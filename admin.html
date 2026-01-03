@@ -3,82 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Tool v14.0 (VSAT Matching Support)</title>
+    <title>Admin Tool v18.0 (AI Powered)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
     <style>
-        /* GIAO DIỆN CHUẨN */
+        /* GIAO DIỆN CHUẨN MỰC */
         body{font-family:'Segoe UI',sans-serif;background:#eceff1;padding:20px;color:#37474f;margin:0}
         
         /* LOGIN */
         #login-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:#263238;z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center}
-        .login-box{background:white;padding:40px;border-radius:10px;width:350px;text-align:center;box-shadow: 0 10px 25px rgba(0,0,0,0.5);}
+        .login-box{background:white;padding:40px;border-radius:10px;width:350px;text-align:center;box-shadow:0 10px 25px rgba(0,0,0,0.5)}
         .login-box input{width:100%;padding:12px;margin:20px 0;border:1px solid #ccc;border-radius:4px}
         .login-btn{width:100%;padding:12px;background:#00695c;color:white;border:none;border-radius:4px;cursor:pointer;font-weight:bold;transition:0.3s}
         .login-btn:hover{background:#004d40}
 
-        /* MAIN APP */
+        /* KHUNG CHÍNH */
         #main-app{display:none;max-width:1200px;margin:0 auto;background:white;padding:25px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.1)}
         h1{color:#00695c;text-align:center;border-bottom:3px solid #004d40;padding-bottom:10px}
         
-        /* TABS */
-        .tab-bar{display:flex;gap:10px;margin-bottom:20px;border-bottom:2px solid #eee;padding-bottom:10px}
-        .tab-btn{padding:10px 20px;background:#f5f5f5;border:none;border-radius:6px;cursor:pointer;font-weight:bold;color:#666;transition:0.2s}
-        .tab-btn.active{background:#00796b;color:white}
-        .section{display:none}.section.active{display:block}
-        
-        /* CONFIG */
+        /* INPUT & BUTTON */
         .config-box{background:#e3f2fd;padding:15px;border-radius:8px;margin-bottom:20px;border:1px solid #90caf9}
         .row{display:flex;gap:15px;margin-bottom:10px}.col{flex:1}
-        input,select{width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;box-sizing:border-box}
+        input,select,textarea{width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;box-sizing:border-box}
         label{font-weight:600;font-size:0.9em;display:block;margin-bottom:3px}
+        .btn{padding:10px 20px;border:none;border-radius:4px;cursor:pointer;font-weight:bold;color:white}
+        .btn-green{background:#2e7d32}.btn-blue{background:#1565c0}.btn-red{background:#c62828}.btn-gray{background:#607d8b}
+        .btn-purple{background:#7b1fa2}.btn-purple:hover{background:#4a148c}
         
-        /* EDITOR */
+        /* TABS */
+        .tab-bar{display:flex;gap:10px;margin-bottom:20px;border-bottom:2px solid #eee;padding-bottom:10px}
+        .tab-btn{padding:10px 20px;background:#f5f5f5;border:none;border-radius:6px;cursor:pointer;font-weight:bold;color:#666}.tab-btn.active{background:#00796b;color:white}
+        .section{display:none}.section.active{display:block}
+
+        /* AI BOX */
+        .ai-box { background: linear-gradient(135deg, #f3e5f5, #e1bee7); padding: 20px; border-radius: 12px; border: 2px dashed #9c27b0; margin-bottom: 25px; text-align: center; position: relative; overflow: hidden; }
+        .ai-box::before { content: "✨ AI GEMINI PRO"; position: absolute; top: 0; right: 0; background: #9c27b0; color: white; padding: 5px 15px; font-size: 0.8em; border-bottom-left-radius: 10px; }
+        .ai-btn { padding: 15px 30px; background: #8e24aa; color: white; border:none; border-radius: 50px; font-size: 1.1em; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(142, 36, 170, 0.3); transition: 0.3s; }
+        .ai-btn:hover { transform: scale(1.05); background: #7b1fa2; }
+
+        /* EDITOR UI */
         .q-item{border:1px solid #cfd8dc;margin-bottom:30px;border-radius:8px;overflow:hidden;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,0.05)}
         .q-toolbar{background:#f5f5f5;padding:10px 15px;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;align-items:center}
         .q-body{display:flex;border-bottom:1px solid #eee}
         .column{flex:1;padding:15px;display:flex;flex-direction:column;gap:15px}
         .col-left{border-right:1px solid #eee;background:#fafafa}.col-right{background:#fff}
         
-        .mini-toolbar{display:flex;gap:5px;margin-bottom:5px}
-        .tool-btn{padding:5px 10px;border:1px solid #ccc;background:white;cursor:pointer;border-radius:3px;font-weight:bold;min-width:30px}
-        .smart-textarea{width:100%;height:100px;padding:10px;border:1px solid #ccc;border-radius:4px;font-family:monospace;resize:vertical;box-sizing:border-box}
-        
-        /* MATCHING STYLES (NEW) */
+        /* MATCHING UI */
         .match-edit-row { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
-        .match-edit-label { font-weight: bold; min-width: 20px; color: #00695c; }
         .match-edit-input { flex: 1; padding: 5px; border: 1px solid #ccc; border-radius: 4px; }
         .match-section { background: #f1f8e9; padding: 10px; border-radius: 6px; margin-top: 10px; border: 1px solid #c5e1a5; }
-        .match-header { font-weight: bold; color: #33691e; margin-bottom: 5px; border-bottom: 1px dashed #a5d6a7; padding-bottom: 3px; display: flex; justify-content: space-between; }
-        
+
         /* PREVIEW */
         .preview-box{padding:10px;border:1px dashed #ccc;border-radius:4px;min-height:50px;background:white}
         .preview-img{max-width:100%;height:auto;display:block;margin:10px auto;border:1px solid #ddd}
-        .img-status{font-size:0.85em;margin-top:5px;display:flex;align-items:center;gap:5px}
-        .img-badge{background:#e0f2f1;color:#00695c;padding:2px 6px;border-radius:3px;font-size:0.8em}
-        
-        .btn{padding:10px 20px;border:none;border-radius:4px;cursor:pointer;font-weight:bold;color:white}
-        .btn-green{background:#2e7d32}.btn-blue{background:#1565c0}.btn-red{background:#c62828}.btn-gray{background:#607d8b}
-        .btn-sm{padding: 2px 8px; font-size: 0.8em;}
-        .btn-edit{background:#ff9800;color:white;border:none;padding:5px 15px;border-radius:4px;cursor:pointer;margin-right:10px;font-weight:bold}
 
+        /* LOADING & QR MODAL */
         #loading-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:99999;display:none;flex-direction:column;justify-content:center;align-items:center;color:white}
         #log-text{margin-top:15px;font-family:monospace;color:#80cbc4;white-space:pre-wrap;max-height:300px;overflow-y:auto;text-align:left;width:80%;background:#263238;padding:15px;border-radius:8px}
         
-        .img-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:15px;margin-top:15px}
-        .img-card{border:1px solid #ddd;border-radius:6px;padding:10px;text-align:center;background:#fff}
-        .img-thumb{width:100%;height:100px;object-fit:contain;margin-bottom:5px;border:1px solid #eee}
-        .btn-del-img{background:#c62828;color:white;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:0.8em;margin-top:5px;width:100%}
+        .modal{display:none;position:fixed;z-index:10000;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);align-items:center;justify-content:center}
+        .modal-content{background-color:white;padding:20px;border-radius:10px;text-align:center;box-shadow:0 5px 20px rgba(0,0,0,0.3)}
+        #qrcode{margin:20px auto;display:flex;justify-content:center}
         
         .file-list{display:flex;flex-direction:column;gap:10px}
         .file-item{display:flex;justify-content:space-between;align-items:center;padding:15px;background:#fafafa;border:1px solid #ddd;border-radius:6px}
+        .btn-edit{background:#ff9800;color:white;border:none;padding:5px 15px;border-radius:4px;cursor:pointer;margin-right:5px}
+        .btn-qr{background:#3f51b5;color:white;border:none;padding:5px 15px;border-radius:4px;cursor:pointer;margin-right:5px}
+        .btn-del-img{background:#c62828;color:white;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:0.8em;margin-top:5px;width:100%}
+        .img-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:15px;margin-top:15px}
+        .img-card{border:1px solid #ddd;border-radius:6px;padding:10px;text-align:center;background:#fff}
+        .img-thumb{width:100%;height:100px;object-fit:contain;margin-bottom:5px}
     </style>
 </head>
 <body>
 
-<div id="loading-overlay"><div style="font-size: 50px;">🚀</div><h2 id="loading-title">ĐANG XỬ LÝ...</h2><div id="log-text"></div></div>
+<div id="loading-overlay"><div style="font-size: 50px;">🤖</div><h2 id="loading-title">AI ĐANG SUY NGHĨ...</h2><div id="log-text"></div></div>
+
+<div id="qr-modal" class="modal">
+    <div class="modal-content">
+        <h3 style="color:#3f51b5">MÃ QR ĐỀ THI</h3>
+        <p id="qr-link-text" style="font-size:0.8em;color:#666;margin-bottom:10px"></p>
+        <div id="qrcode"></div>
+        <button class="btn btn-red" onclick="document.getElementById('qr-modal').style.display='none'" style="margin-top:15px">Đóng</button>
+    </div>
+</div>
 
 <div id="login-screen">
     <div class="login-box">
@@ -90,61 +101,89 @@
 </div>
 
 <div id="main-app">
-    <h1>HỆ THỐNG QUẢN TRỊ v14.0</h1>
+    <h1>HỆ THỐNG QUẢN TRỊ v18.0 (AI SUPER)</h1>
     
     <div class="config-box">
         <div class="row">
-            <div class="col"><label>Username</label><input type="text" id="gh-user"></div>
+            <div class="col"><label>GitHub Username</label><input type="text" id="gh-user"></div>
             <div class="col"><label>Repository</label><input type="text" id="gh-repo"></div>
-            <div class="col"><label>Token</label><input type="password" id="gh-token"></div>
+            <div class="col"><label>GitHub Token</label><input type="password" id="gh-token"></div>
         </div>
-        <div class="row"><div class="col"><button class="btn btn-gray" onclick="saveConfig()">💾 Lưu Cấu Hình</button></div></div>
+        
+        <div class="row" style="margin-top:15px; border-top:1px dashed #bbb; padding-top:15px">
+            <div class="col" style="flex:2">
+                <label style="color:#7b1fa2">✨ Gemini API Key (Dán Key thầy vừa lấy vào đây)</label>
+                <input type="password" id="gemini-key" placeholder="AIza..." style="border:2px solid #ce93d8; background:#f3e5f5">
+            </div>
+            <div class="col">
+                <label>Ngân hàng nhận tiền (VD: MB)</label>
+                <input type="text" id="bank-id" placeholder="MB">
+            </div>
+            <div class="col">
+                <label>Số Tài Khoản</label>
+                <input type="text" id="bank-acc">
+            </div>
+        </div>
+        <div class="row" style="margin-top:10px">
+            <div class="col"><button class="btn btn-gray" onclick="saveConfig()">💾 LƯU TẤT CẢ CẤU HÌNH</button></div>
+        </div>
     </div>
 
     <div class="tab-bar">
-        <button class="tab-btn active" onclick="switchTab('create')">📝 SOẠN ĐỀ</button>
+        <button class="tab-btn active" onclick="switchTab('create')">📝 SOẠN ĐỀ (AI)</button>
+        <button class="tab-btn" onclick="switchTab('data')">📂 QUẢN LÝ & QR</button>
         <button class="tab-btn" onclick="switchTab('images')">📷 KHO ẢNH</button>
-        <button class="tab-btn" onclick="switchTab('data')">📂 QUẢN LÝ ĐỀ</button>
     </div>
 
     <div id="sec-create" class="section active">
+        <div class="ai-box">
+            <h3 style="margin-top:0; color:#6a1b9a">📸 QUÉT ẢNH RA ĐỀ THI (HỖ TRỢ VSAT)</h3>
+            <p style="color:#555; margin-bottom:15px">AI sẽ tự động đọc Trắc nghiệm, Đúng/Sai, Ghép cột từ ảnh chụp.</p>
+            <input type="file" id="ai-img-input" style="display:none" accept="image/*" onchange="processImageWithGemini(this)">
+            <button class="ai-btn" onclick="document.getElementById('ai-img-input').click()">CHỌN ẢNH ĐỀ THI NGAY</button>
+        </div>
+
         <div class="config-box" style="background:#fff3e0;border-color:#ffe0b2">
-            <div class="row">
-                <div class="col"><label>Môn</label><select id="exam-subject"><option value="Toan">Toán</option><option value="Su">Lịch Sử</option><option value="Ly">Vật Lý</option><option value="Hoa">Hóa</option><option value="Sinh">Sinh</option><option value="Dia">Địa</option><option value="Anh">Anh</option><option value="GDCD">GDCD</option></select></div>
-                <div class="col"><label>Khối</label><select id="exam-grade"><option value="12">12</option><option value="11">11</option><option value="10">10</option><option value="12OT">Ôn Thi</option></select></div>
-                <div class="col"><label>Thời gian (phút)</label><input type="number" id="exam-time" value="45"></div>
-            </div>
             <div class="row">
                 <div class="col"><label>Mã Đề (ID)</label><input type="text" id="exam-id" placeholder="de-toan-hk1" style="font-weight:bold;color:#c62828"></div>
                 <div class="col" style="flex:2"><label>Tiêu Đề</label><input type="text" id="exam-title" placeholder="Kiểm tra..."></div>
+            </div>
+            <div class="row">
+                <div class="col"><label>Môn</label><select id="exam-subject"><option value="Toan">Toán</option><option value="Ly">Vật Lý</option><option value="Hoa">Hóa</option><option value="Sinh">Sinh</option><option value="Su">Sử</option><option value="Dia">Địa</option><option value="Anh">Anh</option><option value="GDCD">GDCD</option></select></div>
+                <div class="col"><label>Thời gian (phút)</label><input type="number" id="exam-time" value="45"></div>
+                <div class="col"><label style="color:#d32f2f">💰 Giá bán (VNĐ)</label><input type="number" id="exam-price" placeholder="VD: 5000"></div>
+            </div>
+            <div class="row">
+                <div class="col"><label>Mở lúc</label><input type="datetime-local" id="exam-start"></div>
+                <div class="col"><label>Đóng lúc</label><input type="datetime-local" id="exam-end"></div>
                 <div class="col"><label>Mật khẩu Đề</label><input type="text" id="exam-pass" oninput="hashPass()"><input type="hidden" id="exam-pass-hash"></div>
             </div>
-            <div class="row" style="background:#fff; padding:10px; border-radius:4px; margin-top:10px">
-                <div class="col"><label>⏰ Mở đề lúc</label><input type="datetime-local" id="exam-start"></div>
-                <div class="col"><label>🚫 Đóng đề lúc</label><input type="datetime-local" id="exam-end"></div>
-            </div>
-            <div class="row" style="margin-top:10px; background:#fff; padding:10px; border-radius:4px">
-                <div class="col"><input type="checkbox" id="secure-mode" style="width:20px;height:20px" checked><label for="secure-mode" style="display:inline;color:#c62828;font-weight:bold;margin-left:5px">🔒 MÃ HÓA ĐÁP ÁN</label></div>
+            <div class="row" style="margin-top:5px">
+                <div class="col"><input type="checkbox" id="secure-mode" checked><label for="secure-mode" style="display:inline;margin-left:5px">Mã hóa đáp án</label></div>
             </div>
         </div>
 
         <div style="margin-bottom:30px">
-            <label>📥 JSON từ Gemini (Dạng MCQ, Match...):</label>
-            <textarea id="json-input" class="smart-textarea" style="height:80px;border:2px dashed #009688" placeholder='[{"type":"match",...}]'></textarea>
-            <button class="btn btn-blue" style="width:100%;margin-top:10px" onclick="parseData()">⚡ PHÂN TÍCH & SOẠN THẢO</button>
+            <label>JSON Data (AI sẽ tự điền vào đây):</label>
+            <textarea id="json-input" class="smart-textarea" style="height:100px;border:2px dashed #9c27b0" placeholder="Kết quả AI sẽ hiện ở đây..."></textarea>
+            <button class="btn btn-blue" style="width:100%;margin-top:10px" onclick="parseData()">⚡ PHÂN TÍCH THỦ CÔNG</button>
         </div>
 
         <div id="editor-area" style="display:none">
-            <h3 style="color:#2e7d32;border-bottom:2px solid #eee;padding-bottom:10px">📝 KHUNG CHỈNH SỬA</h3>
+            <h3 style="color:#2e7d32;border-bottom:2px solid #eee;padding-bottom:10px">📝 KHUNG CHỈNH SỬA CHI TIẾT</h3>
             <div id="questions-list"></div>
             <div style="text-align:right;margin-top:30px;padding-top:20px;border-top:1px solid #ccc">
-                <button class="btn btn-red" style="font-size:1.2em;padding:15px 40px" onclick="publishExam()">🚀 XUẤT BẢN / CẬP NHẬT</button>
+                <button class="btn btn-red" style="font-size:1.2em;padding:15px 40px" onclick="publishExam()">🚀 XUẤT BẢN ĐỀ THI</button>
             </div>
         </div>
     </div>
 
-    <div id="sec-images" class="section"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3>KHO ẢNH</h3><button class="btn btn-green" onclick="loadImagesFromGitHub()">🔄 Tải ảnh</button></div><p id="img-loading" style="display:none">Đang tải...</p><div id="image-gallery" class="img-grid"></div></div>
-    <div id="sec-data" class="section"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3>QUẢN LÝ ĐỀ</h3><button class="btn btn-green" onclick="loadDataFiles()">🔄 Tải danh sách</button></div><div id="data-list" class="file-list"></div></div>
+    <div id="sec-data" class="section">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3>DANH SÁCH ĐỀ THI</h3><button class="btn btn-green" onclick="loadDataFiles()">🔄 Tải danh sách</button></div>
+        <div id="data-list" class="file-list"></div>
+    </div>
+
+    <div id="sec-images" class="section"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3>KHO ẢNH GITHUB</h3><button class="btn btn-green" onclick="loadImagesFromGitHub()">🔄 Tải ảnh</button></div><p id="img-loading" style="display:none">Đang tải...</p><div id="image-gallery" class="img-grid"></div></div>
 </div>
 
 <script>
@@ -153,71 +192,139 @@
     if(sessionStorage.getItem('admin_ok')) checkAdmin();
 
     function switchTab(t){document.querySelectorAll('.section').forEach(e=>e.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));document.getElementById('sec-'+t).classList.add('active');event.target.classList.add('active');}
-    let questions=[];window.onload=()=>{['gh-user','gh-repo','gh-token'].forEach(id=>{if(localStorage.getItem(id))document.getElementById(id).value=localStorage.getItem(id)});}
-    function saveConfig(){['gh-user','gh-repo','gh-token'].forEach(id=>localStorage.setItem(id,document.getElementById(id).value.trim()));alert("Đã lưu!");}
+    
+    // --- CẤU HÌNH & LƯU TRỮ ---
+    window.onload=()=>{
+        ['gh-user','gh-repo','gh-token','gemini-key','bank-id','bank-acc'].forEach(id=>{
+            if(localStorage.getItem(id)) document.getElementById(id).value=localStorage.getItem(id);
+        });
+    }
+    function saveConfig(){
+        ['gh-user','gh-repo','gh-token','gemini-key','bank-id','bank-acc'].forEach(id=>{
+            localStorage.setItem(id,document.getElementById(id).value.trim());
+        });
+        alert("Đã lưu cấu hình và API Key thành công!");
+    }
     function hashPass(){let p=document.getElementById('exam-pass').value.trim();document.getElementById('exam-pass-hash').value=p?CryptoJS.MD5(p).toString():"";}
 
-    // --- 1. LOAD FILE THÔNG MINH (Kèm Fix JSON & Decode Match) ---
+    // --- AI GEMINI PRO (NEW FEATURE) ---
+    async function processImageWithGemini(input) {
+        const file = input.files[0];
+        const key = document.getElementById('gemini-key').value.trim();
+        
+        if(!file) return;
+        if(!key) return alert("❌ CHƯA CÓ API KEY!\nVui lòng dán Key 'AIza...' vào ô cấu hình bên trên và bấm Lưu.");
+
+        const ov = document.getElementById('loading-overlay');
+        const log = document.getElementById('log-text');
+        ov.style.display = 'flex';
+        log.innerText = "1. Đang đọc ảnh...";
+
+        try {
+            const base64 = await new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result.split(',')[1]);
+                reader.readAsDataURL(file);
+            });
+
+            log.innerText = "2. Đang gửi cho AI phân tích (Đợi 5-10s)...";
+
+            // Prompt tối ưu cho VSAT
+            const prompt = `
+                Bạn là trợ lý soạn đề thi Toán chuyên nghiệp. Hãy trích xuất nội dung từ ảnh này thành JSON.
+                Hỗ trợ các dạng: 
+                - Trắc nghiệm (mcq): 4 đáp án A,B,C,D.
+                - Đúng/Sai (tf): 4 ý nhỏ.
+                - Ghép cột (match): Cột trái (items) và cột phải (options).
+                - Điền khuyết (short).
+
+                OUTPUT JSON FORMAT (Array):
+                [
+                    { "type": "mcq", "q": "Câu 1...", "options": ["A", "B", "C", "D"], "ans": 0, "explain": "" },
+                    { "type": "tf", "q": "Câu 2...", "items": [{ "sub": "Ý 1", "ans": "T" }, { "sub": "Ý 2", "ans": "F" }] },
+                    { "type": "match", "q": "Câu 3. Ghép cột...", "items": ["Ý trái 1", "Ý trái 2"], "options": ["Phải A", "Phải B"], "ans": ["A", "B"] }
+                ]
+                YÊU CẦU:
+                1. Chỉ trả về JSON thuần, không Markdown.
+                2. Công thức Toán dùng LaTeX đặt trong dấu $.
+                3. Nếu gặp hình vẽ, hãy ghi "[IMG]".
+            `;
+
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }, { inline_data: { mime_type: file.type, data: base64 } }] }] })
+            });
+
+            const data = await response.json();
+            if(data.error) throw new Error(data.error.message);
+
+            let text = data.candidates[0].content.parts[0].text;
+            text = text.replace(/```json/g, '').replace(/```/g, '').trim();
+            
+            log.innerText = "3. Xử lý dữ liệu...";
+            document.getElementById('json-input').value = text;
+            parseData();
+            
+            ov.style.display = 'none';
+            alert("✅ AI đã quét xong! Hãy kiểm tra lại nội dung bên dưới.");
+            
+        } catch (e) {
+            ov.style.display = 'none';
+            alert("❌ Lỗi AI: " + e.message);
+        } finally {
+            input.value = '';
+        }
+    }
+
+    // --- CORE FUNCTIONS (LOAD, EDIT, PUBLISH) ---
     async function loadExamToEdit(path, name) {
         const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value;
         const ov=document.getElementById('loading-overlay'); ov.style.display='flex'; document.getElementById('log-text').innerText=`⏳ Đang tải: ${name}...`;
-
         try {
             const res = await fetch(`https://api.github.com/repos/${u}/${r}/contents/${path}`, {headers:{Authorization:`token ${t}`}});
-            if(!res.ok) throw new Error("Lỗi tải file (Token?)");
+            if(!res.ok) throw new Error("Lỗi tải file");
             const json = await res.json();
             const content = decodeURIComponent(escape(atob(json.content)));
-            
-            // Fix JSON thừa ký tự
             const firstBrace = content.indexOf('{'); const lastBrace = content.lastIndexOf('}');
             if(firstBrace === -1) throw new Error("File hỏng");
-            let jsonStr = content.substring(firstBrace, lastBrace + 1);
-            let data = JSON.parse(jsonStr);
+            let data = JSON.parse(content.substring(firstBrace, lastBrace + 1));
 
-            // GIẢI MÃ ĐÁP ÁN (MCQ, TF, MATCH)
+            // DECODE HASH (NẾU CÓ)
             if(data.encrypted) {
                 const HASH_MAP = {
                     "cfcd208495d565ef66e7dff9f98764da": 0, "c4ca4238a0b923820dcc509a6f75849b": 1, 
                     "c81e728d9d4c2f636f067f89cc14862c": 2, "eccbc87e4b5ce2fe28308fd9f2a7baf3": 3,
                     "b9ece18c950afbfa6b0fdbfa4ff731d3": "T", "800618943025315f869e4e1f09471012": "F",
-                    // Giải mã các chữ cái Matching (A-F)
-                    "7fc56270e7a70fa81a5935b72eacbe29": "A", "9d5ed678fe57bcca610140957afab571": "B",
-                    "0d61f8370cad1d412f80b84d143e1257": "C", "f623e75af30e62bbd73d6df5b50bb7b5": "D",
+                    "7fc56270e7a70fa81a5935b72eacbe29": "A", "9d5ed678fe57bcca610140957afab571": "B", 
+                    "0d61f8370cad1d412f80b84d143e1257": "C", "f623e75af30e62bbd73d6df5b50bb7b5": "D", 
                     "3a3ea00cfc35332cedf6e5e9a32e94da": "E", "5807dd805a30054e94b72fd4af691ca2": "F"
                 };
-
                 (data.questions || []).forEach(q => {
                     if(q.type === 'mcq' && HASH_MAP[q.ans] !== undefined) q.ans = HASH_MAP[q.ans];
                     else if(q.type === 'tf') q.items.forEach(it => { if(HASH_MAP[it.ans]) it.ans = HASH_MAP[it.ans]; });
-                    else if(q.type === 'match') {
-                        // Giải mã mảng ans: ["HashA", "HashB"] -> ["A", "B"]
-                        q.ans = q.ans.map(h => HASH_MAP[h] || h);
-                    }
-                    else if(q.type === 'short') q.ans = "";
+                    else if(q.type === 'match') q.ans = q.ans.map(h => HASH_MAP[h] || h);
+                    else if(q.type === 'short') q.ans = ""; // Short ko giải mã ngược được
                 });
             }
 
-            // Fill Form
             document.getElementById('exam-id').value = name.replace('.js','');
             document.getElementById('exam-title').value = data.title||"";
             document.getElementById('exam-subject').value = data.subject||"Toan";
-            document.getElementById('exam-grade').value = data.grade||"12";
             document.getElementById('exam-time').value = data.time||45;
+            document.getElementById('exam-price').value = data.price||0;
             document.getElementById('exam-pass-hash').value = data.password||"";
             document.getElementById('secure-mode').checked = data.encrypted;
             if(data.start) document.getElementById('exam-start').value = data.start;
             if(data.end) document.getElementById('exam-end').value = data.end;
-
+            
             questions = data.questions || [];
             questions.forEach(q => { if(!q.imgQ)q.imgQ={}; if(!q.imgE)q.imgE={}; }); 
-            renderEditor();
-
-            ov.style.display='none'; switchTab('create'); window.scrollTo({top:0,behavior:'smooth'});
+            renderEditor(); ov.style.display='none'; switchTab('create'); window.scrollTo({top:0,behavior:'smooth'});
 
         } catch(e) { ov.style.display='none'; alert("Lỗi: " + e.message); }
     }
 
-    // --- 2. EDITOR (Updated for Match) ---
+    let questions=[];
     function parseData(){
         let t=document.getElementById('json-input').value.trim(); if(!t)return alert("Trống!");
         let s=t.indexOf('['),e=t.lastIndexOf(']'); if(s!==-1&&e>s)t=t.substring(s,e+1);
@@ -229,100 +336,99 @@
             renderEditor();
         }catch(z){alert("Lỗi JSON: "+z.message);}
     }
-    
+
     function renderEditor(){
         let c=document.getElementById('questions-list');c.innerHTML="";
         questions.forEach((q,i)=>{
             let ansUI = "";
-
-            // --- UI CHO TRẮC NGHIỆM ---
+            // UI MCQ
             if(q.type === 'mcq') {
                 ansUI = `<div class="match-section"><div class="match-header">ĐÁP ÁN ĐÚNG</div><select onchange="questions[${i}].ans=parseInt(this.value)">
                     <option value="0" ${q.ans==0?'selected':''}>A</option><option value="1" ${q.ans==1?'selected':''}>B</option>
                     <option value="2" ${q.ans==2?'selected':''}>C</option><option value="3" ${q.ans==3?'selected':''}>D</option>
                 </select></div>`;
             } 
-            // --- UI CHO SHORT ---
-            else if (q.type === 'short') {
-                ansUI = `<div class="match-section"><div class="match-header">ĐÁP ÁN</div><input type="text" value="${q.ans||''}" onchange="questions[${i}].ans=this.value" style="width:100%"></div>`;
-            }
-            // --- UI CHO MATCHING (GHÉP CỘT) ---
+            // UI MATCH
             else if (q.type === 'match') {
                 ansUI = `<div class="match-section">
-                    <div class="match-header"><span>CỘT TRÁI (Ý) & ĐÁP ÁN</span> <button class="btn btn-green btn-sm" onclick="addMatchItem(${i})">+ Ý</button></div>
+                    <div class="match-header"><span>CỘT TRÁI (Ý) & ĐÁP ÁN</span> <button class="btn btn-green" style="padding:2px 8px;font-size:0.8em" onclick="addMatchItem(${i})">+ Ý</button></div>
                     <div id="match-items-${i}">
                         ${q.items.map((it, idx) => `
                         <div class="match-edit-row">
-                            <span class="match-edit-label">${idx+1})</span>
+                            <span style="font-weight:bold">${idx+1})</span>
                             <input class="match-edit-input" value="${it}" onchange="questions[${i}].items[${idx}]=this.value;upd(${i})">
                             <select onchange="questions[${i}].ans[${idx}]=this.value">
                                 <option value="">--</option>
                                 ${q.options.map((_,oId)=>`<option value="${String.fromCharCode(65+oId)}" ${q.ans[idx]===String.fromCharCode(65+oId)?'selected':''}>${String.fromCharCode(65+oId)}</option>`).join('')}
                             </select>
-                            <button class="btn btn-red btn-sm" onclick="delMatchItem(${i},${idx})">x</button>
+                            <button class="btn btn-red" style="padding:2px 8px" onclick="delMatchItem(${i},${idx})">x</button>
                         </div>`).join('')}
                     </div>
-                    
-                    <div class="match-header" style="margin-top:15px"><span>CỘT PHẢI (LỰA CHỌN)</span> <button class="btn btn-blue btn-sm" onclick="addMatchOpt(${i})">+ Lựa chọn</button></div>
+                    <div class="match-header" style="margin-top:10px"><span>CỘT PHẢI (LỰA CHỌN)</span> <button class="btn btn-blue" style="padding:2px 8px;font-size:0.8em" onclick="addMatchOpt(${i})">+ Lựa chọn</button></div>
                     <div id="match-opts-${i}">
                         ${q.options.map((opt, oIdx) => `
                         <div class="match-edit-row">
-                            <span class="match-edit-label">${String.fromCharCode(65+oIdx)}</span>
+                            <span style="font-weight:bold">${String.fromCharCode(65+oIdx)}</span>
                             <input class="match-edit-input" value="${opt}" onchange="questions[${i}].options[${oIdx}]=this.value;renderEditor()">
-                            <button class="btn btn-red btn-sm" onclick="delMatchOpt(${i},${oIdx})">x</button>
+                            <button class="btn btn-red" style="padding:2px 8px" onclick="delMatchOpt(${i},${oIdx})">x</button>
                         </div>`).join('')}
                     </div>
                 </div>`;
             }
+            // UI SHORT
+            else if (q.type === 'short') {
+                ansUI = `<div class="match-section"><div class="match-header">ĐÁP ÁN</div><input type="text" value="${q.ans||''}" onchange="questions[${i}].ans=this.value" style="width:100%"></div>`;
+            }
 
-            let typeLbl = q.type==='match'?'GHÉP CỘT (VSAT)':(q.type==='mcq'?'TRẮC NGHIỆM':q.type.toUpperCase());
-            c.insertAdjacentHTML('beforeend',`<div class="q-item"><div class="q-toolbar"><span style="font-weight:bold;color:#00695c">CÂU ${i+1} [${typeLbl}]</span><button class="btn btn-red" style="padding:5px" onclick="removeQ(${i})">Xóa</button></div><div class="q-body"><div class="column col-left"><div><label>Câu hỏi:</label>${tb(i,'q')}<textarea id="tq${i}" class="smart-textarea" oninput="upd(${i})" ondrop="drop(event,${i},'q')" ondragover="event.preventDefault()">${q.q}</textarea><div id="sq${i}" class="img-status"></div>${ansUI}</div><div style="margin-top:10px;border-top:1px dashed #ccc;padding-top:10px"><label>Lời giải:</label>${tb(i,'e')}<textarea id="te${i}" class="smart-textarea" oninput="upd(${i})" ondrop="drop(event,${i},'e')" ondragover="event.preventDefault()">${q.explain||''}</textarea><div id="se${i}" class="img-status"></div></div></div><div class="column col-right"><div class="preview-label">Xem trước:</div><div class="preview-box" id="pq${i}"></div><div class="preview-label" style="margin-top:20px">Lời giải:</div><div class="preview-box" id="pe${i}" style="background:#e8f5e9"></div></div></div></div>`);
+            let typeLbl = q.type==='match'?'GHÉP CỘT':(q.type==='mcq'?'TRẮC NGHIỆM':q.type.toUpperCase());
+            c.insertAdjacentHTML('beforeend',`<div class="q-item"><div class="q-toolbar"><span style="font-weight:bold;color:#00695c">CÂU ${i+1} [${typeLbl}]</span><button class="btn btn-red" style="padding:5px" onclick="removeQ(${i})">Xóa</button></div><div class="q-body"><div class="column col-left"><div><label>Câu hỏi:</label>${tb(i,'q')}<textarea id="tq${i}" class="smart-textarea" oninput="upd(${i})" ondrop="drop(event,${i},'q')" ondragover="event.preventDefault()">${q.q}</textarea><div id="sq${i}" style="margin-top:5px"></div>${ansUI}</div><div style="margin-top:10px;border-top:1px dashed #ccc;padding-top:10px"><label>Lời giải:</label>${tb(i,'e')}<textarea id="te${i}" class="smart-textarea" oninput="upd(${i})" ondrop="drop(event,${i},'e')" ondragover="event.preventDefault()">${q.explain||''}</textarea><div id="se${i}" style="margin-top:5px"></div></div></div><div class="column col-right"><div class="preview-label">Xem trước:</div><div class="preview-box" id="pq${i}"></div><div class="preview-label" style="margin-top:20px">Lời giải:</div><div class="preview-box" id="pe${i}" style="background:#e8f5e9"></div></div></div></div>`);
             upd(i);
         });
     }
 
-    // --- MATCHING HELPER FUNCTIONS ---
+    // MATCH HELPER
     function addMatchItem(i){ questions[i].items.push("Ý mới..."); questions[i].ans.push(""); renderEditor(); }
     function delMatchItem(i,idx){ questions[i].items.splice(idx,1); questions[i].ans.splice(idx,1); renderEditor(); }
     function addMatchOpt(i){ questions[i].options.push("Lựa chọn mới..."); renderEditor(); }
     function delMatchOpt(i,idx){ questions[i].options.splice(idx,1); renderEditor(); }
 
-    // --- UTILS ---
-    function tb(i,f){return `<div class="mini-toolbar"><button class="tool-btn" onclick="tag(${i},'${f}','**','**')">B</button><button class="tool-btn" onclick="tag(${i},'${f}','$','$')">∑</button><label class="tool-btn">📷<input type="file" style="display:none" accept="image/*" onchange="fileSel(this,${i},'${f}')"></label></div>`;}
+    function tb(i,f){return `<div class="mini-toolbar"><button class="btn" style="padding:2px 8px;background:#ddd;color:#333" onclick="tag(${i},'${f}','**','**')">B</button><button class="btn" style="padding:2px 8px;background:#ddd;color:#333" onclick="tag(${i},'${f}','$','$')">∑</button><label class="btn" style="padding:2px 8px;background:#ddd;color:#333;cursor:pointer">📷<input type="file" style="display:none" accept="image/*" onchange="fileSel(this,${i},'${f}')"></label></div>`;}
     function tag(i,f,s,e){let el=document.getElementById(`t${f}${i}`),v=el.value,st=el.selectionStart,en=el.selectionEnd;el.value=v.substring(0,st)+s+v.substring(st,en)+e+v.substring(en);upd(i);}
     function drop(e,i,f){e.preventDefault();if(e.dataTransfer.files[0])procImg(e.dataTransfer.files[0],i,f);}
     function fileSel(inp,i,f){if(inp.files[0])procImg(inp.files[0],i,f);}
-    function procImg(fl,i,f){let q=questions[i],k=f==='q'?'imgQ':'imgE';q[k].f=fl;q[k].u=URL.createObjectURL(fl);let el=document.getElementById(`t${f}${i}`);if(!el.value.includes('[IMG]'))el.value+="\n[IMG]";document.getElementById(`s${f}${i}`).innerHTML=`<span class="img-badge">🖼️ ${fl.name}</span>`;upd(i);}
+    function procImg(fl,i,f){let q=questions[i],k=f==='q'?'imgQ':'imgE';q[k].f=fl;q[k].u=URL.createObjectURL(fl);let el=document.getElementById(`t${f}${i}`);if(!el.value.includes('[IMG]'))el.value+="\n[IMG]";document.getElementById(`s${f}${i}`).innerHTML=`<span style="background:#e0f2f1;color:#00695c;padding:2px 6px;border-radius:3px">🖼️ ${fl.name}</span>`;upd(i);}
     
     function upd(i){
         let q=questions[i];q.q=document.getElementById(`tq${i}`).value;q.explain=document.getElementById(`te${i}`).value;
-        let uQ=(q.imgQ&&q.imgQ.u)?q.imgQ.u:q.img,uE=(q.imgE&&q.imgE.u)?q.imgE.u:null;
+        let uQ=(q.imgQ&&q.imgQ.u)?q.imgQ.u:q.img, uE=(q.imgE&&q.imgE.u)?q.imgE.u:null;
         let hQ=rt(q.q,uQ);
-        
         if(q.type==='mcq') hQ+=`<div style="margin-top:10px;color:#555">`+q.options.map((o,x)=>`<b>${String.fromCharCode(65+x)}.</b> ${o}`).join('<br>')+`</div>`;
         else if(q.type==='tf') hQ+=`<table style="width:100%;margin-top:5px">`+q.items.map((t,x)=>`<tr><td><b>${x+1})</b> ${t.sub}</td><td>T / F</td></tr>`).join('')+`</table>`;
-        else if(q.type==='short') hQ+=`<div style="color:blue;font-weight:bold;margin-top:5px">ĐS: ${q.ans}</div>`;
         else if(q.type==='match'){
             hQ += `<div style="display:flex; gap:10px; margin-top:10px; font-size:0.9em">`;
-            hQ += `<div style="flex:1">` + q.items.map((it,ix)=>`<div><b>${ix+1})</b> ${it} -> [?]</div>`).join('') + `</div>`;
+            hQ += `<div style="flex:1">` + q.items.map((it,ix)=>`<div><b>${ix+1})</b> ${it} -> [${q.ans[ix]||'?'}]</div>`).join('') + `</div>`;
             hQ += `<div style="flex:1; border-left:1px solid #ccc; padding-left:10px">` + q.options.map((op,ox)=>`<div><b>${String.fromCharCode(65+ox)}.</b> ${op}</div>`).join('') + `</div>`;
             hQ += `</div>`;
         }
-
+        else if(q.type==='short') hQ+=`<div style="color:blue;font-weight:bold;margin-top:5px">ĐS: ${q.ans}</div>`;
         document.getElementById(`pq${i}`).innerHTML=hQ;
         document.getElementById(`pe${i}`).innerHTML=rt(q.explain,uE);
         if(window.MathJax)MathJax.typesetPromise([document.getElementById(`pq${i}`),document.getElementById(`pe${i}`)]);
     }
-    
     function rt(t,u){if(!t)return"";let h=t.replace(/\*\*(.*?)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>');if(u){let g=`<img src="${u}" class="preview-img">`;h=h.includes('[IMG]')?h.replace('[IMG]',g):h+`<br>${g}`;}return h.replace('[IMG]','');}
     function removeQ(i){if(confirm("Xóa?")){questions.splice(i,1);renderEditor();}}
 
-    // --- UPLOAD ---
+    // --- UPLOAD SYSTEM ---
     async function publishExam(){
         const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value,id=document.getElementById('exam-id').value;
         if(!u||!r||!t||!id)return alert("Thiếu info!"); if(!confirm("Xuất bản?"))return;
-        const ov=document.getElementById('loading-overlay'),lb=document.getElementById('log-text');ov.style.display='flex';lb.innerHTML="⏳ Đang xử lý...";
-        function log(m){lb.innerHTML+="\n"+m;lb.scrollTop=lb.scrollHeight;}
+        
+        // Lấy thông tin thanh toán & giá
+        const bankInfo = { id: document.getElementById('bank-id').value, acc: document.getElementById('bank-acc').value };
+        const price = parseInt(document.getElementById('exam-price').value) || 0;
+
+        const ov=document.getElementById('loading-overlay'),lb=document.getElementById('log-text');ov.style.display='flex';lb.innerText="⏳ Đang xử lý...";
+        function log(m){lb.innerText+="\n"+m;}
         try{
             saveConfig();
             for(let i=0;i<questions.length;i++){
@@ -333,17 +439,13 @@
             }
             let fQ=JSON.parse(JSON.stringify(questions));
             let sec=document.getElementById('secure-mode').checked;
-            
             if(sec){
-                log("Mã hóa...");
+                log("Mã hóa đáp án...");
                 fQ.forEach(q=>{
                     if(q.type==='mcq')q.ans=CryptoJS.MD5(String(q.ans)).toString();
                     else if(q.type==='tf')q.items.forEach(x=>x.ans=CryptoJS.MD5(x.ans).toString());
-                    else if(q.type==='short')q.ans=CryptoJS.MD5(String(q.ans).trim().toLowerCase()).toString();
-                    else if(q.type==='match'){
-                        // Mã hóa từng chữ cái A, B, C...
-                        q.ans = q.ans.map(val => CryptoJS.MD5(val).toString());
-                    }
+                    else if(q.type==='match')q.ans=q.ans.map(v=>CryptoJS.MD5(v).toString());
+                    // Short ko mã hóa vì khó so sánh chuỗi
                 });
             }
             
@@ -351,29 +453,53 @@
             let dt={
                 title:document.getElementById('exam-title').value,
                 subject:document.getElementById('exam-subject').value,
-                grade:document.getElementById('exam-grade').value,
                 time:parseInt(document.getElementById('exam-time').value),
+                price: price,
+                bank: bankInfo,
                 password:document.getElementById('exam-pass-hash').value,
                 encrypted:sec,
-                start: document.getElementById('exam-start').value,
-                end: document.getElementById('exam-end').value,
-                scores:{mcq:0.25,tf:1.0,short:0.5,match:1.0}, // Thêm điểm match
+                start:document.getElementById('exam-start').value,
+                end:document.getElementById('exam-end').value,
+                scores:{mcq:0.2,tf:1.0,short:0.5,match:1.0},
                 questions:fQ
             };
             let c=btoa(unescape(encodeURIComponent(`window.EXAM_DATA = ${JSON.stringify(dt,null,4)};`)));
             await upF(u,r,t,`data/${id}.js`,c,false);
-            log("Update list...");
+            log("Cập nhật danh sách...");
             await updateList(u,r,t,id,dt);
-            log("DONE!"); alert("Đã cập nhật!"); setTimeout(()=>{ov.style.display='none'},2000);
+            log("Xong!"); alert("Đã xuất bản thành công!"); setTimeout(()=>{ov.style.display='none'},2000);
         }catch(e){log("LỖI: "+e.message);setTimeout(()=>{ov.style.display='none'},5000);}
     }
     async function upF(u,r,t,p,c,isF){let s=null;try{let k=await fetch(`https://api.github.com/repos/${u}/${r}/contents/${p}`,{headers:{Authorization:`token ${t}`}});if(k.ok)s=(await k.json()).sha;}catch(e){}let b={message:"Up",content:isF?await toB64(c):c};if(s)b.sha=s;let rs=await fetch(`https://api.github.com/repos/${u}/${r}/contents/${p}`,{method:'PUT',headers:{Authorization:`token ${t}`,'Content-Type':'application/json'},body:JSON.stringify(b)});if(!rs.ok){let j=await rs.json();throw new Error(j.message);}return `https://raw.githubusercontent.com/${u}/${r}/main/${p}`;}
     function toB64(f){return new Promise(r=>{let fr=new FileReader();fr.onload=()=>r(fr.result.split(',')[1]);fr.readAsDataURL(f);});}
-    async function updateList(u,r,t,id,d){let url=`https://api.github.com/repos/${u}/${r}/contents/data/list.js`,l=[],s=null;try{let k=await fetch(url,{headers:{Authorization:`token ${t}`}});if(k.ok){let j=await k.json();s=j.sha;l=new Function("return "+decodeURIComponent(escape(atob(j.content))).replace(/window\.EXAM_LIST\s*=\s*/,'').replace(/;$/,''))();}}catch(e){}l=l.filter(x=>x.id!==id);l.unshift({id:id,title:d.title,subject:d.subject,grade:d.grade,time:d.time});let c=btoa(unescape(encodeURIComponent(`window.EXAM_LIST = ${JSON.stringify(l,null,4)};`)));await upF(u,r,t,`data/list.js`,c,false);}
+    async function updateList(u,r,t,id,d){let url=`https://api.github.com/repos/${u}/${r}/contents/data/list.js`,l=[],s=null;try{let k=await fetch(url,{headers:{Authorization:`token ${t}`}});if(k.ok){let j=await k.json();s=j.sha;l=new Function("return "+decodeURIComponent(escape(atob(j.content))).replace(/window\.EXAM_LIST\s*=\s*/,'').replace(/;$/,''))();}}catch(e){}l=l.filter(x=>x.id!==id);l.unshift({id:id,title:d.title,subject:d.subject,grade:d.grade,time:d.time,price:d.price});let c=btoa(unescape(encodeURIComponent(`window.EXAM_LIST = ${JSON.stringify(l,null,4)};`)));await upF(u,r,t,`data/list.js`,c,false);}
     
-    // FILES
-    async function loadDataFiles(){const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value;if(!u||!r||!t)return alert("Thiếu info!");document.getElementById('data-list').innerHTML='Loading...';try{const res=await fetch(`https://api.github.com/repos/${u}/${r}/contents/data`,{headers:{Authorization:`token ${t}`}});const f=await res.json();let h='';f.forEach(x=>{if(x.name.endsWith('.js')&&x.name!=='list.js')h+=`<div class="file-item"><span>📄 ${x.name}</span><div><button class="btn-edit" onclick="loadExamToEdit('${x.path}','${x.name}')">✏️ Sửa</button><button class="btn btn-red" onclick="deleteDataFile('${x.path}','${x.sha}','${x.name}')">🗑️</button></div></div>`});document.getElementById('data-list').innerHTML=h||'Trống';}catch(e){alert(e.message);}}
-    async function deleteDataFile(p,s,n){if(!confirm(`Xóa ${n}?`))return;const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value;await fetch(`https://api.github.com/repos/${u}/${r}/contents/${p}`,{method:'DELETE',headers:{Authorization:`token ${t}`,'Content-Type':'application/json'},body:JSON.stringify({message:`Del ${n}`,sha:s})});let id=n.replace('.js','');await removeFromList(u,r,t,id);alert("Xong!");loadDataFiles();}
+    // QR & FILES
+    function showExamQR(fileName) {
+        const u = document.getElementById('gh-user').value.trim();
+        const r = document.getElementById('gh-repo').value.trim();
+        const examId = fileName.replace('.js', '');
+        const url = `https://${u}.github.io/${r}/thi.html?id=${examId}`;
+        document.getElementById('qr-modal').style.display = 'flex';
+        document.getElementById('qr-link-text').innerText = url;
+        document.getElementById('qrcode').innerHTML = "";
+        new QRCode(document.getElementById("qrcode"), { text: url, width: 200, height: 200 });
+    }
+    async function loadDataFiles(){
+        const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value;
+        try{
+            const res=await fetch(`https://api.github.com/repos/${u}/${r}/contents/data`,{headers:{Authorization:`token ${t}`}});
+            const f=await res.json();
+            let h='';
+            f.forEach(x=>{
+                if(x.name.endsWith('.js')&&x.name!=='list.js') {
+                    h+=`<div class="file-item"><span>📄 ${x.name}</span><div><button class="btn-qr" onclick="showExamQR('${x.name}')">📱 QR</button><button class="btn-edit" onclick="loadExamToEdit('${x.path}','${x.name}')">✏️ Sửa</button><button class="btn-del-img" onclick="deleteDataFile('${x.path}','${x.sha}')">🗑️</button></div></div>`;
+                }
+            });
+            document.getElementById('data-list').innerHTML=h||'Trống';
+        }catch(e){alert(e.message);}
+    }
+    async function deleteDataFile(p,s){if(!confirm("Xóa?"))return;const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value;await fetch(`https://api.github.com/repos/${u}/${r}/contents/${p}`,{method:'DELETE',headers:{Authorization:`token ${t}`,'Content-Type':'application/json'},body:JSON.stringify({message:"Del",sha:s})});loadDataFiles();}
     async function loadImagesFromGitHub(){const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value;if(!u||!r||!t)return alert("Thiếu info!");document.getElementById('img-loading').style.display='block';document.getElementById('image-gallery').innerHTML='';try{const res=await fetch(`https://api.github.com/repos/${u}/${r}/contents/images`,{headers:{Authorization:`token ${t}`}});const f=await res.json();document.getElementById('img-loading').style.display='none';let h='';f.forEach(x=>{if(x.name.match(/\.(png|jpg|jpeg|gif)$/i))h+=`<div class="img-card" id="c-${x.sha}"><a href="${x.download_url}" target="_blank"><img src="${x.download_url}" class="img-thumb"></a><div class="img-name">${x.name}</div><button class="btn-del-img" onclick="delImg('${x.path}','${x.sha}')">Xóa</button></div>`});document.getElementById('image-gallery').innerHTML=h||'Trống';}catch(e){alert(e.message);}}
     async function delImg(p,s){if(!confirm("Xóa?"))return;const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value;await fetch(`https://api.github.com/repos/${u}/${r}/contents/${p}`,{method:'DELETE',headers:{Authorization:`token ${t}`,'Content-Type':'application/json'},body:JSON.stringify({message:"Del img",sha:s})});document.getElementById(`c-${s}`).remove();}
 </script>
