@@ -1,5 +1,12 @@
 window.EXAM_LIST = [
     {
+        "id": "2-HK2-CanTho25",
+        "title": "Đề Thi Cuối HK2, Khối 12, Sở Cần Thơ, Năm học 2024-2025",
+        "subject": "Toan",
+        "grade": "12",
+        "time": 90
+    },
+    {
         "id": "2-De-minh-hoa-TN2025-BGD",
         "title": "Đề minh họa TN 2025, Bộ Giáo Dục",
         "subject": "Toan",
