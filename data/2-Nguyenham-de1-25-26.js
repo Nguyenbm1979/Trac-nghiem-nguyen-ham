@@ -33,7 +33,7 @@ window.EXAM_DATA = {
                 "$\\displaystyle\\int 2\\sin x\\mathrm{\\,d}x=\\sin^2x+C$",
                 "$\\displaystyle\\int 2\\sin x\\mathrm{\\,d}x=\\sin 2x+C$"
             ],
-            "ans": "cfcd208495d565ef66e7dff9f98764da",
+            "ans": "eccbc87e4b5ce2fe28308fd9f2a7baf3",
             "explain": "Ta có $\\displaystyle\\int 2\\sin x\\mathrm{\\,d}x=2\\displaystyle\\int \\sin x \\mathrm{\\,d}x=-2\\cos x+C$.",
             "id": 1767413174764.782
         },
