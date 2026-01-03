@@ -105,7 +105,7 @@
 
 <script>
     // --- AUTH ---
-    const ADMIN_HASH = "3c59dc048e8850243be8079a5c74d079"; // Mật khẩu: Nguyen@#197@9
+    const ADMIN_HASH = "55ab43ebd8eb2635766c3944cb192e72";// Mật khẩu: Nguyen@#197@9
     function checkAdmin(){if(CryptoJS.MD5(document.getElementById('admin-pass-input').value).toString()===ADMIN_HASH){document.getElementById('login-screen').style.display='none';document.getElementById('main-app').style.display='block';sessionStorage.setItem('admin_ok','1');}else document.getElementById('login-msg').style.display='block';}
     if(sessionStorage.getItem('admin_ok')) checkAdmin();
 
