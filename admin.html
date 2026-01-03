@@ -3,64 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Tool v10.0 (Pro Editor)</title>
+    <title>Admin Tool v10.1 (Fix Upload)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
+        /* GIỮ NGUYÊN GIAO DIỆN CŨ */
         body { font-family: 'Segoe UI', sans-serif; background: #eceff1; padding: 20px; color: #37474f; margin: 0; }
-        
-        /* LOGIN */
         #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #263238; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .login-box { background: white; padding: 40px; border-radius: 10px; width: 350px; text-align: center; }
         .login-box input { width: 100%; padding: 12px; margin: 20px 0; border: 1px solid #ccc; border-radius: 4px; }
         .login-btn { width: 100%; padding: 12px; background: #00695c; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
-
-        /* MAIN APP */
         #main-app { display: none; max-width: 1200px; margin: 0 auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         h1 { color: #00695c; text-align: center; border-bottom: 3px solid #004d40; padding-bottom: 10px; }
-
-        /* CONFIG */
         .config-box { background: #e3f2fd; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #90caf9; }
         .row { display: flex; gap: 15px; margin-bottom: 10px; } .col { flex: 1; }
         input, select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         label { font-weight: 600; font-size: 0.9em; display: block; margin-bottom: 3px; }
-
-        /* EDITOR STYLES */
         .q-item { border: 1px solid #cfd8dc; margin-bottom: 30px; border-radius: 8px; overflow: hidden; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .q-toolbar { background: #f5f5f5; padding: 10px 15px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; }
         .q-body { display: flex; border-bottom: 1px solid #eee; }
-        
         .column { flex: 1; padding: 15px; display: flex; flex-direction: column; gap: 15px; }
         .col-left { border-right: 1px solid #eee; background: #fafafa; }
         .col-right { background: #fff; }
-
-        /* MINI TOOLBAR */
         .mini-toolbar { display: flex; gap: 5px; margin-bottom: 5px; }
         .tool-btn { padding: 5px 10px; border: 1px solid #ccc; background: white; cursor: pointer; border-radius: 3px; font-weight: bold; min-width: 30px; }
         .tool-btn:hover { background: #e0f2f1; border-color: #009688; color: #009688; }
-
-        /* TEXTAREA & DRAG DROP */
-        .editor-wrap { position: relative; }
         .smart-textarea { width: 100%; height: 100px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-family: monospace; resize: vertical; box-sizing: border-box; transition: 0.2s; }
         .smart-textarea:focus { border-color: #009688; outline: none; }
         .smart-textarea.drag-over { border: 2px dashed #009688; background: #e0f2f1; }
-
-        /* PREVIEW */
         .preview-box { padding: 10px; border: 1px dashed #ccc; border-radius: 4px; min-height: 50px; background: white; position: relative; }
         .preview-label { font-size: 0.8em; color: #999; text-transform: uppercase; margin-bottom: 5px; font-weight: bold; }
         .preview-img { max-width: 100%; height: auto; display: block; margin: 10px auto; border: 1px solid #ddd; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        
-        /* IMAGE STATUS */
         .img-status { font-size: 0.85em; margin-top: 5px; display: flex; align-items: center; gap: 5px; }
         .img-badge { background: #e0f2f1; color: #00695c; padding: 2px 6px; border-radius: 3px; font-size: 0.8em; }
-
-        /* BUTTONS */
         .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: white; transition: 0.2s; }
         .btn:hover { opacity: 0.9; transform: translateY(-1px); }
         .btn-green { background: #2e7d32; } .btn-blue { background: #1565c0; } .btn-red { background: #c62828; } .btn-gray { background: #607d8b; }
-
-        /* LOADING */
         #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 99999; display: none; flex-direction: column; justify-content: center; align-items: center; color: white; }
         #log-text { margin-top: 15px; font-family: monospace; color: #80cbc4; white-space: pre-wrap; max-height: 300px; overflow-y: auto; text-align: left; width: 80%; background: #263238; padding: 15px; border-radius: 8px; }
     </style>
@@ -79,7 +58,7 @@
 </div>
 
 <div id="main-app">
-    <h1>SOẠN THẢO ĐỀ THI CHUYÊN NGHIỆP (v10.0)</h1>
+    <h1>SOẠN THẢO ĐỀ THI (v10.1 FIX)</h1>
 
     <div class="config-box">
         <div class="row">
@@ -118,7 +97,7 @@
 
     <div id="editor-area" style="display:none">
         <h3 style="color:#2e7d32; border-bottom:2px solid #eee; padding-bottom:10px">📝 2. SOẠN THẢO & KIỂM TRA</h3>
-        <p style="font-size:0.9em; color:#666"><i>Mẹo: Bôi đen văn bản rồi bấm nút công cụ. Kéo ảnh từ máy tính thả vào ô nhập liệu để chèn ảnh.</i></p>
+        <p style="font-size:0.9em; color:#666"><i>Mẹo: Kéo ảnh thả vào ô nội dung để chèn ảnh.</i></p>
         
         <div id="questions-list"></div>
 
@@ -138,7 +117,7 @@
             sessionStorage.setItem('admin_ok','1');
         } else document.getElementById('login-msg').style.display='block';
     }
-    if(sessionStorage.getItem('admin_ok')) checkAdmin(); // Auto login
+    if(sessionStorage.getItem('admin_ok')) checkAdmin();
 
     // --- 1. CORE ---
     let questions = [];
@@ -158,15 +137,15 @@
             questions = Array.isArray(data) ? data : (data.questions || []);
             questions.forEach(q => { 
                 q.id = Date.now() + Math.random(); 
-                q.imgQ = {file:null, url:null}; // Ảnh câu hỏi
-                q.imgE = {file:null, url:null}; // Ảnh lời giải
+                q.imgQ = {file:null, url:null}; 
+                q.imgE = {file:null, url:null}; 
             });
             document.getElementById('editor-area').style.display = 'block';
             renderEditor();
         } catch(e) { alert("Lỗi code: " + e.message); }
     }
 
-    // --- 3. RENDER EDITOR (COMPLETE REWRITE) ---
+    // --- 3. RENDER EDITOR ---
     function renderEditor() {
         const container = document.getElementById('questions-list');
         container.innerHTML = "";
@@ -189,10 +168,9 @@
                                 ondrop="handleDrop(event, ${idx}, 'q')" 
                                 ondragover="event.preventDefault(); this.classList.add('drag-over')"
                                 ondragleave="this.classList.remove('drag-over')"
-                                placeholder="Nhập câu hỏi... Kéo ảnh thả vào đây">${q.q}</textarea>
+                                placeholder="Nhập câu hỏi...">${q.q}</textarea>
                             <div class="img-status" id="status-q-${idx}"></div>
                         </div>
-
                         <div style="margin-top:10px; border-top:1px dashed #ccc; padding-top:10px">
                             <label>Lời giải chi tiết:</label>
                             ${renderToolbar(idx, 'e')}
@@ -201,21 +179,18 @@
                                 ondrop="handleDrop(event, ${idx}, 'e')" 
                                 ondragover="event.preventDefault(); this.classList.add('drag-over')"
                                 ondragleave="this.classList.remove('drag-over')"
-                                placeholder="Nhập lời giải... Kéo ảnh thả vào đây">${q.explain || ''}</textarea>
+                                placeholder="Nhập lời giải...">${q.explain || ''}</textarea>
                             <div class="img-status" id="status-e-${idx}"></div>
                         </div>
                     </div>
-
                     <div class="column col-right">
                         <div class="preview-label">Xem trước Câu hỏi:</div>
                         <div class="preview-box" id="preview-q-${idx}"></div>
-                        
                         <div class="preview-label" style="margin-top:20px">Xem trước Lời giải:</div>
                         <div class="preview-box" id="preview-e-${idx}" style="background:#e8f5e9"></div>
                     </div>
                 </div>
             </div>`;
-            
             container.insertAdjacentHTML('beforeend', html);
             updatePreview(idx);
         });
@@ -233,104 +208,70 @@
         </div>`;
     }
 
-    // --- 4. EDITOR LOGIC (TAGS, DRAG DROP, PREVIEW) ---
-    function insertTag(idx, field, startTag, endTag) {
+    // --- 4. EDITOR LOGIC ---
+    function insertTag(idx, field, sTag, eTag) {
         let el = document.getElementById(`txt-${field}-${idx}`);
-        let start = el.selectionStart;
-        let end = el.selectionEnd;
-        let text = el.value;
-        let before = text.substring(0, start);
-        let selected = text.substring(start, end);
-        let after = text.substring(end);
-        
-        el.value = before + startTag + selected + endTag + after;
-        el.selectionStart = el.selectionEnd = start + startTag.length + selected.length; // Move cursor inside
-        el.focus();
+        let s = el.selectionStart, e = el.selectionEnd;
+        el.value = el.value.substring(0,s) + sTag + el.value.substring(s,e) + eTag + el.value.substring(e);
         updatePreview(idx);
     }
-
     function handleDrop(e, idx, field) {
-        e.preventDefault();
-        e.target.classList.remove('drag-over');
-        if(e.dataTransfer.files && e.dataTransfer.files[0]) {
-            processImage(e.dataTransfer.files[0], idx, field);
-        }
+        e.preventDefault(); e.target.classList.remove('drag-over');
+        if(e.dataTransfer.files[0]) processImage(e.dataTransfer.files[0], idx, field);
     }
-
     function handleFileSelect(input, idx, field) {
-        if(input.files && input.files[0]) processImage(input.files[0], idx, field);
+        if(input.files[0]) processImage(input.files[0], idx, field);
     }
-
     function processImage(file, idx, field) {
         let q = questions[idx];
         let key = field === 'q' ? 'imgQ' : 'imgE';
-        
+        if(!q[key]) q[key] = {}; // Fix crash nếu retry
         q[key].file = file;
         q[key].url = URL.createObjectURL(file);
-        
-        // Thêm tag [IMG] vào cuối nếu chưa có
         let el = document.getElementById(`txt-${field}-${idx}`);
-        if(!el.value.includes('[IMG]')) {
-            el.value += "\n[IMG]"; 
-        }
-        
-        // Cập nhật giao diện
-        document.getElementById(`status-${field}-${idx}`).innerHTML = `<span class="img-badge">🖼️ ${file.name}</span> <span style="color:green; font-weight:bold">Đã chọn</span>`;
+        if(!el.value.includes('[IMG]')) el.value += "\n[IMG]";
+        document.getElementById(`status-${field}-${idx}`).innerHTML = `<span class="img-badge">🖼️ ${file.name}</span>`;
         updatePreview(idx);
     }
-
     function updatePreview(idx) {
         let q = questions[idx];
-        // Lấy nội dung mới từ textarea
         q.q = document.getElementById(`txt-q-${idx}`).value;
         q.explain = document.getElementById(`txt-e-${idx}`).value;
 
-        // Render Q
-        let htmlQ = renderTextWithImg(q.q, q.imgQ.url || q.img);
-        // Render nội dung phụ của câu hỏi (Options)
+        // Fix crash nếu q.imgQ không tồn tại (do upload trước đó xóa)
+        let urlQ = (q.imgQ && q.imgQ.url) ? q.imgQ.url : q.img;
+        let urlE = (q.imgE && q.imgE.url) ? q.imgE.url : null;
+
+        let htmlQ = renderText(q.q, urlQ);
         if(q.type==='mcq') htmlQ += `<div style="margin-top:10px; color:#555">` + q.options.map((o,i)=>`<b>${String.fromCharCode(65+i)}.</b> ${o}`).join('<br>') + `</div>`;
-        else if(q.type==='tf') htmlQ += `<table class="tf-table" style="width:100%; border-collapse:collapse; margin-top:5px">` + q.items.map((it,i)=>`<tr><td style="border-bottom:1px dashed #ccc; padding:5px"><b>${i+1})</b> ${it.sub}</td><td style="font-weight:bold; color:${it.ans==='T'?'green':'red'}">${it.ans}</td></tr>`).join('') + `</table>`;
+        else if(q.type==='tf') htmlQ += `<table style="width:100%; border-collapse:collapse; margin-top:5px">` + q.items.map((it,i)=>`<tr><td style="border-bottom:1px solid #eee; padding:5px"><b>${i+1})</b> ${it.sub}</td><td style="font-weight:bold; color:${it.ans==='T'?'green':'red'}">${it.ans}</td></tr>`).join('') + `</table>`;
         else if(q.type==='short') htmlQ += `<div style="color:#1565c0; font-weight:bold; margin-top:5px">ĐS: ${q.ans}</div>`;
         
         document.getElementById(`preview-q-${idx}`).innerHTML = htmlQ;
-
-        // Render Explain
-        let htmlE = renderTextWithImg(q.explain, q.imgE.url || null); // Note: Cần sửa logic nếu explain có ảnh cũ (ít gặp)
-        document.getElementById(`preview-e-${idx}`).innerHTML = htmlE || "(Chưa có lời giải)";
-
+        document.getElementById(`preview-e-${idx}`).innerHTML = renderText(q.explain, urlE);
         if(window.MathJax) MathJax.typesetPromise([document.getElementById(`preview-q-${idx}`), document.getElementById(`preview-e-${idx}`)]);
     }
-
-    function renderTextWithImg(text, imgUrl) {
-        if(!text) return "";
-        // Chuyển đổi **bold** và *italic* sang HTML
-        let html = text
-            .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
-            .replace(/\*(.*?)\*/g, '<i>$1</i>')
-            .replace(/\n/g, '<br>');
-            
+    function renderText(txt, imgUrl) {
+        if(!txt) return "";
+        let h = txt.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\*(.*?)\*/g, '<i>$1</i>').replace(/\n/g, '<br>');
         if(imgUrl) {
-            let imgTag = `<img src="${imgUrl}" class="preview-img">`;
-            if(html.includes('[IMG]')) html = html.replace('[IMG]', imgTag);
-            else html += `<br>${imgTag}`;
-        } else {
-            html = html.replace('[IMG]', '<span style="background:yellow; font-size:0.8em">[VỊ TRÍ ẢNH]</span>');
+            let tag = `<img src="${imgUrl}" class="preview-img">`;
+            h = h.includes('[IMG]') ? h.replace('[IMG]', tag) : h + `<br>${tag}`;
         }
-        return html;
+        return h.replace('[IMG]', '');
     }
+    function removeQ(idx) { if(confirm("Xóa?")) { questions.splice(idx, 1); renderEditor(); } }
 
-    function removeQ(idx) { if(confirm("Xóa câu này?")) { questions.splice(idx, 1); renderEditor(); } }
-
-    // --- 5. UPLOAD SYSTEM (UPDATED FOR DUAL IMAGES) ---
+    // --- 5. UPLOAD VỚI BÁO LỖI CHI TIẾT ---
     async function publishExam() {
-        const user = document.getElementById('gh-user').value.trim();
-        const repo = document.getElementById('gh-repo').value.trim();
-        const token = document.getElementById('gh-token').value.trim();
-        const examId = document.getElementById('exam-id').value.trim();
-        const secureMode = document.getElementById('secure-mode').checked;
+        const u = document.getElementById('gh-user').value.trim();
+        const r = document.getElementById('gh-repo').value.trim();
+        const t = document.getElementById('gh-token').value.trim();
+        const eid = document.getElementById('exam-id').value.trim();
+        const secure = document.getElementById('secure-mode').checked;
 
-        if(!user || !repo || !token || !examId) return alert("Thiếu thông tin cấu hình!");
-        if(!confirm("Xác nhận xuất bản?")) return;
+        if(!u || !r || !t || !eid) return alert("Thiếu thông tin!");
+        if(!confirm("Xuất bản?")) return;
 
         const overlay = document.getElementById('loading-overlay');
         const logBox = document.getElementById('log-text');
@@ -340,45 +281,37 @@
         try {
             saveConfig();
             
-            // 1. Upload Images (Loop qua từng câu, check cả Q và E)
+            // 1. UPLOAD ẢNH (FIX CRASH)
             for (let i = 0; i < questions.length; i++) {
                 let q = questions[i];
-                
-                // Upload ảnh câu hỏi
-                if (q.imgQ.file) {
-                    log(`➤ Upload ảnh câu hỏi ${i+1}...`);
-                    let url = await uploadImgFile(user, repo, token, examId, i+1, 'q', q.imgQ.file);
-                    q.img = url; // Gán vào thuộc tính chuẩn
-                    q.q = q.q.replace('[IMG]', ''); 
+                if (q.imgQ && q.imgQ.file) {
+                    log(`➤ Upload ảnh câu ${i+1}...`);
+                    q.img = await uploadFile(u,r,t, `images/${eid}-q${i+1}-q-${Date.now()}.png`, q.imgQ.file, true);
+                    q.q = q.q.replace('[IMG]', '');
                 }
-                
-                // Upload ảnh lời giải (Logic mới: chèn thẳng thẻ img vào text explain)
-                if (q.imgE.file) {
+                if (q.imgE && q.imgE.file) {
                     log(`➤ Upload ảnh lời giải ${i+1}...`);
-                    let url = await uploadImgFile(user, repo, token, examId, i+1, 'e', q.imgE.file);
-                    // Với lời giải, ta thay thế [IMG] bằng thẻ markdown hoặc HTML để client hiển thị
-                    // Nhưng để đơn giản cho thi.html, ta thay bằng thẻ HTML img
-                    // Lưu ý: thi.html cần cho phép render HTML trong explain (đã hỗ trợ)
-                    let imgTag = `<div style="text-align:center"><img src="${url}" style="max-width:100%; border-radius:8px; margin:10px 0;"></div>`;
-                    if(q.explain.includes('[IMG]')) q.explain = q.explain.replace('[IMG]', imgTag);
-                    else q.explain += imgTag;
+                    let url = await uploadFile(u,r,t, `images/${eid}-q${i+1}-e-${Date.now()}.png`, q.imgE.file, true);
+                    let tag = `<div style="text-align:center"><img src="${url}" style="max-width:100%; border-radius:8px; margin:10px 0;"></div>`;
+                    q.explain = q.explain.includes('[IMG]') ? q.explain.replace('[IMG]', tag) : q.explain + tag;
                 }
-                
-                // Dọn dẹp object tạm
-                delete q.imgQ; delete q.imgE; 
+                // Dọn dẹp an toàn
+                if(q.imgQ) delete q.imgQ; 
+                if(q.imgE) delete q.imgE;
             }
 
-            // 2. Encrypt & Upload Data
-            let finalQuestions = JSON.parse(JSON.stringify(questions));
-            if (secureMode) {
-                log("➤ Đang mã hóa đáp án...");
-                finalQuestions.forEach(q => {
+            // 2. ENCRYPT
+            let finalQ = JSON.parse(JSON.stringify(questions));
+            if (secure) {
+                log("➤ Mã hóa đáp án...");
+                finalQ.forEach(q => {
                     if(q.type==='mcq') q.ans=CryptoJS.MD5(String(q.ans)).toString();
                     else if(q.type==='tf') q.items.forEach(it=>it.ans=CryptoJS.MD5(it.ans).toString());
                     else if(q.type==='short') q.ans=CryptoJS.MD5(String(q.ans).trim().toLowerCase()).toString();
                 });
             }
 
+            // 3. UPLOAD DATA (BÁO LỖI CHI TIẾT)
             log(`➤ Tạo file dữ liệu...`);
             const examData = {
                 title: document.getElementById('exam-title').value,
@@ -386,53 +319,75 @@
                 grade: document.getElementById('exam-grade').value,
                 time: parseInt(document.getElementById('exam-time').value),
                 password: document.getElementById('exam-pass-hash').value,
-                encrypted: secureMode,
+                encrypted: secure,
                 scores: { mcq: 0.25, tf: 1.0, short: 0.5 },
-                questions: finalQuestions
+                questions: finalQ
             };
             
-            await uploadToGitHub(user, repo, token, `data/${examId}.js`, `window.EXAM_DATA = ${JSON.stringify(examData, null, 4)};`);
+            // Encode content an toàn
+            const contentStr = `window.EXAM_DATA = ${JSON.stringify(examData, null, 4)};`;
+            const contentBase64 = btoa(unescape(encodeURIComponent(contentStr)));
+            
+            await uploadFile(u,r,t, `data/${eid}.js`, contentBase64, false);
             
             log(`➤ Cập nhật danh sách...`);
-            await updateListFile(user, repo, token, examId, examData);
+            await updateList(u,r,t, eid, examData);
 
             log(`🎉 THÀNH CÔNG!`);
-            alert("Xuất bản xong!");
+            alert("Đã xuất bản xong!");
             setTimeout(() => { overlay.style.display = 'none'; }, 2000);
 
         } catch (err) { 
             log(`❌ LỖI: ${err.message}`); 
-            alert("Có lỗi xảy ra! Vui lòng kiểm tra lại (Xem chi tiết trong khung đen).");
-            
-            // THÊM DÒNG NÀY ĐỂ TẮT MÀN HÌNH CHỜ KHI LỖI:
-            setTimeout(() => { 
-                document.getElementById('loading-overlay').style.display = 'none'; 
-            }, 3000); // Tự tắt sau 3 giây để thầy kịp đọc lỗi
+            alert("Có lỗi! Xem chi tiết trong khung đen.");
+            // Tự tắt sau 5s để thầy xem
+            setTimeout(() => { document.getElementById('loading-overlay').style.display='none'; }, 5000);
         }
     }
+
+    // HÀM UPLOAD CẢI TIẾN (BÁO LỖI GITHUB)
+    async function uploadFile(u, r, t, path, content, isFileObj) {
+        let sha = null;
+        try {
+            let check = await fetch(`https://api.github.com/repos/${u}/${r}/contents/${path}`, {headers:{Authorization:`token ${t}`}});
+            if(check.ok) sha = (await check.json()).sha;
+        } catch(e){}
+
+        let bodyData;
+        if(isFileObj) {
+            // Convert file to base64
+            let b64 = await new Promise(resolve => {
+                let fr = new FileReader();
+                fr.onload = () => resolve(fr.result.split(',')[1]);
+                fr.readAsDataURL(content);
+            });
+            bodyData = { message: "Up Img", content: b64 };
+        } else {
+            bodyData = { message: "Up Data", content: content };
+        }
+        if(sha) bodyData.sha = sha;
+
+        let res = await fetch(`https://api.github.com/repos/${u}/${r}/contents/${path}`, {
+            method: 'PUT',
+            headers: { Authorization: `token ${t}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify(bodyData)
+        });
+
+        if(!res.ok) {
+            let errJson = await res.json();
+            throw new Error(`GitHub từ chối (${res.status}): ${errJson.message}`);
+        }
+        
+        // Trả về link raw
+        return `https://raw.githubusercontent.com/${u}/${r}/main/${path}`; // Có thể sửa 'main' thành 'master' nếu cần
     }
 
-    async function uploadImgFile(user, repo, token, examId, qIdx, suffix, file) {
-        const ext = file.name.split('.').pop();
-        const path = `images/${examId}-q${qIdx}-${suffix}-${Date.now()}.${ext}`;
-        const base64 = await toBase64(file);
-        await uploadToGitHub(user, repo, token, path, base64, true);
-        return path; // Trả về đường dẫn tương đối
-    }
-
-    function toBase64(f) { return new Promise((r,j)=>{const d=new FileReader();d.readAsDataURL(f);d.onload=()=>r(d.result.split(',')[1]);d.onerror=e=>j(e);}); }
-    
-    async function uploadToGitHub(u,r,t,p,c,i) { 
-        let s=null; try{let k=await fetch(`https://api.github.com/repos/${u}/${r}/contents/${p}`,{headers:{Authorization:`token ${t}`}});if(k.ok)s=(await k.json()).sha;}catch(e){}
-        let rs=await fetch(`https://api.github.com/repos/${u}/${r}/contents/${p}`,{method:'PUT',headers:{Authorization:`token ${t}`,'Content-Type':'application/json'},body:JSON.stringify({message:i?"Img":"Data",content:c,sha:s})});
-        if(!rs.ok) throw new Error(`Lỗi upload ${p}`); 
-    }
-
-    async function updateListFile(u,r,t,id,d) {
+    async function updateList(u,r,t,id,d) {
         let url=`https://api.github.com/repos/${u}/${r}/contents/data/list.js`, l=[], s=null;
         try{let k=await fetch(url,{headers:{Authorization:`token ${t}`}});if(k.ok){let j=await k.json();s=j.sha;l=new Function("return "+decodeURIComponent(escape(atob(j.content))).replace(/window\.EXAM_LIST\s*=\s*/,'').replace(/;$/,''))();}}catch(e){}
         l=l.filter(x=>x.id!==id); l.unshift({id:id, title:d.title, subject:d.subject, grade:d.grade, time:d.time});
-        await uploadToGitHub(u,r,t,`data/list.js`,btoa(unescape(encodeURIComponent(`window.EXAM_LIST = ${JSON.stringify(l,null,4)};`))), false); // false để báo là text
+        let c = btoa(unescape(encodeURIComponent(`window.EXAM_LIST = ${JSON.stringify(l,null,4)};`)));
+        await uploadFile(u,r,t, `data/list.js`, c, false);
     }
 </script>
 </body>
