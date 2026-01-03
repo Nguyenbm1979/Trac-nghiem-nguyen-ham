@@ -3,124 +3,236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ngân Hàng Đề Thi Trực Tuyến</title>
+    <title>Ngân Hàng Đề Thi - Thầy Nguyễn Bình Nguyên</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
-        .container { max-width: 1000px; margin: 0 auto; }
-        h1 { text-align: center; color: #00796b; margin-bottom: 30px; text-transform: uppercase; }
+        /* --- 1. CẤU TRÚC CHUNG --- */
+        body { font-family: 'Roboto', sans-serif; background-color: #f0f2f5; margin: 0; padding: 0; color: #333; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
         
-        /* BỘ LỌC */
-        .filter-bar { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-        select { padding: 12px; border: 1px solid #ddd; border-radius: 8px; flex: 1; min-width: 150px; font-size: 16px; outline: none; }
-        select:focus { border-color: #009688; }
-        
-        /* GRID DANH SÁCH */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
-        .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.3s; border-top: 5px solid #ddd; display: flex; flex-direction: column; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        
-        /* MÀU SẮC THEO MÔN */
-        .Sub-Toan { border-color: #1976d2; } .Tag-Toan { background: #e3f2fd; color: #1976d2; }
-        .Sub-Ly { border-color: #7b1fa2; } .Tag-Ly { background: #f3e5f5; color: #7b1fa2; }
-        .Sub-Hoa { border-color: #c2185b; } .Tag-Hoa { background: #fce4ec; color: #c2185b; }
-        .Sub-Su { border-color: #e64a19; } .Tag-Su { background: #fbe9e7; color: #e64a19; }
-        .Sub-Dia { border-color: #00796b; } .Tag-Dia { background: #e0f2f1; color: #00796b; }
-        .Sub-Anh { border-color: #303f9f; } .Tag-Anh { background: #e8eaf6; color: #303f9f; }
+        /* --- 2. HEADER PROFILE (THƯƠNG HIỆU) --- */
+        .profile-header {
+            background: linear-gradient(135deg, #1565c0, #0d47a1); /* Màu xanh thương hiệu */
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            box-shadow: 0 10px 30px rgba(21, 101, 192, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        /* Hiệu ứng nền trang trí */
+        .profile-header::before {
+            content: ''; position: absolute; top: -50%; left: -10%; width: 200px; height: 200px;
+            background: rgba(255,255,255,0.1); border-radius: 50%;
+        }
+        .profile-header::after {
+            content: ''; position: absolute; bottom: -20%; right: -5%; width: 150px; height: 150px;
+            background: rgba(255,255,255,0.1); border-radius: 50%;
+        }
 
-        .card h3 { margin: 15px 0; font-size: 1.2em; color: #333; line-height: 1.4; flex-grow: 1; }
-        .info { font-size: 0.9em; color: #666; display: flex; justify-content: space-between; margin-bottom: 20px; background: #f8f9fa; padding: 10px; border-radius: 6px; }
-        .tag { padding: 5px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; text-transform: uppercase; }
-        .btn { display: block; width: 100%; padding: 12px; background: #009688; color: white; text-align: center; border-radius: 8px; text-decoration: none; font-weight: bold; transition: 0.2s; }
-        .btn:hover { background: #00796b; box-shadow: 0 4px 10px rgba(0,150,136,0.3); }
+        .avatar-box { position: relative; display: inline-block; margin-bottom: 15px; }
+        .avatar {
+            width: 110px; height: 110px; object-fit: cover;
+            border-radius: 50%; border: 4px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            background: white;
+        }
+        .teacher-name { font-size: 2em; font-weight: 900; margin: 0; letter-spacing: 1px; text-transform: uppercase; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .teacher-role { font-size: 1.1em; font-weight: 300; margin: 5px 0 0; opacity: 0.95; }
+        .teacher-school { font-size: 1em; font-weight: 500; color: #ffeb3b; margin-top: 5px; display: inline-block; background: rgba(0,0,0,0.2); padding: 5px 15px; border-radius: 20px; }
+        .teacher-detail { font-size: 0.9em; opacity: 0.8; margin-top: 5px; font-style: italic; }
+
+        /* --- 3. THANH TÌM KIẾM & BỘ LỌC --- */
+        .search-bar-container {
+            background: white; padding: 20px; border-radius: 15px;
+            margin-top: -30px; margin-bottom: 30px; /* Đẩy lên đè lên header */
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            display: flex; gap: 15px; flex-wrap: wrap;
+            position: relative; z-index: 10; width: 90%; max-width: 900px; margin-left: auto; margin-right: auto;
+        }
+        .search-input-box { flex: 2; position: relative; }
+        .search-input-box i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #999; }
+        .search-input {
+            width: 100%; padding: 12px 12px 12px 40px; border: 1px solid #ddd; border-radius: 8px; font-size: 1em; outline: none; transition: 0.3s; box-sizing: border-box;
+        }
+        .search-input:focus { border-color: #1565c0; box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.1); }
+        .filter-select {
+            flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1em; outline: none; min-width: 150px; cursor: pointer;
+        }
+
+        /* --- 4. DANH SÁCH ĐỀ THI (GRID) --- */
+        .exam-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Tự động chia cột */
+            gap: 20px;
+        }
+        .exam-card {
+            background: white; border-radius: 12px; overflow: hidden;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.05); transition: 0.3s;
+            border: 1px solid #eee; display: flex; flex-direction: column;
+            position: relative;
+        }
+        .exam-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-color: #bbdefb; }
+        
+        .card-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .subject-badge { padding: 4px 10px; border-radius: 6px; font-size: 0.8em; font-weight: bold; text-transform: uppercase; color: white; }
+        
+        /* Màu sắc môn học */
+        .bg-toan { background: #1e88e5; }
+        .bg-ly { background: #7b1fa2; }
+        .bg-hoa { background: #00897b; }
+        .bg-anh { background: #d32f2f; }
+        .bg-su { background: #f57c00; }
+        .bg-default { background: #607d8b; }
+
+        .grade-badge { background: #f5f5f5; color: #555; padding: 4px 8px; border-radius: 6px; font-size: 0.8em; font-weight: bold; }
+
+        .card-body { padding: 0 15px 15px; flex: 1; }
+        .exam-title { font-size: 1.1em; font-weight: 700; color: #333; margin: 0 0 10px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .exam-meta { font-size: 0.9em; color: #666; display: flex; gap: 15px; align-items: center; }
+        .exam-meta i { color: #1565c0; margin-right: 5px; }
+
+        .card-footer { padding: 15px; border-top: 1px solid #f0f0f0; text-align: center; background: #fafafa; }
+        .btn-start {
+            display: block; width: 100%; padding: 10px; background: #1565c0; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; transition: 0.2s;
+        }
+        .btn-start:hover { background: #0d47a1; }
+
+        .empty-state { text-align: center; padding: 50px; color: #999; grid-column: 1 / -1; }
+
+        /* Responsive Mobile */
+        @media (max-width: 600px) {
+            .teacher-name { font-size: 1.5em; }
+            .search-bar-container { flex-direction: column; gap: 10px; }
+            .filter-select { width: 100%; }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>📚 NGÂN HÀNG ĐỀ THI TRỰC TUYẾN</h1>
-    
-    <div class="filter-bar">
-        <select id="f-subject" onchange="renderExams()">
-            <option value="all">-- Tất cả các môn --</option>
-            <option value="Toan">Toán Học</option>
-            <option value="Ly">Vật Lý</option>
-            <option value="Hoa">Hóa Học</option>
-            <option value="Sinh">Sinh Học</option>
-            <option value="Su">Lịch Sử</option>
-            <option value="Dia">Địa Lý</option>
-            <option value="Anh">Tiếng Anh</option>
-            <option value="GDCD">GDCD</option>
-        </select>
-        <select id="f-grade" onchange="renderExams()">
-            <option value="all">-- Tất cả các khối --</option>
-            <option value="12">Lớp 12</option>
-            <option value="11">Lớp 11</option>
-            <option value="10">Lớp 10</option>
-            <option value="12OT">Ôn Thi THPT</option>
-        </select>
+    <div class="profile-header">
+        <div class="avatar-box">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar" class="avatar">
+        </div>
+        <h1 class="teacher-name">NGUYỄN BÌNH NGUYÊN</h1>
+        <p class="teacher-role">Thạc sĩ Toán</p>
+        <div class="teacher-school">Giáo viên trường THPT Bình Minh, Vĩnh Long</div>
+        <div class="teacher-detail"><i class="fas fa-check-circle"></i> Thành viên HĐBM môn Toán tỉnh Vĩnh Long</div>
     </div>
 
-    <div id="exam-grid" class="grid">Đang tải danh sách đề thi...</div>
-</div>
+    <div class="container">
+        <div class="search-bar-container">
+            <div class="search-input-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="search-input" class="search-input" placeholder="Nhập tên đề thi để tìm..." onkeyup="filterExams()">
+            </div>
+            <select id="subject-filter" class="filter-select" onchange="filterExams()">
+                <option value="all">-- Tất cả môn --</option>
+                <option value="Toan">Toán Học</option>
+                <option value="Ly">Vật Lý</option>
+                <option value="Hoa">Hóa Học</option>
+                <option value="Anh">Tiếng Anh</option>
+                <option value="Su">Lịch Sử</option>
+                <option value="Dia">Địa Lý</option>
+            </select>
+            <select id="grade-filter" class="filter-select" onchange="filterExams()">
+                <option value="all">-- Tất cả khối --</option>
+                <option value="12">Khối 12</option>
+                <option value="11">Khối 11</option>
+                <option value="10">Khối 10</option>
+                <option value="12OT">Ôn Thi THPT</option>
+            </select>
+        </div>
 
-<script>
-    // Ép buộc tải lại file list.js mới nhất từ GitHub để tránh lưu cache cũ
-    const script = document.createElement('script');
-    script.src = "data/list.js?v=" + new Date().getTime();
-    document.head.appendChild(script);
+        <div id="exam-grid" class="exam-grid">
+            <div class="empty-state">
+                <i class="fas fa-spinner fa-spin fa-2x"></i><br>Đang tải dữ liệu...
+            </div>
+        </div>
+    </div>
 
-    script.onload = function() {
-        renderExams();
-    };
+    <script>
+        // Tải file dữ liệu danh sách đề thi
+        // Lưu ý: File này được Admin Tool tự động cập nhật
+        const script = document.createElement('script');
+        script.src = 'data/list.js?v=' + Date.now(); // Thêm v=time để tránh cache cũ
+        script.onload = () => {
+            if (window.EXAM_LIST) {
+                renderExams(window.EXAM_LIST);
+            } else {
+                document.getElementById('exam-grid').innerHTML = '<div class="empty-state">Chưa có đề thi nào.</div>';
+            }
+        };
+        script.onerror = () => {
+            document.getElementById('exam-grid').innerHTML = '<div class="empty-state">❌ Không tải được dữ liệu đề thi.<br>Hãy chắc chắn thầy đã Xuất bản ít nhất 1 đề trong Admin Tool.</div>';
+        };
+        document.body.appendChild(script);
 
-    function renderExams() {
-        const container = document.getElementById('exam-grid');
-        const subFilter = document.getElementById('f-subject').value;
-        const gradeFilter = document.getElementById('f-grade').value;
-        
-        if (!window.EXAM_LIST || window.EXAM_LIST.length === 0) {
-            container.innerHTML = "<p style='text-align:center; width:100%; color:#666;'>Chưa có đề thi nào trong danh sách.</p>";
-            return;
+        // Hàm hiển thị danh sách
+        function renderExams(list) {
+            const grid = document.getElementById('exam-grid');
+            grid.innerHTML = "";
+
+            if (!list || list.length === 0) {
+                grid.innerHTML = '<div class="empty-state">Chưa có đề thi nào.</div>';
+                return;
+            }
+
+            list.forEach(exam => {
+                // Xử lý màu sắc môn học
+                let subjectClass = 'bg-default';
+                let subjectName = exam.subject || 'Khác';
+                switch (exam.subject) {
+                    case 'Toan': subjectClass = 'bg-toan'; subjectName = 'Toán'; break;
+                    case 'Ly': subjectClass = 'bg-ly'; subjectName = 'Vật Lý'; break;
+                    case 'Hoa': subjectClass = 'bg-hoa'; subjectName = 'Hóa Học'; break;
+                    case 'Anh': subjectClass = 'bg-anh'; subjectName = 'Tiếng Anh'; break;
+                    case 'Su': subjectClass = 'bg-su'; subjectName = 'Lịch Sử'; break;
+                }
+
+                const html = `
+                    <div class="exam-card">
+                        <div class="card-header">
+                            <span class="subject-badge ${subjectClass}">${subjectName}</span>
+                            <span class="grade-badge">Khối ${exam.grade || '12'}</span>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="exam-title">${exam.title}</h3>
+                            <div class="exam-meta">
+                                <span><i class="far fa-clock"></i> ${exam.time} phút</span>
+                                <span><i class="far fa-file-alt"></i> ID: ${exam.id}</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="thi.html?id=${exam.id}" class="btn-start">VÀO THI NGAY <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                `;
+                grid.insertAdjacentHTML('beforeend', html);
+            });
         }
 
-        let html = '';
-        let hasContent = false;
+        // Hàm lọc đề thi
+        function filterExams() {
+            const txt = document.getElementById('search-input').value.toLowerCase();
+            const sub = document.getElementById('subject-filter').value;
+            const grd = document.getElementById('grade-filter').value;
 
-        // Hiển thị đề mới nhất lên đầu (đảo ngược mảng)
-        const displayList = [...window.EXAM_LIST].reverse();
+            if (!window.EXAM_LIST) return;
 
-        displayList.forEach(ex => {
-            if (subFilter !== 'all' && ex.subject !== subFilter) return;
-            if (gradeFilter !== 'all' && ex.grade !== gradeFilter) return;
+            const filtered = window.EXAM_LIST.filter(ex => {
+                const matchText = ex.title.toLowerCase().includes(txt) || ex.id.toLowerCase().includes(txt);
+                const matchSub = sub === 'all' || ex.subject === sub;
+                const matchGrd = grd === 'all' || ex.grade === grd;
+                return matchText && matchSub && matchGrd;
+            });
 
-            let subName = getSubName(ex.subject);
-            let cssClass = `Sub-${ex.subject}`;
-            let tagClass = `Tag-${ex.subject}`;
-
-            html += `
-            <div class="card ${cssClass}">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <span class="tag ${tagClass}">${subName}</span>
-                    <span class="tag" style="background:#eee; color:#555">Khối ${ex.grade}</span>
-                </div>
-                <h3>${ex.title}</h3>
-                <div class="info">
-                    <span>⏳ ${ex.time} phút</span>
-                    <span>🆔 ${ex.id}</span>
-                </div>
-                <a href="thi.html?id=${ex.id}" class="btn">VÀO THI NGAY</a>
-            </div>`;
-            hasContent = true;
-        });
-
-        container.innerHTML = hasContent ? html : "<p style='text-align:center; width:100%; color:#666;'>Không tìm thấy đề thi nào phù hợp với bộ lọc.</p>";
-    }
-
-    function getSubName(code) {
-        const map = { 'Toan':'Toán', 'Ly':'Vật Lý', 'Hoa':'Hóa Học', 'Sinh':'Sinh Học', 'Su':'Lịch Sử', 'Dia':'Địa Lý', 'Anh':'Tiếng Anh', 'GDCD':'GDCD' };
-        return map[code] || code;
-    }
-</script>
-
+            renderExams(filtered);
+        }
+    </script>
 </body>
 </html>
