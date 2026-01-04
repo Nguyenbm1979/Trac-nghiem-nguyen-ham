@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Tool v18.1 (Restore Delete)</title>
+    <title>Admin Tool v19.0 (File Manager)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* CSS CHUẨN */
         body{font-family:'Segoe UI',sans-serif;background:#eceff1;padding:20px;color:#37474f;margin:0}
-        .btn{padding:10px 20px;border:none;border-radius:4px;cursor:pointer;font-weight:bold;color:white}
+        .btn{padding:8px 15px;border:none;border-radius:4px;cursor:pointer;font-weight:bold;color:white;font-size:0.9em}
         .btn-green{background:#2e7d32}.btn-blue{background:#1565c0}.btn-red{background:#c62828}.btn-gray{background:#607d8b}
+        .btn:hover{opacity:0.9}
         
         /* CÁC NÚT THAO TÁC */
-        .btn-edit{background:#ff9800;color:white;border:none;padding:5px 15px;border-radius:4px;cursor:pointer;margin-right:5px}
-        .btn-qr{background:#3f51b5;color:white;border:none;padding:5px 15px;border-radius:4px;cursor:pointer;margin-right:5px}
-        .btn-del{background:#d32f2f;color:white;border:none;padding:5px 15px;border-radius:4px;cursor:pointer;} /* Nút xóa mới */
-        .btn-del:hover{background:#b71c1c}
+        .btn-edit{background:#ff9800;color:white;margin-right:5px}
+        .btn-qr{background:#3f51b5;color:white;margin-right:5px}
+        .btn-del{background:#d32f2f;color:white;} 
 
         input,select{width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;box-sizing:border-box}
         .config-box{background:#e3f2fd;padding:15px;border-radius:8px;margin-bottom:20px}
@@ -27,8 +28,8 @@
         #main-app{display:none;max-width:1200px;margin:0 auto;background:white;padding:25px;border-radius:10px}
         
         /* TABS */
-        .tab-bar{display:flex;gap:10px;margin-bottom:20px;border-bottom:2px solid #eee;padding-bottom:10px}
-        .tab-btn{padding:10px 20px;background:#f5f5f5;border:none;border-radius:6px;cursor:pointer;color:#666;font-weight:bold}
+        .tab-bar{display:flex;gap:10px;margin-bottom:20px;border-bottom:2px solid #eee;padding-bottom:10px;overflow-x:auto}
+        .tab-btn{padding:10px 20px;background:#f5f5f5;border:none;border-radius:6px;cursor:pointer;color:#666;font-weight:bold;white-space:nowrap}
         .tab-btn.active{background:#00796b;color:white}
         .section{display:none}.section.active{display:block}
         
@@ -36,12 +37,20 @@
         .modal{display:none;position:fixed;z-index:10000;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);align-items:center;justify-content:center}
         .modal-content{background-color:white;padding:20px;border-radius:10px;text-align:center}
         #qrcode{margin:20px auto;display:flex;justify-content:center}
-        .file-item{display:flex;justify-content:space-between;padding:15px;background:#fafafa;border:1px solid #ddd;border-radius:6px;margin-bottom:10px;align-items:center}
+        .file-item{display:flex;justify-content:space-between;padding:12px;background:#fafafa;border:1px solid #ddd;border-radius:6px;margin-bottom:8px;align-items:center}
         .ai-box{background:#f3e5f5;padding:15px;border-radius:8px;border:1px dashed #ab47bc;text-align:center;margin-bottom:20px}
+        
+        /* FILE MANAGER STYLES (NEW) */
+        .fm-breadcrumb {padding:10px; background:#eee; margin-bottom:15px; border-radius:4px; font-weight:bold; display:flex; align-items:center;}
+        .fm-item {display:flex; align-items:center; padding:10px; border-bottom:1px solid #eee; cursor:pointer;}
+        .fm-item:hover {background:#f0f0f0;}
+        .fm-icon {width:30px; text-align:center; margin-right:10px; font-size:1.2em;}
+        .fm-name {flex:1; font-weight:500;}
+        .fm-folder {color:#fbc02d;}
+        .fm-file {color:#546e7a;}
         
         /* EDITOR STYLES */
         .q-item{border:1px solid #ddd; padding:15px; margin-bottom:15px; border-radius:8px; background:#fff;}
-        .match-row{display:flex; gap:10px; margin-bottom:5px; align-items:center;}
         .smart-textarea{width:100%; height:80px; border:1px solid #ccc; padding:5px; margin-top:5px;}
     </style>
 </head>
@@ -68,7 +77,7 @@
 </div>
 
 <div id="main-app">
-    <h1>HỆ THỐNG QUẢN TRỊ v18.1</h1>
+    <h1>QUẢN TRỊ v19.0</h1>
     <div class="config-box">
         <div class="row">
             <div class="col"><label>User</label><input type="text" id="gh-user"></div>
@@ -84,14 +93,23 @@
     </div>
 
     <div class="tab-bar">
-        <button id="tab-data" class="tab-btn active" onclick="switchTab('data')">📂 QUẢN LÝ</button>
+        <button id="tab-data" class="tab-btn active" onclick="switchTab('data')">📂 QUẢN LÝ ĐỀ</button>
+        <button id="tab-files" class="tab-btn" onclick="switchTab('files')">🗂️ QUẢN LÝ FILE (FULL)</button>
         <button id="tab-create" class="tab-btn" onclick="switchTab('create')">📝 SOẠN ĐỀ</button>
         <button id="tab-images" class="tab-btn" onclick="switchTab('images')">📷 KHO ẢNH</button>
     </div>
 
     <div id="sec-data" class="section active">
-        <div style="display:flex;justify-content:space-between;margin-bottom:20px"><h3>DANH SÁCH FILE</h3><button class="btn btn-green" onclick="loadDataFiles()">🔄 Tải Lại</button></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:20px"><h3>DANH SÁCH ĐỀ THI</h3><button class="btn btn-green" onclick="loadDataFiles()">🔄 Tải Lại</button></div>
         <div id="data-list" class="file-list"></div>
+    </div>
+
+    <div id="sec-files" class="section">
+        <div class="fm-breadcrumb">
+            <button class="btn btn-gray" style="margin-right:10px" onclick="loadFileManager('')"><i class="fas fa-home"></i> Gốc</button>
+            <span id="fm-current-path">/</span>
+        </div>
+        <div id="fm-list" style="background:white;border:1px solid #ddd;border-radius:6px"></div>
     </div>
 
     <div id="sec-create" class="section">
@@ -136,39 +154,84 @@
         document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
         document.getElementById('sec-'+t).classList.add('active');
         const btn = document.getElementById('tab-'+t); if(btn) btn.classList.add('active');
+        
+        // Auto load tab File Manager
+        if(t === 'files') loadFileManager('');
     }
     
     window.onload=()=>{ ['gh-user','gh-repo','gh-token','gemini-key','bank-id','bank-acc'].forEach(id=>{if(localStorage.getItem(id))document.getElementById(id).value=localStorage.getItem(id)}); }
     function saveConfig(){ ['gh-user','gh-repo','gh-token','gemini-key','bank-id','bank-acc'].forEach(id=>localStorage.setItem(id,document.getElementById(id).value.trim())); alert("Đã lưu!"); }
     function hashPass(){let p=document.getElementById('exam-pass').value.trim();document.getElementById('exam-pass-hash').value=p?CryptoJS.MD5(p).toString():"";}
 
-    // --- TÍNH NĂNG XÓA FILE (MỚI BỔ SUNG) ---
-    async function deleteFile(path, name) {
-        if(!confirm(`⚠️ CẢNH BÁO:\nBạn có chắc chắn muốn XÓA vĩnh viễn file "${name}" không?\nHành động này không thể hoàn tác!`)) return;
-        
+    // ==========================================
+    // TÍNH NĂNG QUẢN LÝ FILE (MỚI v19.0)
+    // ==========================================
+    let currentPath = "";
+
+    async function loadFileManager(path) {
+        currentPath = path;
+        document.getElementById('fm-current-path').innerText = path || " (Thư mục gốc)";
+        const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value;
+        const ov=document.getElementById('loading-overlay'); ov.style.display='flex';
+
+        try {
+            const res = await fetch(`https://api.github.com/repos/${u}/${r}/contents/${path}`, {headers: {Authorization: `token ${t}`}});
+            if(!res.ok) throw new Error("Lỗi tải thư mục!");
+            const items = await res.json();
+            
+            // Sắp xếp: Folder trước, File sau
+            items.sort((a, b) => (a.type === b.type ? 0 : a.type === 'dir' ? -1 : 1));
+
+            let html = '';
+            if(path !== "") { // Nút quay lại
+                let parent = path.split('/').slice(0,-1).join('/');
+                html += `<div class="fm-item" onclick="loadFileManager('${parent}')"><div class="fm-icon fm-folder"><i class="fas fa-level-up-alt"></i></div><div class="fm-name">.. (Quay lại)</div></div>`;
+            }
+
+            items.forEach(item => {
+                let icon = item.type === 'dir' ? '<i class="fas fa-folder"></i>' : '<i class="fas fa-file-alt"></i>';
+                let cls = item.type === 'dir' ? 'fm-folder' : 'fm-file';
+                let action = item.type === 'dir' ? `onclick="loadFileManager('${item.path}')"` : '';
+                let delBtn = `<button class="btn btn-del" style="padding:2px 8px;font-size:0.8em" onclick="event.stopPropagation();deleteFileGeneric('${item.path}', '${item.name}', true)">Xóa</button>`;
+                
+                html += `<div class="fm-item" ${action}>
+                            <div class="fm-icon ${cls}">${icon}</div>
+                            <div class="fm-name">${item.name}</div>
+                            <div>${delBtn}</div>
+                         </div>`;
+            });
+            document.getElementById('fm-list').innerHTML = html;
+        } catch(e) { alert("Lỗi: " + e.message); } finally { ov.style.display='none'; }
+    }
+
+    // HÀM XÓA CHUNG (Dùng cho cả 2 tab)
+    async function deleteFileGeneric(path, name, isFileManager) {
+        if(!confirm(`⚠️ CẢNH BÁO:\nXóa vĩnh viễn "${name}"?\nKhông thể phục hồi!`)) return;
         const u=document.getElementById('gh-user').value, r=document.getElementById('gh-repo').value, t=document.getElementById('gh-token').value;
         const ov=document.getElementById('loading-overlay'); ov.style.display='flex';
 
         try {
-            // 1. Lấy SHA của file cần xóa
             const res = await fetch(`https://api.github.com/repos/${u}/${r}/contents/${path}`, {headers: {Authorization: `token ${t}`}});
-            if(!res.ok) throw new Error("Không tìm thấy file để xóa!");
+            if(!res.ok) throw new Error("Không tìm thấy file!");
             const data = await res.json();
             
-            // 2. Gửi lệnh xóa
             const del = await fetch(`https://api.github.com/repos/${u}/${r}/contents/${path}`, {
                 method: 'DELETE',
                 headers: { Authorization: `token ${t}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: `Delete ${name}`, sha: data.sha })
             });
 
-            if(del.ok) { alert("Đã xóa thành công!"); loadDataFiles(); } 
-            else throw new Error("Lỗi khi xóa file!");
-            
+            if(del.ok) { 
+                alert("Đã xóa!"); 
+                if(isFileManager) loadFileManager(currentPath); // Reload tab File
+                else loadDataFiles(); // Reload tab Data
+            } else throw new Error("Lỗi xóa file!");
         } catch(e) { alert("Lỗi: " + e.message); } finally { ov.style.display='none'; }
     }
 
-    // --- LOAD DANH SÁCH FILE (ĐÃ THÊM NÚT XÓA) ---
+    // ==========================================
+    // CÁC TÍNH NĂNG CŨ (GIỮ NGUYÊN)
+    // ==========================================
     async function loadDataFiles(){
         const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value;
         if(!u)return alert("Thiếu Config!");
@@ -178,13 +241,12 @@
             let h='';
             f.forEach(x=>{
                 if(x.name.endsWith('.js')&&x.name!=='list.js') {
-                    // Thêm nút Xóa (btn-del) vào đây
                     h+=`<div class="file-item">
                             <span style="font-weight:500">${x.name}</span>
                             <div>
-                                <button class="btn-qr" onclick="showExamQR('${x.name}')"><i class="fas fa-qrcode"></i> QR</button>
-                                <button class="btn-edit" onclick="loadExamToEdit('${x.path}','${x.name}')">Sửa</button>
-                                <button class="btn-del" onclick="deleteFile('${x.path}','${x.name}')">Xóa</button>
+                                <button class="btn btn-qr" onclick="showExamQR('${x.name}')"><i class="fas fa-qrcode"></i> QR</button>
+                                <button class="btn btn-edit" onclick="loadExamToEdit('${x.path}','${x.name}')">Sửa</button>
+                                <button class="btn btn-del" onclick="deleteFileGeneric('${x.path}','${x.name}', false)">Xóa</button>
                             </div>
                         </div>`;
                 }
@@ -193,7 +255,6 @@
         }catch(e){alert(e.message);}
     }
 
-    // --- CÁC HÀM CŨ (LOAD, EDIT, PUBLISH) GIỮ NGUYÊN ---
     async function processImageWithGemini(input) {
         const file=input.files[0], key=document.getElementById('gemini-key').value;
         if(!file||!key)return alert("Thiếu Key hoặc File!");
@@ -228,7 +289,6 @@
             document.getElementById('secure-mode').checked=data.encrypted;
             if(data.start)document.getElementById('exam-start').value=data.start;
             if(data.end)document.getElementById('exam-end').value=data.end;
-            
             questions=data.questions||[]; renderEditor(); 
             ov.style.display='none'; switchTab('create');
         }catch(e){ alert("Lỗi tải đề: "+e.message); ov.style.display='none'; }
@@ -264,7 +324,6 @@
         const bankInfo = {id: document.getElementById('bank-id').value, acc: document.getElementById('bank-acc').value};
         const price = parseInt(document.getElementById('exam-price').value) || 0;
         const ov=document.getElementById('loading-overlay');ov.style.display='flex';
-        
         try{
             let fQ=JSON.parse(JSON.stringify(questions));
             let sec=document.getElementById('secure-mode').checked;
@@ -276,7 +335,6 @@
                     else if(q.type==='match') q.ans=q.ans.map(v=>CryptoJS.MD5(String(v).trim()).toString());
                 });
             }
-
             let dt={
                 title:document.getElementById('exam-title').value,
                 time:parseInt(document.getElementById('exam-time').value),
@@ -288,7 +346,6 @@
                 scores:{mcq:0.25,tf:1.0,short:0.5,match:1.0},
                 questions:fQ
             };
-            
             let c=btoa(unescape(encodeURIComponent(`window.EXAM_DATA = ${JSON.stringify(dt,null,4)};`)));
             await upF(u,r,t,`data/${id}.js`,c,false);
             await updateList(u,r,t,id,dt);
