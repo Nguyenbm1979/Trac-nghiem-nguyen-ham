@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Tool v20.9 (Final Stable)</title>
+    <title>Admin Tool v21.1 (Image Delete)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
@@ -22,14 +22,17 @@
         .tab-btn{padding:10px 20px;background:#f5f5f5;border:none;border-radius:6px;cursor:pointer;color:#666;font-weight:bold;white-space:nowrap}
         .tab-btn.active{background:#00796b;color:white}
         .section{display:none}.section.active{display:block}
+        
         .split-view {display:flex; gap:20px; align-items: flex-start;}
         .editor-col {flex: 1; min-width: 0;} 
         .preview-col {flex: 1; position: sticky; top: 20px; max-height: 90vh; overflow-y: auto; background: white; border-radius: 8px; border: 1px solid #ddd; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); display:none;}
+        
         .q-item {background:white; padding:15px; border:1px solid #ccc; border-radius:8px; margin-bottom:15px; border-left:5px solid #009688; position:relative;}
         .q-item-header {display:flex; justify-content:space-between; margin-bottom:10px; font-weight:bold; color:#00796b; border-bottom:1px solid #eee; padding-bottom:5px}
         .smart-textarea {min-height:60px; font-family:inherit; font-size:1em}
         .upload-wrapper {display:flex; gap:5px; margin: 5px 0;}
         .file-upload-btn {background:#e0e0e0; color:#333; padding:5px 10px; border-radius:4px; cursor:pointer; display:inline-block; font-size:0.9em; border:1px solid #ccc;}
+        
         .preview-header {text-align: center; color: #1a237e; border-bottom: 2px solid #eee; margin-bottom: 15px; padding-bottom: 10px;}
         .p-q-block {background:#fff; margin-bottom:15px; padding-bottom:15px; border-bottom:1px dashed #ccc;}
         .p-label {color:#1a237e; font-weight:bold; font-size:1.1em;}
@@ -37,12 +40,22 @@
         .p-opt {background:#fafafa; border:1px solid #eee; padding:8px; margin-bottom:5px; border-radius:4px;}
         .p-img {max-width:100%; border-radius:8px; margin:10px 0; border:1px solid #eee; display:block;}
         .p-sol {background:#e8f5e9; color:#2e7d32; padding:10px; border-radius:4px; font-size:0.9em; margin-top:10px; border:1px dashed #a5d6a7;}
+        
+        /* FILE MANAGER */
         .file-item{display:flex;justify-content:space-between;padding:10px;background:#fafafa;border:1px solid #ddd;border-radius:6px;margin-bottom:5px;align-items:center}
         .fm-breadcrumb {padding:10px; background:#eee; margin-bottom:15px; border-radius:4px; font-weight:bold; display:flex; align-items:center;}
         .fm-item {display:flex; align-items:center; padding:10px; border-bottom:1px solid #eee; cursor:pointer;}
         .fm-item:hover {background:#f0f0f0;}
         .fm-icon {width:30px; text-align:center; margin-right:10px; font-size:1.2em;}
         .fm-name {flex:1; font-weight:500;} .fm-folder {color:#fbc02d;} .fm-file {color:#546e7a;}
+        
+        /* IMAGE GALLERY (CÓ NÚT XÓA) */
+        .img-card {border:1px solid #ddd; padding:5px; background:white; border-radius:4px; text-align:center; width: 150px; position: relative;}
+        .img-card img {width: 100%; height: 100px; object-fit: cover; border-radius: 4px;}
+        .img-card small {display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-top:5px;}
+        .img-del-btn {background:#d32f2f; color:white; border:none; width:100%; padding:5px; cursor:pointer; margin-top:5px; border-radius:2px;}
+        .img-del-btn:hover {background:#b71c1c;}
+
         #loading-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:9999;display:none;flex-direction:column;justify-content:center;align-items:center;color:white}
         .modal{display:none;position:fixed;z-index:10000;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);align-items:center;justify-content:center}
         .modal-content{background-color:white;padding:20px;border-radius:10px;text-align:center}
@@ -74,7 +87,7 @@
 </div>
 
 <div id="main-app">
-    <h1>QUẢN TRỊ v20.9 (STABLE)</h1>
+    <h1>QUẢN TRỊ v21.1 (THÊM XÓA ẢNH)</h1>
     
     <div class="config-box">
         <div class="row">
@@ -155,7 +168,13 @@
         </div>
     </div>
 
-    <div id="sec-images" class="section"><button class="btn btn-green" onclick="loadImagesFromGitHub()">Tải ảnh</button><div id="image-gallery" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:15px"></div></div>
+    <div id="sec-images" class="section">
+        <div style="margin-bottom:15px; display:flex; justify-content:space-between">
+            <h3>KHO ẢNH TRÊN GITHUB</h3>
+            <button class="btn btn-green" onclick="loadImagesFromGitHub()">🔄 Tải Lại Ảnh</button>
+        </div>
+        <div id="image-gallery" style="display:flex;flex-wrap:wrap;gap:10px"></div>
+    </div>
 </div>
 
 <script>
@@ -171,13 +190,14 @@
         document.getElementById('sec-'+t).classList.add('active');
         const btn = document.getElementById('tab-'+t); if(btn) btn.classList.add('active');
         if(t === 'files') loadFileManager('');
+        if(t === 'images') loadImagesFromGitHub(); // Auto load ảnh
     }
     
     window.onload=()=>{ ['gh-user','gh-repo','gh-token','bank-id','bank-acc'].forEach(id=>{if(localStorage.getItem(id))document.getElementById(id).value=localStorage.getItem(id)}); }
     function saveConfig(){ ['gh-user','gh-repo','gh-token','bank-id','bank-acc'].forEach(id=>localStorage.setItem(id,document.getElementById(id).value.trim())); alert("Đã lưu!"); }
     function hashPass(){let p=document.getElementById('exam-pass').value.trim();document.getElementById('exam-pass-hash').value=p?CryptoJS.MD5(p).toString():"";}
 
-    // --- LOGIC CÂU HỎI ---
+    // --- LOGIC CÂU HỎI & ẢNH ---
     function addQ(type) {
         if(type === 'mcq') EXAM_QUESTIONS.push({type:'mcq', q:'Câu hỏi mới... [IMG]', img:'', options:['A','B','C','D'], ans:0, explain:'Lời giải... [IMG]', solImg:''});
         if(type === 'tf') EXAM_QUESTIONS.push({type:'tf', q:'Đúng hay sai?', img:'', items:[{sub:'Ý 1', ans:'T'},{sub:'Ý 2', ans:'F'},{sub:'Ý 3', ans:'T'},{sub:'Ý 4', ans:'F'}], explain:'', solImg:''});
@@ -287,7 +307,6 @@
         } catch(e) { alert("❌ Lỗi JSON: " + e.message); }
     }
 
-    // --- CÁC HÀM TƯƠNG TÁC GITHUB ---
     async function deleteFileGeneric(path, name, isFileManager) {
         if(!confirm(`⚠️ XÓA VĨNH VIỄN: ${name}?`)) return;
         const u=document.getElementById('gh-user').value, r=document.getElementById('gh-repo').value, t=document.getElementById('gh-token').value;
@@ -299,7 +318,10 @@
                 method: 'DELETE', headers: { Authorization: `token ${t}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: `Delete ${name}`, sha: data.sha })
             });
-            alert("Đã xóa!"); if(isFileManager) loadFileManager(currentPath); else loadDataFiles();
+            alert("Đã xóa!"); 
+            if(isFileManager) loadFileManager(currentPath); 
+            else if (path.startsWith('images/')) loadImagesFromGitHub(); // Reload kho ảnh
+            else loadDataFiles();
         } catch(e) { alert("Lỗi: " + e.message); } finally { ov.style.display='none'; }
     }
 
@@ -398,7 +420,7 @@
     async function upF(u,r,t,p,c,isF){let s=null;try{let k=await fetch(`https://api.github.com/repos/${u}/${r}/contents/${p}`,{headers:{Authorization:`token ${t}`}});if(k.ok)s=(await k.json()).sha;}catch(e){}let b={message:"Up",content:isF?await toB64(c):c};if(s)b.sha=s;let rs=await fetch(`https://api.github.com/repos/${u}/${r}/contents/${p}`,{method:'PUT',headers:{Authorization:`token ${t}`,'Content-Type':'application/json'},body:JSON.stringify(b)});if(!rs.ok){let j=await rs.json();throw new Error(j.message);}}
     function toB64(f){return new Promise(r=>{let fr=new FileReader();fr.onload=()=>r(fr.result.split(',')[1]);fr.readAsDataURL(f);});}
     
-    // --- HÀM UPDATE LIST (ĐÃ SỬA LỖI FILTER UNDEFINED) ---
+    // --- HÀM UPDATE LIST (ĐÃ FIX LỖI FILTER) ---
     async function updateList(u,r,t,id,d){
         let url=`https://api.github.com/repos/${u}/${r}/contents/data/list.js`;
         let l=[],s=null;
@@ -407,14 +429,12 @@
             if(k.ok){
                 let j=await k.json();
                 s=j.sha;
-                // GIẢI MÃ AN TOÀN VÀ TRÍCH XUẤT MẢNG
                 let content = decodeURIComponent(escape(atob(j.content)));
                 let jsonStr = content.substring(content.indexOf('['), content.lastIndexOf(']')+1);
                 if(jsonStr) l = JSON.parse(jsonStr);
             }
-        }catch(e){ console.log("List chưa có hoặc lỗi, sẽ tạo mới"); }
+        }catch(e){ console.log("List chưa có hoặc lỗi, tạo mới."); }
         
-        // CHỐT CHẶN AN TOÀN: NẾU L KHÔNG PHẢI MẢNG, GÁN VỀ RỖNG
         if(!Array.isArray(l)) l = [];
         
         l=l.filter(x=>x.id!==id);
@@ -449,7 +469,27 @@
             document.getElementById('fm-list').innerHTML = html;
         } catch(e) {}
     }
-    async function loadImagesFromGitHub(){const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value;if(!u)return;try{const res=await fetch(`https://api.github.com/repos/${u}/${r}/contents/images`,{headers:{Authorization:`token ${t}`}});const f=await res.json();let h='';f.forEach(x=>{if(x.name.match(/\.(png|jpg)$/i))h+=`<div style="border:1px solid #ddd;padding:5px"><img src="${x.download_url}" style="height:100px"><br><small>${x.name}</small></div>`});document.getElementById('image-gallery').innerHTML=h;}catch(e){}}
+    
+    // --- TẢI ẢNH (CÓ NÚT XÓA) ---
+    async function loadImagesFromGitHub(){
+        const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value;
+        if(!u)return;
+        try{
+            const res=await fetch(`https://api.github.com/repos/${u}/${r}/contents/images`,{headers:{Authorization:`token ${t}`}});
+            const f=await res.json();
+            let h='';
+            f.forEach(x=>{
+                if(x.name.match(/\.(png|jpg)$/i)) {
+                    h+=`<div class="img-card">
+                            <img src="${x.download_url}" onclick="window.open('${x.download_url}')">
+                            <small>${x.name}</small>
+                            <button class="img-del-btn" onclick="deleteFileGeneric('${x.path}', '${x.name}', false)">Xóa Ảnh</button>
+                        </div>`;
+                }
+            });
+            document.getElementById('image-gallery').innerHTML=h;
+        }catch(e){}
+    }
 </script>
 </body>
 </html>
