@@ -3,306 +3,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hệ Thống Thi Trực Tuyến Pro (v14.0 VSAT)</title>
+    <title>Hệ Thống Thi Trực Tuyến v16.1 (Fix Bug)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* CSS CHUẨN */
-        *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;scroll-behavior:smooth}body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;margin:0;color:#333;padding-bottom:80px;user-select:none}.container{max-width:900px;margin:0 auto;padding:15px}.header-bar{background:white;padding:10px 20px;box-shadow:0 2px 10px rgba(0,0,0,0.1);position:sticky;top:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #009688}.timer{font-size:1.3em;color:#d32f2f;font-weight:800;font-family:monospace;background:#ffebee;padding:5px 15px;border-radius:20px}.violation-box{background:#ffebee;color:#c62828;padding:10px;margin-bottom:15px;border-radius:6px;border:1px solid #ffcdd2;display:none;font-weight:bold;text-align:center}.palette-container{background:white;padding:15px;margin:15px auto;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.1)}.palette-grid{display:flex;flex-wrap:wrap;gap:8px}.palette-item{width:35px;height:35px;display:flex;align-items:center;justify-content:center;border:1px solid #ddd;border-radius:4px;font-size:0.9em;cursor:pointer;background:#f9f9f9}.palette-item.answered{background:#009688;color:white;border-color:#009688;font-weight:bold}.question-block{background:white;padding:20px;border-radius:12px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.05);border:1px solid #e0e0e0;scroll-margin-top:80px}.q-label{color:#0277bd;font-weight:800;font-size:1.1em}.q-content{font-weight:500;display:block;margin-bottom:15px}.q-image{max-width:100%;border-radius:8px;margin:10px auto;border:1px solid #eee;display:block}.option-item{display:flex;align-items:flex-start;background:#f8f9fa;border:1px solid #eee;padding:12px;border-radius:8px;cursor:pointer;margin-bottom:8px;transition:0.2s}.option-item:hover{background:#e0f2f1}.option-item:has(input:checked){border-color:#009688;background:#e0f2f1;font-weight:600;color:#004d40}.option-item input{margin-right:12px;margin-top:5px;transform:scale(1.3);accent-color:#009688}.tf-table{width:100%;border-collapse:collapse;margin-top:5px}.tf-table td,.tf-table th{padding:10px;border-bottom:1px solid #eee;text-align:center}.tf-table td:first-child{text-align:left}.short-input{width:100%;padding:12px;border:2px solid #ddd;border-radius:8px;outline:none}.part-header{background:#e3f2fd;color:#1565c0;padding:12px;margin:30px 0 15px 0;font-weight:800;border-radius:6px;border-left:5px solid #1565c0}.welcome-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#009688,#004d40);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px}.welcome-card{background:white;width:100%;max-width:420px;padding:35px;border-radius:16px;text-align:center;box-shadow:0 15px 40px rgba(0,0,0,0.3)}.welcome-card input{width:100%;padding:14px;margin-bottom:15px;border:1px solid #ccc;border-radius:8px;font-size:16px}.btn-start{background:#ff9800;color:white;width:100%;padding:15px;border:none;border-radius:50px;font-weight:bold;font-size:1.2em;cursor:pointer;transition:0.3s}.btn-start:hover{transform:scale(1.05)}.loading{position:fixed;top:0;left:0;width:100%;height:100%;background:white;z-index:3000;display:flex;flex-direction:column;justify-content:center;align-items:center}.result-box{display:none;background:white;padding:40px;text-align:center;border-radius:12px;margin-bottom:20px;border-top:6px solid #2e7d32}.solution-box{display:none;margin-top:15px;padding:15px;background:#e8f5e9;border-radius:6px;color:#2e7d32;border:1px dashed #a5d6a7}.ans-badge{display:inline-block;padding:5px 10px;border-radius:6px;font-weight:bold;margin-top:10px}.correct{background:#c8e6c9;color:#1b5e20}.wrong{background:#ffcdd2;color:#b71c1c}.btn-submit{background:#d32f2f;color:white;padding:15px;width:100%;border:none;border-radius:8px;font-size:18px;font-weight:bold;cursor:pointer;margin-top:20px}.error-overlay{background:rgba(255,255,255,0.9);position:fixed;top:0;left:0;width:100%;height:100%;z-index:4000;display:flex;justify-content:center;align-items:center;flex-direction:column;text-align:center}
-        
-        /* CSS MỚI CHO DẠNG GHÉP CỘT (MATCHING) */
-        .match-container { display: flex; flex-direction: column; gap: 15px; margin-top:10px; }
-        .match-row { display: flex; align-items: center; justify-content: space-between; padding: 10px; border-bottom: 1px dashed #eee; background: #fafafa; border-radius: 4px; }
-        .match-label { font-weight: bold; margin-right: 10px; min-width: 20px; color: #00695c; }
-        .match-content { flex: 1; margin-right: 10px; }
-        .match-select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-weight: bold; color: #1565c0; width: 80px; }
-        .match-options-list { margin-top: 15px; background: #e3f2fd; padding: 15px; border-radius: 8px; font-size: 0.9em; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
-        .match-opt-item { background: white; padding: 5px 10px; border-radius: 4px; border: 1px solid #bbdefb; }
+        /* CSS GIAO DIỆN CHUYÊN NGHIỆP (GIỮ NGUYÊN) */
+        body{font-family:'Roboto',sans-serif;background:#f4f7f6;margin:0;color:#333;padding-bottom:80px}
+        .teacher-header{background:linear-gradient(135deg,#1a237e,#0d47a1);color:white;padding:20px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,0.1)}
+        .teacher-avatar{width:80px;height:80px;border-radius:50%;border:3px solid white;object-fit:cover;margin-bottom:10px;background:white}
+        .teacher-name{font-size:1.4em;font-weight:700;text-transform:uppercase;margin:0}
+        .teacher-title{font-size:0.95em;font-weight:300;opacity:0.9;margin:2px 0}
+        .teacher-school{font-size:0.9em;font-weight:500;color:#ffeb3b;margin-top:5px}
+        .status-bar{background:white;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 5px rgba(0,0,0,0.05);border-bottom:1px solid #eee}
+        .timer-box{background:#ffebee;color:#c62828;padding:5px 12px;border-radius:20px;font-weight:700;font-family:monospace;font-size:1.2em}
+        .student-box{font-weight:600;color:#1565c0}
+        .container{max-width:900px;margin:0 auto;padding:15px}
+        .question-block{background:white;padding:25px;border-radius:12px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.03);border-left:5px solid #1a237e}
+        .q-label{color:#1a237e;font-weight:700;font-size:1.1em;margin-bottom:5px;display:block}
+        .option-item{display:flex;align-items:center;background:#fafafa;border:1px solid #eee;padding:12px 15px;border-radius:8px;cursor:pointer;margin-bottom:8px;transition:0.2s}
+        .option-item:hover{background:#e8eaf6;border-color:#c5cae9}
+        .option-item:has(input:checked){background:#e3f2fd;border-color:#2196f3;color:#0d47a1;font-weight:500}
+        input[type="radio"]{accent-color:#1a237e;transform:scale(1.2);margin-right:10px}
+        .welcome-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(13,71,161,0.95);z-index:2000;display:flex;align-items:center;justify-content:center}
+        .welcome-card{background:white;width:90%;max-width:400px;padding:40px;border-radius:20px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,0.3)}
+        .btn-start{background:linear-gradient(45deg,#1565c0,#0d47a1);color:white;width:100%;padding:15px;border:none;border-radius:50px;font-weight:bold;font-size:1.1em;cursor:pointer;box-shadow:0 5px 15px rgba(13,71,161,0.3);margin-top:15px}
+        .pay-box{border:2px dashed #e91e63;background:#fce4ec;padding:15px;margin:15px 0;border-radius:12px}
+        .palette-item{width:35px;height:35px;display:flex;align-items:center;justify-content:center;border:1px solid #ddd;border-radius:6px;cursor:pointer;background:white;font-weight:bold;color:#555}
+        .palette-item.answered{background:#1a237e;color:white;border-color:#1a237e}
+        .palette-grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+        .loading{position:fixed;top:0;left:0;width:100%;height:100%;background:white;z-index:3000;display:flex;flex-direction:column;justify-content:center;align-items:center}
+        /* Style cho kết quả Đúng/Sai */
+        .res-badge { display:inline-block; padding:5px 10px; border-radius:6px; font-weight:bold; margin-top:10px; }
+        .res-correct { background:#c8e6c9; color:#1b5e20; }
+        .res-wrong { background:#ffcdd2; color:#b71c1c; }
     </style>
 </head>
 <body>
 
-<div class="loading" id="loading"><div style="font-size:50px; animation: bounce 1s infinite">⏳</div><div style="margin-top:15px; color:#009688; font-weight:bold">Đang tải đề thi...</div></div>
+<div class="loading" id="loading"><div style="font-size:50px;animation:bounce 1s infinite">📚</div><div style="margin-top:15px;color:#1a237e;font-weight:bold">Đang tải đề thi...</div></div>
 
 <div class="welcome-overlay" id="welcome-screen" style="display:none">
     <div class="welcome-card">
-        <h2 id="exam-title" style="color:#00796b; margin:0">BÀI KIỂM TRA</h2>
-        <p id="exam-info" style="color:#666; margin-bottom:25px"></p>
-        <p style="font-size:0.9em;color:#d32f2f;background:#ffebee;padding:5px;border-radius:4px">⚠️ Lưu ý: Hệ thống sẽ tự động nộp bài nếu bạn rời khỏi màn hình quá 3 lần!</p>
-        <input type="text" id="s-name" placeholder="Họ và Tên">
-        <input type="text" id="s-class" placeholder="Lớp">
-        <div id="pass-area" style="display:none"><input type="password" id="s-pass" placeholder="Mật khẩu đề thi"></div>
-        <button class="btn-start" onclick="checkLogin()">BẮT ĐẦU LÀM BÀI</button>
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="teacher-avatar" style="width:60px;height:60px;border:none;box-shadow:none">
+        <h2 id="exam-title" style="color:#1a237e;margin:0 0 10px 0">BÀI KIỂM TRA</h2>
+        <p id="exam-info" style="color:#666;font-size:0.9em;margin-bottom:20px"></p>
+        
+        <div id="payment-area" class="pay-box" style="display:none">
+            <h3 style="margin:0;color:#c2185b;font-size:1em"><i class="fas fa-heart"></i> MỜI CÀ PHÊ</h3>
+            <p style="font-size:0.85em;color:#880e4f;margin:5px 0">Ủng hộ tác giả để vào thi nhé!</p>
+            <img id="vietqr-img" style="width:100%;max-width:200px;border-radius:8px;border:1px solid #ddd" src="">
+            <p id="pay-amount" style="font-weight:bold;font-size:1.4em;color:#d81b60;margin:10px 0"></p>
+        </div>
+
+        <input type="text" id="s-name" placeholder="Họ và Tên" style="width:100%;padding:12px;margin-bottom:10px;border:1px solid #ccc;border-radius:8px;box-sizing:border-box">
+        <input type="text" id="s-class" placeholder="Lớp" style="width:100%;padding:12px;margin-bottom:10px;border:1px solid #ccc;border-radius:8px;box-sizing:border-box">
+        <div id="pass-area" style="display:none"><input type="password" id="s-pass" placeholder="Mật khẩu" style="width:100%;padding:12px;border:1px solid #ccc;border-radius:8px;box-sizing:border-box"></div>
+        <button class="btn-start" onclick="checkLogin()">VÀO THI NGAY <i class="fas fa-arrow-right"></i></button>
     </div>
 </div>
 
 <div class="container" id="main-interface" style="display:none">
-    <div class="header-bar"><div class="student-info">👤 <span id="d-name"></span> | <span id="d-class"></span></div><div class="timer" id="timer">00:00</div></div>
-    <div id="violation-msg" class="violation-box"></div>
-    <div class="palette-container"><div class="palette-grid" id="palette-grid"></div></div>
-    <div id="result-area" class="result-box">
-        <div style="color:#666;font-size:1.2em">KẾT QUẢ</div><h1 style="color:#2e7d32;font-size:4em;margin:10px 0"><span id="final-score"></span></h1>
-        <div id="violation-final" style="color:red;font-weight:bold;margin-bottom:10px;display:none">⚠️ BÀI THI BỊ ĐÁNH DẤU VI PHẠM</div>
-        <div id="save-status" style="margin-bottom:10px;font-style:italic;color:#555"></div>
-        <div style="color:#1565c0;font-weight:bold">▼ Xem chi tiết đáp án bên dưới ▼</div>
+    <div class="status-bar">
+        <div class="student-box"><i class="fas fa-user-graduate"></i> <span id="d-name">HS</span> <span id="d-class" style="background:#e3f2fd;padding:2px 8px;border-radius:4px;font-size:0.8em;margin-left:5px"></span></div>
+        <div class="timer-box"><i class="far fa-clock"></i> <span id="timer">00:00</span></div>
     </div>
+    
+    <div style="background:white;padding:15px;margin:15px 0;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.1)">
+        <div class="palette-grid" id="palette-grid"></div>
+    </div>
+
+    <div id="result-area" style="display:none;background:white;padding:40px;text-align:center;border-radius:12px;margin-bottom:20px;border-top:6px solid #2e7d32;box-shadow:0 5px 15px rgba(0,0,0,0.1)">
+        <div style="color:#666;font-size:1.2em">KẾT QUẢ</div>
+        <h1 style="color:#2e7d32;font-size:4em;margin:10px 0"><span id="final-score"></span></h1>
+        <div id="save-status" style="margin-bottom:10px;font-style:italic;color:#555"></div>
+        <div style="color:#1565c0;font-weight:bold;margin-top:20px">▼ Xem chi tiết đáp án bên dưới</div>
+    </div>
+
     <div id="quiz-body"></div>
-    <button class="btn-submit" onclick="confirmSubmit()" id="btn-submit">NỘP BÀI THI</button>
+    <button class="btn-start" onclick="confirmSubmit()" id="btn-submit" style="background:#c62828;margin-top:20px">NỘP BÀI <i class="fas fa-paper-plane"></i></button>
 </div>
 
 <script>
     // --- CẤU HÌNH ---
-    // ⚠️ QUAN TRỌNG: DÁN LINK GOOGLE SCRIPT CỦA THẦY VÀO ĐÂY
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbypgz3zUkMH6qGEahUz3v5wq_D3nqAJ3Iogm0ox96mZN21L7NtiYi4Xf1zx2NdW4D4C/exec'; 
+    const GOOGLE_SCRIPT_URL = ''; // Dán link Script vào đây nếu cần lưu điểm
 
     let rawQ=[], curQ=[], timerDur=0, timerInt;
-    let scoresConfig={mcq:0.25,tf:1.0,short:0.5,match:1.0}; // Thêm điểm cho câu match
+    let scoresConfig={mcq:0.25, tf:1.0, short:0.5, match:1.0}; // Cấu hình điểm
     let isEnc=false, userAns={}, stId="", exId="";
-    let vCount=0, isVio=false; const MAX_V=3;
-    let startTime=0;
+    let vCount=0; const MAX_V=3;
 
-    // --- 1. TẢI ĐỀ ---
+    // --- LOAD ĐỀ ---
     const urlParams=new URLSearchParams(window.location.search);
     const pId=urlParams.get('id'); exId=pId||"demo";
-    if(pId){const s=document.createElement('script');s.src=`data/${pId}.js?v=`+Date.now();s.onload=()=>{if(window.EXAM_DATA)initExam(window.EXAM_DATA)};s.onerror=()=>document.getElementById('loading').innerHTML="<h3 style='color:red'>Không tìm thấy đề!</h3>";document.head.appendChild(s);}else document.getElementById('loading').innerText="Chưa có mã đề.";
+    if(pId){
+        const s=document.createElement('script');
+        s.src=`data/${pId}.js?v=`+Date.now();
+        s.onload=()=>{if(window.EXAM_DATA)initExam(window.EXAM_DATA)};
+        s.onerror=()=>document.getElementById('loading').innerHTML="<h3 style='color:red'>Không tìm thấy đề!</h3>";
+        document.head.appendChild(s);
+    }else document.getElementById('loading').innerText="Chưa có mã đề.";
 
     function initExam(d){
         let now = new Date();
-        if(d.start && now < new Date(d.start)) return showErr(`⛔ CHƯA ĐẾN GIỜ THI!<br>Đề sẽ mở lúc: ${formatDate(d.start)}`);
-        if(d.end && now > new Date(d.end)) return showErr(`⛔ ĐÃ HẾT GIỜ THI!<br>Đề đã đóng lúc: ${formatDate(d.end)}`);
+        if(d.start && now < new Date(d.start)) return showErr(`⛔ CHƯA ĐẾN GIỜ THI!<br>Mở: ${formatDate(d.start)}`);
+        if(d.end && now > new Date(d.end)) return showErr(`⛔ ĐÃ HẾT GIỜ THI!<br>Đóng: ${formatDate(d.end)}`);
 
         rawQ=d.questions; timerDur=(d.time||45)*60;
-        if(d.scores)scoresConfig={...scoresConfig, ...d.scores}; 
+        if(d.scores) scoresConfig={...scoresConfig, ...d.scores}; 
         isEnc=d.encrypted===true;
+        
         document.getElementById('exam-title').innerText=d.title||"BÀI KIỂM TRA";
-        document.getElementById('exam-info').innerText=`${rawQ.length} Câu | ${d.time} Phút | Môn: ${d.subject||'Khác'}`;
+        document.getElementById('exam-info').innerText=`${rawQ.length} Câu | ${d.time} Phút`;
         if(d.password)document.getElementById('pass-area').style.display='block';
+
+        let price = d.price || 0;
+        if(price > 0 && d.bank) {
+             document.getElementById('payment-area').style.display = 'block';
+             document.getElementById('pay-amount').innerText = price.toLocaleString('vi-VN') + "đ";
+             const content = `HOCPHI ${exId}`;
+             const qrUrl = `https://img.vietqr.io/image/${d.bank.id}-${d.bank.acc}-compact.png?amount=${price}&addInfo=${encodeURIComponent(content)}`;
+             document.getElementById('vietqr-img').src = qrUrl;
+        }
         document.getElementById('loading').style.display='none'; 
         document.getElementById('welcome-screen').style.display='flex';
     }
 
-    function showErr(msg){ document.body.innerHTML += `<div class="error-overlay"><h1>${msg}</h1></div>`; document.getElementById('loading').style.display='none'; }
-    function formatDate(s){ return new Date(s).toLocaleString('vi-VN'); }
+    function showErr(msg){document.body.innerHTML=`<div style="position:fixed;top:0;left:0;width:100%;height:100%;background:white;display:flex;justify-content:center;align-items:center;color:red"><h1>${msg}</h1></div>`;document.getElementById('loading').style.display='none';}
+    function formatDate(s){return new Date(s).toLocaleString('vi-VN');}
 
-    // --- 2. SEEDED SHUFFLE ---
-    function mul32(a){return function(){var t=a+=0x6D2B79F5;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296}}
-    function cyrb128(s){let h1=1779033703,h2=3144134277,h3=1013904242,h4=2773480762;for(let i=0,k;i<s.length;i++){k=s.charCodeAt(i);h1=h2^Math.imul(h1^k,597399067);h2=h3^Math.imul(h2^k,2869860281);h3=h4^Math.imul(h3^k,951274213);h4=h1^Math.imul(h4^k,2716044179);}return(h1^h2^h3^h4)>>>0}
-    function seedShuf(arr,rng){for(let i=arr.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}}
-
-    // --- 3. START ---
+    // --- LOGIC THI ---
     function checkLogin(){
         const n=document.getElementById('s-name').value.trim(), c=document.getElementById('s-class').value.trim();
-        if(!n||!c)return alert("Nhập tên và lớp!");
-        if(window.EXAM_DATA.password&&CryptoJS.MD5(document.getElementById('s-pass').value.trim()).toString()!==window.EXAM_DATA.password)return alert("Sai mật khẩu!");
+        if(!n||!c)return alert("Vui lòng nhập tên và lớp!");
+        if(window.EXAM_DATA.password && CryptoJS.MD5(document.getElementById('s-pass').value.trim()).toString()!==window.EXAM_DATA.password) return alert("Sai mật khẩu!");
         stId=n+c; document.getElementById('d-name').innerText=n; document.getElementById('d-class').innerText=c;
         startLogic(n);
     }
+
     function startLogic(name){
+        // Hàm Random seed giữ nguyên
+        function mul32(a){return function(){var t=a+=0x6D2B79F5;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296}}
+        function cyrb128(s){let h1=1779033703,h2=3144134277,h3=1013904242,h4=2773480762;for(let i=0,k;i<s.length;i++){k=s.charCodeAt(i);h1=h2^Math.imul(h1^k,597399067);h2=h3^Math.imul(h2^k,2869860281);h3=h4^Math.imul(h3^k,951274213);h4=h1^Math.imul(h4^k,2716044179);}return(h1^h2^h3^h4)>>>0}
+        function seedShuf(arr,rng){for(let i=arr.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}}
+        
         const rng=mul32(cyrb128(name+exId));
-        prepQ(rng);
-        document.getElementById('welcome-screen').style.display='none';
-        document.getElementById('main-interface').style.display='block';
-        startTime = new Date();
-        resProg(); actAntiCheat();
-        timerInt=setInterval(()=>{let m=Math.floor(timerDur/60),s=timerDur%60;document.getElementById('timer').innerText=`${m}:${s<10?'0'+s:s}`;if(--timerDur<0){clearInterval(timerInt);submitQuiz();alert("Hết giờ!");}},1000);
-    }
-    function prepQ(rng){
         let aq=JSON.parse(JSON.stringify(rawQ));
         let p1=aq.filter(q=>q.type==='mcq'), p2=aq.filter(q=>q.type==='tf'), p3=aq.filter(q=>q.type==='short'), p4=aq.filter(q=>q.type==='match');
-        
         seedShuf(p1,rng); seedShuf(p2,rng); seedShuf(p3,rng); seedShuf(p4,rng);
         p1.forEach(q=>{q.idx=q.options.map((_,i)=>i);seedShuf(q.idx,rng)}); 
         p2.forEach(q=>seedShuf(q.items,rng));
-        // Câu match thường không đảo thứ tự item bên trái để giữ logic đề bài, nhưng có thể đảo thứ tự hiển thị bên phải nếu cần. Ở đây ta giữ nguyên.
-
-        if(p1.length)p1[0].hd=`PHẦN 1: TRẮC NGHIỆM`; if(p2.length)p2[0].hd=`PHẦN 2: ĐÚNG SAI`; 
-        if(p3.length)p3[0].hd=`PHẦN 3: TRẢ LỜI NGẮN`; if(p4.length)p4[0].hd=`PHẦN 4: GHÉP CỘT (VSAT)`;
-
+        
         curQ=[...p1,...p2,...p3,...p4]; renderUI();
+
+        document.getElementById('welcome-screen').style.display='none';
+        document.getElementById('main-interface').style.display='block';
+        timerInt=setInterval(()=>{let m=Math.floor(timerDur/60),s=timerDur%60;document.getElementById('timer').innerText=`${m}:${s<10?'0'+s:s}`;if(--timerDur<0){clearInterval(timerInt);submitQuiz();alert("Hết giờ!");}},1000);
     }
 
-    // --- 4. RENDER UI (CẬP NHẬT MATCHING) ---
     function renderUI(){
-        let ph='', bh='';
+        let bh='', ph='';
         curQ.forEach((q,i)=>{
-            ph+=`<div class="palette-item" id="pb-${i}" onclick="scQ(${i})">${i+1}</div>`;
-            if(q.hd)bh+=`<div class="part-header">${q.hd}</div>`;
-            bh+=`<div class="question-block" id="q-${i}"><div style="margin-bottom:15px"><span class="q-label">Câu ${i+1}:</span> <span class="q-content">${q.q.replace(/^Câu \d+[:.]\s*/i,'')}</span></div>`;
-            if(q.img)bh+=`<div style="text-align:center"><img src="${q.img}" class="q-image"></div>`;
+            ph+=`<div class="palette-item" id="pb-${i}" onclick="document.getElementById('q-${i}').scrollIntoView({behavior:'smooth',block:'center'})">${i+1}</div>`;
+            bh+=`<div class="question-block" id="q-${i}"><div style="margin-bottom:15px"><span class="q-label">Câu ${i+1}:</span> <span style="font-weight:500">${q.q.replace(/^Câu \d+[:.]\s*/i,'')}</span></div>`;
+            if(q.img)bh+=`<div style="text-align:center"><img src="${q.img}" style="max-width:100%;border-radius:8px;margin:10px auto;border:1px solid #eee"></div>`;
             
-            // 1. MCQ
-            if(q.type==='mcq')bh+=`<div class="options-grid">`+q.idx.map((o,d)=>`<label class="option-item"><input type="radio" name="q${i}" value="${o}" onchange="sv(${i},${o})"><span><b>${['A','B','C','D'][d]}.</b> ${q.options[o]}</span></label>`).join('')+`</div>`;
-            
-            // 2. TF (Đúng Sai)
-            else if(q.type==='tf')bh+=`<table class="tf-table"><tr><th>Ý</th><th>Đ</th><th>S</th></tr>`+q.items.map((it,s)=>`<tr><td>${it.sub}</td><td align="center"><input type="radio" name="q${i}_${s}" value="T" onchange="sv(${i},'T',${s})"></td><td align="center"><input type="radio" name="q${i}_${s}" value="F" onchange="sv(${i},'F',${s})"></td></tr>`).join('')+`</table>`;
-            
-            // 3. MATCHING (MỚI - VSAT)
+            if(q.type==='mcq') bh+=`<div style="display:grid;grid-template-columns:1fr;gap:5px">`+q.idx.map((o,d)=>`<label class="option-item"><input type="radio" name="q${i}" value="${o}" onchange="sv(${i},${o})"><span><b>${['A','B','C','D'][d]}.</b> ${q.options[o]}</span></label>`).join('')+`</div>`;
+            else if(q.type==='tf') bh+=`<table style="width:100%;border-collapse:collapse;margin-top:5px"><tr><th>Ý</th><th>Đ</th><th>S</th></tr>`+q.items.map((it,s)=>`<tr><td style="border-bottom:1px solid #eee;padding:8px">${it.sub}</td><td align="center" style="border-bottom:1px solid #eee"><input type="radio" name="q${i}_${s}" value="T" onchange="sv(${i},'T',${s})"></td><td align="center" style="border-bottom:1px solid #eee"><input type="radio" name="q${i}_${s}" value="F" onchange="sv(${i},'F',${s})"></td></tr>`).join('')+`</table>`;
             else if(q.type==='match') {
-                // q.items: mảng trái (1,2,3,4)
-                // q.options: mảng phải (A,B,C,D,E,F...)
-                bh += `<div class="match-container">`;
-                
-                // Cột trái + Dropdown
+                bh += `<div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">`;
                 q.items.forEach((it, idx) => {
-                    let optsHTML = `<option value="">--</option>` + q.options.map((opt, oIdx) => {
-                        let letter = String.fromCharCode(65 + oIdx); // A, B, C...
-                        return `<option value="${letter}">${letter}</option>`;
-                    }).join('');
-
-                    bh += `<div class="match-row">
-                        <div style="flex:1"><span class="match-label">${idx+1})</span> ${it}</div>
-                        <select class="match-select" id="match-${i}-${idx}" onchange="sv(${i}, this.value, ${idx})">${optsHTML}</select>
-                    </div>`;
+                    let optsHTML = `<option value="">-- Chọn --</option>` + q.options.map((opt, oIdx) => `<option value="${String.fromCharCode(65 + oIdx)}">${String.fromCharCode(65 + oIdx)}</option>`).join('');
+                    bh += `<div style="display:flex;align-items:center;justify-content:space-between;background:#f9f9f9;padding:8px;border-radius:4px"><div style="flex:1;font-size:0.9em"><b>${idx+1})</b> ${it}</div><select style="padding:5px;border:1px solid #ccc;border-radius:4px;color:#1565c0;font-weight:bold" onchange="sv(${i},this.value,${idx})">${optsHTML}</select></div>`;
                 });
-
-                // Cột phải (Tham chiếu)
-                bh += `<div class="match-options-list">`;
-                q.options.forEach((opt, oIdx) => {
-                    bh += `<div class="match-opt-item"><b>${String.fromCharCode(65 + oIdx)}.</b> ${opt}</div>`;
-                });
-                bh += `</div></div>`;
+                bh += `<div style="margin-top:10px;background:#e3f2fd;padding:10px;border-radius:8px;font-size:0.9em">` + q.options.map((opt, oIdx) => `<div style="margin-bottom:4px"><b>${String.fromCharCode(65 + oIdx)}.</b> ${opt}</div>`).join('') + `</div></div>`;
             }
-
-            // 4. SHORT
-            else bh+=`<input type="text" class="short-input" id="in-${i}" placeholder="Đáp án..." onchange="sv(${i},this.value)">`;
+            else bh+=`<input type="text" placeholder="Nhập đáp án..." onchange="sv(${i},this.value)" style="width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;outline:none;font-weight:bold;color:#1a237e">`;
             
-            bh+=`<div class="solution-box" id="sol-${i}"><b>LỜI GIẢI:</b><br>${q.explain||'Không.'}</div></div>`;
+            bh+=`<div id="sol-${i}" style="display:none;margin-top:15px;padding:15px;background:#e8f5e9;border-radius:6px;color:#2e7d32;border:1px dashed #a5d6a7"><b>LỜI GIẢI:</b><br>${q.explain||'Không có.'}</div></div>`;
         });
         document.getElementById('palette-grid').innerHTML=ph; document.getElementById('quiz-body').innerHTML=bh;
         if(window.MathJax)MathJax.typesetPromise();
     }
 
-    // --- 5. LOGIC SAVE & RESTORE ---
     function sv(i,v,s=null){
         if(!userAns[i]) userAns[i]={};
-        if(curQ[i].type === 'match' || curQ[i].type === 'tf') {
-            // Match và TF lưu dạng object {0:'A', 1:'B'}
-            userAns[i][s] = v;
-        } else {
-            // MCQ, Short lưu giá trị đơn
-            userAns[i] = v;
-        }
+        if(curQ[i].type === 'match' || curQ[i].type === 'tf') userAns[i][s] = v;
+        else userAns[i] = v;
         document.getElementById(`pb-${i}`).classList.add('answered');
-        localStorage.setItem(`ex_${exId}_${stId}`,JSON.stringify({a:userAns,t:timerDur}));
     }
 
-    function resProg(){
-        let d=localStorage.getItem(`ex_${exId}_${stId}`);
-        if(d){try{let j=JSON.parse(d);userAns=j.a||{};timerDur=j.t>0?j.t:timerDur;
-        for(let[i,v]of Object.entries(userAns)){
-            const q=curQ[i];
-            if(q.type==='mcq'){let r=document.querySelector(`input[name="q${i}"][value="${v}"]`);if(r)r.checked=true}
-            else if(q.type==='short'){document.getElementById(`in-${i}`).value=v}
-            else if(q.type==='tf'){for(let[s,tv]of Object.entries(v)){let r=document.querySelector(`input[name="q${i}_${s}"][value="${tv}"]`);if(r)r.checked=true}}
-            else if(q.type==='match'){
-                // Khôi phục dropdown matching
-                for(let[s,val]of Object.entries(v)){
-                    let el = document.getElementById(`match-${i}-${s}`);
-                    if(el) el.value = val;
-                }
-            }
-            document.getElementById(`pb-${i}`).classList.add('answered');
-        }}catch(e){}}}
+    function confirmSubmit(){ if(confirm("Nộp bài thi?")) submitQuiz(); }
 
-    function scQ(i){document.getElementById(`q-${i}`).scrollIntoView({behavior:"smooth",block:"center"});}
-    function actAntiCheat(){window.addEventListener('blur',()=>{if(document.getElementById('result-area').style.display==='block')return;vCount++;document.getElementById('violation-msg').style.display='block';document.getElementById('violation-msg').innerText=`⚠️ CẢNH BÁO: Rời màn hình! (${vCount}/${MAX_V})`;if(vCount>MAX_V){isVio=true;alert("VI PHẠM QUY CHẾ. HỆ THỐNG TỰ NỘP BÀI!");submitQuiz();}});}
-
-    // --- 6. SUBMIT & GRADING ---
-    function confirmSubmit(){
-        let un=[];curQ.forEach((q,i)=>{
-            if(q.type==='mcq' || q.type==='short'){ if(!userAns[i]) un.push(i+1); }
-            else if(q.type==='tf' || q.type==='match'){
-                // Phải làm đủ số ý nhỏ mới tính là xong
-                let reqCount = (q.type==='match') ? q.items.length : q.items.length;
-                if(!userAns[i] || Object.keys(userAns[i]).length < reqCount) un.push(i+1);
-            }
-        });
-        if(un.length>0){if(!confirm(`Chưa làm câu: ${un.join(", ")}. Nộp luôn?`))return;}else{if(!confirm("Xác nhận nộp bài?"))return;}
-        submitQuiz();
+    // --- HÀM KIỂM TRA ĐÁP ÁN (ĐÃ FIX LỖI 0/NULL) ---
+    function chk(u, c) {
+        // Fix lỗi: Nếu u là 0 (đáp án A) thì !u sẽ là true -> return false (SAI)
+        // Sửa lại: Chỉ return false khi u là undefined hoặc null hoặc chuỗi rỗng
+        if (u === undefined || u === null || u === "") return false;
+        
+        let uStr = String(u).trim().toLowerCase();
+        let cStr = String(c).trim().toLowerCase();
+        return isEnc ? CryptoJS.MD5(uStr).toString() === cStr : uStr === cStr;
     }
 
     function submitQuiz(){
         clearInterval(timerInt);
         document.getElementById('btn-submit').style.display='none';
-        localStorage.removeItem(`ex_${exId}_${stId}`);
         
         let score=0, max=0;
         curQ.forEach((q,i)=>{
             const bl=document.getElementById(`q-${i}`); document.getElementById(`sol-${i}`).style.display='block';
             
-            // CHẤM MCQ
-            if(q.type==='mcq'){max+=scoresConfig.mcq;if(chk(userAns[i],q.ans)){score+=scoresConfig.mcq;bg(bl,'correct','Đúng');}else bg(bl,'wrong',isEnc?'Sai':'Đúng: '+q.options[q.ans]);}
-            
-            // CHẤM TF (Đúng sai)
+            if(q.type==='mcq'){
+                max+=scoresConfig.mcq;
+                if(chk(userAns[i], q.ans)){
+                    score+=scoresConfig.mcq;
+                    bg(bl, true, 'Đúng');
+                } else {
+                    bg(bl, false, isEnc ? 'Sai' : 'Đúng: ' + q.options[q.ans]);
+                }
+            }
             else if(q.type==='tf'){
-                max+=scoresConfig.tf;let c=0;q.items.forEach((it,s)=>{if(chk(userAns[i]?userAns[i][s]:'X',it.ans))c++});
+                max+=scoresConfig.tf; let c=0;
+                q.items.forEach((it,s)=>{ if(chk(userAns[i]?userAns[i][s]:null, it.ans)) c++; });
                 let s=[0,0.1,0.25,0.5,1.0][c]*scoresConfig.tf; score+=s;
-                bg(bl,s>0?'correct':'wrong',`Đúng ${c}/${q.items.length} ý`);
+                bg(bl, s>0, `Đúng ${c}/${q.items.length} ý`);
             }
-            
-            // CHẤM MATCHING (GHÉP CỘT)
             else if(q.type==='match'){
-                max+=scoresConfig.match;
-                let correctCnt = 0;
-                // q.ans là mảng đáp án đúng ["A", "D", "B", "C"] tương ứng 1,2,3,4
-                // userAns[i] là object {0:"A", 1:"C"...}
-                let uA = userAns[i] || {};
-                
-                q.items.forEach((_, idx) => {
-                    let correctVal = q.ans[idx]; // Đáp án đúng của ý này (VD: "A")
-                    let userVal = uA[idx];       // Đáp án HS chọn (VD: "A")
-                    if(chk(userVal, correctVal)) correctCnt++;
-                });
-
-                // Tính điểm theo tỷ lệ số ý đúng (Ví dụ: 4 ý, đúng 2 được 50% điểm câu)
-                let itemScore = (correctCnt / q.items.length) * scoresConfig.match;
-                score += itemScore;
-                
-                bg(bl, itemScore>0?'correct':'wrong', `Đúng ${correctCnt}/${q.items.length} cặp`);
+                max+=scoresConfig.match; let c=0; let uA=userAns[i]||{};
+                q.items.forEach((_,idx)=>{ if(chk(uA[idx], q.ans[idx])) c++; });
+                let s = (c/q.items.length)*scoresConfig.match; score+=s;
+                bg(bl, s>0, `Đúng ${c}/${q.items.length} cặp`);
             }
-
-            // CHẤM SHORT
-            else{max+=scoresConfig.short;if(chk(userAns[i],q.ans)) {score+=scoresConfig.short;bg(bl,'correct','Đúng');} else bg(bl,'wrong','Sai');}
+            else {
+                max+=scoresConfig.short;
+                if(chk(userAns[i], q.ans)) { score+=scoresConfig.short; bg(bl, true, 'Đúng'); }
+                else bg(bl, false, 'Sai');
+            }
         });
 
         let finalS = Math.round(score*100)/100;
         document.getElementById('result-area').style.display='block';
         document.getElementById('final-score').innerText = `${finalS} / ${max}`;
-        if(isVio){document.getElementById('violation-final').style.display='block';document.getElementById('final-score').style.color='red';}
         window.scrollTo({top:0,behavior:'smooth'});
-
-        sendToSheet(finalS);
+        
+        if(GOOGLE_SCRIPT_URL.length > 10) sendToSheet(finalS);
     }
 
-    function bg(el,cls,txt){el.insertAdjacentHTML('beforeend',`<div class="ans-badge ${cls}">${txt}</div>`);}
-    function chk(u,c){if(!u)return false;return isEnc?CryptoJS.MD5(String(u).trim().toLowerCase()).toString()===c:String(u).trim().toLowerCase()===String(c).trim().toLowerCase();}
+    function bg(el,isT,txt){
+        el.insertAdjacentHTML('beforeend',`<div class="res-badge ${isT?'res-correct':'res-wrong'}">${txt}</div>`);
+    }
 
     function sendToSheet(score) {
-        if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.length < 10) return;
         document.getElementById('save-status').innerText = "⏳ Đang lưu điểm...";
-        let duration = Math.round((new Date() - startTime) / 60000); 
-        let data = {
-            name: document.getElementById('s-name').value,
-            class: document.getElementById('s-class').value,
-            exam: window.EXAM_DATA.title || "Bài thi",
-            score: score,
-            duration: duration + " phút",
-            violation: vCount
-        };
         fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+            body: JSON.stringify({
+                name: document.getElementById('s-name').value,
+                class: document.getElementById('s-class').value,
+                exam: window.EXAM_DATA.title,
+                score: score
+            })
         }).then(() => {
-            document.getElementById('save-status').innerText = "✅ Đã lưu điểm thành công!";
-            document.getElementById('save-status').style.color = "green";
-        }).catch(err => {
-            document.getElementById('save-status').innerText = "❌ Lỗi lưu điểm. Hãy chụp ảnh màn hình!";
-            document.getElementById('save-status').style.color = "red";
-        });
+            document.getElementById('save-status').innerText = "✅ Đã lưu điểm!"; document.getElementById('save-status').style.color="green";
+        }).catch(() => { document.getElementById('save-status').innerText = "❌ Lỗi lưu điểm!"; });
     }
 </script>
 </body>
 </html>
-
-   
