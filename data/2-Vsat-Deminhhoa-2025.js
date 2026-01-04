@@ -1,5 +1,7 @@
 window.EXAM_DATA = {
     "title": "Đề Minh Họa V-Sat, Đại Học Cần Thơ, Năm 2025",
+    "subject": "Toan",
+    "grade": "12",
     "time": 90,
     "password": "858eabb9c6c80b4947777108ced59f12",
     "encrypted": true,
