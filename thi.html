@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Thi Trực Tuyến - Phiên Bản Ổn Định v16.6</title>
+    <title>Hệ Thống Thi Trực Tuyến v17.0 (Smart Fix)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
+    
     <style>
-        /* CSS GIAO DIỆN */
+        /* CSS GIAO DIỆN CHUẨN */
         body{font-family:'Roboto',sans-serif;background:#f4f7f6;margin:0;color:#333;padding-bottom:80px;user-select:none}
         .status-bar{background:white;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 5px rgba(0,0,0,0.05);border-bottom:1px solid #eee}
         .timer-box{background:#ffebee;color:#c62828;padding:5px 12px;border-radius:20px;font-weight:700;font-family:monospace;font-size:1.2em}
@@ -23,27 +23,14 @@
         .option-item:hover{background:#e8eaf6;border-color:#c5cae9}
         .option-item:has(input:checked){background:#e3f2fd;border-color:#2196f3;color:#0d47a1;font-weight:500}
         input[type="radio"]{accent-color:#1a237e;transform:scale(1.2);margin-right:10px}
-        
-        /* ALERT RULE */
-        .alert-rule {
-            background: #fff3e0; border: 1px solid #ffe0b2; color: #e65100;
-            padding: 15px; border-radius: 8px; margin-bottom: 20px;
-            font-weight: bold; display: flex; align-items: center; gap: 10px; font-size: 0.95em;
-        }
-
-        /* WELCOME SCREEN */
+        .alert-rule {background: #fff3e0; border: 1px solid #ffe0b2; color: #e65100; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; display: flex; align-items: center; gap: 10px; font-size: 0.95em;}
         .welcome-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(13,71,161,0.95);z-index:2000;display:flex;align-items:center;justify-content:center}
         .welcome-card{background:white;width:90%;max-width:400px;padding:30px;border-radius:20px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,0.3)}
         .btn-start{background:linear-gradient(45deg,#1565c0,#0d47a1);color:white;width:100%;padding:15px;border:none;border-radius:50px;font-weight:bold;font-size:1.1em;cursor:pointer;margin-top:15px;box-shadow:0 5px 15px rgba(21,101,192,0.3)}
-        
-        /* PAYMENT */
         .pay-box{border:2px dashed #e91e63;background:#fce4ec;padding:15px;margin:15px 0;border-radius:12px}
-        
-        /* PALETTE & RESULT */
         .palette-item{width:35px;height:35px;display:flex;align-items:center;justify-content:center;border:1px solid #ddd;border-radius:6px;cursor:pointer;background:white;font-weight:bold;color:#555}
         .palette-item.answered{background:#1a237e;color:white;border-color:#1a237e}
         .palette-grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-        
         .res-badge{display:inline-block;padding:5px 10px;border-radius:6px;font-weight:bold;margin-top:10px;font-size:0.9em}
         .res-correct{background:#c8e6c9;color:#1b5e20;border:1px solid #a5d6a7}
         .res-wrong{background:#ffcdd2;color:#b71c1c;border:1px solid #ef9a9a}
@@ -86,20 +73,17 @@
     <div class="alert-rule">
         <i class="fas fa-info-circle fa-2x"></i>
         <div>
-            <b>LƯU Ý QUAN TRỌNG:</b><br>
-            - Máy tính chấp nhận cả dấu phẩy (,) và dấu chấm (.)<br>
-            - Ví dụ: Nhập <b>15,78</b> hoặc <b>15.78</b> đều được tính điểm.
+            <b>LƯU Ý:</b> Máy tính chấp nhận cả dấu phẩy (,) và dấu chấm (.)<br>
+            Ví dụ: Nhập <b>16,98</b> hoặc <b>16.98</b> đều được tính điểm.
         </div>
     </div>
 
     <div id="result-area" style="display:none;background:white;padding:30px;text-align:center;border-radius:12px;margin-bottom:20px;border-top:5px solid #2e7d32">
         <div style="color:#666">KẾT QUẢ</div>
         <h1 style="color:#2e7d32;font-size:4em;margin:5px 0"><span id="final-score"></span></h1>
-        
         <div id="review-timer" style="color:#c62828;font-weight:bold;margin-top:10px;padding:10px;background:#ffebee;border-radius:4px;border:1px solid #ffcdd2">
             ⏳ Thời gian xem lại bài: <span id="r-time">120</span> giây
         </div>
-        
         <div style="color:#1565c0;font-weight:bold;margin-top:15px">▼ Kéo xuống để xem lời giải chi tiết ▼</div>
     </div>
 
@@ -108,15 +92,13 @@
 </div>
 
 <script>
-    // --- CẤU HÌNH ---
-    const GOOGLE_SCRIPT_URL = ''; // Link Script (nếu có)
-    const REVIEW_TIME = 90; // 120 giây xem lại bài
+    const GOOGLE_SCRIPT_URL = ''; 
+    const REVIEW_TIME = 120;
 
     let rawQ=[], curQ=[], timerDur=0, timerInt;
     let scoresConfig={mcq:0.25, tf:1.0, short:0.5, match:1.0};
     let isEnc=false, userAns={}, stId="", exId="";
 
-    // LOAD ĐỀ
     const urlParams=new URLSearchParams(window.location.search);
     const pId=urlParams.get('id'); exId=pId||"demo";
     if(pId){
@@ -151,13 +133,15 @@
         if(!n||!c)return alert("Nhập đủ thông tin!");
         if(window.EXAM_DATA.password && CryptoJS.MD5(document.getElementById('s-pass').value.trim()).toString()!==window.EXAM_DATA.password) return alert("Sai mật khẩu!");
         stId=n+c; document.getElementById('d-name').innerText=n; document.getElementById('d-class').innerText=c;
-        
-        // Shuffle
+        startLogic(n);
+    }
+
+    function startLogic(name){
         function mul32(a){return function(){var t=a+=0x6D2B79F5;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296}}
         function cyrb128(s){let h1=1779033703,h2=3144134277,h3=1013904242,h4=2773480762;for(let i=0,k;i<s.length;i++){k=s.charCodeAt(i);h1=h2^Math.imul(h1^k,597399067);h2=h3^Math.imul(h2^k,2869860281);h3=h4^Math.imul(h3^k,951274213);h4=h1^Math.imul(h4^k,2716044179);}return(h1^h2^h3^h4)>>>0}
         function seedShuf(arr,rng){for(let i=arr.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}}
-        const rng=mul32(cyrb128(n+exId));
         
+        const rng=mul32(cyrb128(name+exId));
         let aq=JSON.parse(JSON.stringify(rawQ));
         let p1=aq.filter(q=>q.type==='mcq'), p2=aq.filter(q=>q.type==='tf'), p3=aq.filter(q=>q.type==='short'), p4=aq.filter(q=>q.type==='match');
         seedShuf(p1,rng); seedShuf(p2,rng); seedShuf(p3,rng); seedShuf(p4,rng);
@@ -182,11 +166,8 @@
             bh+=`<div class="question-block" id="q-${i}"><div style="margin-bottom:15px"><span class="q-label">Câu ${i+1}:</span> <span style="font-weight:500">${q.q.replace(/^Câu \d+[:.]\s*/i,'')}</span></div>`;
             if(q.img)bh+=`<div style="text-align:center"><img src="${q.img}" style="max-width:100%;border-radius:8px;margin:10px auto;border:1px solid #eee"></div>`;
             
-            // MCQ
             if(q.type==='mcq') bh+=`<div style="display:grid;grid-template-columns:1fr;gap:5px">`+q.idx.map((o,d)=>`<label class="option-item"><input type="radio" name="q${i}" value="${o}" onchange="sv(${i},${o})"><span><b>${['A','B','C','D'][d]}.</b> ${q.options[o]}</span></label>`).join('')+`</div>`;
-            // TF
             else if(q.type==='tf') bh+=`<table style="width:100%;border-collapse:collapse;margin-top:5px"><tr><th>Ý</th><th>Đ</th><th>S</th></tr>`+q.items.map((it,s)=>`<tr><td style="border-bottom:1px solid #eee;padding:8px">${it.sub}</td><td align="center" style="border-bottom:1px solid #eee"><input type="radio" name="q${i}_${s}" value="T" onchange="sv(${i},'T',${s})"></td><td align="center" style="border-bottom:1px solid #eee"><input type="radio" name="q${i}_${s}" value="F" onchange="sv(${i},'F',${s})"></td></tr>`).join('')+`</table>`;
-            // MATCH
             else if(q.type==='match') {
                 bh += `<div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">`;
                 q.items.forEach((it, idx) => {
@@ -195,8 +176,7 @@
                 });
                 bh += `<div style="margin-top:10px;background:#e3f2fd;padding:10px;border-radius:8px;font-size:0.9em">` + q.options.map((opt, oIdx) => `<div style="margin-bottom:4px"><b>${String.fromCharCode(65 + oIdx)}.</b> ${opt}</div>`).join('') + `</div></div>`;
             }
-            // SHORT - Dùng oninput để bắt dữ liệu nhạy hơn
-            else bh+=`<input type="text" placeholder="Nhập đáp án (15,67 hoặc 15.67)" oninput="sv(${i},this.value)" style="width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;outline:none;font-weight:bold;color:#1a237e">`;
+            else bh+=`<input type="text" placeholder="Nhập đáp án (VD: 16,98)" oninput="sv(${i},this.value)" style="width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;outline:none;font-weight:bold;color:#1a237e">`;
             
             bh+=`<div id="sol-${i}" style="display:none;margin-top:15px;padding:15px;background:#e8f5e9;border-radius:6px;color:#2e7d32;border:1px dashed #a5d6a7"><b>LỜI GIẢI:</b><br>${q.explain||'Không có.'}</div></div>`;
         });
@@ -221,45 +201,39 @@
         submitQuiz();
     }
 
-    // --- HÀM KIỂM TRA ĐA NĂNG (QUAN TRỌNG NHẤT) ---
+    // --- 3. HÀM CHẤM ĐIỂM (TỰ ĐỘNG PHÁT HIỆN LỖI DỮ LIỆU) ---
     function chk(u, c) {
         if (u === undefined || u === null || u === "") return false;
         
         let uStr = String(u).trim();
         let cStr = String(c).trim();
-        
-        // Tạo biến thể của User Input
-        let uDot = uStr.replace(/,/g, '.'); // Đổi phẩy -> chấm
-        let uCom = uStr.replace(/\./g, ','); // Đổi chấm -> phẩy
+        let uLow = uStr.toLowerCase().replace(',', '.'); // Chuẩn hóa phẩy -> chấm
 
-        if (isEnc) {
-            // 1. So khớp chính xác
+        // ⚠️ AUTO-DETECT: Nếu đáp án trong máy (cStr) KHÔNG PHẢI là mã Hash (không đủ 32 ký tự)
+        // Thì ta coi như đề này CHƯA MÃ HÓA (Dù cờ isEnc = true)
+        let isRealEnc = isEnc && cStr.length === 32 && /^[0-9a-f]{32}$/i.test(cStr);
+
+        if (isRealEnc) {
+            // Chế độ Mã Hóa Thật
             if (CryptoJS.MD5(uStr).toString() === cStr) return true;
-            // 2. So khớp hoán đổi chấm/phẩy (Giải quyết vụ 16,98)
-            if (CryptoJS.MD5(uDot).toString() === cStr) return true;
-            if (CryptoJS.MD5(uCom).toString() === cStr) return true;
+            if (CryptoJS.MD5(uLow).toString() === cStr) return true; // Chấp nhận 16,98
             
-            // 3. So khớp Đúng/Sai mở rộng
             if (uStr === 'T') { 
-                // Thử Hash của tất cả biến thể ĐÚNG
                 let trues = ["True", "true", "TRUE", "Đúng", "Dung", "Yes", "1", "T"];
                 for(let t of trues) if(CryptoJS.MD5(t).toString() === cStr) return true;
             }
             if (uStr === 'F') {
-                // Thử Hash của tất cả biến thể SAI
                 let falses = ["False", "false", "FALSE", "Sai", "No", "0", "F"];
                 for(let f of falses) if(CryptoJS.MD5(f).toString() === cStr) return true;
             }
         } else {
-            // Không mã hóa
+            // Chế độ Không Mã Hóa (Hoặc Mã Hóa Giả) - So sánh trực tiếp
             if (uStr === cStr) return true;
-            if (uDot === cStr) return true;
-            if (uCom === cStr) return true;
-            if (uStr.toLowerCase() === cStr.toLowerCase()) return true;
+            if (uLow === cStr.toLowerCase().replace(',', '.')) return true; // So sánh 16.98 == 16,98
             
-            // TF Mở rộng
-            if (uStr === 'T' && ["true", "đúng", "dung", "yes", "1"].includes(cStr.toLowerCase())) return true;
-            if (uStr === 'F' && ["false", "sai", "no", "0"].includes(cStr.toLowerCase())) return true;
+            // So sánh Đúng/Sai thông minh
+            if (uStr === 'T' && ["true", "đúng", "dung", "yes", "1", "t"].includes(cStr.toLowerCase())) return true;
+            if (uStr === 'F' && ["false", "sai", "no", "0", "f"].includes(cStr.toLowerCase())) return true;
         }
         return false;
     }
@@ -275,7 +249,7 @@
             if(q.type==='mcq'){
                 max+=scoresConfig.mcq;
                 if(chk(userAns[i], q.ans)) { score+=scoresConfig.mcq; bg(bl, true, 'Đúng'); } 
-                else bg(bl, false, isEnc ? 'Sai' : 'Đúng: ' + ['A','B','C','D'][q.ans]);
+                else bg(bl, false, 'Sai');
             }
             else if(q.type==='tf'){
                 max+=scoresConfig.tf; let c=0;
@@ -291,7 +265,7 @@
             else {
                 max+=scoresConfig.short;
                 if(chk(userAns[i], q.ans)) { score+=scoresConfig.short; bg(bl, true, 'Đúng'); } 
-                else bg(bl, false, isEnc?'Sai':`Sai (Đáp án đúng: ${q.ans})`);
+                else bg(bl, false, `Sai. ĐS: ${q.ans}`);
             }
         });
 
@@ -301,14 +275,13 @@
         window.scrollTo({top:0,behavior:'smooth'});
         if(GOOGLE_SCRIPT_URL.length > 10) sendToSheet(finalS);
 
-        // --- HẸN GIỜ ĐÓNG ---
         let reviewSec = REVIEW_TIME;
         const rInt = setInterval(() => {
             reviewSec--;
             document.getElementById('r-time').innerText = reviewSec;
             if(reviewSec <= 0) {
                 clearInterval(rInt);
-                document.body.innerHTML = "<div style='height:100vh;display:flex;justify-content:center;align-items:center;background:#263238;color:white;flex-direction:column'><h1>HẾT GIỜ XEM BÀI</h1><p>Hệ thống tự động đóng để bảo mật đề.</p><button onclick='location.reload()' style='padding:10px'>Quay lại</button></div>";
+                document.body.innerHTML = "<div style='height:100vh;display:flex;justify-content:center;align-items:center;background:#263238;color:white;flex-direction:column'><h1>HẾT GIỜ XEM BÀI</h1><button onclick='location.reload()' style='padding:10px'>Quay lại</button></div>";
             }
         }, 1000);
     }
