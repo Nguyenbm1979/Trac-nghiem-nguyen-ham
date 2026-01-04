@@ -1,10 +1,10 @@
 window.EXAM_DATA = {
     "title": "Đề Minh Họa V-Sat, Đại Học Cần Thơ, Năm 2025",
-    "time": 45,
+    "time": 90,
     "password": "858eabb9c6c80b4947777108ced59f12",
     "encrypted": false,
-    "start": "2026-01-04T21:22",
-    "end": "2026-01-05T21:29",
+    "start": "2026-01-04T21:31",
+    "end": "2026-01-05T21:33",
     "price": 0,
     "bank": {
         "id": "",
@@ -88,7 +88,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "tf",
-            "q": "Bảng sau đây tóm tắt kết quả phân tích quá trình tự phân hủy (sự phá hủy tế bào sau khi tế bào chết do hoạt động của các enzym của chính tế bào) và sự thối rữa (sự phân hủy chất hữu cơ, đặc biệt là protein, bởi vi sinh vật dẫn đến tạo ra mùi hôi thối) của các con bọ cánh cứng chết:<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767532754185_991.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"><br>Chọn ngẫu nhiên một con bọ cánh cứng trong các mẫu phân tích trên.",
+            "q": "Bảng sau đây tóm tắt kết quả phân tích quá trình tự phân hủy (sự phá hủy tế bào sau khi tế bào chết do hoạt động của các enzym của chính tế bào) và sự thối rữa (sự phân hủy chất hữu cơ, đặc biệt là protein, bởi vi sinh vật dẫn đến tạo ra mùi hôi thối) của các con bọ cánh cứng chết:<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767533332798_675.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"><br>Chọn ngẫu nhiên một con bọ cánh cứng trong các mẫu phân tích trên.",
             "items": [
                 {
                     "sub": "Xác suất để mẫu chọn ra có quá trình tự phân hủy cao là $\\dfrac{7}{50}$",
@@ -193,7 +193,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "mcq",
-            "q": "Thời gian trung bình sử dụng ChatGPT trên một ngày của một nhóm học sinh được ghi lại trong bảng dưới đây.<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767532780186_392.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"><br>Tính tứ phân vị thứ nhất của mẫu số liệu ghép nhóm trên (làm tròn kết quả đến hàng phần chục; đơn vị: phút).",
+            "q": "Thời gian trung bình sử dụng ChatGPT trên một ngày của một nhóm học sinh được ghi lại trong bảng dưới đây.<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767533352544_834.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"><br>Tính tứ phân vị thứ nhất của mẫu số liệu ghép nhóm trên (làm tròn kết quả đến hàng phần chục; đơn vị: phút).",
             "options": [
                 "$11{,}4$",
                 "$11{,}3$",
@@ -205,7 +205,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "mcq",
-            "q": "Thời gian trung bình sử dụng ChatGPT trên một ngày của một nhóm học sinh được ghi lại trong bảng dưới đây.<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767532789798_795.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"><br>Chọn ngẫu nhiên một bạn học sinh trong nhóm trên. Tính xác suất để thời gian trung bình bạn đó sử dụng Chat GPT lớn hơn hoặc bằng $25$ phút một ngày (làm tròn kết quả đến hàng phần trăm).",
+            "q": "Thời gian trung bình sử dụng ChatGPT trên một ngày của một nhóm học sinh được ghi lại trong bảng dưới đây.<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767533362242_121.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"><br>Chọn ngẫu nhiên một bạn học sinh trong nhóm trên. Tính xác suất để thời gian trung bình bạn đó sử dụng Chat GPT lớn hơn hoặc bằng $25$ phút một ngày (làm tròn kết quả đến hàng phần trăm).",
             "options": [
                 "$0{,}50$",
                 "$0{,}38$",
@@ -217,7 +217,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "mcq",
-            "q": "Thời gian trung bình sử dụng ChatGPT trên một ngày của một nhóm học sinh được ghi lại trong bảng dưới đây.<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767532798397_918.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"><br>Do sai sót trong quá trình nhập và xử lý số liệu, tất cả các mốc thời gian trong bảng trên đã bị ghi lùi 5 phút so với thực tế và người ta điều chỉnh lại bảng số liệu ban đầu cho đúng. Gọi $s_1$, $s_2$ lần lượt là độ lệch chuẩn của mẫu số liệu ghép nhóm trước và sau khi chỉnh sửa. Chọn khẳng định đúng nhất.",
+            "q": "Thời gian trung bình sử dụng ChatGPT trên một ngày của một nhóm học sinh được ghi lại trong bảng dưới đây.<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767533373668_90.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"><br>Do sai sót trong quá trình nhập và xử lý số liệu, tất cả các mốc thời gian trong bảng trên đã bị ghi lùi 5 phút so với thực tế và người ta điều chỉnh lại bảng số liệu ban đầu cho đúng. Gọi $s_1$, $s_2$ lần lượt là độ lệch chuẩn của mẫu số liệu ghép nhóm trước và sau khi chỉnh sửa. Chọn khẳng định đúng nhất.",
             "options": [
                 "$s_1 = s_2$",
                 "$s_1 > s_2$",
@@ -229,7 +229,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "match",
-            "q": "Cho hàm số $y = f(x)$, với $f(x)$ là đa thức bậc bốn, có đồ thị hàm số $y = f'(x)$ như hình vẽ. \n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767532873480_622.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\">\nĐặt $g(x) = f(-x^2 + 3x - m)$.",
+            "q": "Cho hàm số $y = f(x)$, với $f(x)$ là đa thức bậc bốn, có đồ thị hàm số $y = f'(x)$ như hình vẽ. Đặt $g(x) = f(-x^2 + 3x - m)$.<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767533384978_571.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\">",
             "items": [
                 "Khi $m=1$, số điểm cực trị của hàm số $g(x)$ là",
                 "Số giá trị nguyên của tham số $m$ để hàm số $g(x)$ có đúng $3$ điểm cực trị là",
@@ -341,7 +341,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "short",
-            "q": "Một người đàn ông đang ở vị trí điểm $A$ trên bờ một đoạn sông thẳng, rộng $300m$ và muốn đến điểm $B$, ở bờ đối diện, xuôi về phía hạ lưu $2km$ (xem hình vẽ). Biết người này có một chiếc thuyền, với vận tốc trung bình khi chèo thuyền trên đoạn sông này là $6km/h$. Nhưng nếu có thể lên bờ và chạy bộ thì vận tốc trung bình mà anh ta có thể đạt được là $8km/h$. Hãy tính thời gian nhanh nhất mà anh ta có thể đạt được để di chuyển từ $A$ đến $B$, theo đơn vị phút.<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767532899872_314.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\">",
+            "q": "Một người đàn ông đang ở vị trí điểm $A$ trên bờ một đoạn sông thẳng, rộng $300m$ và muốn đến điểm $B$, ở bờ đối diện, xuôi về phía hạ lưu $2km$ (xem hình vẽ). Biết người này có một chiếc thuyền, với vận tốc trung bình khi chèo thuyền trên đoạn sông này là $6km/h$. Nhưng nếu có thể lên bờ và chạy bộ thì vận tốc trung bình mà anh ta có thể đạt được là $8km/h$. Hãy tính thời gian nhanh nhất mà anh ta có thể đạt được để di chuyển từ $A$ đến $B$, theo đơn vị phút.<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767533420737_477.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\">",
             "ans": "17",
             "explain": "Đổi đơn vị: $300m = 0{,}3km$.<br>Gọi $C$ là điểm người đó cập bến ở bờ đối diện. Đặt khoảng cách từ hình chiếu của $A$ bên bờ đối diện đến $C$ là $x$ ($km$), điều kiện $0 \\le x \\le 2$.<br>Quãng đường chèo thuyền: $S_1 = \\sqrt{0{,}3^2 + x^2} = \\sqrt{0{,}09 + x^2}$.<br>Quãng đường chạy bộ: $S_2 = 2 - x$.<br>Tổng thời gian di chuyển: $T(x) = \\dfrac{\\sqrt{x^2+0{,}09}}{6} + \\dfrac{2-x}{8}$.<br>Ta có $T'(x) = \\dfrac{x}{6\\sqrt{x^2+0{,}09}} - \\dfrac{1}{8}$.<br>$T'(x) = 0 \\Leftrightarrow \\dfrac{x}{\\sqrt{x^2+0{,}09}} = \\dfrac{3}{4} \\Leftrightarrow 16x^2 = 9(x^2+0{,}09) \\Leftrightarrow 7x^2 = 0{,}81 \\Leftrightarrow x = \\dfrac{0{,}9}{\\sqrt{7}}$.<br>Khi đó thời gian ngắn nhất là:<br>$$T_{\\min} = T\\left(\\dfrac{0{,}9}{\\sqrt{7}}\\right) = \\dfrac{1}{4} + \\dfrac{\\sqrt{7}}{80} \\text{ (giờ)}.$$<br>Đổi ra phút:<br>$$T_{\\text{phút}} = 60 \\cdot \\left(\\dfrac{1}{4} + \\dfrac{\\sqrt{7}}{80}\\right) = 15 + \\dfrac{3\\sqrt{7}}{4} \\approx 16{,}98 \\text{ (phút)}.$$"
         },
@@ -353,7 +353,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "short",
-            "q": "Trong không gian $Oxyz$, cho khối đa diện $(H)$ là tập hợp tất cả các điểm $M(x;y;z)$ thỏa mãn $|x|+|y|+|z| \\le 6$ và $|x|+|y|+|z-2| \\le 6$. Tính thể tích khối đa diện $(H)$.",
+            "q": "Trong không gian $Oxyz$, cho khối đa diện $(H)$ là tập hợp tất cả các điểm $M(x;y;z)$ thỏa mãn $|x|+|y|+|z| \\le 6$ và $|x|+|y|+|z-2| \\le 6$. Tính thể tích khối đa diện $(H)$, làm tròn đến hàng đơn vị.",
             "ans": "167",
             "explain": "Khối $(H)$ là phần chung của hai khối bát diện đều:<br>$V_1: |x|+|y|+|z| \\le 6$ (Tâm $O(0;0;0)$, trục đối xứng $Oz$).<br>$V_2: |x|+|y|+|z-2| \\le 6$ (Tâm $I(0;0;2)$, trục đối xứng $Oz$).<br>Giao của hai khối này đối xứng qua mặt phẳng $z=1$ (trung điểm của đoạn nối hai tâm).<br>Tại mỗi cao độ $z$, thiết diện ngang là hình vuông có diện tích $S(z) = 2r^2(z)$, với $r(z)$ là bán kính thu hẹp.<br>Ta xét nửa dưới từ $z=-4$ đến $z=1$ (đối xứng với phần từ $z=1$ đến $z=6$).<br>Tại $z \\in [-4; 1]$, bán kính bị chặn bởi khối $V_2$: $r(z) = 6 - |z-2|$.<br>Vì $z \\le 1 < 2$ nên $|z-2|=2-z \\Rightarrow r(z) = 6-(2-z) = 4+z$.<br>Diện tích thiết diện: $S(z) = 2(4+z)^2$.<br>Thể tích phần dưới: $\\displaystyle\\int\\limits_{-4}^1 2(4+z)^2 \\mathrm{\\,d}z$. Đặt $t=4+z \\Rightarrow \\displaystyle\\int\\limits_{0}^5 2t^2 \\mathrm{\\,d}t = \\dfrac{2t^3}{3}\\Big|_0^5 = \\dfrac{250}{3}$.<br>Do tính đối xứng, thể tích phần trên bằng thể tích phần dưới.<br>Vậy $V_{(H)} = 2 \\cdot \\dfrac{250}{3} = \\dfrac{500}{3}$."
         }
