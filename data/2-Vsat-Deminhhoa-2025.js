@@ -1,12 +1,15 @@
 window.EXAM_DATA = {
     "title": "Đề Minh Họa V-Sat, Đại Học Cần Thơ, Năm 2025",
-    "subject": "Toan",
-    "grade": "12",
     "time": 90,
     "password": "858eabb9c6c80b4947777108ced59f12",
     "encrypted": true,
-    "start": "2026-01-03T19:30",
+    "start": "2026-01-04T13:30",
     "end": "2026-01-05T21:00",
+    "price": 0,
+    "bank": {
+        "id": "",
+        "acc": ""
+    },
     "scores": {
         "mcq": 0.25,
         "tf": 1,
@@ -20,19 +23,19 @@ window.EXAM_DATA = {
             "items": [
                 {
                     "sub": "Xác suất để mẫu chọn ra có quá trình tự phân hủy cao là $\\dfrac{7}{50}$",
-                    "ans": "800618943025315f869e4e1f09471012"
+                    "ans": "ed8a4ab0c0967b14e3bf6b145e153ec9"
                 },
                 {
                     "sub": "Xác suất để mẫu chọn ra có quá trình tự phân hủy cao và độ thối rữa thấp là $\\dfrac{9}{50}$",
-                    "ans": "b9ece18c950afbfa6b0fdbfa4ff731d3"
+                    "ans": "65c162f7c43612ba1bdf4d0f2912bbc0"
                 },
                 {
                     "sub": "Nếu quá trình tự phân hủy của một mẫu chọn ra là cao thì xác suất để thối rữa thấp là $\\dfrac{9}{16}$",
-                    "ans": "b9ece18c950afbfa6b0fdbfa4ff731d3"
+                    "ans": "65c162f7c43612ba1bdf4d0f2912bbc0"
                 },
                 {
                     "sub": "Nếu độ thối rữa một mẫu chọn ra là cao thì xác suất để quá trình tự phân hủy cao bằng $\\dfrac{14}{73}$",
-                    "ans": "b9ece18c950afbfa6b0fdbfa4ff731d3"
+                    "ans": "65c162f7c43612ba1bdf4d0f2912bbc0"
                 }
             ],
             "explain": "Tổng số mẫu quan sát là: $n(\\Omega) = 14 + 59 + 18 + 9 = 100$.<br>Gọi $A$ là biến cố \"Tự phân hủy cao\", $B$ là biến cố \"Thối rữa cao\".<br>Ta có số lượng mẫu tương ứng:<br>- Tự phân hủy cao: $14 + 18 = 32$.<br>- Thối rữa cao: $14 + 59 = 73$.<br>- Thối rữa thấp: $18 + 9 = 27$.<br>- Tự phân hủy cao và thối rữa thấp: $18$.<br>- Tự phân hủy cao và thối rữa cao: $14$.<br>- Xác suất tự phân hủy cao là: $P(A) = \\dfrac{32}{100} = \\dfrac{8}{25}$. Mệnh đề Sai.<br>- Xác suất tự phân hủy cao và thối rữa thấp là: $\\dfrac{18}{100} = \\dfrac{9}{50}$. Mệnh đề Đúng.<br>- Xác suất thối rữa thấp biết rằng tự phân hủy cao là: $\\dfrac{18}{32} = \\dfrac{9}{16}$. Mệnh đề Đúng.<br>- Xác suất tự phân hủy cao biết rằng thối rữa cao là: $\\dfrac{14}{73}$. Mệnh đề Đúng.",
@@ -45,19 +48,19 @@ window.EXAM_DATA = {
             "items": [
                 {
                     "sub": "$\\displaystyle\\int 2x \\mathrm{\\,d}x = x^2 + C$",
-                    "ans": "b9ece18c950afbfa6b0fdbfa4ff731d3"
+                    "ans": "65c162f7c43612ba1bdf4d0f2912bbc0"
                 },
                 {
                     "sub": "$\\displaystyle\\int \\cos x \\mathrm{\\,d}x = \\sin x + C$",
-                    "ans": "b9ece18c950afbfa6b0fdbfa4ff731d3"
+                    "ans": "65c162f7c43612ba1bdf4d0f2912bbc0"
                 },
                 {
                     "sub": "$\\displaystyle\\int x\\sqrt{x} \\mathrm{\\,d}x = \\dfrac{2x^2\\sqrt{x}}{5} + C$",
-                    "ans": "b9ece18c950afbfa6b0fdbfa4ff731d3"
+                    "ans": "65c162f7c43612ba1bdf4d0f2912bbc0"
                 },
                 {
                     "sub": "$\\displaystyle\\int \\cot^2 x \\mathrm{\\,d}x = \\cot x - x + C$",
-                    "ans": "800618943025315f869e4e1f09471012"
+                    "ans": "ed8a4ab0c0967b14e3bf6b145e153ec9"
                 }
             ],
             "explain": "- Ta có $(x^2+C)' = 2x$. Đúng.\n<br>- Ta có $(\\sin x + C)' = \\cos x$. Đúng.\n<br>- $\\displaystyle\\int x\\sqrt{x} \\mathrm{\\,d}x = \\displaystyle\\int x^{\\frac{3}{2}} \\mathrm{\\,d}x = \\dfrac{x^{\\frac{5}{2}}}{\\frac{5}{2}} + C = \\dfrac{2}{5}x^2\\sqrt{x} + C$. Đúng.\n<br>- $\\displaystyle\\int \\cot^2 x \\mathrm{\\,d}x = \\displaystyle\\int \\left(\\dfrac{1}{\\sin^2 x} - 1\\right) \\mathrm{\\,d}x = -\\cot x - x + C$. Mệnh đề sai vì thiếu dấu trừ.",
@@ -69,19 +72,19 @@ window.EXAM_DATA = {
             "items": [
                 {
                     "sub": "Mặt cầu $(S)$ có tâm là điểm $I(2;-5;1)$ và bán kính $R=4$",
-                    "ans": "b9ece18c950afbfa6b0fdbfa4ff731d3"
+                    "ans": "65c162f7c43612ba1bdf4d0f2912bbc0"
                 },
                 {
                     "sub": "Điểm $A$ nằm ngoài mặt cầu $(S)$",
-                    "ans": "800618943025315f869e4e1f09471012"
+                    "ans": "ed8a4ab0c0967b14e3bf6b145e153ec9"
                 },
                 {
                     "sub": "Phương trình mặt cầu tâm $A$ và đi qua điểm $B$ là $(x-3)^2 + (y+4)^2 + (z-4)^2 = 4$",
-                    "ans": "800618943025315f869e4e1f09471012"
+                    "ans": "ed8a4ab0c0967b14e3bf6b145e153ec9"
                 },
                 {
                     "sub": "Phương trình mặt cầu đường kính $AB$ là $(x-4)^2 + (y+3)^2 + (z-4)^2 = 2$",
-                    "ans": "b9ece18c950afbfa6b0fdbfa4ff731d3"
+                    "ans": "65c162f7c43612ba1bdf4d0f2912bbc0"
                 }
             ],
             "explain": "Mặt cầu $(S)$ có tâm $I(2;-5;1)$ và bán kính $R = \\sqrt{2^2 + (-5)^2 + 1^2 - 14} = \\sqrt{16} = 4$.\n<br>- Tâm $I(2;-5;1)$, bán kính $R=4$. Đúng.\n<br>- $IA = \\sqrt{11}$. Vì $IA = \\sqrt{11} < R=4$ nên $A$ nằm trong mặt cầu. Sai.\n<br>- Bán kính mặt cầu tâm $A$ đi qua $B$ là $r = AB= \\sqrt{8}$. Phương trình là $(x-3)^2 + (y+4)^2 + (z-4)^2 = 8$. Sai.\n<br>- Trung điểm $AB$ là $K(4;-3;4)$; $AB = \\sqrt{8} \\Rightarrow R' = \\dfrac{\\sqrt{8}}{2} = \\sqrt{2}$. Phương trình mặt cầu đường kính $AB$: $(x-4)^2 + (y+3)^2 + (z-4)^2 = 2$. Đúng.",
@@ -93,19 +96,19 @@ window.EXAM_DATA = {
             "items": [
                 {
                     "sub": "Nhiệt độ ban đầu của nước trong ấm là $20^\\circ\\text{C}$",
-                    "ans": "b9ece18c950afbfa6b0fdbfa4ff731d3"
+                    "ans": "65c162f7c43612ba1bdf4d0f2912bbc0"
                 },
                 {
                     "sub": "Ta có $A=85$",
-                    "ans": "800618943025315f869e4e1f09471012"
+                    "ans": "ed8a4ab0c0967b14e3bf6b145e153ec9"
                 },
                 {
                     "sub": "Sau khoảng $2$ phút (làm tròn đến hàng đơn vị) kể từ lúc bật bếp thì nước trong ấm đạt $85^\\circ\\text{C}$",
-                    "ans": "b9ece18c950afbfa6b0fdbfa4ff731d3"
+                    "ans": "65c162f7c43612ba1bdf4d0f2912bbc0"
                 },
                 {
                     "sub": "Sau khoảng $21$ phút (làm tròn đến hàng đơn vị) kể từ lúc tắt bếp thì nhiệt độ của nước trong ấm giảm xuống tới $40^\\circ\\text{C}$",
-                    "ans": "b9ece18c950afbfa6b0fdbfa4ff731d3"
+                    "ans": "65c162f7c43612ba1bdf4d0f2912bbc0"
                 }
             ],
             "explain": "- Tại thời điểm ban đầu $t=0$, \n$T = 95 - 75\\mathrm{e}^0 = 95 - 75 = 20^\\circ\\text{C}$. Đúng.<br>- Tại thời điểm tắt bếp ($t=0$ của giai đoạn 2), nhiệt độ là $85^\\circ\\text{C}$. Ta có $85 = 15 + A\\mathrm{e}^0 \\Rightarrow A = 70$. Sai.\n<br>- Xét giai đoạn đun: $85 = 95 - 75\\mathrm{e}^{-t} \\Leftrightarrow 75\\mathrm{e}^{-t} = 10 \\Leftrightarrow \\mathrm{e}^{-t} = \\dfrac{2}{15} \\Rightarrow t = -\\ln\\left(\\dfrac{2}{15}\\right) \\approx 2{,}01$ phút. Đúng.\n<br>- Xét giai đoạn tắt bếp (với $A=70$): $40 = 15 + 70\\mathrm{e}^{-\\frac{t}{20}} \\Leftrightarrow 25 = 70\\mathrm{e}^{-\\frac{t}{20}} \\Leftrightarrow \\mathrm{e}^{-\\frac{t}{20}} = \\dfrac{5}{14} \\Rightarrow -\\dfrac{t}{20} = \\ln\\left(\\dfrac{5}{14}\\right) \\Rightarrow t \\approx 20{,}59$ phút. Làm tròn là $21$ phút. Đúng.",
@@ -117,19 +120,19 @@ window.EXAM_DATA = {
             "items": [
                 {
                     "sub": "Thể tích khối chóp $S.ABCD$ bằng $\\dfrac{3a^3}{2}$",
-                    "ans": "800618943025315f869e4e1f09471012"
+                    "ans": "ed8a4ab0c0967b14e3bf6b145e153ec9"
                 },
                 {
                     "sub": "Đường thẳng $SC$ tạo với mặt phẳng $(ABCD)$ một góc bằng $45^\\circ$",
-                    "ans": "800618943025315f869e4e1f09471012"
+                    "ans": "ed8a4ab0c0967b14e3bf6b145e153ec9"
                 },
                 {
                     "sub": "Khoảng cách từ điểm $A$ đến đường thẳng $CD$ bằng $\\sqrt{2}a$",
-                    "ans": "b9ece18c950afbfa6b0fdbfa4ff731d3"
+                    "ans": "65c162f7c43612ba1bdf4d0f2912bbc0"
                 },
                 {
                     "sub": "Khoảng cách từ điểm $B$ đến mặt phẳng $(SCD)$ bằng $\\dfrac{\\sqrt{5}a}{5}$",
-                    "ans": "800618943025315f869e4e1f09471012"
+                    "ans": "ed8a4ab0c0967b14e3bf6b145e153ec9"
                 }
             ],
             "explain": "<br><div style=\"text-align:center\"><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/2-Vsat-Deminhhoa-2025-q5-e-1767443168081.png\" style=\"max-width:100%;border-radius:8px;margin:10px 0\"></div><br>\nDiện tích đáy $S_{ABCD} = \\dfrac{(BC+AD)AB}{2} = \\dfrac{(a+2a)a}{2} = \\dfrac{3a^2}{2}$.\n<br>- Thể tích $V = \\dfrac{1}{3} SA \\cdot S_{ABCD} = \\dfrac{1}{3} a \\cdot \\dfrac{3a^2}{2} = \\dfrac{a^3}{2}$. Mệnh đề Sai.<br>- Hình chiếu của $S$ lên $(ABCD)$ là $A$. Góc giữa $SC$ và đáy là $\\widehat{SCA}$.<br>Ta có $AC = \\sqrt{AB^2+BC^2} = a\\sqrt{2}$.<br>$\\tan \\widehat{SCA} = \\dfrac{SA}{AC} = \\dfrac{a}{a\\sqrt{2}} = \\dfrac{1}{\\sqrt{2}} \\ne 1$. Góc không bằng $45^\\circ$. Mệnh đề Sai.\n<br>- Chọn hệ trục tọa độ $A(0;0;0)$, $B(a;0;0)$, $D(0;2a;0)$, $S(0;0;a)$. Suy ra $C(a;a;0)$.\n<br>Ta có diện tích tam giác $ACD$: $S_{ACD} = S_{ABCD} - S_{ABC} = \\dfrac{3a^2}{2} - \\dfrac{a^2}{2} = a^2$.\n<br>Cạnh $CD = a\\sqrt{2}$.\n<br>Khoảng cách $d(A, CD) = \\dfrac{2S_{ACD}}{CD} = \\dfrac{2a^2}{a\\sqrt{2}} = a\\sqrt{2}$. Mệnh đề Đúng.\n<br>- Ta có thể tích $V_{S.BCD} = V_{S.ABCD} - V_{S.ABD} = \\dfrac{a^3}{2} - \\dfrac{1}{3}a \\cdot \\dfrac{1}{2}a \\cdot 2a = \\dfrac{a^3}{2} - \\dfrac{a^3}{3} = \\dfrac{a^3}{6}$.\n<br>Tam giác $SCD$ có $SC=a\\sqrt{3}, SD=a\\sqrt{5}, CD=a\\sqrt{2}$. Vì $SC^2+CD^2 = 3a^2+2a^2 = 5a^2 = SD^2$ nên $\\Delta SCD$ vuông tại $C$.<br>$S_{SCD} = \\dfrac{1}{2} SC \\cdot CD = \\dfrac{1}{2} a\\sqrt{3} \\cdot a\\sqrt{2} = \\dfrac{a^2\\sqrt{6}}{2}$.\n<br>$d(B, (SCD)) = \\dfrac{3V_{S.BCD}}{S_{SCD}} = \\dfrac{a^3/2}{a^2\\sqrt{6}/2} = \\dfrac{a}{\\sqrt{6}}$. Mệnh đề Sai.",
@@ -141,19 +144,19 @@ window.EXAM_DATA = {
             "items": [
                 {
                     "sub": "Tỉ lệ dương tính thật bằng $95\\%$",
-                    "ans": "800618943025315f869e4e1f09471012"
+                    "ans": "ed8a4ab0c0967b14e3bf6b145e153ec9"
                 },
                 {
                     "sub": "Tỉ lệ xét nghiệm RT-PCR có kết quả dương tính là $9{,}1\\%$",
-                    "ans": "b9ece18c950afbfa6b0fdbfa4ff731d3"
+                    "ans": "65c162f7c43612ba1bdf4d0f2912bbc0"
                 },
                 {
                     "sub": "Tỉ lệ người nhiễm virus trong những người có kết quả xét nghiệm RT-PCR dương tính khoảng $47{,}8\\%$",
-                    "ans": "b9ece18c950afbfa6b0fdbfa4ff731d3"
+                    "ans": "65c162f7c43612ba1bdf4d0f2912bbc0"
                 },
                 {
                     "sub": "Tỉ lệ người không nhiễm virus trong những người có kết quả xét nghiệm RT-PCR âm tính khoảng $90{,}9\\%$",
-                    "ans": "800618943025315f869e4e1f09471012"
+                    "ans": "ed8a4ab0c0967b14e3bf6b145e153ec9"
                 }
             ],
             "explain": "Gọi $D$ là biến cố nhiễm bệnh ($P(D)=0{,}05$), $H$ là không nhiễm ($P(H)=0{,}95$).\n<br>Gọi $+$ là kết quả dương tính, $-$ là kết quả âm tính.\n<br>Theo đề bài: Dương tính giả $P(+|H) = 0{,}05$; \nÂm tính giả $P(-|D) = 0{,}13$.\n<br>Suy ra: Dương tính thật $P(+|D) = 1 - 0{,}13 = 0{,}87$; \nÂm tính thật $P(-|H) = 1 - 0{,}05 = 0{,}95$.\n<br>- Tỉ lệ dương tính thật là $P(+|D) = 87\\%$. Mệnh đề Sai.\n<br>- Tỉ lệ kết quả dương tính: $P(+) = P(+|D)P(D) + P(+|H)P(H)= 0{,}091 = 9{,}1\\%$. Mệnh đề Đúng.\n<br>- Tỉ lệ nhiễm virus trong nhóm dương tính: $P(D|+) = \\dfrac{P(+|D)P(D)}{P(+)} \\approx 47{,}8\\%$. Mệnh đề Đúng.\n<br>- Tỉ lệ không nhiễm trong nhóm âm tính: $P(H|-) = \\dfrac{P(-|H)P(H)}{1 - P(+)} = \\dfrac{0{,}95 \\cdot 0{,}95}{1 - 0{,}091} = \\dfrac{0{,}9025}{0{,}909} \\approx 99{,}3\\%$. Mệnh đề Sai.",
@@ -168,7 +171,7 @@ window.EXAM_DATA = {
                 "$4{,}8$",
                 "$6{,}4$"
             ],
-            "ans": "cfcd208495d565ef66e7dff9f98764da",
+            "ans": "dcfcd07e645d245babe887e5e2daa016",
             "explain": "Hàm số $a(t) = -0{,}8t + 4$ là hàm bậc nhất có hệ số góc âm nên nghịch biến trên $\\mathbb{R}$.<br>Trong khoảng $[1; 3]$, gia tốc lớn nhất tại $t=1$.<br>$a_{\\max} = a(1) = -0{,}8(1) + 4 = 3{,}2 \\ (\\text{m/s}^2)$.",
             "id": 1767440931715.7039
         },
@@ -181,7 +184,7 @@ window.EXAM_DATA = {
                 "$[4; 5]$",
                 "$[1; 3]$"
             ],
-            "ans": "cfcd208495d565ef66e7dff9f98764da",
+            "ans": "dcfcd07e645d245babe887e5e2daa016",
             "explain": "Vận tốc của vật là nguyên hàm của gia tốc. Với $v(0)=0$ (bắt đầu di chuyển từ $O$), ta có:\n<br>$v(t) = \\displaystyle\\int (-0{,}8t + 4) \\mathrm{\\,d}t = -0{,}4t^2 + 4t$.\n<br>Vật chuyển động theo chiều dương ($v > 0$) khi $-0{,}4t^2 + 4t > 0 \\Leftrightarrow 0 < t < 10$.\n<br>Tốc độ của vật giảm khi vật chuyển động chậm dần, tức là $a(t) \\cdot v(t) < 0$.\n<br>Trong khoảng thời gian $t \\in (0; 10)$, $v(t) > 0$, nên ta cần $a(t) < 0$.\n<br>$-0{,}8t + 4 < 0 \\Leftrightarrow t > 5$.\n<br>Vậy trong khoảng $(5; 10)$, tốc độ của vật giảm. Khoảng $[5; 6]$ thỏa mãn.",
             "id": 1767440931715.187
         },
@@ -194,7 +197,7 @@ window.EXAM_DATA = {
                 "$33{,}3$",
                 "$37{,}4$"
             ],
-            "ans": "cfcd208495d565ef66e7dff9f98764da",
+            "ans": "dcfcd07e645d245babe887e5e2daa016",
             "explain": "Vận tốc $v(t) = -0{,}4t^2 + 4t$.\n<br>Ta thấy $v(t) = 0$ khi $t=0$ hoặc $t=10$.\n<br>Trong khoảng $[5; 10]$, vật đi theo chiều dương ($v \\ge 0$).<br>Trong khoảng $[10; 11]$, vật đi theo chiều âm ($v \\le 0$).\n<br>Quãng đường đi được là:\n<br>$S = \\displaystyle\\int\\limits_{5}^{11} |v(t)| \\mathrm{\\,d}t = \\displaystyle\\int\\limits_{5}^{10} (-0{,}4t^2 + 4t) \\mathrm{\\,d}t + \\displaystyle\\int\\limits_{10}^{11} -(-0{,}4t^2 + 4t) \\mathrm{\\,d}t$.<br>Tính tích phân:\n<br>$\\displaystyle\\int\\limits_{5}^{10} (-0{,}4t^2 + 4t) \\mathrm{\\,d}t = \\left.\\left(-\\dfrac{0{,}4t^3}{3} + 2t^2\\right)\\right|_5^{10} = \\dfrac{200}{3} - \\dfrac{100}{3} = \\dfrac{100}{3}$.<br>$\\displaystyle\\int\\limits_{10}^{11} (0{,}4t^2 - 4t) \\mathrm{\\,d}t = \\left.\\left(\\dfrac{0{,}4t^3}{3} - 2t^2\\right)\\right|_{10}^{11} \\approx 2{,}133$.\n<br>Tổng quãng đường $S \\approx 33{,}333 + 2{,}133 = 35{,}466$.<br>Làm tròn đến hàng phần chục là $35{,}5$.",
             "id": 1767440931715.084
         },
@@ -207,7 +210,7 @@ window.EXAM_DATA = {
                 "$11{,}2$",
                 "$11{,}1$"
             ],
-            "ans": "cfcd208495d565ef66e7dff9f98764da",
+            "ans": "dcfcd07e645d245babe887e5e2daa016",
             "explain": "Tổng số học sinh là $n = 3 + 11 + 6 + 15 + 5 = 40$.\nVị trí của tứ phân vị thứ nhất là $\\dfrac{n}{4} = \\dfrac{40}{4} = 10$.\nTần số tích lũy của nhóm $[0; 5)$ là $3 < 10$.\nTần số tích lũy của nhóm $[5; 15)$ là $3 + 11 = 14 > 10$.\nDo đó, tứ phân vị thứ nhất thuộc nhóm $[5; 15)$.\nTa có: $u_m = 5$; $u_{m+1} = 15$; $n_m = 11$; $C_{m-1} = 3$.\nĐộ dài nhóm là $L = 15 - 5 = 10$.\nTứ phân vị thứ nhất là:$$Q_1 = u_m + \\dfrac{\\frac{n}{4} - C_{m-1}}{n_m} \\cdot L = 5 + \\dfrac{10 - 3}{11} \\cdot 10 = 5 + \\dfrac{70}{11} \\approx 11{,}36.$$\nLàm tròn đến hàng phần chục ta được $11{,}4$.",
             "id": 1767440931715.056,
             "img": "https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/2-Vsat-Deminhhoa-2025-q10-q-1767443170087.png"
@@ -221,7 +224,7 @@ window.EXAM_DATA = {
                 "$0{,}37$",
                 "$0{,}51$"
             ],
-            "ans": "cfcd208495d565ef66e7dff9f98764da",
+            "ans": "dcfcd07e645d245babe887e5e2daa016",
             "explain": "Tổng số học sinh là $n = 40$.\nSố học sinh sử dụng ChatGPT từ 25 phút trở lên thuộc các nhóm $[25; 30)$ và $[30; 35)$.\nSố lượng học sinh thỏa mãn là: $15 + 5 = 20$ (học sinh).\nXác suất cần tìm là: $P = \\dfrac{20}{40} = 0{,}5$.",
             "id": 1767440931715.52,
             "img": "https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/2-Vsat-Deminhhoa-2025-q11-q-1767443171651.png"
@@ -235,7 +238,7 @@ window.EXAM_DATA = {
                 "$s_1 < s_2$",
                 "$s_1 = s_2 - 5$"
             ],
-            "ans": "cfcd208495d565ef66e7dff9f98764da",
+            "ans": "dcfcd07e645d245babe887e5e2daa016",
             "explain": "Khi cộng thêm một hằng số $c$ (ở đây $c=5$) vào tất cả các giá trị của mẫu số liệu thì:\n<ul>\n<li>Số trung bình cộng tăng thêm $c$.</li>\n<li>Phương sai và độ lệch chuẩn không thay đổi.</li>\n</ul>\nDo đó độ lệch chuẩn trước và sau khi chỉnh sửa là bằng nhau, tức là $s_1 = s_2$.",
             "id": 1767440931715.6028,
             "img": "https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/2-Vsat-Deminhhoa-2025-q12-q-1767443173573.png"
@@ -258,10 +261,10 @@ window.EXAM_DATA = {
                 "$-19$"
             ],
             "ans": [
-                "0d61f8370cad1d412f80b84d143e1257",
-                "7fc56270e7a70fa81a5935b72eacbe29",
-                "3a3ea00cfc35332cedf6e5e9a32e94da",
-                "9d5ed678fe57bcca610140957afab571"
+                "297e7ca127d2eef674c119331fe30dff",
+                "4cbd6d53280de25e04712c7434a70642",
+                "1925294ef4492da4b990901ebab5396e",
+                "01b7c90b02081ae53119957e0697b081"
             ],
             "explain": "Dựa vào bảng biến thiên ta thấy:<ul><li>Đạo hàm đổi dấu từ dương sang âm khi đi qua $x=-1$, nên hàm số đạt cực đại tại $x_{\\text{CĐ}} = -1$.</li><li>Đạo hàm đổi dấu từ âm sang dương khi đi qua $x=3$, nên hàm số đạt cực tiểu tại $x_{\\text{CT}} = 3$.</li><li>Giá trị cực đại của hàm số là $y_{\\text{CĐ}} = f(-1) = 6$.</li><li>Giá trị cực tiểu của hàm số là $y_{\\text{CT}} = f(3) = -26$.</li></ul>Vậy ta có kết quả ghép nối:<br>- Hàm số $f(x)$ đạt cực đại tại điểm $x_{\\text{CĐ}}=-1$. (Ghép với C)<br>- Hàm số $f(x)$ đạt cực tiểu tại điểm $x_{\\text{CT}}=3$. (Ghép với A)<br>- Giá trị cực đại của hàm số $f(x)$ là $y_{\\text{CĐ}}=6$. (Ghép với E)<br>- Giá trị cực tiểu của hàm số $f(x)$ là $y_{\\text{CT}}=-26$. (Ghép với B)",
             "id": 1767440931715.8206,
@@ -285,10 +288,10 @@ window.EXAM_DATA = {
                 "$2$"
             ],
             "ans": [
-                "3a3ea00cfc35332cedf6e5e9a32e94da",
-                "f623e75af30e62bbd73d6df5b50bb7b5",
-                "800618943025315f869e4e1f09471012",
-                "9d5ed678fe57bcca610140957afab571"
+                "1925294ef4492da4b990901ebab5396e",
+                "0c554e24da6263f40dbc6aabe26f354d",
+                "ed8a4ab0c0967b14e3bf6b145e153ec9",
+                "01b7c90b02081ae53119957e0697b081"
             ],
             "explain": "<br><div style=\"text-align:center\"><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/2-Vsat-Deminhhoa-2025-q14-e-1767443177243.png\" style=\"max-width:100%;border-radius:8px;margin:10px 0\"></div><br>\n- Ta có $CD \\parallel AB \\Rightarrow (CD,SB) = (AB,SB) = \\widehat{SBA}$.<br>Trong tam giác vuông $SAB$: $\\tan \\widehat{SBA} = \\dfrac{SA}{AB} = \\dfrac{2\\sqrt{3}a}{a} = 2\\sqrt{3}$.<br>- Hình chiếu của $S$ lên $(ABCD)$ là $A \\Rightarrow (SC,(ABCD)) = \\widehat{SCA}$.<br>$AC = \\sqrt{AB^2+AD^2} = \\sqrt{a^2+3a^2} = 2a$.<br>$\\tan \\widehat{SCA} = \\dfrac{SA}{AC} = \\dfrac{2\\sqrt{3}a}{2a} = \\sqrt{3}$.<br>- Ta có $\\left\\{\\begin{aligned}& CD \\perp AD \\\\& CD \\perp SA \\\\ \\end{aligned}\\right. \\Rightarrow CD \\perp (SAD)$.<br>Do đó góc nhị diện $[S,CD,A]$ chính là $\\widehat{SDA}$.<br>$\\tan \\widehat{SDA} = \\dfrac{SA}{AD} = \\dfrac{2\\sqrt{3}a}{\\sqrt{3}a} = 2$.<br>- Góc nhị diện $[C,SA,D]$: Vì $SA \\perp (ABCD)$ nên $(SAC) \\perp (ABCD)$ và $(SAD) \\perp (ABCD)$.<br>Giao tuyến của hai mặt phẳng $(SAC)$ và $(SAD)$ là $SA$. Góc phẳng nhị diện là góc giữa $AC$ và $AD$, tức là $\\widehat{CAD}$.<br>$\\tan \\widehat{CAD} = \\dfrac{CD}{AD} = \\dfrac{AB}{AD} = \\dfrac{a}{\\sqrt{3}a} = \\dfrac{\\sqrt{3}}{3}$.",
             "id": 1767440931715.0366
@@ -311,10 +314,10 @@ window.EXAM_DATA = {
                 "$2x+y-3z-1=0$"
             ],
             "ans": [
-                "9d5ed678fe57bcca610140957afab571",
-                "7fc56270e7a70fa81a5935b72eacbe29",
-                "0d61f8370cad1d412f80b84d143e1257",
-                "800618943025315f869e4e1f09471012"
+                "01b7c90b02081ae53119957e0697b081",
+                "4cbd6d53280de25e04712c7434a70642",
+                "297e7ca127d2eef674c119331fe30dff",
+                "ed8a4ab0c0967b14e3bf6b145e153ec9"
             ],
             "explain": "- Vectơ pháp tuyến là $\\overrightarrow{BC} = (-1;2;-2)$.<br>Phương trình: $-1(x-1) + 2(y+1) - 2(z-0) = 0 \\Leftrightarrow -x+2y-2z+3=0 \\Leftrightarrow x-2y+2z-3=0$.<br>- Vectơ pháp tuyến là $\\vec{n}_P = (2;-1;1)$.<br>Phương trình: $2(x-1) - 1(y+1) + 1(z-0) = 0 \\Leftrightarrow 2x-y+z-3=0$.<br>- Ta có $\\overrightarrow{AB} = (1;1;1)$, $\\overrightarrow{AC} = (0;3;-1)$.<br>Vectơ pháp tuyến $\\vec{n} = [\\overrightarrow{AB}, \\overrightarrow{AC}] = (-4;1;3)$.<br>Phương trình: $-4(x-1) + 1(y+1) + 3(z-0) = 0 \\Leftrightarrow -4x+y+3z+5=0 \\Leftrightarrow 4x-y-3z-5=0$.<br>- Vectơ pháp tuyến $\\vec{n} = [\\overrightarrow{AB}, \\vec{n}_P] = \\left( \\begin{vmatrix} 1 & 1 \\\\ -1 & 1 \\end{vmatrix}; \\begin{vmatrix} 1 & 1 \\\\ 1 & 2 \\end{vmatrix}; \\begin{vmatrix} 1 & 1 \\\\ 2 & -1 \\end{vmatrix} \\right) = (2;1;-3)$.<br>Phương trình: $2(x-1) + 1(y+1) - 3(z-0) = 0 \\Leftrightarrow 2x+y-3z-1=0$.",
             "id": 1767440931715.39
@@ -337,10 +340,10 @@ window.EXAM_DATA = {
                 "$(4;3;-3)$"
             ],
             "ans": [
-                "7fc56270e7a70fa81a5935b72eacbe29",
-                "9d5ed678fe57bcca610140957afab571",
-                "0d61f8370cad1d412f80b84d143e1257",
-                "f623e75af30e62bbd73d6df5b50bb7b5"
+                "4cbd6d53280de25e04712c7434a70642",
+                "01b7c90b02081ae53119957e0697b081",
+                "297e7ca127d2eef674c119331fe30dff",
+                "0c554e24da6263f40dbc6aabe26f354d"
             ],
             "explain": "Xét hệ phương trình giao điểm của $d_1$ và $d_2$:<br>$\\left\\{\\begin{aligned}& 2-t = 3+t' \\\\& 3 = 2-t' \\\\& -1+t = -1 \\\\ \\end{aligned}\\right. \\Leftrightarrow \\left\\{\\begin{aligned}& t=0 \\\\& t'=-1 \\\\ \\end{aligned}\\right.$.<br>Thay $t=0$ vào $d_1$ ta được tọa độ $A(2;3;-1)$.<br><br>Vì $B \\in d_1 \\Rightarrow B(2-m; 3; -1+m)$ và $C \\in d_2 \\Rightarrow C(3+n; 2-n; -1)$.<br>Ta có $M$, $B$, $C$ thẳng hàng và $\\triangle ABC$ đều (suy ra $AB=AC$).<br>Thử các đáp án từ cột phải để tìm tọa độ phù hợp:<br>Kiểm tra $B(0;3;1)$ (ứng với $m=2$) $\\in d_1$ và $C(0;5;-1)$ (ứng với $n=-3$) $\\in d_2$.<br>Khi đó:<br>$\\overrightarrow{MB} = (0;3;-3)$,<br> $\\overrightarrow{MC} = (0;5;-5)$.<br>Ta thấy $\\overrightarrow{MC} = \\dfrac{5}{3}\\overrightarrow{MB} \\Rightarrow M, B, C$ thẳng hàng.<br>Kiểm tra tam giác đều:<br>$AB= \\sqrt{8}$; $AC= \\sqrt{8}$;\t$BC= \\sqrt{8}$.<br>Vậy $AB=BC=CA$, tam giác $ABC$ đều.<br>- Tọa độ điểm $A(2;3;-1)$.<br>- Đường thẳng $d_3$ đi qua $B$, $C$ nên có VTCP $\\overrightarrow{u} = \\dfrac{1}{2}\\overrightarrow{BC} = \\dfrac{1}{2}(0;2;-2) = (0;1;-1)$.<br>- Tọa độ điểm $B(0;3;1)$.<br>- Tọa độ điểm $C(0;5;-1)$.",
             "id": 1767440931715.3396
@@ -363,10 +366,10 @@ window.EXAM_DATA = {
                 "$13$"
             ],
             "ans": [
-                "0d61f8370cad1d412f80b84d143e1257",
-                "7fc56270e7a70fa81a5935b72eacbe29",
-                "9d5ed678fe57bcca610140957afab571",
-                "d41d8cd98f00b204e9800998ecf8427e"
+                "297e7ca127d2eef674c119331fe30dff",
+                "4cbd6d53280de25e04712c7434a70642",
+                "01b7c90b02081ae53119957e0697b081",
+                "74be16979710d4c4e7c6647856088456"
             ],
             "explain": "Ta có $g'(x) = (-2x+3)f'(-x^2+3x-m)$.<br>$$g'(x)=0 \\Leftrightarrow \\left[\\begin{aligned}& -2x+3=0 \\Rightarrow x=\\dfrac{3}{2} \\\\ & f'(-x^2+3x-m)=0.\\\\ \\end{aligned}\\right.$$<br>Dựa vào đồ thị $f'(x)$, ta có $f'(u)=0 \\Leftrightarrow u \\in \\{-1; 1; 4\\}$.<br>Khi đó $g'(x)=0 \\Leftrightarrow \\left[\\begin{aligned}& x=1{,}5 \\\\ & -x^2+3x-m = -1 & (1) \\\\ & -x^2+3x-m = 1 & (2) \\\\ & -x^2+3x-m = 4. & (3)\\\\ \\end{aligned}\\right.$\n<br>Xét parabol $h(x) = -x^2+3x-m$. \nĐỉnh tại $x=1{,}5$, giá trị lớn nhất $h(1{,}5) = \\dfrac{9}{4}-m$.\n<br><div style=\"text-align:center\"><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/2-Vsat-Deminhhoa-2025-q17-e-1767443179689.png\" style=\"max-width:100%;border-radius:8px;margin:10px 0\"></div><br>\n- Với $m=1$, ta có $h(1{,}5) = 1{,}25$.\n<br>PT (1) trở thành $-x^2+3x = 0 \\Rightarrow 2$ nghiệm.\n<br>PT (2) trở thành $-x^2+3x-2 = 0 \\Rightarrow 2$ nghiệm.\n<br>PT (3) trở thành $-x^2+3x-5 = 0$ (vô nghiệm vì đỉnh $1{,}25 < 4$).<br>Tổng số nghiệm bội lẻ là $1 + 2 + 2 = 5$. Vậy có 5 điểm cực trị.\n\n<br>- Để có đúng 3 cực trị: Cần 1 nghiệm $x=1{,}5$ và 2 nghiệm từ các PT trên.\n<br>Điều kiện: $-1 < \\max h(x) \\le 1 \\Leftrightarrow -1 < \\dfrac{9}{4}-m \\le 1 \\Leftrightarrow \\dfrac{5}{4} \\le m < \\dfrac{13}{4}$.\n<br>Do $m \\in \\mathbb{Z} \\Rightarrow m \\in \\{2; 3\\}$. Có 2 giá trị.\n\n<br>- Để có đúng 5 cực trị: Điều kiện $1 < \\max h(x) \\le 4 \\Leftrightarrow 1 < \\dfrac{9}{4}-m \\le 4 \\Leftrightarrow -\\dfrac{7}{4} \\le m < \\dfrac{5}{4}$.\n<br>Do $m \\in \\mathbb{Z} \\Rightarrow m \\in \\{-1; 0; 1\\}$. Có 3 giá trị.\n\n<br>- Để có đúng 7 cực trị: Điều kiện $\\max h(x) > 4 \\Leftrightarrow \\dfrac{9}{4}-m > 4 \\Leftrightarrow m < -\\dfrac{7}{4} = -1{,}75$.\n<br>Trong khoảng $(-2; 5)$, không có số nguyên nào nhỏ hơn $-1{,}75$. (Kết quả là $0$ giá trị, nhưng không có đáp án $0$ trong cột phải để ghép).",
             "id": 1767440931715.0452
@@ -387,8 +390,8 @@ window.EXAM_DATA = {
         },
         {
             "type": "short",
-            "q": "Một người đàn ông đang ở vị trí điểm $A$ trên bờ một đoạn sông thẳng, rộng $300m$ và muốn đến điểm $B$, ở bờ đối diện, xuôi về phía hạ lưu $2km$ (xem hình vẽ). Biết người này có một chiếc thuyền, với vận tốc trung bình khi chèo thuyền trên đoạn sông này là $6km/h$. Nhưng nếu có thể lên bờ và chạy bộ thì vận tốc trung bình mà anh ta có thể đạt được là $8km/h$. Hãy tính thời gian nhanh nhất mà anh ta có thể đạt được để di chuyển từ $A$ đến $B$, theo đơn vị phút( làm tròn tới hàng phần trăm).<br><br>",
-            "ans": "e570e5af5d163528a061ea3fde6bf866",
+            "q": "Một người đàn ông đang ở vị trí điểm $A$ trên bờ một đoạn sông thẳng, rộng $300m$ và muốn đến điểm $B$, ở bờ đối diện, xuôi về phía hạ lưu $2km$ (xem hình vẽ). Biết người này có một chiếc thuyền, với vận tốc trung bình khi chèo thuyền trên đoạn sông này là $6km/h$. Nhưng nếu có thể lên bờ và chạy bộ thì vận tốc trung bình mà anh ta có thể đạt được là $8km/h$. Hãy tính thời gian nhanh nhất mà anh ta có thể đạt được để di chuyển từ $A$ đến $B$, theo đơn vị phút( làm tròn tới hàng đơn vị).<br><br>",
+            "ans": "70efdf2ec9b086079795c442636b55fb",
             "explain": "Đổi đơn vị: $300m = 0{,}3km$.\nGọi $C$ là điểm người đó cập bến ở bờ đối diện. Đặt khoảng cách từ hình chiếu của $A$ bên bờ đối diện đến $C$ là $x$ ($km$), điều kiện $0 \\le x \\le 2$.\nQuãng đường chèo thuyền: $S_1 = \\sqrt{0{,}3^2 + x^2} = \\sqrt{0{,}09 + x^2}$.\\\\Quãng đường chạy bộ: $S_2 = 2 - x$.\nTổng thời gian di chuyển: \n$T(x) = \\dfrac{\\sqrt{x^2+0{,}09}}{6} + \\dfrac{2-x}{8}$.\nTa có $T'(x) = \\dfrac{x}{6\\sqrt{x^2+0{,}09}} - \\dfrac{1}{8}$.\n$T'(x) = 0 \\Leftrightarrow \\dfrac{x}{\\sqrt{x^2+0{,}09}} = \\dfrac{3}{4} \\Leftrightarrow 16x^2 = 9(x^2+0{,}09)$\n$\\Leftrightarrow 7x^2 = 0{,}81 \\Leftrightarrow x = \\dfrac{0{,}9}{\\sqrt{7}}$.\nKhi đó thời gian ngắn nhất là:$$T_{\\min} = T\\left(\\dfrac{0{,}9}{\\sqrt{7}}\\right) = \\dfrac{1}{4} + \\dfrac{\\sqrt{7}}{80} \\text{ (giờ)}.$$\nĐổi ra phút:$$T_{\\text{phút}} = 60 \\cdot \\left(\\dfrac{1}{4} + \\dfrac{\\sqrt{7}}{80}\\right) = 15 + \\dfrac{3\\sqrt{7}}{4} \\approx 16{,}98 \\text{ (phút)}.$$",
             "id": 1767440931715.7256,
             "img": "https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/2-Vsat-Deminhhoa-2025-q20-q-1767443182237.png"
