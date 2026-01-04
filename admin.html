@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Tool v20.4 (Fix JSON Import)</title>
+    <title>Admin Tool v20.6 (Final Fix)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
@@ -11,34 +11,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* CSS CHUẨN */
         body{font-family:'Segoe UI',sans-serif;background:#eceff1;padding:20px;color:#37474f;margin:0}
         .btn{padding:8px 15px;border:none;border-radius:4px;cursor:pointer;font-weight:bold;color:white;font-size:0.9em;display:inline-flex;align-items:center;gap:5px}
         .btn-green{background:#2e7d32}.btn-blue{background:#1565c0}.btn-red{background:#c62828}.btn-gray{background:#607d8b}.btn-orange{background:#ef6c00}
-        .btn:hover{opacity:0.9}
-        
         .config-box{background:#e3f2fd;padding:15px;border-radius:8px;margin-bottom:20px}
         .row{display:flex;gap:15px;margin-bottom:10px}.col{flex:1}
         label{font-weight:600;display:block;margin-bottom:3px}
         input,select,textarea{width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;box-sizing:border-box}
-        
         .tab-bar{display:flex;gap:10px;margin-bottom:20px;border-bottom:2px solid #eee;padding-bottom:10px;overflow-x:auto}
         .tab-btn{padding:10px 20px;background:#f5f5f5;border:none;border-radius:6px;cursor:pointer;color:#666;font-weight:bold;white-space:nowrap}
         .tab-btn.active{background:#00796b;color:white}
         .section{display:none}.section.active{display:block}
-
         .split-view {display:flex; gap:20px; align-items: flex-start;}
         .editor-col {flex: 1; min-width: 0;} 
         .preview-col {flex: 1; position: sticky; top: 20px; max-height: 90vh; overflow-y: auto; background: white; border-radius: 8px; border: 1px solid #ddd; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); display:none;}
-        
         .q-item {background:white; padding:15px; border:1px solid #ccc; border-radius:8px; margin-bottom:15px; border-left:5px solid #009688; position:relative;}
         .q-item-header {display:flex; justify-content:space-between; margin-bottom:10px; font-weight:bold; color:#00796b; border-bottom:1px solid #eee; padding-bottom:5px}
         .smart-textarea {min-height:60px; font-family:inherit; font-size:1em}
-        
         .upload-wrapper {display:flex; gap:5px; margin: 5px 0;}
         .file-upload-btn {background:#e0e0e0; color:#333; padding:5px 10px; border-radius:4px; cursor:pointer; display:inline-block; font-size:0.9em; border:1px solid #ccc;}
-        
-        /* PREVIEW STYLES */
         .preview-header {text-align: center; color: #1a237e; border-bottom: 2px solid #eee; margin-bottom: 15px; padding-bottom: 10px;}
         .p-q-block {background:#fff; margin-bottom:15px; padding-bottom:15px; border-bottom:1px dashed #ccc;}
         .p-label {color:#1a237e; font-weight:bold; font-size:1.1em;}
@@ -46,14 +37,12 @@
         .p-opt {background:#fafafa; border:1px solid #eee; padding:8px; margin-bottom:5px; border-radius:4px;}
         .p-img {max-width:100%; border-radius:8px; margin:10px 0; border:1px solid #eee; display:block;}
         .p-sol {background:#e8f5e9; color:#2e7d32; padding:10px; border-radius:4px; font-size:0.9em; margin-top:10px; border:1px dashed #a5d6a7;}
-
         .file-item{display:flex;justify-content:space-between;padding:10px;background:#fafafa;border:1px solid #ddd;border-radius:6px;margin-bottom:5px;align-items:center}
         .fm-breadcrumb {padding:10px; background:#eee; margin-bottom:15px; border-radius:4px; font-weight:bold; display:flex; align-items:center;}
         .fm-item {display:flex; align-items:center; padding:10px; border-bottom:1px solid #eee; cursor:pointer;}
         .fm-item:hover {background:#f0f0f0;}
         .fm-icon {width:30px; text-align:center; margin-right:10px; font-size:1.2em;}
         .fm-name {flex:1; font-weight:500;} .fm-folder {color:#fbc02d;} .fm-file {color:#546e7a;}
-
         #loading-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:9999;display:none;flex-direction:column;justify-content:center;align-items:center;color:white}
         .modal{display:none;position:fixed;z-index:10000;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);align-items:center;justify-content:center}
         .modal-content{background-color:white;padding:20px;border-radius:10px;text-align:center}
@@ -85,7 +74,7 @@
 </div>
 
 <div id="main-app">
-    <h1>QUẢN TRỊ v20.4 (FIX JSON)</h1>
+    <h1>QUẢN TRỊ v20.6 (FIXED)</h1>
     
     <div class="config-box">
         <div class="row">
@@ -147,18 +136,14 @@
                 <div id="questions-list"></div>
                 <p style="text-align:center;color:#666" id="empty-msg">Chưa có câu hỏi. Bấm nút thêm bên trên.</p>
             </div>
-
             <div class="preview-col" id="preview-area">
-                <div class="preview-header">
-                    <h3>XEM TRƯỚC (PREVIEW)</h3>
-                    <small>Giao diện hiển thị như lúc học sinh thi</small>
-                </div>
+                <div class="preview-header"><h3>XEM TRƯỚC (PREVIEW)</h3></div>
                 <div id="preview-content"></div>
             </div>
         </div>
         
         <div style="margin-top:20px;border-top:1px dashed #ccc;padding-top:10px">
-            <small style="cursor:pointer;color:#999" onclick="document.getElementById('json-import-box').style.display='block'">▼ Nạp dữ liệu JSON (Sao chép & Dán)</small>
+            <small style="cursor:pointer;color:#999" onclick="document.getElementById('json-import-box').style.display='block'">▼ Nạp dữ liệu JSON</small>
             <div id="json-import-box" style="display:none">
                 <textarea id="json-input" style="width:100%;height:100px;font-family:monospace;font-size:0.9em" placeholder='Dán mã JSON vào đây...'></textarea>
                 <button class="btn btn-gray" onclick="parseDataSafe()">📥 Nạp Dữ Liệu</button>
@@ -171,6 +156,9 @@
 
 <script>
     const ADMIN_HASH = "55ab43ebd8eb2635766c3944cb192e72"; 
+    // KHAI BÁO BIẾN TOÀN CỤC TRƯỚC HẾT ĐỂ TRÁNH LỖI HOISTING
+    let EXAM_QUESTIONS = [];
+
     function checkAdmin(){if(CryptoJS.MD5(document.getElementById('admin-pass-input').value).toString()===ADMIN_HASH){document.getElementById('login-screen').style.display='none';document.getElementById('main-app').style.display='block';sessionStorage.setItem('admin_ok','1');}else document.getElementById('login-msg').style.display='block';}
     if(sessionStorage.getItem('admin_ok')) checkAdmin();
 
@@ -186,160 +174,102 @@
     function saveConfig(){ ['gh-user','gh-repo','gh-token','bank-id','bank-acc'].forEach(id=>localStorage.setItem(id,document.getElementById(id).value.trim())); alert("Đã lưu!"); }
     function hashPass(){let p=document.getElementById('exam-pass').value.trim();document.getElementById('exam-pass-hash').value=p?CryptoJS.MD5(p).toString():"";}
 
-    let questions = [];
-
+    // --- CÁC HÀM XỬ LÝ NÚT BẤM (ĐÃ SỬA DÙNG EXAM_QUESTIONS) ---
     function addQ(type) {
-        if(type === 'mcq') questions.push({type:'mcq', q:'Câu hỏi mới...', img:'', options:['A','B','C','D'], ans:0, explain:'', solImg:''});
-        if(type === 'tf') questions.push({type:'tf', q:'Đúng hay sai?', img:'', items:[{sub:'Ý 1', ans:'T'},{sub:'Ý 2', ans:'F'},{sub:'Ý 3', ans:'T'},{sub:'Ý 4', ans:'F'}], explain:'', solImg:''});
-        if(type === 'short') questions.push({type:'short', q:'Điền đáp án:', img:'', ans:'', explain:'', solImg:''});
-        if(type === 'match') questions.push({type:'match', q:'Ghép cặp:', img:'', items:['Trái 1','Trái 2','Trái 3','Trái 4'], options:['Phải A','Phải B','Phải C','Phải D'], ans:['A','B','C','D'], explain:'', solImg:''});
+        if(type === 'mcq') EXAM_QUESTIONS.push({type:'mcq', q:'Câu hỏi mới...', img:'', options:['A','B','C','D'], ans:0, explain:'', solImg:''});
+        if(type === 'tf') EXAM_QUESTIONS.push({type:'tf', q:'Đúng hay sai?', img:'', items:[{sub:'Ý 1', ans:'T'},{sub:'Ý 2', ans:'F'},{sub:'Ý 3', ans:'T'},{sub:'Ý 4', ans:'F'}], explain:'', solImg:''});
+        if(type === 'short') EXAM_QUESTIONS.push({type:'short', q:'Điền đáp án:', img:'', ans:'', explain:'', solImg:''});
+        if(type === 'match') EXAM_QUESTIONS.push({type:'match', q:'Ghép cặp:', img:'', items:['Trái 1','Trái 2','Trái 3','Trái 4'], options:['Phải A','Phải B','Phải C','Phải D'], ans:['A','B','C','D'], explain:'', solImg:''});
         renderEditor();
     }
 
     async function handleImageUpload(input, index, field) {
         const file = input.files[0];
         if(!file) return;
-        
         const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value;
         if(!t) return alert("Chưa có Token GitHub!");
-
         const ext = file.name.split('.').pop();
         const fileName = `img_${Date.now()}_${Math.floor(Math.random()*1000)}.${ext}`;
         const path = `images/${fileName}`;
-
         input.parentElement.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Upload...`;
-
         try {
-            const base64 = await new Promise(resolve => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result.split(',')[1]);
-                reader.readAsDataURL(file);
-            });
-
+            const base64 = await new Promise(r => { let fr=new FileReader(); fr.onload=()=>r(fr.result.split(',')[1]); fr.readAsDataURL(file); });
             const res = await fetch(`https://api.github.com/repos/${u}/${r}/contents/${path}`, {
-                method: 'PUT',
-                headers: { Authorization: `token ${t}`, 'Content-Type': 'application/json' },
+                method: 'PUT', headers: { Authorization: `token ${t}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: `Upload ${fileName}`, content: base64 })
             });
-
-            if(!res.ok) throw new Error("Lỗi Upload GitHub");
+            if(!res.ok) throw new Error("Lỗi Upload");
             const data = await res.json();
             const rawUrl = data.content.download_url; 
-            
-            if(field === 'q') questions[index].img = rawUrl;
-            else questions[index].solImg = rawUrl;
-            
+            if(field === 'q') EXAM_QUESTIONS[index].img = rawUrl; else EXAM_QUESTIONS[index].solImg = rawUrl;
             renderEditor(); 
-
-        } catch(e) {
-            alert("Upload thất bại: " + e.message);
-            renderEditor();
-        }
+        } catch(e) { alert("Upload thất bại: " + e.message); renderEditor(); }
     }
 
     function renderEditor(){
         let c=document.getElementById('questions-list'); c.innerHTML="";
-        if(questions.length > 0) {
-            document.getElementById('empty-msg').style.display='none';
-            document.getElementById('preview-area').style.display='block';
-        }
+        if(EXAM_QUESTIONS.length > 0) { document.getElementById('empty-msg').style.display='none'; document.getElementById('preview-area').style.display='block'; }
         
-        questions.forEach((q,i)=>{
+        EXAM_QUESTIONS.forEach((q,i)=>{
             let imgQ = `<div class="upload-wrapper" style="background:#f1f8e9; padding:5px; border-radius:4px">
                 <i class="fas fa-image" style="color:#2e7d32"></i> <b>Ảnh Đề:</b>
-                <input type="text" value="${q.img||''}" onchange="questions[${i}].img=this.value; renderPreview()" style="flex:1" placeholder="Link ảnh...">
-                <label class="file-upload-btn">
-                    <i class="fas fa-upload"></i> Chọn File
-                    <input type="file" style="display:none" accept="image/*" onchange="handleImageUpload(this, ${i}, 'q')">
-                </label>
-                ${q.img ? `<img src="${q.img}" style="height:30px;border:1px solid #ccc">` : ''}
+                <input type="text" value="${q.img||''}" onchange="EXAM_QUESTIONS[${i}].img=this.value; renderPreview()" style="flex:1" placeholder="Link ảnh...">
+                <label class="file-upload-btn"><i class="fas fa-upload"></i> <input type="file" style="display:none" accept="image/*" onchange="handleImageUpload(this, ${i}, 'q')"></label>
+                ${q.img ? `<img src="${q.img}" style="height:30px">` : ''}
             </div>`;
-
             let imgSol = `<div class="upload-wrapper" style="background:#fffde7; padding:5px; border-radius:4px; margin-top:5px">
                 <i class="fas fa-lightbulb" style="color:#fbc02d"></i> <b>Ảnh Lời Giải:</b>
-                <input type="text" value="${q.solImg||''}" onchange="questions[${i}].solImg=this.value; renderPreview()" style="flex:1" placeholder="Link ảnh...">
-                <label class="file-upload-btn">
-                    <i class="fas fa-upload"></i> Chọn File
-                    <input type="file" style="display:none" accept="image/*" onchange="handleImageUpload(this, ${i}, 'sol')">
-                </label>
-                ${q.solImg ? `<img src="${q.solImg}" style="height:30px;border:1px solid #ccc">` : ''}
+                <input type="text" value="${q.solImg||''}" onchange="EXAM_QUESTIONS[${i}].solImg=this.value; renderPreview()" style="flex:1" placeholder="Link ảnh...">
+                <label class="file-upload-btn"><i class="fas fa-upload"></i> <input type="file" style="display:none" accept="image/*" onchange="handleImageUpload(this, ${i}, 'sol')"></label>
+                ${q.solImg ? `<img src="${q.solImg}" style="height:30px">` : ''}
             </div>`;
 
             let ansUI = "";
-            if(q.type === 'mcq') {
-                ansUI = q.options.map((opt,idx)=>`<div style="display:flex;margin-bottom:3px;align-items:center"><input type="radio" name="r${i}" ${q.ans==idx?'checked':''} onchange="questions[${i}].ans=${idx};renderPreview()"><b style="width:20px;text-align:center">${['A','B','C','D'][idx]}</b><input style="flex:1" value="${opt}" onchange="questions[${i}].options[${idx}]=this.value;renderPreview()"></div>`).join('');
-            } 
-            else if (q.type === 'tf') {
-                ansUI = q.items.map((it,idx)=>`<div style="display:flex;gap:5px;margin-bottom:3px"><b style="width:30px">Ý ${idx+1}</b><input style="flex:1" value="${it.sub}" onchange="questions[${i}].items[${idx}].sub=this.value;renderPreview()"><select onchange="questions[${i}].items[${idx}].ans=this.value;renderPreview()"><option value="T" ${it.ans=='T'?'selected':''}>ĐÚNG</option><option value="F" ${it.ans=='F'?'selected':''}>SAI</option></select></div>`).join('');
-            }
-            else if (q.type === 'short') {
-                ansUI = `<b>Đáp án:</b> <input type="text" value="${q.ans}" onchange="questions[${i}].ans=this.value;renderPreview()">`;
-            }
-            else if (q.type === 'match') {
-                 ansUI = q.items.map((it,idx)=>`<div style="display:flex;gap:5px;margin-bottom:3px"><input style="flex:1" value="${it}" onchange="questions[${i}].items[${idx}]=this.value;renderPreview()"> - <input style="flex:1" value="${q.options[idx]}" placeholder="Phải ${String.fromCharCode(65+idx)}" onchange="questions[${i}].options[${idx}]=this.value;renderPreview()"> - Đáp án: <input style="width:40px" value="${q.ans[idx]}" onchange="questions[${i}].ans[${idx}]=this.value;renderPreview()"></div>`).join('');
-            }
+            if(q.type === 'mcq') ansUI = q.options.map((opt,idx)=>`<div style="display:flex;margin-bottom:3px;align-items:center"><input type="radio" name="r${i}" ${q.ans==idx?'checked':''} onchange="EXAM_QUESTIONS[${i}].ans=${idx};renderPreview()"><b style="width:20px;text-align:center">${['A','B','C','D'][idx]}</b><input style="flex:1" value="${opt}" onchange="EXAM_QUESTIONS[${i}].options[${idx}]=this.value;renderPreview()"></div>`).join('');
+            else if (q.type === 'tf') ansUI = q.items.map((it,idx)=>`<div style="display:flex;gap:5px;margin-bottom:3px"><b style="width:30px">Ý ${idx+1}</b><input style="flex:1" value="${it.sub}" onchange="EXAM_QUESTIONS[${i}].items[${idx}].sub=this.value;renderPreview()"><select onchange="EXAM_QUESTIONS[${i}].items[${idx}].ans=this.value;renderPreview()"><option value="T" ${it.ans=='T'?'selected':''}>ĐÚNG</option><option value="F" ${it.ans=='F'?'selected':''}>SAI</option></select></div>`).join('');
+            else if (q.type === 'short') ansUI = `<b>Đáp án:</b> <input type="text" value="${q.ans}" onchange="EXAM_QUESTIONS[${i}].ans=this.value;renderPreview()">`;
+            else if (q.type === 'match') ansUI = q.items.map((it,idx)=>`<div style="display:flex;gap:5px;margin-bottom:3px"><input style="flex:1" value="${it}" onchange="EXAM_QUESTIONS[${i}].items[${idx}]=this.value;renderPreview()"> - <input style="flex:1" value="${q.options[idx]}" placeholder="Phải" onchange="EXAM_QUESTIONS[${i}].options[${idx}]=this.value;renderPreview()"> - Đáp án: <input style="width:40px" value="${q.ans[idx]}" onchange="EXAM_QUESTIONS[${i}].ans[${idx}]=this.value;renderPreview()"></div>`).join('');
 
             c.insertAdjacentHTML('beforeend',`<div class="q-item">
-                <div class="q-item-header"><span>Câu ${i+1} (${q.type.toUpperCase()})</span><button class="btn btn-red" style="padding:2px 8px;font-size:0.8em" onclick="questions.splice(${i},1);renderEditor()">Xóa</button></div>
-                <textarea class="smart-textarea" oninput="questions[${i}].q=this.value; renderPreview()">${q.q}</textarea>
+                <div class="q-item-header"><span>Câu ${i+1} (${q.type.toUpperCase()})</span><button class="btn btn-red" style="padding:2px 8px;font-size:0.8em" onclick="EXAM_QUESTIONS.splice(${i},1);renderEditor()">Xóa</button></div>
+                <textarea class="smart-textarea" oninput="EXAM_QUESTIONS[${i}].q=this.value; renderPreview()">${q.q}</textarea>
                 ${imgQ}
                 <div style="margin:10px 0;background:#f9f9f9;padding:10px;border-radius:4px">${ansUI}</div>
-                <textarea class="smart-textarea" placeholder="Lời giải..." oninput="questions[${i}].explain=this.value; renderPreview()" style="height:50px;border-color:#a5d6a7">${q.explain||''}</textarea>
+                <textarea class="smart-textarea" placeholder="Lời giải..." oninput="EXAM_QUESTIONS[${i}].explain=this.value; renderPreview()" style="height:50px;border-color:#a5d6a7">${q.explain||''}</textarea>
                 ${imgSol}
             </div>`);
         });
-        
         renderPreview();
     }
 
     function renderPreview() {
         let h = '';
-        questions.forEach((q, i) => {
+        EXAM_QUESTIONS.forEach((q, i) => {
             let imgHtml = q.img ? `<img src="${q.img}" class="p-img">` : '';
             let solImgHtml = q.solImg ? `<img src="${q.solImg}" class="p-img">` : '';
             let body = '';
-            if(q.type === 'mcq') {
-                body = q.options.map((opt, idx) => `<div class="p-opt ${q.ans==idx?'selected':''}"><b>${['A','B','C','D'][idx]}.</b> ${opt}</div>`).join('');
-            } else if (q.type === 'tf') {
-                body = `<table width="100%"><tr><th>Ý</th><th>Nội dung</th><th>Đ/S</th></tr>` + 
-                       q.items.map((it, idx) => `<tr><td>${idx+1}</td><td>${it.sub}</td><td><b>${it.ans=='T'?'Đ':'S'}</b></td></tr>`).join('') + `</table>`;
-            } else if (q.type === 'short') {
-                body = `<div class="p-opt"><b>Trả lời:</b> ${q.ans}</div>`;
-            } else if (q.type === 'match') {
-                body = q.items.map((it, idx) => `<div class="p-opt">${idx+1}. ${it} --> ${q.ans[idx]} (${q.options[idx]})</div>`).join('');
-            }
+            if(q.type === 'mcq') body = q.options.map((opt, idx) => `<div class="p-opt ${q.ans==idx?'selected':''}"><b>${['A','B','C','D'][idx]}.</b> ${opt}</div>`).join('');
+            else if (q.type === 'tf') body = `<table width="100%"><tr><th>Ý</th><th>Nội dung</th><th>Đ/S</th></tr>` + q.items.map((it, idx) => `<tr><td>${idx+1}</td><td>${it.sub}</td><td><b>${it.ans=='T'?'Đ':'S'}</b></td></tr>`).join('') + `</table>`;
+            else if (q.type === 'short') body = `<div class="p-opt"><b>Trả lời:</b> ${q.ans}</div>`;
+            else if (q.type === 'match') body = q.items.map((it, idx) => `<div class="p-opt">${idx+1}. ${it} --> ${q.ans[idx]} (${q.options[idx]})</div>`).join('');
             h += `<div class="p-q-block"><div class="p-label">Câu ${i+1}:</div><div class="p-content">${q.q}</div>${imgHtml}<div>${body}</div><div class="p-sol"><b>Lời giải:</b><br>${q.explain} ${solImgHtml}</div></div>`;
         });
         document.getElementById('preview-content').innerHTML = h;
         if(window.MathJax) MathJax.typesetPromise();
     }
 
-    // --- HÀM NẠP JSON AN TOÀN (FIX LỖI v20.4) ---
+    // --- ĐÃ SỬA LỖI TRONG HÀM NÀY: DÙNG EXAM_QUESTIONS THAY VÌ QUESTIONS ---
     function parseDataSafe() {
         try {
             let raw = document.getElementById('json-input').value.trim();
             if(!raw) return alert("Chưa nhập JSON!");
-            
-            // Xử lý làm sạch JSON trước khi parse
-            // 1. Loại bỏ các ký tự xuống dòng ẩn nếu có trong string
-            // 2. Dùng JSON.parse chuẩn thay vì eval (an toàn hơn)
             let data = JSON.parse(raw);
-            
-            // Nếu là mảng câu hỏi
-            if(Array.isArray(data)) {
-                questions = data;
-            } else if (data.questions && Array.isArray(data.questions)) {
-                questions = data.questions;
-            } else {
-                throw new Error("Cấu trúc JSON không hợp lệ (Phải là mảng câu hỏi hoặc đối tượng chứa mảng questions)");
-            }
-            
+            if(Array.isArray(data)) EXAM_QUESTIONS = data;
+            else if (data.questions && Array.isArray(data.questions)) EXAM_QUESTIONS = data.questions;
+            else throw new Error("Cấu trúc JSON không hợp lệ");
             renderEditor();
-            alert("✅ Đã nạp thành công " + questions.length + " câu hỏi!");
-            
-        } catch(e) {
-            alert("❌ Lỗi JSON: " + e.message + "\n\nHãy kiểm tra lại cú pháp (dấu ngoặc, dấu phẩy).");
-        }
+            alert("✅ Đã nạp " + EXAM_QUESTIONS.length + " câu hỏi!");
+        } catch(e) { alert("❌ Lỗi JSON: " + e.message); }
     }
 
     async function deleteFileGeneric(path, name, isFileManager) {
@@ -353,8 +283,7 @@
                 method: 'DELETE', headers: { Authorization: `token ${t}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: `Delete ${name}`, sha: data.sha })
             });
-            alert("Đã xóa!"); 
-            if(isFileManager) loadFileManager(currentPath); else loadDataFiles();
+            alert("Đã xóa!"); if(isFileManager) loadFileManager(currentPath); else loadDataFiles();
         } catch(e) { alert("Lỗi: " + e.message); } finally { ov.style.display='none'; }
     }
 
@@ -380,8 +309,7 @@
         try{
             const res=await fetch(`https://api.github.com/repos/${u}/${r}/contents/${path}`,{headers:{Authorization:`token ${t}`}});
             const json=await res.json(), content=decodeURIComponent(escape(atob(json.content)));
-            let dataStr = content.substring(content.indexOf('{'), content.lastIndexOf('}')+1);
-            let data=JSON.parse(dataStr);
+            let data=JSON.parse(content.substring(content.indexOf('{'), content.lastIndexOf('}')+1));
             document.getElementById('exam-id').value=name.replace('.js','');
             document.getElementById('exam-title').value=data.title||"";
             document.getElementById('exam-time').value=data.time||45;
@@ -390,34 +318,23 @@
             document.getElementById('secure-mode').checked=data.encrypted;
             if(data.start)document.getElementById('exam-start').value=data.start;
             if(data.end)document.getElementById('exam-end').value=data.end;
-            
-            data.questions.forEach(q => {
-                if(q.explain && q.explain.includes('<img')) {
-                    let match = q.explain.match(/src="([^"]+)"/);
-                    if(match) q.solImg = match[1];
-                    q.explain = q.explain.replace(/<br><img.*?>/g, '').trim(); 
-                }
-            });
-
-            questions=data.questions||[]; renderEditor(); 
-            ov.style.display='none'; switchTab('create');
+            data.questions.forEach(q => { if(q.explain && q.explain.includes('<img')) { let match = q.explain.match(/src="([^"]+)"/); if(match) q.solImg = match[1]; q.explain = q.explain.replace(/<br><img.*?>/g, '').trim(); }});
+            // SỬA LỖI TẠI ĐÂY: GÁN VÀO EXAM_QUESTIONS
+            EXAM_QUESTIONS=data.questions||[]; renderEditor(); ov.style.display='none'; switchTab('create');
         }catch(e){ alert("Lỗi tải đề: "+e.message); ov.style.display='none'; }
     }
 
     async function publishExam(){
         const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value,id=document.getElementById('exam-id').value;
         if(!u||!r||!t||!id)return alert("Thiếu info!");
-        const bankInfo = {id: document.getElementById('bank-id').value, acc: document.getElementById('bank-acc').value};
-        const price = parseInt(document.getElementById('exam-price').value) || 0;
+        const bankInfo = {id: document.getElementById('bank-id').value, acc: document.getElementById('bank-acc').value}, price = parseInt(document.getElementById('exam-price').value) || 0;
         const ov=document.getElementById('loading-overlay');ov.style.display='flex';
         try{
-            let fQ=JSON.parse(JSON.stringify(questions));
+            // SỬA LỖI TẠI ĐÂY: LẤY TỪ EXAM_QUESTIONS
+            let fQ=JSON.parse(JSON.stringify(EXAM_QUESTIONS));
             let sec=document.getElementById('secure-mode').checked;
             fQ.forEach(q=>{
-                if(q.solImg) {
-                    q.explain = (q.explain || "") + `<br><img src="${q.solImg}" style="max-width:100%;margin-top:10px;border-radius:5px">`;
-                    delete q.solImg; 
-                }
+                if(q.solImg) { q.explain = (q.explain || "") + `<br><img src="${q.solImg}" style="max-width:100%;margin-top:10px;border-radius:5px">`; delete q.solImg; }
                 if(sec){
                     if(q.type==='mcq') q.ans=CryptoJS.MD5(String(q.ans)).toString();
                     else if(q.type==='tf') q.items.forEach(x=>x.ans=CryptoJS.MD5(String(x.ans).trim()).toString());
@@ -427,8 +344,7 @@
             });
             let dt={ title:document.getElementById('exam-title').value, time:parseInt(document.getElementById('exam-time').value), password:document.getElementById('exam-pass-hash').value, encrypted:sec, start:document.getElementById('exam-start').value, end:document.getElementById('exam-end').value, price: price, bank: bankInfo, scores:{mcq:0.25,tf:1.0,short:0.5,match:1.0}, questions:fQ };
             let c=btoa(unescape(encodeURIComponent(`window.EXAM_DATA = ${JSON.stringify(dt,null,4)};`)));
-            await upF(u,r,t,`data/${id}.js`,c,false);
-            await updateList(u,r,t,id,dt);
+            await upF(u,r,t,`data/${id}.js`,c,false); await updateList(u,r,t,id,dt);
             alert("Thành công! Đề đã được xuất bản."); ov.style.display='none'; loadDataFiles();
         }catch(e){alert(e.message); ov.style.display='none';}
     }
