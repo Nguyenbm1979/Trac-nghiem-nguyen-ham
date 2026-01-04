@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Tool v19.2 (AI Model Fix)</title>
+    <title>Admin Tool v19.3 (Model Selector)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -13,11 +13,9 @@
         .btn{padding:8px 15px;border:none;border-radius:4px;cursor:pointer;font-weight:bold;color:white;font-size:0.9em}
         .btn-green{background:#2e7d32}.btn-blue{background:#1565c0}.btn-red{background:#c62828}.btn-gray{background:#607d8b}
         .btn:hover{opacity:0.9}
-        
         .btn-edit{background:#ff9800;color:white;margin-right:5px}
         .btn-qr{background:#3f51b5;color:white;margin-right:5px}
         .btn-del{background:#d32f2f;color:white;} 
-
         input,select{width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;box-sizing:border-box}
         .config-box{background:#e3f2fd;padding:15px;border-radius:8px;margin-bottom:20px}
         .row{display:flex;gap:15px;margin-bottom:10px}.col{flex:1}
@@ -25,20 +23,16 @@
         #login-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:#263238;z-index:9999;display:flex;justify-content:center;align-items:center}
         .login-box{background:white;padding:40px;border-radius:10px;width:350px;text-align:center}
         #main-app{display:none;max-width:1200px;margin:0 auto;background:white;padding:25px;border-radius:10px}
-        
         .tab-bar{display:flex;gap:10px;margin-bottom:20px;border-bottom:2px solid #eee;padding-bottom:10px;overflow-x:auto}
         .tab-btn{padding:10px 20px;background:#f5f5f5;border:none;border-radius:6px;cursor:pointer;color:#666;font-weight:bold;white-space:nowrap}
         .tab-btn.active{background:#00796b;color:white}
         .section{display:none}.section.active{display:block}
-        
         #loading-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:9999;display:none;flex-direction:column;justify-content:center;align-items:center;color:white}
         .modal{display:none;position:fixed;z-index:10000;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);align-items:center;justify-content:center}
         .modal-content{background-color:white;padding:20px;border-radius:10px;text-align:center}
         #qrcode{margin:20px auto;display:flex;justify-content:center}
         .file-item{display:flex;justify-content:space-between;padding:12px;background:#fafafa;border:1px solid #ddd;border-radius:6px;margin-bottom:8px;align-items:center}
         .ai-box{background:#f3e5f5;padding:15px;border-radius:8px;border:1px dashed #ab47bc;text-align:center;margin-bottom:20px}
-        
-        /* FILE MANAGER */
         .fm-breadcrumb {padding:10px; background:#eee; margin-bottom:15px; border-radius:4px; font-weight:bold; display:flex; align-items:center;}
         .fm-item {display:flex; align-items:center; padding:10px; border-bottom:1px solid #eee; cursor:pointer;}
         .fm-item:hover {background:#f0f0f0;}
@@ -46,7 +40,6 @@
         .fm-name {flex:1; font-weight:500;}
         .fm-folder {color:#fbc02d;}
         .fm-file {color:#546e7a;}
-        
         .q-item{border:1px solid #ddd; padding:15px; margin-bottom:15px; border-radius:8px; background:#fff;}
         .smart-textarea{width:100%; height:80px; border:1px solid #ccc; padding:5px; margin-top:5px;}
     </style>
@@ -74,17 +67,30 @@
 </div>
 
 <div id="main-app">
-    <h1>QUẢN TRỊ v19.2</h1>
+    <h1>QUẢN TRỊ v19.3 (AI Selector)</h1>
     <div class="config-box">
         <div class="row">
             <div class="col"><label>User GitHub</label><input type="text" id="gh-user"></div>
             <div class="col"><label>Repo Name</label><input type="text" id="gh-repo"></div>
-            <div class="col"><label>Token (Classic)</label><input type="password" id="gh-token"></div>
+            <div class="col"><label>Token</label><input type="password" id="gh-token"></div>
         </div>
         <div class="row" style="margin-top:10px;border-top:1px dashed #999;padding-top:10px">
             <div class="col"><label>Ngân hàng</label><input type="text" id="bank-id" placeholder="MB"></div>
-            <div class="col"><label>Số Tài Khoản</label><input type="text" id="bank-acc"></div>
-            <div class="col"><label style="color:#d32f2f">Gemini API Key</label><input type="password" id="gemini-key"></div>
+            <div class="col"><label>Số TK</label><input type="text" id="bank-acc"></div>
+            
+            <div class="col" style="flex:2">
+                <label style="color:#d32f2f">Gemini API Key</label>
+                <input type="password" id="gemini-key">
+            </div>
+            <div class="col">
+                <label style="color:#1565c0">Model AI</label>
+                <select id="gemini-model" style="font-weight:bold">
+                    <option value="gemini-1.5-flash">Gemini 1.5 Flash (Chuẩn)</option>
+                    <option value="gemini-1.5-flash-002">Gemini 1.5 Flash 002 (Mới)</option>
+                    <option value="gemini-1.5-pro">Gemini 1.5 Pro (Mạnh)</option>
+                    <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash (Thử nghiệm)</option>
+                </select>
+            </div>
         </div>
         <div class="row" style="margin-top:10px"><button class="btn btn-gray" onclick="saveConfig()">💾 Lưu Cấu Hình</button></div>
     </div>
@@ -111,8 +117,8 @@
 
     <div id="sec-create" class="section">
         <div class="ai-box">
-            <h3 style="margin:0;color:#7b1fa2">✨ AI QUÉT ĐỀ (GEMINI)</h3>
-            <p style="font-size:0.9em;color:#666">Hỗ trợ ảnh chụp, ảnh màn hình đề thi</p>
+            <h3 style="margin:0;color:#7b1fa2">✨ AI QUÉT ĐỀ</h3>
+            <p style="font-size:0.9em;color:#666">Nếu quét lỗi, hãy thử đổi "Model AI" ở trên Cấu Hình và Lưu lại.</p>
             <input type="file" id="ai-img-input" style="display:none" accept="image/*" onchange="processImageWithGemini(this)">
             <button class="btn" style="background:#9c27b0;color:white;margin-top:5px" onclick="document.getElementById('ai-img-input').click()">📸 Chọn ảnh đề thi</button>
         </div>
@@ -155,34 +161,39 @@
         if(t === 'files') loadFileManager('');
     }
     
-    window.onload=()=>{ ['gh-user','gh-repo','gh-token','gemini-key','bank-id','bank-acc'].forEach(id=>{if(localStorage.getItem(id))document.getElementById(id).value=localStorage.getItem(id)}); }
-    function saveConfig(){ ['gh-user','gh-repo','gh-token','gemini-key','bank-id','bank-acc'].forEach(id=>localStorage.setItem(id,document.getElementById(id).value.trim())); alert("Đã lưu!"); }
+    window.onload=()=>{ ['gh-user','gh-repo','gh-token','gemini-key','gemini-model','bank-id','bank-acc'].forEach(id=>{if(localStorage.getItem(id))document.getElementById(id).value=localStorage.getItem(id)}); }
+    function saveConfig(){ ['gh-user','gh-repo','gh-token','gemini-key','gemini-model','bank-id','bank-acc'].forEach(id=>localStorage.setItem(id,document.getElementById(id).value.trim())); alert("Đã lưu!"); }
     function hashPass(){let p=document.getElementById('exam-pass').value.trim();document.getElementById('exam-pass-hash').value=p?CryptoJS.MD5(p).toString():"";}
 
     // ==========================================
-    // AI GEMINI (ĐÃ SỬA TÊN MODEL: gemini-1.5-flash-latest)
+    // AI GEMINI (CHỌN MODEL TÙY Ý)
     // ==========================================
     async function processImageWithGemini(input) {
-        const file=input.files[0], key=document.getElementById('gemini-key').value;
-        if(!key || key.length < 10) return alert("❌ LỖI: Bạn chưa nhập Gemini API Key hoặc chưa bấm 'Lưu Cấu Hình'.");
+        const file=input.files[0];
+        const key=document.getElementById('gemini-key').value;
+        // Lấy model từ ô chọn, mặc định là gemini-1.5-flash
+        const model=document.getElementById('gemini-model').value || 'gemini-1.5-flash';
+
+        if(!key || key.length < 10) return alert("❌ LỖI: Chưa nhập Key!");
         
         const ov=document.getElementById('loading-overlay'); ov.style.display='flex';
         try {
             const base64 = await new Promise(r => { let fr=new FileReader(); fr.onload=()=>r(fr.result.split(',')[1]); fr.readAsDataURL(file); });
-            // SỬA Ở ĐÂY: Thêm "-latest" vào tên model
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${key}`, {
+            
+            // Gọi API với model đã chọn
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
                 method:'POST', headers:{'Content-Type':'application/json'},
                 body:JSON.stringify({contents:[{parts:[{text:"Trích xuất đề thi từ ảnh thành JSON (type: mcq, tf, match, short). Chỉ trả về JSON thuần không markdown."}, {inline_data:{mime_type:file.type, data:base64}}]}]})
             });
             const d=await res.json();
             
             if (d.error) throw new Error("Google từ chối: " + d.error.message);
-            if (!d.candidates || !d.candidates[0]) throw new Error("AI không trích xuất được nội dung.");
+            if (!d.candidates || !d.candidates[0]) throw new Error("AI không trả về kết quả.");
             
             document.getElementById('json-input').value = d.candidates[0].content.parts[0].text.replace(/```json/g,'').replace(/```/g,'').trim();
             parseData();
         } catch(e){
-            alert("⚠️ LỖI AI: " + e.message);
+            alert(`⚠️ LỖI (${model}): ${e.message}\n\nHãy thử chọn Model khác trong Cấu Hình!`);
         } finally{ov.style.display='none'; input.value='';}
     }
 
