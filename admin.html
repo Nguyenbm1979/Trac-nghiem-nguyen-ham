@@ -3,45 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Tool v19.3 (Model Selector)</title>
+    <title>Admin Tool v20.2 (Full Manual)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* CSS CHUẨN */
         body{font-family:'Segoe UI',sans-serif;background:#eceff1;padding:20px;color:#37474f;margin:0}
-        .btn{padding:8px 15px;border:none;border-radius:4px;cursor:pointer;font-weight:bold;color:white;font-size:0.9em}
-        .btn-green{background:#2e7d32}.btn-blue{background:#1565c0}.btn-red{background:#c62828}.btn-gray{background:#607d8b}
+        .btn{padding:8px 15px;border:none;border-radius:4px;cursor:pointer;font-weight:bold;color:white;font-size:0.9em;display:inline-flex;align-items:center;gap:5px}
+        .btn-green{background:#2e7d32}.btn-blue{background:#1565c0}.btn-red{background:#c62828}.btn-gray{background:#607d8b}.btn-orange{background:#ef6c00}
         .btn:hover{opacity:0.9}
-        .btn-edit{background:#ff9800;color:white;margin-right:5px}
-        .btn-qr{background:#3f51b5;color:white;margin-right:5px}
-        .btn-del{background:#d32f2f;color:white;} 
-        input,select{width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;box-sizing:border-box}
+        
         .config-box{background:#e3f2fd;padding:15px;border-radius:8px;margin-bottom:20px}
         .row{display:flex;gap:15px;margin-bottom:10px}.col{flex:1}
         label{font-weight:600;display:block;margin-bottom:3px}
-        #login-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:#263238;z-index:9999;display:flex;justify-content:center;align-items:center}
-        .login-box{background:white;padding:40px;border-radius:10px;width:350px;text-align:center}
-        #main-app{display:none;max-width:1200px;margin:0 auto;background:white;padding:25px;border-radius:10px}
+        input,select,textarea{width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;box-sizing:border-box}
+        
+        /* TABS */
         .tab-bar{display:flex;gap:10px;margin-bottom:20px;border-bottom:2px solid #eee;padding-bottom:10px;overflow-x:auto}
         .tab-btn{padding:10px 20px;background:#f5f5f5;border:none;border-radius:6px;cursor:pointer;color:#666;font-weight:bold;white-space:nowrap}
         .tab-btn.active{background:#00796b;color:white}
         .section{display:none}.section.active{display:block}
+
+        /* MANUAL TOOLBAR */
+        .manual-toolbar {background:white; padding:15px; border-radius:8px; margin-bottom:15px; border:1px solid #ddd; display:flex; gap:10px; flex-wrap:wrap;}
+        
+        /* CÂU HỎI EDITOR */
+        .q-item {background:white; padding:20px; border:1px solid #ccc; border-radius:8px; margin-bottom:20px; border-left:5px solid #009688; position:relative; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
+        .q-item-header {display:flex; justify-content:space-between; margin-bottom:15px; font-weight:bold; color:#00796b; border-bottom: 1px solid #eee; padding-bottom: 10px;}
+        .smart-textarea {min-height:70px; font-family:inherit; font-size: 1.05em;}
+        .img-input-group {display:flex; align-items:center; gap:10px; background:#f1f8e9; padding:8px; border-radius:4px; margin: 10px 0;}
+        .sol-area {background:#e8f5e9; padding:15px; border-radius:8px; margin-top:15px; border:1px dashed #4caf50;}
+        
+        /* OPTION INPUTS */
+        .opt-row {display:flex; align-items:center; margin-bottom:8px; gap:10px;}
+        .opt-label {font-weight:bold; width: 25px;}
+        .opt-radio {width: 20px; height: 20px; cursor: pointer;}
+        
+        /* LOGIN & MODAL */
+        #login-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:#263238;z-index:9999;display:flex;justify-content:center;align-items:center}
+        .login-box{background:white;padding:40px;border-radius:10px;width:350px;text-align:center}
+        #main-app{display:none;max-width:1200px;margin:0 auto;background:white;padding:25px;border-radius:10px}
         #loading-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:9999;display:none;flex-direction:column;justify-content:center;align-items:center;color:white}
-        .modal{display:none;position:fixed;z-index:10000;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);align-items:center;justify-content:center}
-        .modal-content{background-color:white;padding:20px;border-radius:10px;text-align:center}
-        #qrcode{margin:20px auto;display:flex;justify-content:center}
-        .file-item{display:flex;justify-content:space-between;padding:12px;background:#fafafa;border:1px solid #ddd;border-radius:6px;margin-bottom:8px;align-items:center}
-        .ai-box{background:#f3e5f5;padding:15px;border-radius:8px;border:1px dashed #ab47bc;text-align:center;margin-bottom:20px}
+        
+        /* FILE MANAGER */
+        .file-item{display:flex;justify-content:space-between;padding:10px;background:#fafafa;border:1px solid #ddd;border-radius:6px;margin-bottom:5px;align-items:center}
         .fm-breadcrumb {padding:10px; background:#eee; margin-bottom:15px; border-radius:4px; font-weight:bold; display:flex; align-items:center;}
         .fm-item {display:flex; align-items:center; padding:10px; border-bottom:1px solid #eee; cursor:pointer;}
         .fm-item:hover {background:#f0f0f0;}
         .fm-icon {width:30px; text-align:center; margin-right:10px; font-size:1.2em;}
-        .fm-name {flex:1; font-weight:500;}
-        .fm-folder {color:#fbc02d;}
-        .fm-file {color:#546e7a;}
-        .q-item{border:1px solid #ddd; padding:15px; margin-bottom:15px; border-radius:8px; background:#fff;}
-        .smart-textarea{width:100%; height:80px; border:1px solid #ccc; padding:5px; margin-top:5px;}
+        .fm-name {flex:1; font-weight:500;} .fm-folder {color:#fbc02d;} .fm-file {color:#546e7a;}
+        
+        /* QR MODAL */
+        .modal{display:none;position:fixed;z-index:10000;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);align-items:center;justify-content:center}
+        .modal-content{background-color:white;padding:20px;border-radius:10px;text-align:center}
+        #qrcode{margin:20px auto;display:flex;justify-content:center}
     </style>
 </head>
 <body>
@@ -61,38 +77,25 @@
     <div class="login-box">
         <h2 style="color:#00695c">ADMIN LOGIN</h2>
         <input type="password" id="admin-pass-input" onkeyup="if(event.key==='Enter')checkAdmin()">
-        <button class="btn btn-green" onclick="checkAdmin()">ĐĂNG NHẬP</button>
+        <button class="btn btn-green" onclick="checkAdmin()" style="margin-top:10px;width:100%">ĐĂNG NHẬP</button>
         <p id="login-msg" style="color:red;display:none;margin-top:10px">Sai mật khẩu!</p>
     </div>
 </div>
 
 <div id="main-app">
-    <h1>QUẢN TRỊ v19.3 (AI Selector)</h1>
+    <h1>QUẢN TRỊ v20.2 (FULL THỦ CÔNG)</h1>
+    
     <div class="config-box">
         <div class="row">
             <div class="col"><label>User GitHub</label><input type="text" id="gh-user"></div>
             <div class="col"><label>Repo Name</label><input type="text" id="gh-repo"></div>
-            <div class="col"><label>Token</label><input type="password" id="gh-token"></div>
+            <div class="col"><label>Token (Classic)</label><input type="password" id="gh-token"></div>
         </div>
-        <div class="row" style="margin-top:10px;border-top:1px dashed #999;padding-top:10px">
+        <div class="row" style="margin-top:10px">
             <div class="col"><label>Ngân hàng</label><input type="text" id="bank-id" placeholder="MB"></div>
-            <div class="col"><label>Số TK</label><input type="text" id="bank-acc"></div>
-            
-            <div class="col" style="flex:2">
-                <label style="color:#d32f2f">Gemini API Key</label>
-                <input type="password" id="gemini-key">
-            </div>
-            <div class="col">
-                <label style="color:#1565c0">Model AI</label>
-                <select id="gemini-model" style="font-weight:bold">
-                    <option value="gemini-1.5-flash">Gemini 1.5 Flash (Chuẩn)</option>
-                    <option value="gemini-1.5-flash-002">Gemini 1.5 Flash 002 (Mới)</option>
-                    <option value="gemini-1.5-pro">Gemini 1.5 Pro (Mạnh)</option>
-                    <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash (Thử nghiệm)</option>
-                </select>
-            </div>
+            <div class="col"><label>Số Tài Khoản</label><input type="text" id="bank-acc"></div>
+            <div class="col"><button class="btn btn-gray" style="margin-top:22px;width:100%" onclick="saveConfig()">💾 Lưu Cấu Hình</button></div>
         </div>
-        <div class="row" style="margin-top:10px"><button class="btn btn-gray" onclick="saveConfig()">💾 Lưu Cấu Hình</button></div>
     </div>
 
     <div class="tab-bar">
@@ -116,33 +119,44 @@
     </div>
 
     <div id="sec-create" class="section">
-        <div class="ai-box">
-            <h3 style="margin:0;color:#7b1fa2">✨ AI QUÉT ĐỀ</h3>
-            <p style="font-size:0.9em;color:#666">Nếu quét lỗi, hãy thử đổi "Model AI" ở trên Cấu Hình và Lưu lại.</p>
-            <input type="file" id="ai-img-input" style="display:none" accept="image/*" onchange="processImageWithGemini(this)">
-            <button class="btn" style="background:#9c27b0;color:white;margin-top:5px" onclick="document.getElementById('ai-img-input').click()">📸 Chọn ảnh đề thi</button>
-        </div>
-
         <div class="config-box" style="background:#fff3e0;border-color:#ffe0b2">
             <div class="row">
-                <div class="col"><label>Mã Đề (ID)</label><input type="text" id="exam-id" placeholder="de-toan-hk1" style="font-weight:bold;color:#c62828"></div>
-                <div class="col" style="flex:2"><label>Tiêu Đề</label><input type="text" id="exam-title"></div>
+                <div class="col"><label>Mã Đề (ID)</label><input type="text" id="exam-id" placeholder="vd: de-toan-giua-ky-1" style="font-weight:bold;color:#c62828"></div>
+                <div class="col" style="flex:2"><label>Tiêu Đề</label><input type="text" id="exam-title" placeholder="VD: Đề thi thử Toán 12..."></div>
             </div>
             <div class="row">
                 <div class="col"><label>Thời gian (phút)</label><input type="number" id="exam-time" value="45"></div>
-                <div class="col"><label style="color:#d32f2f">💰 Giá bán (VNĐ)</label><input type="number" id="exam-price" placeholder="VD: 5000"></div>
+                <div class="col"><label>Giá bán (VNĐ)</label><input type="number" id="exam-price" placeholder="0"></div>
                 <div class="col"><label>Mật khẩu</label><input type="text" id="exam-pass" oninput="hashPass()"><input type="hidden" id="exam-pass-hash"></div>
             </div>
-            <div class="row">
+            <div class="row" style="margin-top:10px">
                 <div class="col"><label>Mở lúc</label><input type="datetime-local" id="exam-start"></div>
                 <div class="col"><label>Đóng lúc</label><input type="datetime-local" id="exam-end"></div>
+                <div class="col" style="display:flex;align-items:center"><input type="checkbox" id="secure-mode" style="width:auto;margin-right:5px"> <label for="secure-mode">Mã hóa đáp án</label></div>
             </div>
-            <div class="row" style="margin-top:10px"><input type="checkbox" id="secure-mode" checked><label for="secure-mode" style="display:inline">Mã hóa đáp án</label></div>
         </div>
 
-        <textarea id="json-input" style="width:100%;height:80px;border:2px dashed #009688;padding:10px" placeholder="JSON kết quả sẽ hiện ở đây..."></textarea>
-        <button class="btn btn-blue" style="width:100%;margin-top:10px" onclick="parseData()">PHÂN TÍCH JSON</button>
-        <div id="editor-area" style="display:none;margin-top:20px"><div id="questions-list"></div><button class="btn btn-red" style="width:100%;margin-top:20px;padding:15px" onclick="publishExam()">🚀 XUẤT BẢN ĐỀ THI</button></div>
+        <div class="manual-toolbar">
+            <button class="btn btn-blue" onclick="addQ('mcq')"><i class="fas fa-plus-circle"></i> Trắc Nghiệm (4)</button>
+            <button class="btn btn-green" onclick="addQ('tf')"><i class="fas fa-check-square"></i> Đúng/Sai</button>
+            <button class="btn btn-orange" onclick="addQ('short')"><i class="fas fa-pen-alt"></i> Điền Số/Chữ</button>
+            <button class="btn btn-gray" onclick="addQ('match')"><i class="fas fa-random"></i> Ghép Cột</button>
+        </div>
+
+        <div id="editor-area">
+            <div id="questions-list"></div>
+            <p style="text-align:center;color:#666;font-style:italic;margin:20px" id="empty-msg">Bấm nút phía trên để thêm câu hỏi.</p>
+        </div>
+
+        <button class="btn btn-red" style="width:100%;margin-top:20px;padding:15px;font-size:1.2em" onclick="publishExam()">🚀 XUẤT BẢN ĐỀ THI</button>
+        
+        <div style="margin-top:20px;border-top:1px dashed #ccc;padding-top:10px">
+            <small style="cursor:pointer;color:#999" onclick="document.getElementById('json-import-box').style.display='block'">▼ Dán JSON cũ (Nếu cần sửa)</small>
+            <div id="json-import-box" style="display:none">
+                <textarea id="json-input" style="width:100%;height:60px;margin-top:5px" placeholder="Dán JSON vào đây..."></textarea>
+                <button class="btn btn-gray" onclick="parseData()">Nạp JSON</button>
+            </div>
+        </div>
     </div>
 
     <div id="sec-images" class="section"><button class="btn btn-green" onclick="loadImagesFromGitHub()">Tải ảnh</button><div id="image-gallery" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:15px"></div></div>
@@ -161,40 +175,93 @@
         if(t === 'files') loadFileManager('');
     }
     
-    window.onload=()=>{ ['gh-user','gh-repo','gh-token','gemini-key','gemini-model','bank-id','bank-acc'].forEach(id=>{if(localStorage.getItem(id))document.getElementById(id).value=localStorage.getItem(id)}); }
-    function saveConfig(){ ['gh-user','gh-repo','gh-token','gemini-key','gemini-model','bank-id','bank-acc'].forEach(id=>localStorage.setItem(id,document.getElementById(id).value.trim())); alert("Đã lưu!"); }
+    window.onload=()=>{ ['gh-user','gh-repo','gh-token','bank-id','bank-acc'].forEach(id=>{if(localStorage.getItem(id))document.getElementById(id).value=localStorage.getItem(id)}); }
+    function saveConfig(){ ['gh-user','gh-repo','gh-token','bank-id','bank-acc'].forEach(id=>localStorage.setItem(id,document.getElementById(id).value.trim())); alert("Đã lưu!"); }
     function hashPass(){let p=document.getElementById('exam-pass').value.trim();document.getElementById('exam-pass-hash').value=p?CryptoJS.MD5(p).toString():"";}
 
     // ==========================================
-    // AI GEMINI (CHỌN MODEL TÙY Ý)
+    // LOGIC SOẠN THẢO (CÓ ẢNH LỜI GIẢI v20.2)
     // ==========================================
-    async function processImageWithGemini(input) {
-        const file=input.files[0];
-        const key=document.getElementById('gemini-key').value;
-        // Lấy model từ ô chọn, mặc định là gemini-1.5-flash
-        const model=document.getElementById('gemini-model').value || 'gemini-1.5-flash';
+    let questions = [];
 
-        if(!key || key.length < 10) return alert("❌ LỖI: Chưa nhập Key!");
+    function addQ(type) {
+        if(type === 'mcq') questions.push({type:'mcq', q:'Câu hỏi mới...', img:'', options:['Lựa chọn A','Lựa chọn B','Lựa chọn C','Lựa chọn D'], ans:0, explain:'', solImg:''});
+        if(type === 'tf') questions.push({type:'tf', q:'Nhận định sau đây đúng hay sai?', img:'', items:[{sub:'Ý 1', ans:'T'},{sub:'Ý 2', ans:'F'},{sub:'Ý 3', ans:'T'},{sub:'Ý 4', ans:'F'}], explain:'', solImg:''});
+        if(type === 'short') questions.push({type:'short', q:'Điền đáp án đúng:', img:'', ans:'', explain:'', solImg:''});
+        if(type === 'match') questions.push({type:'match', q:'Ghép các cặp tương ứng:', img:'', items:['Vế trái 1','Vế trái 2','Vế trái 3','Vế trái 4'], options:['Vế phải A','Vế phải B','Vế phải C','Vế phải D'], ans:['A','B','C','D'], explain:'', solImg:''});
+        renderEditor();
+    }
+
+    function renderEditor(){
+        let c=document.getElementById('questions-list'); c.innerHTML="";
+        if(questions.length > 0) document.getElementById('empty-msg').style.display='none';
         
-        const ov=document.getElementById('loading-overlay'); ov.style.display='flex';
-        try {
-            const base64 = await new Promise(r => { let fr=new FileReader(); fr.onload=()=>r(fr.result.split(',')[1]); fr.readAsDataURL(file); });
-            
-            // Gọi API với model đã chọn
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
-                method:'POST', headers:{'Content-Type':'application/json'},
-                body:JSON.stringify({contents:[{parts:[{text:"Trích xuất đề thi từ ảnh thành JSON (type: mcq, tf, match, short). Chỉ trả về JSON thuần không markdown."}, {inline_data:{mime_type:file.type, data:base64}}]}]})
-            });
-            const d=await res.json();
-            
-            if (d.error) throw new Error("Google từ chối: " + d.error.message);
-            if (!d.candidates || !d.candidates[0]) throw new Error("AI không trả về kết quả.");
-            
-            document.getElementById('json-input').value = d.candidates[0].content.parts[0].text.replace(/```json/g,'').replace(/```/g,'').trim();
-            parseData();
-        } catch(e){
-            alert(`⚠️ LỖI (${model}): ${e.message}\n\nHãy thử chọn Model khác trong Cấu Hình!`);
-        } finally{ov.style.display='none'; input.value='';}
+        questions.forEach((q,i)=>{
+            // UI ẢNH CÂU HỎI
+            let imgQ = `<div class="img-input-group">
+                <i class="fas fa-image" style="color:#2e7d32"></i> <b>Ảnh Đề:</b>
+                <input type="text" placeholder="Link ảnh câu hỏi..." value="${q.img||''}" onchange="questions[${i}].img=this.value" style="flex:1">
+                ${q.img ? `<img src="${q.img}" style="height:40px;border:1px solid #ccc">` : ''}
+            </div>`;
+
+            // UI ẢNH LỜI GIẢI
+            let imgSol = `<div class="img-input-group" style="background:#fffde7">
+                <i class="fas fa-lightbulb" style="color:#fbc02d"></i> <b>Ảnh Lời Giải:</b>
+                <input type="text" placeholder="Link ảnh lời giải..." value="${q.solImg||''}" onchange="questions[${i}].solImg=this.value" style="flex:1">
+                ${q.solImg ? `<img src="${q.solImg}" style="height:40px;border:1px solid #ccc">` : ''}
+            </div>`;
+
+            // UI NỘI DUNG ĐÁP ÁN (HIỆN RÕ RÀNG)
+            let ansUI = "";
+            if(q.type === 'mcq') {
+                ansUI = `<div style="margin:10px 0;background:#f5f5f5;padding:15px;border-radius:4px;border:1px solid #e0e0e0">
+                    ${q.options.map((opt,idx)=>`
+                        <div class="opt-row">
+                            <input type="radio" name="radio_q${i}" class="opt-radio" ${q.ans==idx?'checked':''} onchange="questions[${i}].ans=${idx}">
+                            <span class="opt-label">${['A','B','C','D'][idx]}.</span>
+                            <input style="flex:1" value="${opt}" onchange="questions[${i}].options[${idx}]=this.value">
+                        </div>
+                    `).join('')}
+                </div>`;
+            } 
+            else if (q.type === 'tf') {
+                ansUI = `<div style="margin:10px 0;background:#e3f2fd;padding:15px;border-radius:4px">
+                    ${q.items.map((it,idx)=>`
+                        <div class="opt-row">
+                            <span class="opt-label">Ý ${idx+1}:</span>
+                            <input style="flex:1" value="${it.sub}" onchange="questions[${i}].items[${idx}].sub=this.value">
+                            <select onchange="questions[${i}].items[${idx}].ans=this.value" style="width:90px;font-weight:bold;color:${it.ans=='T'?'#2e7d32':'#c62828'}">
+                                <option value="T" ${it.ans=='T'?'selected':''}>ĐÚNG</option>
+                                <option value="F" ${it.ans=='F'?'selected':''}>SAI</option>
+                            </select>
+                        </div>
+                    `).join('')}
+                </div>`;
+            }
+            else if (q.type === 'short') {
+                ansUI = `<div style="margin:10px 0;padding:10px;border:1px dashed #ffa000;border-radius:4px;background:#fff8e1">
+                    <b>Đáp án đúng (Số/Chữ):</b> <input type="text" value="${q.ans}" onchange="questions[${i}].ans=this.value" placeholder="VD: 16.98" style="font-weight:bold;color:#c62828;width:200px;margin-left:10px">
+                </div>`;
+            }
+            else if (q.type === 'match') {
+                 ansUI = `<div style="margin:10px 0;background:#f3e5f5;padding:10px">
+                    <div style="margin-bottom:10px"><b>Cột Phải (A,B,C,D):</b><br>${q.options.map((opt,oidx)=>`<input placeholder="${String.fromCharCode(65+oidx)}" value="${opt}" onchange="questions[${i}].options[${oidx}]=this.value" style="margin-bottom:2px">`).join('')}</div>
+                    <div><b>Cột Trái & Ghép:</b><br>${q.items.map((it,idx)=>`<div style="display:flex;gap:5px;margin-bottom:3px"><input value="${it}" onchange="questions[${i}].items[${idx}]=this.value"><input value="${q.ans[idx]}" onchange="questions[${i}].ans[${idx}]=this.value" style="width:50px;text-align:center;font-weight:bold" placeholder="A"></div>`).join('')}</div>
+                 </div>`;
+            }
+
+            c.insertAdjacentHTML('beforeend',`<div class="q-item">
+                <div class="q-item-header"><span>CÂU ${i+1} (${q.type.toUpperCase()})</span><button class="btn btn-red" style="padding:2px 8px;font-size:0.8em" onclick="questions.splice(${i},1);renderEditor()">Xóa</button></div>
+                <textarea class="smart-textarea" onchange="questions[${i}].q=this.value" placeholder="Nhập nội dung câu hỏi...">${q.q}</textarea>
+                ${imgQ}
+                ${ansUI}
+                <div class="sol-area">
+                    <label style="color:#2e7d32;font-weight:bold"><i class="fas fa-book-open"></i> Lời Giải Chi Tiết:</label>
+                    <textarea class="smart-textarea" placeholder="Nhập lời giải..." onchange="questions[${i}].explain=this.value" style="border:none;background:transparent;width:100%;min-height:50px">${q.explain||''}</textarea>
+                    ${imgSol}
+                </div>
+            </div>`);
+        });
     }
 
     // ==========================================
@@ -219,7 +286,7 @@
                 let icon = item.type === 'dir' ? '<i class="fas fa-folder"></i>' : '<i class="fas fa-file-alt"></i>';
                 let cls = item.type === 'dir' ? 'fm-folder' : 'fm-file';
                 let action = item.type === 'dir' ? `onclick="loadFileManager('${item.path}')"` : '';
-                let delBtn = `<button class="btn btn-del" style="padding:2px 8px;font-size:0.8em" onclick="event.stopPropagation();deleteFileGeneric('${item.path}', '${item.name}', true)">Xóa</button>`;
+                let delBtn = `<button class="btn btn-red" style="padding:2px 8px" onclick="event.stopPropagation();deleteFileGeneric('${item.path}', '${item.name}', true)">Xóa</button>`;
                 html += `<div class="fm-item" ${action}><div class="fm-icon ${cls}">${icon}</div><div class="fm-name">${item.name}</div><div>${delBtn}</div></div>`;
             });
             document.getElementById('fm-list').innerHTML = html;
@@ -243,8 +310,10 @@
     }
 
     // ==========================================
-    // CÁC HÀM KHÁC
+    // CÁC HÀM XỬ LÝ (PUBLISH, IMPORT)
     // ==========================================
+    function parseData(){ try { let t = document.getElementById('json-input').value; let d = new Function("return " + t)(); questions = Array.isArray(d) ? d : (d.questions || []); renderEditor(); } catch(e) { alert("Lỗi JSON!"); } }
+
     async function loadDataFiles(){
         const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value;
         if(!u)return alert("Thiếu Config!");
@@ -254,7 +323,7 @@
             let h='';
             f.forEach(x=>{
                 if(x.name.endsWith('.js')&&x.name!=='list.js') {
-                    h+=`<div class="file-item"><span style="font-weight:500">${x.name}</span><div><button class="btn btn-qr" onclick="showExamQR('${x.name}')">QR</button><button class="btn btn-edit" onclick="loadExamToEdit('${x.path}','${x.name}')">Sửa</button><button class="btn btn-del" onclick="deleteFileGeneric('${x.path}','${x.name}', false)">Xóa</button></div></div>`;
+                    h+=`<div class="file-item"><span style="font-weight:500">${x.name}</span><div><button class="btn btn-qr" onclick="showExamQR('${x.name}')">QR</button><button class="btn btn-edit" onclick="loadExamToEdit('${x.path}','${x.name}')">Sửa</button><button class="btn btn-red" onclick="deleteFileGeneric('${x.path}','${x.name}', false)">Xóa</button></div></div>`;
                 }
             });
             document.getElementById('data-list').innerHTML=h;
@@ -277,25 +346,19 @@
             document.getElementById('secure-mode').checked=data.encrypted;
             if(data.start)document.getElementById('exam-start').value=data.start;
             if(data.end)document.getElementById('exam-end').value=data.end;
+            
+            // XỬ LÝ LẤY LẠI ẢNH LỜI GIẢI TỪ HTML NẾU CÓ
+            data.questions.forEach(q => {
+                if(q.explain && q.explain.includes('<img')) {
+                    // Trích xuất link ảnh từ thẻ img trong explain nếu có (dành cho đề cũ)
+                    let match = q.explain.match(/src="([^"]+)"/);
+                    if(match) q.solImg = match[1];
+                }
+            });
+
             questions=data.questions||[]; renderEditor(); 
             ov.style.display='none'; switchTab('create');
         }catch(e){ alert("Lỗi tải đề: "+e.message); ov.style.display='none'; }
-    }
-
-    let questions = [];
-    function parseData(){ try { let t = document.getElementById('json-input').value; let d = new Function("return " + t)(); questions = Array.isArray(d) ? d : (d.questions || []); renderEditor(); } catch(e) { alert("Lỗi JSON!"); } }
-
-    function renderEditor(){
-        let c=document.getElementById('questions-list');c.innerHTML="";
-        questions.forEach((q,i)=>{
-            let ansUI = "";
-            if(q.type === 'mcq') ansUI = `<div><b>Đáp án (0-3):</b> <input type="number" value="${q.ans}" onchange="questions[${i}].ans=this.value" style="width:50px"></div>`;
-            else if (q.type === 'match') ansUI = `<div><b>Ghép cột:</b><br>${q.items.map((it,idx)=>`Ý ${idx+1}: <input value="${q.ans[idx]}" onchange="questions[${i}].ans[${idx}]=this.value" style="width:40px">`).join(' | ')}</div>`;
-            else if (q.type === 'tf') ansUI = `<div><b>Đúng(T)/Sai(F):</b><br>${q.items.map((it,idx)=>`Ý ${idx+1}: <input value="${it.ans}" onchange="questions[${i}].items[${idx}].ans=this.value" style="width:40px">`).join(' | ')}</div>`;
-            else ansUI = `<div><b>Đáp án:</b> <input type="text" value="${q.ans}" onchange="questions[${i}].ans=this.value"></div>`;
-            c.insertAdjacentHTML('beforeend',`<div class="q-item"><div style="font-weight:bold;color:#009688">CÂU ${i+1} (${q.type}) <button onclick="questions.splice(${i},1);renderEditor()" style="float:right;background:red;color:white;border:none">Xóa</button></div><textarea class="smart-textarea" onchange="questions[${i}].q=this.value">${q.q}</textarea>${ansUI}<textarea class="smart-textarea" placeholder="Lời giải..." onchange="questions[${i}].explain=this.value">${q.explain||''}</textarea></div>`);
-        });
-        document.getElementById('editor-area').style.display='block';
     }
 
     async function publishExam(){
@@ -307,19 +370,27 @@
         try{
             let fQ=JSON.parse(JSON.stringify(questions));
             let sec=document.getElementById('secure-mode').checked;
-            if(sec){
-                fQ.forEach(q=>{
+            
+            // GỘP ẢNH LỜI GIẢI VÀO EXPLAIN VÀ MÃ HÓA
+            fQ.forEach(q=>{
+                if(q.solImg) {
+                    q.explain = (q.explain || "") + `<br><img src="${q.solImg}" style="max-width:100%;margin-top:10px;border-radius:5px">`;
+                    delete q.solImg; // Xóa trường thừa trước khi lưu
+                }
+
+                if(sec){
                     if(q.type==='mcq') q.ans=CryptoJS.MD5(String(q.ans)).toString();
                     else if(q.type==='tf') q.items.forEach(x=>x.ans=CryptoJS.MD5(String(x.ans).trim()).toString());
                     else if(q.type==='short') q.ans=CryptoJS.MD5(String(q.ans).trim().toLowerCase().replace(',','.')).toString();
                     else if(q.type==='match') q.ans=q.ans.map(v=>CryptoJS.MD5(String(v).trim()).toString());
-                });
-            }
+                }
+            });
+
             let dt={ title:document.getElementById('exam-title').value, time:parseInt(document.getElementById('exam-time').value), password:document.getElementById('exam-pass-hash').value, encrypted:sec, start:document.getElementById('exam-start').value, end:document.getElementById('exam-end').value, price: price, bank: bankInfo, scores:{mcq:0.25,tf:1.0,short:0.5,match:1.0}, questions:fQ };
             let c=btoa(unescape(encodeURIComponent(`window.EXAM_DATA = ${JSON.stringify(dt,null,4)};`)));
             await upF(u,r,t,`data/${id}.js`,c,false);
             await updateList(u,r,t,id,dt);
-            alert("Đã cập nhật đề thi thành công!"); ov.style.display='none'; loadDataFiles();
+            alert("Thành công! Đề đã được xuất bản."); ov.style.display='none'; loadDataFiles();
         }catch(e){alert(e.message); ov.style.display='none';}
     }
 
