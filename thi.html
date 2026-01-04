@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hệ Thống Thi Trực Tuyến - Thầy Nguyễn Bình Nguyên</title>
+    <title>Hệ Thống Thi Trực Tuyến v16.3 (Final Fix)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -11,13 +11,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
-        /* CSS GIAO DIỆN (GIỮ NGUYÊN) */
+        /* CSS CHUẨN (GIỮ NGUYÊN) */
         body{font-family:'Roboto',sans-serif;background:#f4f7f6;margin:0;color:#333;padding-bottom:80px}
-        .teacher-header{background:linear-gradient(135deg,#1a237e,#0d47a1);color:white;padding:20px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,0.1)}
+        .teacher-header{background:linear-gradient(135deg,#1a237e,#0d47a1);color:white;padding:20px;text-align:center}
         .teacher-avatar{width:80px;height:80px;border-radius:50%;border:3px solid white;object-fit:cover;margin-bottom:10px;background:white}
-        .teacher-name{font-size:1.4em;font-weight:700;text-transform:uppercase;margin:0}
-        .teacher-title{font-size:0.95em;font-weight:300;opacity:0.9;margin:2px 0}
-        .teacher-school{font-size:0.9em;font-weight:500;color:#ffeb3b;margin-top:5px}
         .status-bar{background:white;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 5px rgba(0,0,0,0.05);border-bottom:1px solid #eee}
         .timer-box{background:#ffebee;color:#c62828;padding:5px 12px;border-radius:20px;font-weight:700;font-family:monospace;font-size:1.2em}
         .student-box{font-weight:600;color:#1565c0}
@@ -30,16 +27,15 @@
         input[type="radio"]{accent-color:#1a237e;transform:scale(1.2);margin-right:10px}
         .welcome-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(13,71,161,0.95);z-index:2000;display:flex;align-items:center;justify-content:center}
         .welcome-card{background:white;width:90%;max-width:400px;padding:40px;border-radius:20px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,0.3)}
-        .btn-start{background:linear-gradient(45deg,#1565c0,#0d47a1);color:white;width:100%;padding:15px;border:none;border-radius:50px;font-weight:bold;font-size:1.1em;cursor:pointer;box-shadow:0 5px 15px rgba(13,71,161,0.3);margin-top:15px}
+        .btn-start{background:linear-gradient(45deg,#1565c0,#0d47a1);color:white;width:100%;padding:15px;border:none;border-radius:50px;font-weight:bold;font-size:1.1em;cursor:pointer;margin-top:15px}
         .pay-box{border:2px dashed #e91e63;background:#fce4ec;padding:15px;margin:15px 0;border-radius:12px}
         .palette-item{width:35px;height:35px;display:flex;align-items:center;justify-content:center;border:1px solid #ddd;border-radius:6px;cursor:pointer;background:white;font-weight:bold;color:#555}
         .palette-item.answered{background:#1a237e;color:white;border-color:#1a237e}
         .palette-grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
         .loading{position:fixed;top:0;left:0;width:100%;height:100%;background:white;z-index:3000;display:flex;flex-direction:column;justify-content:center;align-items:center}
-        /* KẾT QUẢ ĐÚNG SAI */
-        .res-badge { display:inline-block; padding:5px 10px; border-radius:6px; font-weight:bold; margin-top:10px; font-size: 0.9em; }
-        .res-correct { background:#c8e6c9; color:#1b5e20; border: 1px solid #a5d6a7; }
-        .res-wrong { background:#ffcdd2; color:#b71c1c; border: 1px solid #ef9a9a; }
+        .res-badge{display:inline-block;padding:5px 10px;border-radius:6px;font-weight:bold;margin-top:10px;font-size:0.9em}
+        .res-correct{background:#c8e6c9;color:#1b5e20;border:1px solid #a5d6a7}
+        .res-wrong{background:#ffcdd2;color:#b71c1c;border:1px solid #ef9a9a}
     </style>
 </head>
 <body>
@@ -48,7 +44,7 @@
 
 <div class="welcome-overlay" id="welcome-screen" style="display:none">
     <div class="welcome-card">
-        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="teacher-avatar" style="width:60px;height:60px;border:none;box-shadow:none">
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="teacher-avatar" style="width:60px;height:60px;border:none">
         <h2 id="exam-title" style="color:#1a237e;margin:0 0 10px 0">BÀI KIỂM TRA</h2>
         <p id="exam-info" style="color:#666;font-size:0.9em;margin-bottom:20px"></p>
         
@@ -88,13 +84,14 @@
 </div>
 
 <script>
-    const GOOGLE_SCRIPT_URL = ''; // Dán link Script vào đây nếu cần
+    // --- LINK GOOGLE SCRIPT (NẾU CÓ) ---
+    const GOOGLE_SCRIPT_URL = ''; 
 
     let rawQ=[], curQ=[], timerDur=0, timerInt;
     let scoresConfig={mcq:0.25, tf:1.0, short:0.5, match:1.0};
     let isEnc=false, userAns={}, stId="", exId="";
 
-    // LOAD ĐỀ
+    // 1. TẢI ĐỀ THI
     const urlParams=new URLSearchParams(window.location.search);
     const pId=urlParams.get('id'); exId=pId||"demo";
     if(pId){
@@ -125,7 +122,7 @@
         document.getElementById('welcome-screen').style.display='flex';
     }
 
-    // LOGIC VÀO THI
+    // 2. VÀO THI
     function checkLogin(){
         const n=document.getElementById('s-name').value.trim(), c=document.getElementById('s-class').value.trim();
         if(!n||!c)return alert("Nhập đủ thông tin!");
@@ -145,7 +142,7 @@
         let p1=aq.filter(q=>q.type==='mcq'), p2=aq.filter(q=>q.type==='tf'), p3=aq.filter(q=>q.type==='short'), p4=aq.filter(q=>q.type==='match');
         seedShuf(p1,rng); seedShuf(p2,rng); seedShuf(p3,rng); seedShuf(p4,rng);
         p1.forEach(q=>{q.idx=q.options.map((_,i)=>i);seedShuf(q.idx,rng)}); 
-        p2.forEach(q=>seedShuf(q.items,rng)); // Đảo thứ tự ý con TF
+        p2.forEach(q=>seedShuf(q.items,rng)); 
         
         curQ=[...p1,...p2,...p3,...p4]; renderUI();
 
@@ -192,19 +189,29 @@
 
     function confirmSubmit(){ if(confirm("Nộp bài thi?")) submitQuiz(); }
 
-    // --- HÀM KIỂM TRA ĐÁP ÁN (FIX LỖI CỐT LÕI) ---
+    // --- 3. HÀM CHẤM ĐIỂM (ĐÃ SỬA LỖI IN HOA/THƯỜNG) ---
     function chk(u, c) {
+        // u: Đáp án học sinh chọn
+        // c: Đáp án đúng (hoặc Hash của đáp án đúng)
         if (u === undefined || u === null || u === "") return false;
         
-        // CHUẨN HÓA DỮ LIỆU:
-        // 1. Trim() bỏ khoảng trắng thừa
-        // 2. toLowerCase() để không phân biệt hoa thường
-        // 3. Thay dấu phẩy (,) thành dấu chấm (.) để so sánh số thập phân
-        let uStr = String(u).trim().toLowerCase().replace(',', '.');
-        let cStr = String(c).trim().toLowerCase().replace(',', '.');
+        let strU = String(u).trim(); // Giữ nguyên bản để so sánh T/F
         
-        if (isEnc) return CryptoJS.MD5(uStr).toString() === cStr;
-        return uStr === cStr;
+        if (isEnc) {
+            // Nếu mã hóa: Thử cả In Hoa và Chữ Thường
+            // 1. Thử Hash của chữ IN HOA (Dành cho T/F/A/B/C/D)
+            if (CryptoJS.MD5(strU.toUpperCase()).toString() === c) return true;
+            
+            // 2. Thử Hash của chữ thường + đổi dấu phẩy (Dành cho Short Answer số)
+            let strLow = strU.toLowerCase().replace(',', '.');
+            if (CryptoJS.MD5(strLow).toString() === c) return true;
+            
+            return false;
+        } else {
+            // Nếu không mã hóa
+            // So sánh không phân biệt hoa thường và đổi dấu phẩy
+            return strU.toLowerCase().replace(',', '.') === String(c).toLowerCase().replace(',', '.');
+        }
     }
 
     function submitQuiz(){
@@ -215,59 +222,49 @@
         curQ.forEach((q,i)=>{
             const bl=document.getElementById(`q-${i}`); document.getElementById(`sol-${i}`).style.display='block';
             
-            // 1. CHẤM MCQ
+            // 1. MCQ
             if(q.type==='mcq'){
                 max+=scoresConfig.mcq;
-                // Đáp án A (0) phải được xử lý như một giá trị hợp lệ
-                let uVal = userAns[i];
-                if(chk(uVal, q.ans)) {
+                if(chk(userAns[i], q.ans)) {
                     score+=scoresConfig.mcq;
                     bg(bl, true, 'Đúng');
                 } else {
-                    bg(bl, false, isEnc ? 'Sai' : 'Đáp án đúng: ' + ['A','B','C','D'][q.ans]);
+                    bg(bl, false, isEnc ? 'Sai' : 'Đúng: ' + ['A','B','C','D'][q.ans]);
                 }
             }
-            // 2. CHẤM ĐÚNG/SAI (TF) - Fix lỗi 0/4 ý
+            // 2. TF (Đúng Sai)
             else if(q.type==='tf'){
                 max+=scoresConfig.tf; 
                 let c=0;
-                // Lặp qua từng ý nhỏ để chấm
                 q.items.forEach((it, idx) => {
-                    // Lấy đáp án học sinh chọn cho ý thứ idx
                     let uSub = userAns[i] ? userAns[i][idx] : null;
                     if(chk(uSub, it.ans)) c++;
                 });
-                // Tính điểm theo thang điểm Vsat
-                let s = 0;
-                if(c==1) s = 0.1;
-                else if(c==2) s = 0.25;
-                else if(c==3) s = 0.5;
-                else if(c==4) s = 1.0;
+                let s=0;
+                if(c==1) s=0.1; else if(c==2) s=0.25; else if(c==3) s=0.5; else if(c==4) s=1.0;
                 
-                s = s * scoresConfig.tf; // Nhân với hệ số điểm (thường là 1đ)
+                s = s * scoresConfig.tf; 
                 score += s;
                 bg(bl, s>0, `Đúng ${c}/${q.items.length} ý (${s}đ)`);
             }
-            // 3. CHẤM GHÉP CỘT (MATCH) - Fix lỗi
+            // 3. MATCH (Ghép cột)
             else if(q.type==='match'){
                 max+=scoresConfig.match; 
-                let c=0; 
-                let uObj = userAns[i] || {};
+                let c=0; let uObj = userAns[i] || {};
                 q.items.forEach((_, idx) => {
-                    // So sánh giá trị học sinh chọn (uObj[idx]) với đáp án đúng (q.ans[idx])
                     if(chk(uObj[idx], q.ans[idx])) c++;
                 });
                 let s = (c/q.items.length) * scoresConfig.match; 
                 score += s;
                 bg(bl, s>0, `Đúng ${c}/${q.items.length} cặp (${s.toFixed(2)}đ)`);
             }
-            // 4. CHẤM TRẢ LỜI NGẮN (SHORT) - Fix lỗi dấu phẩy
+            // 4. SHORT
             else {
                 max+=scoresConfig.short;
                 if(chk(userAns[i], q.ans)) { 
                     score+=scoresConfig.short; bg(bl, true, 'Đúng'); 
                 } else { 
-                    bg(bl, false, isEnc?'Sai':`Sai. Đáp án: ${q.ans}`); 
+                    bg(bl, false, 'Sai'); 
                 }
             }
         });
