@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Tool v20.6 (Final Fix)</title>
+    <title>Admin Tool v20.8 (Smart IMG Tag)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
@@ -74,7 +74,7 @@
 </div>
 
 <div id="main-app">
-    <h1>QUẢN TRỊ v20.6 (FIXED)</h1>
+    <h1>QUẢN TRỊ v20.8 (SMART [IMG])</h1>
     
     <div class="config-box">
         <div class="row">
@@ -117,6 +117,10 @@
             </div>
             <div class="row">
                 <div class="col"><label>Thời gian</label><input type="number" id="exam-time" value="45"></div>
+                <div class="col"><label>Mở lúc</label><input type="datetime-local" id="exam-start"></div>
+                <div class="col"><label>Đóng lúc</label><input type="datetime-local" id="exam-end"></div>
+            </div>
+            <div class="row">
                 <div class="col"><label>Giá (VNĐ)</label><input type="number" id="exam-price" placeholder="0"></div>
                 <div class="col"><label>Mật khẩu</label><input type="text" id="exam-pass" oninput="hashPass()"><input type="hidden" id="exam-pass-hash"></div>
                 <div class="col"><label>Chế độ</label><div style="margin-top:5px"><input type="checkbox" id="secure-mode"> Mã hóa</div></div>
@@ -156,7 +160,6 @@
 
 <script>
     const ADMIN_HASH = "55ab43ebd8eb2635766c3944cb192e72"; 
-    // KHAI BÁO BIẾN TOÀN CỤC TRƯỚC HẾT ĐỂ TRÁNH LỖI HOISTING
     let EXAM_QUESTIONS = [];
 
     function checkAdmin(){if(CryptoJS.MD5(document.getElementById('admin-pass-input').value).toString()===ADMIN_HASH){document.getElementById('login-screen').style.display='none';document.getElementById('main-app').style.display='block';sessionStorage.setItem('admin_ok','1');}else document.getElementById('login-msg').style.display='block';}
@@ -174,9 +177,8 @@
     function saveConfig(){ ['gh-user','gh-repo','gh-token','bank-id','bank-acc'].forEach(id=>localStorage.setItem(id,document.getElementById(id).value.trim())); alert("Đã lưu!"); }
     function hashPass(){let p=document.getElementById('exam-pass').value.trim();document.getElementById('exam-pass-hash').value=p?CryptoJS.MD5(p).toString():"";}
 
-    // --- CÁC HÀM XỬ LÝ NÚT BẤM (ĐÃ SỬA DÙNG EXAM_QUESTIONS) ---
     function addQ(type) {
-        if(type === 'mcq') EXAM_QUESTIONS.push({type:'mcq', q:'Câu hỏi mới...', img:'', options:['A','B','C','D'], ans:0, explain:'', solImg:''});
+        if(type === 'mcq') EXAM_QUESTIONS.push({type:'mcq', q:'Câu hỏi mới... [IMG]', img:'', options:['A','B','C','D'], ans:0, explain:'Lời giải chi tiết...', solImg:''});
         if(type === 'tf') EXAM_QUESTIONS.push({type:'tf', q:'Đúng hay sai?', img:'', items:[{sub:'Ý 1', ans:'T'},{sub:'Ý 2', ans:'F'},{sub:'Ý 3', ans:'T'},{sub:'Ý 4', ans:'F'}], explain:'', solImg:''});
         if(type === 'short') EXAM_QUESTIONS.push({type:'short', q:'Điền đáp án:', img:'', ans:'', explain:'', solImg:''});
         if(type === 'match') EXAM_QUESTIONS.push({type:'match', q:'Ghép cặp:', img:'', items:['Trái 1','Trái 2','Trái 3','Trái 4'], options:['Phải A','Phải B','Phải C','Phải D'], ans:['A','B','C','D'], explain:'', solImg:''});
@@ -213,13 +215,13 @@
         EXAM_QUESTIONS.forEach((q,i)=>{
             let imgQ = `<div class="upload-wrapper" style="background:#f1f8e9; padding:5px; border-radius:4px">
                 <i class="fas fa-image" style="color:#2e7d32"></i> <b>Ảnh Đề:</b>
-                <input type="text" value="${q.img||''}" onchange="EXAM_QUESTIONS[${i}].img=this.value; renderPreview()" style="flex:1" placeholder="Link ảnh...">
+                <input type="text" value="${q.img||''}" onchange="EXAM_QUESTIONS[${i}].img=this.value; renderPreview()" style="flex:1" placeholder="Link ảnh... (Chèn [IMG] vào nội dung để hiện ảnh tại đó)">
                 <label class="file-upload-btn"><i class="fas fa-upload"></i> <input type="file" style="display:none" accept="image/*" onchange="handleImageUpload(this, ${i}, 'q')"></label>
                 ${q.img ? `<img src="${q.img}" style="height:30px">` : ''}
             </div>`;
             let imgSol = `<div class="upload-wrapper" style="background:#fffde7; padding:5px; border-radius:4px; margin-top:5px">
                 <i class="fas fa-lightbulb" style="color:#fbc02d"></i> <b>Ảnh Lời Giải:</b>
-                <input type="text" value="${q.solImg||''}" onchange="EXAM_QUESTIONS[${i}].solImg=this.value; renderPreview()" style="flex:1" placeholder="Link ảnh...">
+                <input type="text" value="${q.solImg||''}" onchange="EXAM_QUESTIONS[${i}].solImg=this.value; renderPreview()" style="flex:1" placeholder="Link ảnh... (Chèn [IMG] vào lời giải để hiện ảnh tại đó)">
                 <label class="file-upload-btn"><i class="fas fa-upload"></i> <input type="file" style="display:none" accept="image/*" onchange="handleImageUpload(this, ${i}, 'sol')"></label>
                 ${q.solImg ? `<img src="${q.solImg}" style="height:30px">` : ''}
             </div>`;
@@ -242,23 +244,36 @@
         renderPreview();
     }
 
+    // --- HÀM RENDER PREVIEW CÓ XỬ LÝ [IMG] ---
     function renderPreview() {
         let h = '';
         EXAM_QUESTIONS.forEach((q, i) => {
-            let imgHtml = q.img ? `<img src="${q.img}" class="p-img">` : '';
-            let solImgHtml = q.solImg ? `<img src="${q.solImg}" class="p-img">` : '';
+            // XỬ LÝ ẢNH CÂU HỎI
+            let contentHtml = q.q;
+            if(q.img) {
+                if(contentHtml.includes('[IMG]')) contentHtml = contentHtml.replace('[IMG]', `<img src="${q.img}" class="p-img">`);
+                else contentHtml += `<br><img src="${q.img}" class="p-img">`; // Mặc định ở dưới
+            }
+
+            // XỬ LÝ ẢNH LỜI GIẢI
+            let explainHtml = q.explain;
+            if(q.solImg) {
+                if(explainHtml.includes('[IMG]')) explainHtml = explainHtml.replace('[IMG]', `<img src="${q.solImg}" class="p-img">`);
+                else explainHtml += `<br><img src="${q.solImg}" class="p-img">`; // Mặc định ở dưới
+            }
+
             let body = '';
             if(q.type === 'mcq') body = q.options.map((opt, idx) => `<div class="p-opt ${q.ans==idx?'selected':''}"><b>${['A','B','C','D'][idx]}.</b> ${opt}</div>`).join('');
             else if (q.type === 'tf') body = `<table width="100%"><tr><th>Ý</th><th>Nội dung</th><th>Đ/S</th></tr>` + q.items.map((it, idx) => `<tr><td>${idx+1}</td><td>${it.sub}</td><td><b>${it.ans=='T'?'Đ':'S'}</b></td></tr>`).join('') + `</table>`;
             else if (q.type === 'short') body = `<div class="p-opt"><b>Trả lời:</b> ${q.ans}</div>`;
             else if (q.type === 'match') body = q.items.map((it, idx) => `<div class="p-opt">${idx+1}. ${it} --> ${q.ans[idx]} (${q.options[idx]})</div>`).join('');
-            h += `<div class="p-q-block"><div class="p-label">Câu ${i+1}:</div><div class="p-content">${q.q}</div>${imgHtml}<div>${body}</div><div class="p-sol"><b>Lời giải:</b><br>${q.explain} ${solImgHtml}</div></div>`;
+            
+            h += `<div class="p-q-block"><div class="p-label">Câu ${i+1}:</div><div class="p-content">${contentHtml}</div><div>${body}</div><div class="p-sol"><b>Lời giải:</b><br>${explainHtml}</div></div>`;
         });
         document.getElementById('preview-content').innerHTML = h;
         if(window.MathJax) MathJax.typesetPromise();
     }
 
-    // --- ĐÃ SỬA LỖI TRONG HÀM NÀY: DÙNG EXAM_QUESTIONS THAY VÌ QUESTIONS ---
     function parseDataSafe() {
         try {
             let raw = document.getElementById('json-input').value.trim();
@@ -309,7 +324,8 @@
         try{
             const res=await fetch(`https://api.github.com/repos/${u}/${r}/contents/${path}`,{headers:{Authorization:`token ${t}`}});
             const json=await res.json(), content=decodeURIComponent(escape(atob(json.content)));
-            let data=JSON.parse(content.substring(content.indexOf('{'), content.lastIndexOf('}')+1));
+            let dataStr = content.substring(content.indexOf('{'), content.lastIndexOf('}')+1);
+            let data=JSON.parse(dataStr);
             document.getElementById('exam-id').value=name.replace('.js','');
             document.getElementById('exam-title').value=data.title||"";
             document.getElementById('exam-time').value=data.time||45;
@@ -318,23 +334,42 @@
             document.getElementById('secure-mode').checked=data.encrypted;
             if(data.start)document.getElementById('exam-start').value=data.start;
             if(data.end)document.getElementById('exam-end').value=data.end;
-            data.questions.forEach(q => { if(q.explain && q.explain.includes('<img')) { let match = q.explain.match(/src="([^"]+)"/); if(match) q.solImg = match[1]; q.explain = q.explain.replace(/<br><img.*?>/g, '').trim(); }});
-            // SỬA LỖI TẠI ĐÂY: GÁN VÀO EXAM_QUESTIONS
-            EXAM_QUESTIONS=data.questions||[]; renderEditor(); ov.style.display='none'; switchTab('create');
+            
+            data.questions.forEach(q => {
+                if(q.explain && q.explain.includes('<img')) {
+                    let match = q.explain.match(/src="([^"]+)"/);
+                    if(match) q.solImg = match[1];
+                    q.explain = q.explain.replace(/<br><img.*?>/g, '').trim(); 
+                }
+            });
+
+            EXAM_QUESTIONS=data.questions||[]; renderEditor(); 
+            ov.style.display='none'; switchTab('create');
         }catch(e){ alert("Lỗi tải đề: "+e.message); ov.style.display='none'; }
     }
 
     async function publishExam(){
         const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value,id=document.getElementById('exam-id').value;
         if(!u||!r||!t||!id)return alert("Thiếu info!");
-        const bankInfo = {id: document.getElementById('bank-id').value, acc: document.getElementById('bank-acc').value}, price = parseInt(document.getElementById('exam-price').value) || 0;
+        const bankInfo = {id: document.getElementById('bank-id').value, acc: document.getElementById('bank-acc').value};
+        const price = parseInt(document.getElementById('exam-price').value) || 0;
         const ov=document.getElementById('loading-overlay');ov.style.display='flex';
         try{
-            // SỬA LỖI TẠI ĐÂY: LẤY TỪ EXAM_QUESTIONS
             let fQ=JSON.parse(JSON.stringify(EXAM_QUESTIONS));
             let sec=document.getElementById('secure-mode').checked;
             fQ.forEach(q=>{
-                if(q.solImg) { q.explain = (q.explain || "") + `<br><img src="${q.solImg}" style="max-width:100%;margin-top:10px;border-radius:5px">`; delete q.solImg; }
+                // NẾU CÓ [IMG] THÌ ĐÃ THAY TRONG PREVIEW RỒI, GIỜ PHẢI LƯU CẢ VÀO DB
+                if(q.solImg) {
+                    if(q.explain.includes('[IMG]')) q.explain = q.explain.replace('[IMG]', `<img src="${q.solImg}" style="max-width:100%;margin-top:10px;border-radius:5px">`);
+                    else q.explain = (q.explain || "") + `<br><img src="${q.solImg}" style="max-width:100%;margin-top:10px;border-radius:5px">`;
+                    delete q.solImg; 
+                }
+                if(q.img) {
+                    if(q.q.includes('[IMG]')) q.q = q.q.replace('[IMG]', `<img src="${q.img}" style="max-width:100%;margin:10px 0;border-radius:5px">`);
+                    else q.q = q.q + `<br><img src="${q.img}" style="max-width:100%;margin:10px 0;border-radius:5px">`;
+                    delete q.img;
+                }
+
                 if(sec){
                     if(q.type==='mcq') q.ans=CryptoJS.MD5(String(q.ans)).toString();
                     else if(q.type==='tf') q.items.forEach(x=>x.ans=CryptoJS.MD5(String(x.ans).trim()).toString());
@@ -342,9 +377,20 @@
                     else if(q.type==='match') q.ans=q.ans.map(v=>CryptoJS.MD5(String(v).trim()).toString());
                 }
             });
-            let dt={ title:document.getElementById('exam-title').value, time:parseInt(document.getElementById('exam-time').value), password:document.getElementById('exam-pass-hash').value, encrypted:sec, start:document.getElementById('exam-start').value, end:document.getElementById('exam-end').value, price: price, bank: bankInfo, scores:{mcq:0.25,tf:1.0,short:0.5,match:1.0}, questions:fQ };
+            let dt={
+                title:document.getElementById('exam-title').value,
+                time:parseInt(document.getElementById('exam-time').value),
+                password:document.getElementById('exam-pass-hash').value,
+                encrypted:sec,
+                start:document.getElementById('exam-start').value,
+                end:document.getElementById('exam-end').value,
+                price: price, bank: bankInfo,
+                scores:{mcq:0.25,tf:1.0,short:0.5,match:1.0},
+                questions:fQ
+            };
             let c=btoa(unescape(encodeURIComponent(`window.EXAM_DATA = ${JSON.stringify(dt,null,4)};`)));
-            await upF(u,r,t,`data/${id}.js`,c,false); await updateList(u,r,t,id,dt);
+            await upF(u,r,t,`data/${id}.js`,c,false);
+            await updateList(u,r,t,id,dt);
             alert("Thành công! Đề đã được xuất bản."); ov.style.display='none'; loadDataFiles();
         }catch(e){alert(e.message); ov.style.display='none';}
     }
