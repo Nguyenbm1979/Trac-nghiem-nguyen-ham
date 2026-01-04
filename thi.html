@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hệ Thống Thi Trực Tuyến v17.0 (Smart Fix)</title>
+    <title>Hệ Thống Thi Trực Tuyến v17.1 (Fix Grading)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* CSS GIAO DIỆN CHUẨN */
+        /* CSS GIAO DIỆN */
         body{font-family:'Roboto',sans-serif;background:#f4f7f6;margin:0;color:#333;padding-bottom:80px;user-select:none}
         .status-bar{background:white;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 5px rgba(0,0,0,0.05);border-bottom:1px solid #eee}
         .timer-box{background:#ffebee;color:#c62828;padding:5px 12px;border-radius:20px;font-weight:700;font-family:monospace;font-size:1.2em}
@@ -99,6 +99,7 @@
     let scoresConfig={mcq:0.25, tf:1.0, short:0.5, match:1.0};
     let isEnc=false, userAns={}, stId="", exId="";
 
+    // LOAD ĐỀ
     const urlParams=new URLSearchParams(window.location.search);
     const pId=urlParams.get('id'); exId=pId||"demo";
     if(pId){
@@ -166,8 +167,11 @@
             bh+=`<div class="question-block" id="q-${i}"><div style="margin-bottom:15px"><span class="q-label">Câu ${i+1}:</span> <span style="font-weight:500">${q.q.replace(/^Câu \d+[:.]\s*/i,'')}</span></div>`;
             if(q.img)bh+=`<div style="text-align:center"><img src="${q.img}" style="max-width:100%;border-radius:8px;margin:10px auto;border:1px solid #eee"></div>`;
             
+            // MCQ
             if(q.type==='mcq') bh+=`<div style="display:grid;grid-template-columns:1fr;gap:5px">`+q.idx.map((o,d)=>`<label class="option-item"><input type="radio" name="q${i}" value="${o}" onchange="sv(${i},${o})"><span><b>${['A','B','C','D'][d]}.</b> ${q.options[o]}</span></label>`).join('')+`</div>`;
+            // TF
             else if(q.type==='tf') bh+=`<table style="width:100%;border-collapse:collapse;margin-top:5px"><tr><th>Ý</th><th>Đ</th><th>S</th></tr>`+q.items.map((it,s)=>`<tr><td style="border-bottom:1px solid #eee;padding:8px">${it.sub}</td><td align="center" style="border-bottom:1px solid #eee"><input type="radio" name="q${i}_${s}" value="T" onchange="sv(${i},'T',${s})"></td><td align="center" style="border-bottom:1px solid #eee"><input type="radio" name="q${i}_${s}" value="F" onchange="sv(${i},'F',${s})"></td></tr>`).join('')+`</table>`;
+            // MATCH
             else if(q.type==='match') {
                 bh += `<div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">`;
                 q.items.forEach((it, idx) => {
@@ -176,6 +180,7 @@
                 });
                 bh += `<div style="margin-top:10px;background:#e3f2fd;padding:10px;border-radius:8px;font-size:0.9em">` + q.options.map((opt, oIdx) => `<div style="margin-bottom:4px"><b>${String.fromCharCode(65 + oIdx)}.</b> ${opt}</div>`).join('') + `</div></div>`;
             }
+            // SHORT
             else bh+=`<input type="text" placeholder="Nhập đáp án (VD: 16,98)" oninput="sv(${i},this.value)" style="width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;outline:none;font-weight:bold;color:#1a237e">`;
             
             bh+=`<div id="sol-${i}" style="display:none;margin-top:15px;padding:15px;background:#e8f5e9;border-radius:6px;color:#2e7d32;border:1px dashed #a5d6a7"><b>LỜI GIẢI:</b><br>${q.explain||'Không có.'}</div></div>`;
@@ -201,23 +206,31 @@
         submitQuiz();
     }
 
-    // --- 3. HÀM CHẤM ĐIỂM (TỰ ĐỘNG PHÁT HIỆN LỖI DỮ LIỆU) ---
+    // --- HÀM CHẤM ĐIỂM (BẤT CHẤP MÃ HÓA) ---
     function chk(u, c) {
         if (u === undefined || u === null || u === "") return false;
         
         let uStr = String(u).trim();
         let cStr = String(c).trim();
-        let uLow = uStr.toLowerCase().replace(',', '.'); // Chuẩn hóa phẩy -> chấm
+        let uClean = uStr.replace(',', '.');
+        let cClean = cStr.replace(',', '.');
 
-        // ⚠️ AUTO-DETECT: Nếu đáp án trong máy (cStr) KHÔNG PHẢI là mã Hash (không đủ 32 ký tự)
-        // Thì ta coi như đề này CHƯA MÃ HÓA (Dù cờ isEnc = true)
-        let isRealEnc = isEnc && cStr.length === 32 && /^[0-9a-f]{32}$/i.test(cStr);
+        // 1. KIỂM TRA TRẦN (PLAIN TEXT) TRƯỚC
+        // Nếu khớp nhau về mặt ký tự (hoặc số) -> ĐÚNG LUÔN (Bỏ qua encrypted flag)
+        if (uClean === cClean) return true;
+        if (uStr.toLowerCase() === cStr.toLowerCase()) return true;
+        
+        // Check TF kiểu Việt Nam
+        if (uStr === 'T' && ['true', '1', 'đúng', 'yes'].includes(cStr.toLowerCase())) return true;
+        if (uStr === 'F' && ['false', '0', 'sai', 'no'].includes(cStr.toLowerCase())) return true;
 
-        if (isRealEnc) {
-            // Chế độ Mã Hóa Thật
+        // 2. KIỂM TRA MÃ HÓA (CHỈ KHI PLAIN TEXT KHÔNG KHỚP)
+        // Nếu dữ liệu thực sự đã mã hóa (MD5 dài 32 ký tự)
+        if (isEnc) {
             if (CryptoJS.MD5(uStr).toString() === cStr) return true;
-            if (CryptoJS.MD5(uLow).toString() === cStr) return true; // Chấp nhận 16,98
+            if (CryptoJS.MD5(uClean).toString() === cStr) return true; // Check 16,98 với Hash
             
+            // Check Hash cho TF
             if (uStr === 'T') { 
                 let trues = ["True", "true", "TRUE", "Đúng", "Dung", "Yes", "1", "T"];
                 for(let t of trues) if(CryptoJS.MD5(t).toString() === cStr) return true;
@@ -226,15 +239,8 @@
                 let falses = ["False", "false", "FALSE", "Sai", "No", "0", "F"];
                 for(let f of falses) if(CryptoJS.MD5(f).toString() === cStr) return true;
             }
-        } else {
-            // Chế độ Không Mã Hóa (Hoặc Mã Hóa Giả) - So sánh trực tiếp
-            if (uStr === cStr) return true;
-            if (uLow === cStr.toLowerCase().replace(',', '.')) return true; // So sánh 16.98 == 16,98
-            
-            // So sánh Đúng/Sai thông minh
-            if (uStr === 'T' && ["true", "đúng", "dung", "yes", "1", "t"].includes(cStr.toLowerCase())) return true;
-            if (uStr === 'F' && ["false", "sai", "no", "0", "f"].includes(cStr.toLowerCase())) return true;
         }
+        
         return false;
     }
 
@@ -246,22 +252,26 @@
         curQ.forEach((q,i)=>{
             const bl=document.getElementById(`q-${i}`); document.getElementById(`sol-${i}`).style.display='block';
             
+            // CHẤM MCQ
             if(q.type==='mcq'){
                 max+=scoresConfig.mcq;
                 if(chk(userAns[i], q.ans)) { score+=scoresConfig.mcq; bg(bl, true, 'Đúng'); } 
                 else bg(bl, false, 'Sai');
             }
+            // CHẤM TF
             else if(q.type==='tf'){
                 max+=scoresConfig.tf; let c=0;
                 q.items.forEach((it, idx) => { if(chk(userAns[i]?userAns[i][idx]:null, it.ans)) c++; });
                 let s=0; if(c==1)s=0.1;else if(c==2)s=0.25;else if(c==3)s=0.5;else if(c==4)s=1.0;
                 s = s * scoresConfig.tf; score += s; bg(bl, s>0, `Đúng ${c}/${q.items.length} ý (${s}đ)`);
             }
+            // CHẤM MATCH
             else if(q.type==='match'){
                 max+=scoresConfig.match; let c=0; let uObj = userAns[i] || {};
                 q.items.forEach((_, idx) => { if(chk(uObj[idx], q.ans[idx])) c++; });
                 let s = (c/q.items.length) * scoresConfig.match; score += s; bg(bl, s>0, `Đúng ${c}/${q.items.length} cặp (${s.toFixed(2)}đ)`);
             }
+            // CHẤM SHORT
             else {
                 max+=scoresConfig.short;
                 if(chk(userAns[i], q.ans)) { score+=scoresConfig.short; bg(bl, true, 'Đúng'); } 
