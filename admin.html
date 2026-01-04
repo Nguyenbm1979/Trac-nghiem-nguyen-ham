@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Tool v19.1 (AI Fix)</title>
+    <title>Admin Tool v19.2 (AI Model Fix)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -74,7 +74,7 @@
 </div>
 
 <div id="main-app">
-    <h1>QUẢN TRỊ v19.1</h1>
+    <h1>QUẢN TRỊ v19.2</h1>
     <div class="config-box">
         <div class="row">
             <div class="col"><label>User GitHub</label><input type="text" id="gh-user"></div>
@@ -84,7 +84,7 @@
         <div class="row" style="margin-top:10px;border-top:1px dashed #999;padding-top:10px">
             <div class="col"><label>Ngân hàng</label><input type="text" id="bank-id" placeholder="MB"></div>
             <div class="col"><label>Số Tài Khoản</label><input type="text" id="bank-acc"></div>
-            <div class="col"><label style="color:#d32f2f">Gemini API Key (Bắt buộc)</label><input type="password" id="gemini-key"></div>
+            <div class="col"><label style="color:#d32f2f">Gemini API Key</label><input type="password" id="gemini-key"></div>
         </div>
         <div class="row" style="margin-top:10px"><button class="btn btn-gray" onclick="saveConfig()">💾 Lưu Cấu Hình</button></div>
     </div>
@@ -160,31 +160,29 @@
     function hashPass(){let p=document.getElementById('exam-pass').value.trim();document.getElementById('exam-pass-hash').value=p?CryptoJS.MD5(p).toString():"";}
 
     // ==========================================
-    // AI GEMINI (FIX LỖI & THÔNG BÁO)
+    // AI GEMINI (ĐÃ SỬA TÊN MODEL: gemini-1.5-flash-latest)
     // ==========================================
     async function processImageWithGemini(input) {
         const file=input.files[0], key=document.getElementById('gemini-key').value;
-        
-        // KIỂM TRA KEY TRƯỚC KHI GỬI
         if(!key || key.length < 10) return alert("❌ LỖI: Bạn chưa nhập Gemini API Key hoặc chưa bấm 'Lưu Cấu Hình'.");
         
         const ov=document.getElementById('loading-overlay'); ov.style.display='flex';
         try {
             const base64 = await new Promise(r => { let fr=new FileReader(); fr.onload=()=>r(fr.result.split(',')[1]); fr.readAsDataURL(file); });
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+            // SỬA Ở ĐÂY: Thêm "-latest" vào tên model
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${key}`, {
                 method:'POST', headers:{'Content-Type':'application/json'},
                 body:JSON.stringify({contents:[{parts:[{text:"Trích xuất đề thi từ ảnh thành JSON (type: mcq, tf, match, short). Chỉ trả về JSON thuần không markdown."}, {inline_data:{mime_type:file.type, data:base64}}]}]})
             });
             const d=await res.json();
             
-            // XỬ LÝ LỖI TỪ GOOGLE
             if (d.error) throw new Error("Google từ chối: " + d.error.message);
-            if (!d.candidates || !d.candidates[0]) throw new Error("AI không trích xuất được nội dung. Hãy thử ảnh rõ nét hơn.");
+            if (!d.candidates || !d.candidates[0]) throw new Error("AI không trích xuất được nội dung.");
             
             document.getElementById('json-input').value = d.candidates[0].content.parts[0].text.replace(/```json/g,'').replace(/```/g,'').trim();
             parseData();
         } catch(e){
-            alert("⚠️ LỖI AI: " + e.message + "\n\n(Gợi ý: Kiểm tra lại API Key hoặc mạng internet)");
+            alert("⚠️ LỖI AI: " + e.message);
         } finally{ov.style.display='none'; input.value='';}
     }
 
