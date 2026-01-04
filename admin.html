@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Tool v20.8 (Smart IMG Tag)</title>
+    <title>Admin Tool v20.9 (Final Stable)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
@@ -74,7 +74,7 @@
 </div>
 
 <div id="main-app">
-    <h1>QUẢN TRỊ v20.8 (SMART [IMG])</h1>
+    <h1>QUẢN TRỊ v20.9 (STABLE)</h1>
     
     <div class="config-box">
         <div class="row">
@@ -177,8 +177,9 @@
     function saveConfig(){ ['gh-user','gh-repo','gh-token','bank-id','bank-acc'].forEach(id=>localStorage.setItem(id,document.getElementById(id).value.trim())); alert("Đã lưu!"); }
     function hashPass(){let p=document.getElementById('exam-pass').value.trim();document.getElementById('exam-pass-hash').value=p?CryptoJS.MD5(p).toString():"";}
 
+    // --- LOGIC CÂU HỎI ---
     function addQ(type) {
-        if(type === 'mcq') EXAM_QUESTIONS.push({type:'mcq', q:'Câu hỏi mới... [IMG]', img:'', options:['A','B','C','D'], ans:0, explain:'Lời giải chi tiết...', solImg:''});
+        if(type === 'mcq') EXAM_QUESTIONS.push({type:'mcq', q:'Câu hỏi mới... [IMG]', img:'', options:['A','B','C','D'], ans:0, explain:'Lời giải... [IMG]', solImg:''});
         if(type === 'tf') EXAM_QUESTIONS.push({type:'tf', q:'Đúng hay sai?', img:'', items:[{sub:'Ý 1', ans:'T'},{sub:'Ý 2', ans:'F'},{sub:'Ý 3', ans:'T'},{sub:'Ý 4', ans:'F'}], explain:'', solImg:''});
         if(type === 'short') EXAM_QUESTIONS.push({type:'short', q:'Điền đáp án:', img:'', ans:'', explain:'', solImg:''});
         if(type === 'match') EXAM_QUESTIONS.push({type:'match', q:'Ghép cặp:', img:'', items:['Trái 1','Trái 2','Trái 3','Trái 4'], options:['Phải A','Phải B','Phải C','Phải D'], ans:['A','B','C','D'], explain:'', solImg:''});
@@ -244,22 +245,22 @@
         renderPreview();
     }
 
-    // --- HÀM RENDER PREVIEW CÓ XỬ LÝ [IMG] ---
     function renderPreview() {
         let h = '';
         EXAM_QUESTIONS.forEach((q, i) => {
-            // XỬ LÝ ẢNH CÂU HỎI
+            let imgHtml = q.img ? `<img src="${q.img}" class="p-img">` : '';
+            let solImgHtml = q.solImg ? `<img src="${q.solImg}" class="p-img">` : '';
+            
+            // PREVIEW LOGIC CHO [IMG]
             let contentHtml = q.q;
             if(q.img) {
                 if(contentHtml.includes('[IMG]')) contentHtml = contentHtml.replace('[IMG]', `<img src="${q.img}" class="p-img">`);
-                else contentHtml += `<br><img src="${q.img}" class="p-img">`; // Mặc định ở dưới
+                else contentHtml += `<br><img src="${q.img}" class="p-img">`;
             }
-
-            // XỬ LÝ ẢNH LỜI GIẢI
             let explainHtml = q.explain;
             if(q.solImg) {
                 if(explainHtml.includes('[IMG]')) explainHtml = explainHtml.replace('[IMG]', `<img src="${q.solImg}" class="p-img">`);
-                else explainHtml += `<br><img src="${q.solImg}" class="p-img">`; // Mặc định ở dưới
+                else explainHtml += `<br><img src="${q.solImg}" class="p-img">`;
             }
 
             let body = '';
@@ -267,7 +268,6 @@
             else if (q.type === 'tf') body = `<table width="100%"><tr><th>Ý</th><th>Nội dung</th><th>Đ/S</th></tr>` + q.items.map((it, idx) => `<tr><td>${idx+1}</td><td>${it.sub}</td><td><b>${it.ans=='T'?'Đ':'S'}</b></td></tr>`).join('') + `</table>`;
             else if (q.type === 'short') body = `<div class="p-opt"><b>Trả lời:</b> ${q.ans}</div>`;
             else if (q.type === 'match') body = q.items.map((it, idx) => `<div class="p-opt">${idx+1}. ${it} --> ${q.ans[idx]} (${q.options[idx]})</div>`).join('');
-            
             h += `<div class="p-q-block"><div class="p-label">Câu ${i+1}:</div><div class="p-content">${contentHtml}</div><div>${body}</div><div class="p-sol"><b>Lời giải:</b><br>${explainHtml}</div></div>`;
         });
         document.getElementById('preview-content').innerHTML = h;
@@ -287,6 +287,7 @@
         } catch(e) { alert("❌ Lỗi JSON: " + e.message); }
     }
 
+    // --- CÁC HÀM TƯƠNG TÁC GITHUB ---
     async function deleteFileGeneric(path, name, isFileManager) {
         if(!confirm(`⚠️ XÓA VĨNH VIỄN: ${name}?`)) return;
         const u=document.getElementById('gh-user').value, r=document.getElementById('gh-repo').value, t=document.getElementById('gh-token').value;
@@ -358,7 +359,6 @@
             let fQ=JSON.parse(JSON.stringify(EXAM_QUESTIONS));
             let sec=document.getElementById('secure-mode').checked;
             fQ.forEach(q=>{
-                // NẾU CÓ [IMG] THÌ ĐÃ THAY TRONG PREVIEW RỒI, GIỜ PHẢI LƯU CẢ VÀO DB
                 if(q.solImg) {
                     if(q.explain.includes('[IMG]')) q.explain = q.explain.replace('[IMG]', `<img src="${q.solImg}" style="max-width:100%;margin-top:10px;border-radius:5px">`);
                     else q.explain = (q.explain || "") + `<br><img src="${q.solImg}" style="max-width:100%;margin-top:10px;border-radius:5px">`;
@@ -397,7 +397,31 @@
 
     async function upF(u,r,t,p,c,isF){let s=null;try{let k=await fetch(`https://api.github.com/repos/${u}/${r}/contents/${p}`,{headers:{Authorization:`token ${t}`}});if(k.ok)s=(await k.json()).sha;}catch(e){}let b={message:"Up",content:isF?await toB64(c):c};if(s)b.sha=s;let rs=await fetch(`https://api.github.com/repos/${u}/${r}/contents/${p}`,{method:'PUT',headers:{Authorization:`token ${t}`,'Content-Type':'application/json'},body:JSON.stringify(b)});if(!rs.ok){let j=await rs.json();throw new Error(j.message);}}
     function toB64(f){return new Promise(r=>{let fr=new FileReader();fr.onload=()=>r(fr.result.split(',')[1]);fr.readAsDataURL(f);});}
-    async function updateList(u,r,t,id,d){let url=`https://api.github.com/repos/${u}/${r}/contents/data/list.js`,l=[],s=null;try{let k=await fetch(url,{headers:{Authorization:`token ${t}`}});if(k.ok){let j=await k.json();s=j.sha;l=new Function("return "+decodeURIComponent(escape(atob(j.content))).replace(/window\.EXAM_LIST\s*=\s*/,'').replace(/;$/,''))();}}catch(e){}l=l.filter(x=>x.id!==id);l.unshift({id:id,title:d.title,subject:d.subject,grade:d.grade,time:d.time});let c=btoa(unescape(encodeURIComponent(`window.EXAM_LIST = ${JSON.stringify(l,null,4)};`)));await upF(u,r,t,`data/list.js`,c,false);}
+    
+    // --- HÀM UPDATE LIST (ĐÃ SỬA LỖI FILTER UNDEFINED) ---
+    async function updateList(u,r,t,id,d){
+        let url=`https://api.github.com/repos/${u}/${r}/contents/data/list.js`;
+        let l=[],s=null;
+        try{
+            let k=await fetch(url,{headers:{Authorization:`token ${t}`}});
+            if(k.ok){
+                let j=await k.json();
+                s=j.sha;
+                // GIẢI MÃ AN TOÀN VÀ TRÍCH XUẤT MẢNG
+                let content = decodeURIComponent(escape(atob(j.content)));
+                let jsonStr = content.substring(content.indexOf('['), content.lastIndexOf(']')+1);
+                if(jsonStr) l = JSON.parse(jsonStr);
+            }
+        }catch(e){ console.log("List chưa có hoặc lỗi, sẽ tạo mới"); }
+        
+        // CHỐT CHẶN AN TOÀN: NẾU L KHÔNG PHẢI MẢNG, GÁN VỀ RỖNG
+        if(!Array.isArray(l)) l = [];
+        
+        l=l.filter(x=>x.id!==id);
+        l.unshift({id:id,title:d.title,subject:d.subject,grade:d.grade,time:d.time});
+        let c=btoa(unescape(encodeURIComponent(`window.EXAM_LIST = ${JSON.stringify(l,null,4)};`)));
+        await upF(u,r,t,`data/list.js`,c,false);
+    }
     
     function showExamQR(n){let u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value;let url=`https://${u}.github.io/${r}/thi.html?id=${n.replace('.js','')}`;document.getElementById('qr-modal').style.display='flex';document.getElementById('qr-link-text').innerText=url;document.getElementById('qrcode').innerHTML="";new QRCode(document.getElementById("qrcode"),{text:url,width:200,height:200});}
     
