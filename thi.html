@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hệ Thống Thi Trực Tuyến v16.1 (Fix Bug)</title>
+    <title>Hệ Thống Thi Trực Tuyến - Thầy Nguyễn Bình Nguyên</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <style>
-        /* CSS GIAO DIỆN CHUYÊN NGHIỆP (GIỮ NGUYÊN) */
+        /* CSS GIAO DIỆN (GIỮ NGUYÊN) */
         body{font-family:'Roboto',sans-serif;background:#f4f7f6;margin:0;color:#333;padding-bottom:80px}
         .teacher-header{background:linear-gradient(135deg,#1a237e,#0d47a1);color:white;padding:20px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,0.1)}
         .teacher-avatar{width:80px;height:80px;border-radius:50%;border:3px solid white;object-fit:cover;margin-bottom:10px;background:white}
@@ -35,10 +36,10 @@
         .palette-item.answered{background:#1a237e;color:white;border-color:#1a237e}
         .palette-grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
         .loading{position:fixed;top:0;left:0;width:100%;height:100%;background:white;z-index:3000;display:flex;flex-direction:column;justify-content:center;align-items:center}
-        /* Style cho kết quả Đúng/Sai */
-        .res-badge { display:inline-block; padding:5px 10px; border-radius:6px; font-weight:bold; margin-top:10px; }
-        .res-correct { background:#c8e6c9; color:#1b5e20; }
-        .res-wrong { background:#ffcdd2; color:#b71c1c; }
+        /* KẾT QUẢ ĐÚNG SAI */
+        .res-badge { display:inline-block; padding:5px 10px; border-radius:6px; font-weight:bold; margin-top:10px; font-size: 0.9em; }
+        .res-correct { background:#c8e6c9; color:#1b5e20; border: 1px solid #a5d6a7; }
+        .res-wrong { background:#ffcdd2; color:#b71c1c; border: 1px solid #ef9a9a; }
     </style>
 </head>
 <body>
@@ -52,8 +53,8 @@
         <p id="exam-info" style="color:#666;font-size:0.9em;margin-bottom:20px"></p>
         
         <div id="payment-area" class="pay-box" style="display:none">
-            <h3 style="margin:0;color:#c2185b;font-size:1em"><i class="fas fa-heart"></i> MỜI CÀ PHÊ</h3>
-            <p style="font-size:0.85em;color:#880e4f;margin:5px 0">Ủng hộ tác giả để vào thi nhé!</p>
+            <h3 style="margin:0;color:#c2185b;font-size:1em"><i class="fas fa-heart"></i> ỦNG HỘ TÁC GIẢ</h3>
+            <p style="font-size:0.85em;color:#880e4f;margin:5px 0">Mời thầy ly cà phê để vào thi nhé!</p>
             <img id="vietqr-img" style="width:100%;max-width:200px;border-radius:8px;border:1px solid #ddd" src="">
             <p id="pay-amount" style="font-weight:bold;font-size:1.4em;color:#d81b60;margin:10px 0"></p>
         </div>
@@ -87,15 +88,13 @@
 </div>
 
 <script>
-    // --- CẤU HÌNH ---
-    const GOOGLE_SCRIPT_URL = ''; // Dán link Script vào đây nếu cần lưu điểm
+    const GOOGLE_SCRIPT_URL = ''; // Dán link Script vào đây nếu cần
 
     let rawQ=[], curQ=[], timerDur=0, timerInt;
-    let scoresConfig={mcq:0.25, tf:1.0, short:0.5, match:1.0}; // Cấu hình điểm
+    let scoresConfig={mcq:0.25, tf:1.0, short:0.5, match:1.0};
     let isEnc=false, userAns={}, stId="", exId="";
-    let vCount=0; const MAX_V=3;
 
-    // --- LOAD ĐỀ ---
+    // LOAD ĐỀ
     const urlParams=new URLSearchParams(window.location.search);
     const pId=urlParams.get('id'); exId=pId||"demo";
     if(pId){
@@ -107,10 +106,6 @@
     }else document.getElementById('loading').innerText="Chưa có mã đề.";
 
     function initExam(d){
-        let now = new Date();
-        if(d.start && now < new Date(d.start)) return showErr(`⛔ CHƯA ĐẾN GIỜ THI!<br>Mở: ${formatDate(d.start)}`);
-        if(d.end && now > new Date(d.end)) return showErr(`⛔ ĐÃ HẾT GIỜ THI!<br>Đóng: ${formatDate(d.end)}`);
-
         rawQ=d.questions; timerDur=(d.time||45)*60;
         if(d.scores) scoresConfig={...scoresConfig, ...d.scores}; 
         isEnc=d.encrypted===true;
@@ -123,28 +118,24 @@
         if(price > 0 && d.bank) {
              document.getElementById('payment-area').style.display = 'block';
              document.getElementById('pay-amount').innerText = price.toLocaleString('vi-VN') + "đ";
-             const content = `HOCPHI ${exId}`;
-             const qrUrl = `https://img.vietqr.io/image/${d.bank.id}-${d.bank.acc}-compact.png?amount=${price}&addInfo=${encodeURIComponent(content)}`;
+             const qrUrl = `https://img.vietqr.io/image/${d.bank.id}-${d.bank.acc}-compact.png?amount=${price}&addInfo=HOCPHI ${exId}`;
              document.getElementById('vietqr-img').src = qrUrl;
         }
         document.getElementById('loading').style.display='none'; 
         document.getElementById('welcome-screen').style.display='flex';
     }
 
-    function showErr(msg){document.body.innerHTML=`<div style="position:fixed;top:0;left:0;width:100%;height:100%;background:white;display:flex;justify-content:center;align-items:center;color:red"><h1>${msg}</h1></div>`;document.getElementById('loading').style.display='none';}
-    function formatDate(s){return new Date(s).toLocaleString('vi-VN');}
-
-    // --- LOGIC THI ---
+    // LOGIC VÀO THI
     function checkLogin(){
         const n=document.getElementById('s-name').value.trim(), c=document.getElementById('s-class').value.trim();
-        if(!n||!c)return alert("Vui lòng nhập tên và lớp!");
+        if(!n||!c)return alert("Nhập đủ thông tin!");
         if(window.EXAM_DATA.password && CryptoJS.MD5(document.getElementById('s-pass').value.trim()).toString()!==window.EXAM_DATA.password) return alert("Sai mật khẩu!");
         stId=n+c; document.getElementById('d-name').innerText=n; document.getElementById('d-class').innerText=c;
         startLogic(n);
     }
 
     function startLogic(name){
-        // Hàm Random seed giữ nguyên
+        // Seeded Shuffle
         function mul32(a){return function(){var t=a+=0x6D2B79F5;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296}}
         function cyrb128(s){let h1=1779033703,h2=3144134277,h3=1013904242,h4=2773480762;for(let i=0,k;i<s.length;i++){k=s.charCodeAt(i);h1=h2^Math.imul(h1^k,597399067);h2=h3^Math.imul(h2^k,2869860281);h3=h4^Math.imul(h3^k,951274213);h4=h1^Math.imul(h4^k,2716044179);}return(h1^h2^h3^h4)>>>0}
         function seedShuf(arr,rng){for(let i=arr.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}}
@@ -154,7 +145,7 @@
         let p1=aq.filter(q=>q.type==='mcq'), p2=aq.filter(q=>q.type==='tf'), p3=aq.filter(q=>q.type==='short'), p4=aq.filter(q=>q.type==='match');
         seedShuf(p1,rng); seedShuf(p2,rng); seedShuf(p3,rng); seedShuf(p4,rng);
         p1.forEach(q=>{q.idx=q.options.map((_,i)=>i);seedShuf(q.idx,rng)}); 
-        p2.forEach(q=>seedShuf(q.items,rng));
+        p2.forEach(q=>seedShuf(q.items,rng)); // Đảo thứ tự ý con TF
         
         curQ=[...p1,...p2,...p3,...p4]; renderUI();
 
@@ -170,17 +161,21 @@
             bh+=`<div class="question-block" id="q-${i}"><div style="margin-bottom:15px"><span class="q-label">Câu ${i+1}:</span> <span style="font-weight:500">${q.q.replace(/^Câu \d+[:.]\s*/i,'')}</span></div>`;
             if(q.img)bh+=`<div style="text-align:center"><img src="${q.img}" style="max-width:100%;border-radius:8px;margin:10px auto;border:1px solid #eee"></div>`;
             
+            // MCQ
             if(q.type==='mcq') bh+=`<div style="display:grid;grid-template-columns:1fr;gap:5px">`+q.idx.map((o,d)=>`<label class="option-item"><input type="radio" name="q${i}" value="${o}" onchange="sv(${i},${o})"><span><b>${['A','B','C','D'][d]}.</b> ${q.options[o]}</span></label>`).join('')+`</div>`;
+            // TF
             else if(q.type==='tf') bh+=`<table style="width:100%;border-collapse:collapse;margin-top:5px"><tr><th>Ý</th><th>Đ</th><th>S</th></tr>`+q.items.map((it,s)=>`<tr><td style="border-bottom:1px solid #eee;padding:8px">${it.sub}</td><td align="center" style="border-bottom:1px solid #eee"><input type="radio" name="q${i}_${s}" value="T" onchange="sv(${i},'T',${s})"></td><td align="center" style="border-bottom:1px solid #eee"><input type="radio" name="q${i}_${s}" value="F" onchange="sv(${i},'F',${s})"></td></tr>`).join('')+`</table>`;
+            // MATCH
             else if(q.type==='match') {
                 bh += `<div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">`;
                 q.items.forEach((it, idx) => {
-                    let optsHTML = `<option value="">-- Chọn --</option>` + q.options.map((opt, oIdx) => `<option value="${String.fromCharCode(65 + oIdx)}">${String.fromCharCode(65 + oIdx)}</option>`).join('');
+                    let optsHTML = `<option value="">--</option>` + q.options.map((opt, oIdx) => `<option value="${String.fromCharCode(65 + oIdx)}">${String.fromCharCode(65 + oIdx)}</option>`).join('');
                     bh += `<div style="display:flex;align-items:center;justify-content:space-between;background:#f9f9f9;padding:8px;border-radius:4px"><div style="flex:1;font-size:0.9em"><b>${idx+1})</b> ${it}</div><select style="padding:5px;border:1px solid #ccc;border-radius:4px;color:#1565c0;font-weight:bold" onchange="sv(${i},this.value,${idx})">${optsHTML}</select></div>`;
                 });
                 bh += `<div style="margin-top:10px;background:#e3f2fd;padding:10px;border-radius:8px;font-size:0.9em">` + q.options.map((opt, oIdx) => `<div style="margin-bottom:4px"><b>${String.fromCharCode(65 + oIdx)}.</b> ${opt}</div>`).join('') + `</div></div>`;
             }
-            else bh+=`<input type="text" placeholder="Nhập đáp án..." onchange="sv(${i},this.value)" style="width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;outline:none;font-weight:bold;color:#1a237e">`;
+            // SHORT
+            else bh+=`<input type="text" placeholder="Nhập đáp án (VD: 16,98)" onchange="sv(${i},this.value)" style="width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;outline:none;font-weight:bold;color:#1a237e">`;
             
             bh+=`<div id="sol-${i}" style="display:none;margin-top:15px;padding:15px;background:#e8f5e9;border-radius:6px;color:#2e7d32;border:1px dashed #a5d6a7"><b>LỜI GIẢI:</b><br>${q.explain||'Không có.'}</div></div>`;
         });
@@ -197,15 +192,19 @@
 
     function confirmSubmit(){ if(confirm("Nộp bài thi?")) submitQuiz(); }
 
-    // --- HÀM KIỂM TRA ĐÁP ÁN (ĐÃ FIX LỖI 0/NULL) ---
+    // --- HÀM KIỂM TRA ĐÁP ÁN (FIX LỖI CỐT LÕI) ---
     function chk(u, c) {
-        // Fix lỗi: Nếu u là 0 (đáp án A) thì !u sẽ là true -> return false (SAI)
-        // Sửa lại: Chỉ return false khi u là undefined hoặc null hoặc chuỗi rỗng
         if (u === undefined || u === null || u === "") return false;
         
-        let uStr = String(u).trim().toLowerCase();
-        let cStr = String(c).trim().toLowerCase();
-        return isEnc ? CryptoJS.MD5(uStr).toString() === cStr : uStr === cStr;
+        // CHUẨN HÓA DỮ LIỆU:
+        // 1. Trim() bỏ khoảng trắng thừa
+        // 2. toLowerCase() để không phân biệt hoa thường
+        // 3. Thay dấu phẩy (,) thành dấu chấm (.) để so sánh số thập phân
+        let uStr = String(u).trim().toLowerCase().replace(',', '.');
+        let cStr = String(c).trim().toLowerCase().replace(',', '.');
+        
+        if (isEnc) return CryptoJS.MD5(uStr).toString() === cStr;
+        return uStr === cStr;
     }
 
     function submitQuiz(){
@@ -216,31 +215,60 @@
         curQ.forEach((q,i)=>{
             const bl=document.getElementById(`q-${i}`); document.getElementById(`sol-${i}`).style.display='block';
             
+            // 1. CHẤM MCQ
             if(q.type==='mcq'){
                 max+=scoresConfig.mcq;
-                if(chk(userAns[i], q.ans)){
+                // Đáp án A (0) phải được xử lý như một giá trị hợp lệ
+                let uVal = userAns[i];
+                if(chk(uVal, q.ans)) {
                     score+=scoresConfig.mcq;
                     bg(bl, true, 'Đúng');
                 } else {
-                    bg(bl, false, isEnc ? 'Sai' : 'Đúng: ' + q.options[q.ans]);
+                    bg(bl, false, isEnc ? 'Sai' : 'Đáp án đúng: ' + ['A','B','C','D'][q.ans]);
                 }
             }
+            // 2. CHẤM ĐÚNG/SAI (TF) - Fix lỗi 0/4 ý
             else if(q.type==='tf'){
-                max+=scoresConfig.tf; let c=0;
-                q.items.forEach((it,s)=>{ if(chk(userAns[i]?userAns[i][s]:null, it.ans)) c++; });
-                let s=[0,0.1,0.25,0.5,1.0][c]*scoresConfig.tf; score+=s;
-                bg(bl, s>0, `Đúng ${c}/${q.items.length} ý`);
+                max+=scoresConfig.tf; 
+                let c=0;
+                // Lặp qua từng ý nhỏ để chấm
+                q.items.forEach((it, idx) => {
+                    // Lấy đáp án học sinh chọn cho ý thứ idx
+                    let uSub = userAns[i] ? userAns[i][idx] : null;
+                    if(chk(uSub, it.ans)) c++;
+                });
+                // Tính điểm theo thang điểm Vsat
+                let s = 0;
+                if(c==1) s = 0.1;
+                else if(c==2) s = 0.25;
+                else if(c==3) s = 0.5;
+                else if(c==4) s = 1.0;
+                
+                s = s * scoresConfig.tf; // Nhân với hệ số điểm (thường là 1đ)
+                score += s;
+                bg(bl, s>0, `Đúng ${c}/${q.items.length} ý (${s}đ)`);
             }
+            // 3. CHẤM GHÉP CỘT (MATCH) - Fix lỗi
             else if(q.type==='match'){
-                max+=scoresConfig.match; let c=0; let uA=userAns[i]||{};
-                q.items.forEach((_,idx)=>{ if(chk(uA[idx], q.ans[idx])) c++; });
-                let s = (c/q.items.length)*scoresConfig.match; score+=s;
-                bg(bl, s>0, `Đúng ${c}/${q.items.length} cặp`);
+                max+=scoresConfig.match; 
+                let c=0; 
+                let uObj = userAns[i] || {};
+                q.items.forEach((_, idx) => {
+                    // So sánh giá trị học sinh chọn (uObj[idx]) với đáp án đúng (q.ans[idx])
+                    if(chk(uObj[idx], q.ans[idx])) c++;
+                });
+                let s = (c/q.items.length) * scoresConfig.match; 
+                score += s;
+                bg(bl, s>0, `Đúng ${c}/${q.items.length} cặp (${s.toFixed(2)}đ)`);
             }
+            // 4. CHẤM TRẢ LỜI NGẮN (SHORT) - Fix lỗi dấu phẩy
             else {
                 max+=scoresConfig.short;
-                if(chk(userAns[i], q.ans)) { score+=scoresConfig.short; bg(bl, true, 'Đúng'); }
-                else bg(bl, false, 'Sai');
+                if(chk(userAns[i], q.ans)) { 
+                    score+=scoresConfig.short; bg(bl, true, 'Đúng'); 
+                } else { 
+                    bg(bl, false, isEnc?'Sai':`Sai. Đáp án: ${q.ans}`); 
+                }
             }
         });
 
