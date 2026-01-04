@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Tool v20.2 (Full Manual)</title>
+    <title>Admin Tool v20.3 (Full Features)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
         /* CSS CHUẨN */
         body{font-family:'Segoe UI',sans-serif;background:#eceff1;padding:20px;color:#37474f;margin:0}
@@ -25,27 +28,30 @@
         .tab-btn.active{background:#00796b;color:white}
         .section{display:none}.section.active{display:block}
 
-        /* MANUAL TOOLBAR */
-        .manual-toolbar {background:white; padding:15px; border-radius:8px; margin-bottom:15px; border:1px solid #ddd; display:flex; gap:10px; flex-wrap:wrap;}
+        /* SPLIT VIEW (SOẠN THẢO & PREVIEW) */
+        .split-view {display:flex; gap:20px; align-items: flex-start;}
+        .editor-col {flex: 1; min-width: 0;} /* Cột trái */
+        .preview-col {flex: 1; position: sticky; top: 20px; max-height: 90vh; overflow-y: auto; background: white; border-radius: 8px; border: 1px solid #ddd; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); display:none;} /* Cột phải ẩn mặc định, hiện khi có data */
         
-        /* CÂU HỎI EDITOR */
-        .q-item {background:white; padding:20px; border:1px solid #ccc; border-radius:8px; margin-bottom:20px; border-left:5px solid #009688; position:relative; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
-        .q-item-header {display:flex; justify-content:space-between; margin-bottom:15px; font-weight:bold; color:#00796b; border-bottom: 1px solid #eee; padding-bottom: 10px;}
-        .smart-textarea {min-height:70px; font-family:inherit; font-size: 1.05em;}
-        .img-input-group {display:flex; align-items:center; gap:10px; background:#f1f8e9; padding:8px; border-radius:4px; margin: 10px 0;}
-        .sol-area {background:#e8f5e9; padding:15px; border-radius:8px; margin-top:15px; border:1px dashed #4caf50;}
+        /* EDITOR ITEMS */
+        .q-item {background:white; padding:15px; border:1px solid #ccc; border-radius:8px; margin-bottom:15px; border-left:5px solid #009688; position:relative;}
+        .q-item-header {display:flex; justify-content:space-between; margin-bottom:10px; font-weight:bold; color:#00796b; border-bottom:1px solid #eee; padding-bottom:5px}
+        .smart-textarea {min-height:60px; font-family:inherit; font-size:1em}
         
-        /* OPTION INPUTS */
-        .opt-row {display:flex; align-items:center; margin-bottom:8px; gap:10px;}
-        .opt-label {font-weight:bold; width: 25px;}
-        .opt-radio {width: 20px; height: 20px; cursor: pointer;}
+        /* UPLOAD BUTTON */
+        .upload-wrapper {display:flex; gap:5px; margin: 5px 0;}
+        .file-upload-btn {background:#e0e0e0; color:#333; padding:5px 10px; border-radius:4px; cursor:pointer; display:inline-block; font-size:0.9em; border:1px solid #ccc;}
+        .file-upload-btn:hover {background:#d5d5d5;}
         
-        /* LOGIN & MODAL */
-        #login-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:#263238;z-index:9999;display:flex;justify-content:center;align-items:center}
-        .login-box{background:white;padding:40px;border-radius:10px;width:350px;text-align:center}
-        #main-app{display:none;max-width:1200px;margin:0 auto;background:white;padding:25px;border-radius:10px}
-        #loading-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:9999;display:none;flex-direction:column;justify-content:center;align-items:center;color:white}
-        
+        /* PREVIEW STYLES (GIỐNG THI.HTML) */
+        .preview-header {text-align: center; color: #1a237e; border-bottom: 2px solid #eee; margin-bottom: 15px; padding-bottom: 10px;}
+        .p-q-block {background:#fff; margin-bottom:15px; padding-bottom:15px; border-bottom:1px dashed #ccc;}
+        .p-label {color:#1a237e; font-weight:bold; font-size:1.1em;}
+        .p-content {font-weight:500; margin-bottom:10px;}
+        .p-opt {background:#fafafa; border:1px solid #eee; padding:8px; margin-bottom:5px; border-radius:4px;}
+        .p-img {max-width:100%; border-radius:8px; margin:10px 0; border:1px solid #eee; display:block;}
+        .p-sol {background:#e8f5e9; color:#2e7d32; padding:10px; border-radius:4px; font-size:0.9em; margin-top:10px; border:1px dashed #a5d6a7;}
+
         /* FILE MANAGER */
         .file-item{display:flex;justify-content:space-between;padding:10px;background:#fafafa;border:1px solid #ddd;border-radius:6px;margin-bottom:5px;align-items:center}
         .fm-breadcrumb {padding:10px; background:#eee; margin-bottom:15px; border-radius:4px; font-weight:bold; display:flex; align-items:center;}
@@ -53,11 +59,14 @@
         .fm-item:hover {background:#f0f0f0;}
         .fm-icon {width:30px; text-align:center; margin-right:10px; font-size:1.2em;}
         .fm-name {flex:1; font-weight:500;} .fm-folder {color:#fbc02d;} .fm-file {color:#546e7a;}
-        
-        /* QR MODAL */
+
+        #loading-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:9999;display:none;flex-direction:column;justify-content:center;align-items:center;color:white}
         .modal{display:none;position:fixed;z-index:10000;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);align-items:center;justify-content:center}
         .modal-content{background-color:white;padding:20px;border-radius:10px;text-align:center}
         #qrcode{margin:20px auto;display:flex;justify-content:center}
+        #login-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:#263238;z-index:9999;display:flex;justify-content:center;align-items:center}
+        .login-box{background:white;padding:40px;border-radius:10px;width:350px;text-align:center}
+        #main-app{display:none;max-width:1400px;margin:0 auto;background:white;padding:25px;border-radius:10px} /* Mở rộng chiều rộng */
     </style>
 </head>
 <body>
@@ -78,12 +87,11 @@
         <h2 style="color:#00695c">ADMIN LOGIN</h2>
         <input type="password" id="admin-pass-input" onkeyup="if(event.key==='Enter')checkAdmin()">
         <button class="btn btn-green" onclick="checkAdmin()" style="margin-top:10px;width:100%">ĐĂNG NHẬP</button>
-        <p id="login-msg" style="color:red;display:none;margin-top:10px">Sai mật khẩu!</p>
     </div>
 </div>
 
 <div id="main-app">
-    <h1>QUẢN TRỊ v20.2 (FULL THỦ CÔNG)</h1>
+    <h1>QUẢN TRỊ v20.3 (FULL TÍNH NĂNG)</h1>
     
     <div class="config-box">
         <div class="row">
@@ -101,7 +109,7 @@
     <div class="tab-bar">
         <button id="tab-data" class="tab-btn active" onclick="switchTab('data')">📂 QUẢN LÝ ĐỀ</button>
         <button id="tab-files" class="tab-btn" onclick="switchTab('files')">🗂️ QUẢN LÝ FILE</button>
-        <button id="tab-create" class="tab-btn" onclick="switchTab('create')">📝 SOẠN ĐỀ</button>
+        <button id="tab-create" class="tab-btn" onclick="switchTab('create')">📝 SOẠN ĐỀ (PREVIEW)</button>
         <button id="tab-images" class="tab-btn" onclick="switchTab('images')">📷 KHO ẢNH</button>
     </div>
 
@@ -122,38 +130,43 @@
         <div class="config-box" style="background:#fff3e0;border-color:#ffe0b2">
             <div class="row">
                 <div class="col"><label>Mã Đề (ID)</label><input type="text" id="exam-id" placeholder="vd: de-toan-giua-ky-1" style="font-weight:bold;color:#c62828"></div>
-                <div class="col" style="flex:2"><label>Tiêu Đề</label><input type="text" id="exam-title" placeholder="VD: Đề thi thử Toán 12..."></div>
+                <div class="col" style="flex:2"><label>Tiêu Đề</label><input type="text" id="exam-title"></div>
             </div>
             <div class="row">
-                <div class="col"><label>Thời gian (phút)</label><input type="number" id="exam-time" value="45"></div>
-                <div class="col"><label>Giá bán (VNĐ)</label><input type="number" id="exam-price" placeholder="0"></div>
+                <div class="col"><label>Thời gian</label><input type="number" id="exam-time" value="45"></div>
+                <div class="col"><label>Giá (VNĐ)</label><input type="number" id="exam-price" placeholder="0"></div>
                 <div class="col"><label>Mật khẩu</label><input type="text" id="exam-pass" oninput="hashPass()"><input type="hidden" id="exam-pass-hash"></div>
-            </div>
-            <div class="row" style="margin-top:10px">
-                <div class="col"><label>Mở lúc</label><input type="datetime-local" id="exam-start"></div>
-                <div class="col"><label>Đóng lúc</label><input type="datetime-local" id="exam-end"></div>
-                <div class="col" style="display:flex;align-items:center"><input type="checkbox" id="secure-mode" style="width:auto;margin-right:5px"> <label for="secure-mode">Mã hóa đáp án</label></div>
+                <div class="col"><label>Chế độ</label><div style="margin-top:5px"><input type="checkbox" id="secure-mode"> Mã hóa</div></div>
             </div>
         </div>
 
-        <div class="manual-toolbar">
-            <button class="btn btn-blue" onclick="addQ('mcq')"><i class="fas fa-plus-circle"></i> Trắc Nghiệm (4)</button>
-            <button class="btn btn-green" onclick="addQ('tf')"><i class="fas fa-check-square"></i> Đúng/Sai</button>
-            <button class="btn btn-orange" onclick="addQ('short')"><i class="fas fa-pen-alt"></i> Điền Số/Chữ</button>
-            <button class="btn btn-gray" onclick="addQ('match')"><i class="fas fa-random"></i> Ghép Cột</button>
+        <div style="margin-bottom:15px;display:flex;gap:10px">
+            <button class="btn btn-blue" onclick="addQ('mcq')">➕ Trắc Nghiệm</button>
+            <button class="btn btn-green" onclick="addQ('tf')">➕ Đúng/Sai</button>
+            <button class="btn btn-orange" onclick="addQ('short')">➕ Điền Khuyết</button>
+            <button class="btn btn-gray" onclick="addQ('match')">➕ Ghép Cột</button>
+            <button class="btn btn-red" style="margin-left:auto" onclick="publishExam()">🚀 XUẤT BẢN</button>
         </div>
 
-        <div id="editor-area">
-            <div id="questions-list"></div>
-            <p style="text-align:center;color:#666;font-style:italic;margin:20px" id="empty-msg">Bấm nút phía trên để thêm câu hỏi.</p>
-        </div>
+        <div class="split-view">
+            <div class="editor-col" id="editor-area">
+                <div id="questions-list"></div>
+                <p style="text-align:center;color:#666" id="empty-msg">Chưa có câu hỏi. Bấm nút thêm bên trên.</p>
+            </div>
 
-        <button class="btn btn-red" style="width:100%;margin-top:20px;padding:15px;font-size:1.2em" onclick="publishExam()">🚀 XUẤT BẢN ĐỀ THI</button>
+            <div class="preview-col" id="preview-area">
+                <div class="preview-header">
+                    <h3>XEM TRƯỚC (PREVIEW)</h3>
+                    <small>Giao diện hiển thị như lúc học sinh thi</small>
+                </div>
+                <div id="preview-content"></div>
+            </div>
+        </div>
         
         <div style="margin-top:20px;border-top:1px dashed #ccc;padding-top:10px">
-            <small style="cursor:pointer;color:#999" onclick="document.getElementById('json-import-box').style.display='block'">▼ Dán JSON cũ (Nếu cần sửa)</small>
+            <small style="cursor:pointer;color:#999" onclick="document.getElementById('json-import-box').style.display='block'">▼ Dán JSON cũ</small>
             <div id="json-import-box" style="display:none">
-                <textarea id="json-input" style="width:100%;height:60px;margin-top:5px" placeholder="Dán JSON vào đây..."></textarea>
+                <textarea id="json-input" style="width:100%;height:60px"></textarea>
                 <button class="btn btn-gray" onclick="parseData()">Nạp JSON</button>
             </div>
         </div>
@@ -180,119 +193,156 @@
     function hashPass(){let p=document.getElementById('exam-pass').value.trim();document.getElementById('exam-pass-hash').value=p?CryptoJS.MD5(p).toString():"";}
 
     // ==========================================
-    // LOGIC SOẠN THẢO (CÓ ẢNH LỜI GIẢI v20.2)
+    // LOGIC SOẠN THẢO + UPLOAD + PREVIEW
     // ==========================================
     let questions = [];
 
     function addQ(type) {
-        if(type === 'mcq') questions.push({type:'mcq', q:'Câu hỏi mới...', img:'', options:['Lựa chọn A','Lựa chọn B','Lựa chọn C','Lựa chọn D'], ans:0, explain:'', solImg:''});
-        if(type === 'tf') questions.push({type:'tf', q:'Nhận định sau đây đúng hay sai?', img:'', items:[{sub:'Ý 1', ans:'T'},{sub:'Ý 2', ans:'F'},{sub:'Ý 3', ans:'T'},{sub:'Ý 4', ans:'F'}], explain:'', solImg:''});
-        if(type === 'short') questions.push({type:'short', q:'Điền đáp án đúng:', img:'', ans:'', explain:'', solImg:''});
-        if(type === 'match') questions.push({type:'match', q:'Ghép các cặp tương ứng:', img:'', items:['Vế trái 1','Vế trái 2','Vế trái 3','Vế trái 4'], options:['Vế phải A','Vế phải B','Vế phải C','Vế phải D'], ans:['A','B','C','D'], explain:'', solImg:''});
+        if(type === 'mcq') questions.push({type:'mcq', q:'Câu hỏi mới...', img:'', options:['A','B','C','D'], ans:0, explain:'', solImg:''});
+        if(type === 'tf') questions.push({type:'tf', q:'Đúng hay sai?', img:'', items:[{sub:'Ý 1', ans:'T'},{sub:'Ý 2', ans:'F'},{sub:'Ý 3', ans:'T'},{sub:'Ý 4', ans:'F'}], explain:'', solImg:''});
+        if(type === 'short') questions.push({type:'short', q:'Điền đáp án:', img:'', ans:'', explain:'', solImg:''});
+        if(type === 'match') questions.push({type:'match', q:'Ghép cặp:', img:'', items:['Trái 1','Trái 2','Trái 3','Trái 4'], options:['Phải A','Phải B','Phải C','Phải D'], ans:['A','B','C','D'], explain:'', solImg:''});
         renderEditor();
+    }
+
+    // HÀM UPLOAD ẢNH TRỰC TIẾP
+    async function handleImageUpload(input, index, field) {
+        const file = input.files[0];
+        if(!file) return;
+        
+        const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value;
+        if(!t) return alert("Chưa có Token GitHub!");
+
+        // Tạo tên file ngẫu nhiên để không trùng
+        const ext = file.name.split('.').pop();
+        const fileName = `img_${Date.now()}_${Math.floor(Math.random()*1000)}.${ext}`;
+        const path = `images/${fileName}`;
+
+        // Hiển thị đang tải
+        input.parentElement.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Đang tải lên...`;
+
+        try {
+            const base64 = await new Promise(resolve => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.readAsDataURL(file);
+            });
+
+            const res = await fetch(`https://api.github.com/repos/${u}/${r}/contents/${path}`, {
+                method: 'PUT',
+                headers: { Authorization: `token ${t}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: `Upload ${fileName}`, content: base64 })
+            });
+
+            if(!res.ok) throw new Error("Lỗi Upload GitHub");
+            const data = await res.json();
+            const rawUrl = data.content.download_url; 
+            
+            // Cập nhật dữ liệu câu hỏi
+            if(field === 'q') questions[index].img = rawUrl;
+            else questions[index].solImg = rawUrl;
+            
+            renderEditor(); // Vẽ lại giao diện
+
+        } catch(e) {
+            alert("Upload thất bại: " + e.message);
+            renderEditor();
+        }
     }
 
     function renderEditor(){
         let c=document.getElementById('questions-list'); c.innerHTML="";
-        if(questions.length > 0) document.getElementById('empty-msg').style.display='none';
+        if(questions.length > 0) {
+            document.getElementById('empty-msg').style.display='none';
+            document.getElementById('preview-area').style.display='block';
+        }
         
         questions.forEach((q,i)=>{
-            // UI ẢNH CÂU HỎI
-            let imgQ = `<div class="img-input-group">
+            // NÚT UPLOAD ẢNH CÂU HỎI
+            let imgQ = `<div class="upload-wrapper" style="background:#f1f8e9; padding:5px; border-radius:4px">
                 <i class="fas fa-image" style="color:#2e7d32"></i> <b>Ảnh Đề:</b>
-                <input type="text" placeholder="Link ảnh câu hỏi..." value="${q.img||''}" onchange="questions[${i}].img=this.value" style="flex:1">
-                ${q.img ? `<img src="${q.img}" style="height:40px;border:1px solid #ccc">` : ''}
+                <input type="text" value="${q.img||''}" onchange="questions[${i}].img=this.value; renderPreview()" style="flex:1" placeholder="Link ảnh...">
+                <label class="file-upload-btn">
+                    <i class="fas fa-upload"></i> Chọn File
+                    <input type="file" style="display:none" accept="image/*" onchange="handleImageUpload(this, ${i}, 'q')">
+                </label>
+                ${q.img ? `<img src="${q.img}" style="height:30px;border:1px solid #ccc">` : ''}
             </div>`;
 
-            // UI ẢNH LỜI GIẢI
-            let imgSol = `<div class="img-input-group" style="background:#fffde7">
+            // NÚT UPLOAD ẢNH LỜI GIẢI
+            let imgSol = `<div class="upload-wrapper" style="background:#fffde7; padding:5px; border-radius:4px; margin-top:5px">
                 <i class="fas fa-lightbulb" style="color:#fbc02d"></i> <b>Ảnh Lời Giải:</b>
-                <input type="text" placeholder="Link ảnh lời giải..." value="${q.solImg||''}" onchange="questions[${i}].solImg=this.value" style="flex:1">
-                ${q.solImg ? `<img src="${q.solImg}" style="height:40px;border:1px solid #ccc">` : ''}
+                <input type="text" value="${q.solImg||''}" onchange="questions[${i}].solImg=this.value; renderPreview()" style="flex:1" placeholder="Link ảnh...">
+                <label class="file-upload-btn">
+                    <i class="fas fa-upload"></i> Chọn File
+                    <input type="file" style="display:none" accept="image/*" onchange="handleImageUpload(this, ${i}, 'sol')">
+                </label>
+                ${q.solImg ? `<img src="${q.solImg}" style="height:30px;border:1px solid #ccc">` : ''}
             </div>`;
 
-            // UI NỘI DUNG ĐÁP ÁN (HIỆN RÕ RÀNG)
             let ansUI = "";
             if(q.type === 'mcq') {
-                ansUI = `<div style="margin:10px 0;background:#f5f5f5;padding:15px;border-radius:4px;border:1px solid #e0e0e0">
-                    ${q.options.map((opt,idx)=>`
-                        <div class="opt-row">
-                            <input type="radio" name="radio_q${i}" class="opt-radio" ${q.ans==idx?'checked':''} onchange="questions[${i}].ans=${idx}">
-                            <span class="opt-label">${['A','B','C','D'][idx]}.</span>
-                            <input style="flex:1" value="${opt}" onchange="questions[${i}].options[${idx}]=this.value">
-                        </div>
-                    `).join('')}
-                </div>`;
+                ansUI = q.options.map((opt,idx)=>`<div style="display:flex;margin-bottom:3px;align-items:center"><input type="radio" name="r${i}" ${q.ans==idx?'checked':''} onchange="questions[${i}].ans=${idx};renderPreview()"><b style="width:20px;text-align:center">${['A','B','C','D'][idx]}</b><input style="flex:1" value="${opt}" onchange="questions[${i}].options[${idx}]=this.value;renderPreview()"></div>`).join('');
             } 
             else if (q.type === 'tf') {
-                ansUI = `<div style="margin:10px 0;background:#e3f2fd;padding:15px;border-radius:4px">
-                    ${q.items.map((it,idx)=>`
-                        <div class="opt-row">
-                            <span class="opt-label">Ý ${idx+1}:</span>
-                            <input style="flex:1" value="${it.sub}" onchange="questions[${i}].items[${idx}].sub=this.value">
-                            <select onchange="questions[${i}].items[${idx}].ans=this.value" style="width:90px;font-weight:bold;color:${it.ans=='T'?'#2e7d32':'#c62828'}">
-                                <option value="T" ${it.ans=='T'?'selected':''}>ĐÚNG</option>
-                                <option value="F" ${it.ans=='F'?'selected':''}>SAI</option>
-                            </select>
-                        </div>
-                    `).join('')}
-                </div>`;
+                ansUI = q.items.map((it,idx)=>`<div style="display:flex;gap:5px;margin-bottom:3px"><b style="width:30px">Ý ${idx+1}</b><input style="flex:1" value="${it.sub}" onchange="questions[${i}].items[${idx}].sub=this.value;renderPreview()"><select onchange="questions[${i}].items[${idx}].ans=this.value;renderPreview()"><option value="T" ${it.ans=='T'?'selected':''}>ĐÚNG</option><option value="F" ${it.ans=='F'?'selected':''}>SAI</option></select></div>`).join('');
             }
             else if (q.type === 'short') {
-                ansUI = `<div style="margin:10px 0;padding:10px;border:1px dashed #ffa000;border-radius:4px;background:#fff8e1">
-                    <b>Đáp án đúng (Số/Chữ):</b> <input type="text" value="${q.ans}" onchange="questions[${i}].ans=this.value" placeholder="VD: 16.98" style="font-weight:bold;color:#c62828;width:200px;margin-left:10px">
-                </div>`;
+                ansUI = `<b>Đáp án:</b> <input type="text" value="${q.ans}" onchange="questions[${i}].ans=this.value;renderPreview()">`;
             }
             else if (q.type === 'match') {
-                 ansUI = `<div style="margin:10px 0;background:#f3e5f5;padding:10px">
-                    <div style="margin-bottom:10px"><b>Cột Phải (A,B,C,D):</b><br>${q.options.map((opt,oidx)=>`<input placeholder="${String.fromCharCode(65+oidx)}" value="${opt}" onchange="questions[${i}].options[${oidx}]=this.value" style="margin-bottom:2px">`).join('')}</div>
-                    <div><b>Cột Trái & Ghép:</b><br>${q.items.map((it,idx)=>`<div style="display:flex;gap:5px;margin-bottom:3px"><input value="${it}" onchange="questions[${i}].items[${idx}]=this.value"><input value="${q.ans[idx]}" onchange="questions[${i}].ans[${idx}]=this.value" style="width:50px;text-align:center;font-weight:bold" placeholder="A"></div>`).join('')}</div>
-                 </div>`;
+                 ansUI = q.items.map((it,idx)=>`<div style="display:flex;gap:5px;margin-bottom:3px"><input style="flex:1" value="${it}" onchange="questions[${i}].items[${idx}]=this.value;renderPreview()"> - <input style="flex:1" value="${q.options[idx]}" placeholder="Phải ${String.fromCharCode(65+idx)}" onchange="questions[${i}].options[${idx}]=this.value;renderPreview()"> - Đáp án: <input style="width:40px" value="${q.ans[idx]}" onchange="questions[${i}].ans[${idx}]=this.value;renderPreview()"></div>`).join('');
             }
 
             c.insertAdjacentHTML('beforeend',`<div class="q-item">
-                <div class="q-item-header"><span>CÂU ${i+1} (${q.type.toUpperCase()})</span><button class="btn btn-red" style="padding:2px 8px;font-size:0.8em" onclick="questions.splice(${i},1);renderEditor()">Xóa</button></div>
-                <textarea class="smart-textarea" onchange="questions[${i}].q=this.value" placeholder="Nhập nội dung câu hỏi...">${q.q}</textarea>
+                <div class="q-item-header"><span>Câu ${i+1} (${q.type.toUpperCase()})</span><button class="btn btn-red" style="padding:2px 8px;font-size:0.8em" onclick="questions.splice(${i},1);renderEditor()">Xóa</button></div>
+                <textarea class="smart-textarea" oninput="questions[${i}].q=this.value; renderPreview()">${q.q}</textarea>
                 ${imgQ}
-                ${ansUI}
-                <div class="sol-area">
-                    <label style="color:#2e7d32;font-weight:bold"><i class="fas fa-book-open"></i> Lời Giải Chi Tiết:</label>
-                    <textarea class="smart-textarea" placeholder="Nhập lời giải..." onchange="questions[${i}].explain=this.value" style="border:none;background:transparent;width:100%;min-height:50px">${q.explain||''}</textarea>
-                    ${imgSol}
-                </div>
+                <div style="margin:10px 0;background:#f9f9f9;padding:10px;border-radius:4px">${ansUI}</div>
+                <textarea class="smart-textarea" placeholder="Lời giải..." oninput="questions[${i}].explain=this.value; renderPreview()" style="height:50px;border-color:#a5d6a7">${q.explain||''}</textarea>
+                ${imgSol}
             </div>`);
         });
+        
+        renderPreview(); // Cập nhật luôn bên phải
     }
 
     // ==========================================
-    // QUẢN LÝ FILE
+    // RENDER PREVIEW (CỘT PHẢI - GIỐNG THI.HTML)
     // ==========================================
-    let currentPath = "";
-    async function loadFileManager(path) {
-        currentPath = path;
-        document.getElementById('fm-current-path').innerText = path || " (Gốc)";
-        const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value;
-        try {
-            const res = await fetch(`https://api.github.com/repos/${u}/${r}/contents/${path}`, {headers: {Authorization: `token ${t}`}});
-            if(!res.ok) throw new Error("Lỗi tải thư mục!");
-            const items = await res.json();
-            items.sort((a, b) => (a.type === b.type ? 0 : a.type === 'dir' ? -1 : 1));
-            let html = '';
-            if(path !== "") { 
-                let parent = path.split('/').slice(0,-1).join('/');
-                html += `<div class="fm-item" onclick="loadFileManager('${parent}')"><div class="fm-icon fm-folder"><i class="fas fa-level-up-alt"></i></div><div class="fm-name">.. (Quay lại)</div></div>`;
+    function renderPreview() {
+        let h = '';
+        questions.forEach((q, i) => {
+            let imgHtml = q.img ? `<img src="${q.img}" class="p-img">` : '';
+            let solImgHtml = q.solImg ? `<img src="${q.solImg}" class="p-img">` : '';
+            
+            let body = '';
+            if(q.type === 'mcq') {
+                body = q.options.map((opt, idx) => `<div class="p-opt ${q.ans==idx?'selected':''}"><b>${['A','B','C','D'][idx]}.</b> ${opt}</div>`).join('');
+            } else if (q.type === 'tf') {
+                body = `<table width="100%"><tr><th>Ý</th><th>Nội dung</th><th>Đ/S</th></tr>` + 
+                       q.items.map((it, idx) => `<tr><td>${idx+1}</td><td>${it.sub}</td><td><b>${it.ans=='T'?'Đ':'S'}</b></td></tr>`).join('') + `</table>`;
+            } else if (q.type === 'short') {
+                body = `<div class="p-opt"><b>Trả lời:</b> ${q.ans}</div>`;
+            } else if (q.type === 'match') {
+                body = q.items.map((it, idx) => `<div class="p-opt">${idx+1}. ${it} --> ${q.ans[idx]} (${q.options[idx]})</div>`).join('');
             }
-            items.forEach(item => {
-                let icon = item.type === 'dir' ? '<i class="fas fa-folder"></i>' : '<i class="fas fa-file-alt"></i>';
-                let cls = item.type === 'dir' ? 'fm-folder' : 'fm-file';
-                let action = item.type === 'dir' ? `onclick="loadFileManager('${item.path}')"` : '';
-                let delBtn = `<button class="btn btn-red" style="padding:2px 8px" onclick="event.stopPropagation();deleteFileGeneric('${item.path}', '${item.name}', true)">Xóa</button>`;
-                html += `<div class="fm-item" ${action}><div class="fm-icon ${cls}">${icon}</div><div class="fm-name">${item.name}</div><div>${delBtn}</div></div>`;
-            });
-            document.getElementById('fm-list').innerHTML = html;
-        } catch(e) {}
+
+            h += `<div class="p-q-block">
+                <div class="p-label">Câu ${i+1}:</div>
+                <div class="p-content">${q.q}</div>
+                ${imgHtml}
+                <div>${body}</div>
+                <div class="p-sol"><b>Lời giải:</b><br>${q.explain} ${solImgHtml}</div>
+            </div>`;
+        });
+        document.getElementById('preview-content').innerHTML = h;
+        if(window.MathJax) MathJax.typesetPromise();
     }
 
+    // ==========================================
+    // CÁC HÀM CŨ (GIỮ NGUYÊN)
+    // ==========================================
     async function deleteFileGeneric(path, name, isFileManager) {
         if(!confirm(`⚠️ XÓA VĨNH VIỄN: ${name}?`)) return;
         const u=document.getElementById('gh-user').value, r=document.getElementById('gh-repo').value, t=document.getElementById('gh-token').value;
@@ -309,9 +359,6 @@
         } catch(e) { alert("Lỗi: " + e.message); } finally { ov.style.display='none'; }
     }
 
-    // ==========================================
-    // CÁC HÀM XỬ LÝ (PUBLISH, IMPORT)
-    // ==========================================
     function parseData(){ try { let t = document.getElementById('json-input').value; let d = new Function("return " + t)(); questions = Array.isArray(d) ? d : (d.questions || []); renderEditor(); } catch(e) { alert("Lỗi JSON!"); } }
 
     async function loadDataFiles(){
@@ -347,12 +394,12 @@
             if(data.start)document.getElementById('exam-start').value=data.start;
             if(data.end)document.getElementById('exam-end').value=data.end;
             
-            // XỬ LÝ LẤY LẠI ẢNH LỜI GIẢI TỪ HTML NẾU CÓ
+            // RECOVER IMAGES FROM HTML EXPLAIN
             data.questions.forEach(q => {
                 if(q.explain && q.explain.includes('<img')) {
-                    // Trích xuất link ảnh từ thẻ img trong explain nếu có (dành cho đề cũ)
                     let match = q.explain.match(/src="([^"]+)"/);
                     if(match) q.solImg = match[1];
+                    q.explain = q.explain.replace(/<br><img.*?>/g, '').trim(); // Clean html img
                 }
             });
 
@@ -370,14 +417,11 @@
         try{
             let fQ=JSON.parse(JSON.stringify(questions));
             let sec=document.getElementById('secure-mode').checked;
-            
-            // GỘP ẢNH LỜI GIẢI VÀO EXPLAIN VÀ MÃ HÓA
             fQ.forEach(q=>{
                 if(q.solImg) {
                     q.explain = (q.explain || "") + `<br><img src="${q.solImg}" style="max-width:100%;margin-top:10px;border-radius:5px">`;
-                    delete q.solImg; // Xóa trường thừa trước khi lưu
+                    delete q.solImg; 
                 }
-
                 if(sec){
                     if(q.type==='mcq') q.ans=CryptoJS.MD5(String(q.ans)).toString();
                     else if(q.type==='tf') q.items.forEach(x=>x.ans=CryptoJS.MD5(String(x.ans).trim()).toString());
@@ -385,7 +429,6 @@
                     else if(q.type==='match') q.ans=q.ans.map(v=>CryptoJS.MD5(String(v).trim()).toString());
                 }
             });
-
             let dt={ title:document.getElementById('exam-title').value, time:parseInt(document.getElementById('exam-time').value), password:document.getElementById('exam-pass-hash').value, encrypted:sec, start:document.getElementById('exam-start').value, end:document.getElementById('exam-end').value, price: price, bank: bankInfo, scores:{mcq:0.25,tf:1.0,short:0.5,match:1.0}, questions:fQ };
             let c=btoa(unescape(encodeURIComponent(`window.EXAM_DATA = ${JSON.stringify(dt,null,4)};`)));
             await upF(u,r,t,`data/${id}.js`,c,false);
@@ -399,6 +442,32 @@
     async function updateList(u,r,t,id,d){let url=`https://api.github.com/repos/${u}/${r}/contents/data/list.js`,l=[],s=null;try{let k=await fetch(url,{headers:{Authorization:`token ${t}`}});if(k.ok){let j=await k.json();s=j.sha;l=new Function("return "+decodeURIComponent(escape(atob(j.content))).replace(/window\.EXAM_LIST\s*=\s*/,'').replace(/;$/,''))();}}catch(e){}l=l.filter(x=>x.id!==id);l.unshift({id:id,title:d.title,subject:d.subject,grade:d.grade,time:d.time});let c=btoa(unescape(encodeURIComponent(`window.EXAM_LIST = ${JSON.stringify(l,null,4)};`)));await upF(u,r,t,`data/list.js`,c,false);}
     
     function showExamQR(n){let u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value;let url=`https://${u}.github.io/${r}/thi.html?id=${n.replace('.js','')}`;document.getElementById('qr-modal').style.display='flex';document.getElementById('qr-link-text').innerText=url;document.getElementById('qrcode').innerHTML="";new QRCode(document.getElementById("qrcode"),{text:url,width:200,height:200});}
+    
+    // FILE MANAGER
+    async function loadFileManager(path) {
+        currentPath = path;
+        document.getElementById('fm-current-path').innerText = path || " (Gốc)";
+        const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value;
+        try {
+            const res = await fetch(`https://api.github.com/repos/${u}/${r}/contents/${path}`, {headers: {Authorization: `token ${t}`}});
+            if(!res.ok) throw new Error("Lỗi tải thư mục!");
+            const items = await res.json();
+            items.sort((a, b) => (a.type === b.type ? 0 : a.type === 'dir' ? -1 : 1));
+            let html = '';
+            if(path !== "") { 
+                let parent = path.split('/').slice(0,-1).join('/');
+                html += `<div class="fm-item" onclick="loadFileManager('${parent}')"><div class="fm-icon fm-folder"><i class="fas fa-level-up-alt"></i></div><div class="fm-name">.. (Quay lại)</div></div>`;
+            }
+            items.forEach(item => {
+                let icon = item.type === 'dir' ? '<i class="fas fa-folder"></i>' : '<i class="fas fa-file-alt"></i>';
+                let cls = item.type === 'dir' ? 'fm-folder' : 'fm-file';
+                let action = item.type === 'dir' ? `onclick="loadFileManager('${item.path}')"` : '';
+                let delBtn = `<button class="btn btn-red" style="padding:2px 8px" onclick="event.stopPropagation();deleteFileGeneric('${item.path}', '${item.name}', true)">Xóa</button>`;
+                html += `<div class="fm-item" ${action}><div class="fm-icon ${cls}">${icon}</div><div class="fm-name">${item.name}</div><div>${delBtn}</div></div>`;
+            });
+            document.getElementById('fm-list').innerHTML = html;
+        } catch(e) {}
+    }
     async function loadImagesFromGitHub(){const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value;if(!u)return;try{const res=await fetch(`https://api.github.com/repos/${u}/${r}/contents/images`,{headers:{Authorization:`token ${t}`}});const f=await res.json();let h='';f.forEach(x=>{if(x.name.match(/\.(png|jpg)$/i))h+=`<div style="border:1px solid #ddd;padding:5px"><img src="${x.download_url}" style="height:100px"><br><small>${x.name}</small></div>`});document.getElementById('image-gallery').innerHTML=h;}catch(e){}}
 </script>
 </body>
