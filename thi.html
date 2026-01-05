@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hệ Thống Thi Trực Tuyến v18.1 (Fix Logic)</title>
+    <title>Hệ Thống Thi Trực Tuyến v19.0 (Anti-Cheat & DarkMode)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -11,21 +11,57 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        body{font-family:'Roboto',sans-serif;background:#f4f7f6;margin:0;color:#333;padding-bottom:100px;user-select:none}
-        .status-bar{background:white;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 5px rgba(0,0,0,0.05);border-bottom:1px solid #eee}
-        .timer-box{background:#ffebee;color:#c62828;padding:5px 12px;border-radius:20px;font-weight:700;font-family:monospace;font-size:1.2em}
-        .student-box{font-weight:600;color:#1565c0}
+        /* --- CẤU HÌNH GIAO DIỆN (HỖ TRỢ DARK MODE) --- */
+        :root {
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --block-bg: #ffffff;
+            --highlight: #1a237e;
+            --option-bg: #fafafa;
+            --option-border: #eee;
+            --option-hover: #e8eaf6;
+            --timer-bg: #ffebee;
+            --timer-text: #c62828;
+        }
+
+        /* CHẾ ĐỘ TỐI (DARK MODE) */
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --block-bg: #1e1e1e;
+            --highlight: #90caf9;
+            --option-bg: #2c2c2c;
+            --option-border: #444;
+            --option-hover: #333;
+            --timer-bg: #3e2723;
+            --timer-text: #ffab91;
+        }
+
+        body{font-family:'Roboto',sans-serif;background:var(--bg-color);margin:0;color:var(--text-color);padding-bottom:100px;user-select:none;transition: background 0.3s, color 0.3s;}
+        
+        .status-bar{background:var(--block-bg);padding:10px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 5px rgba(0,0,0,0.05);border-bottom:1px solid var(--option-border)}
+        
+        /* Nút chuyển chế độ Sáng/Tối */
+        .theme-toggle {cursor: pointer; font-size: 1.2em; padding: 5px; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; transition: 0.3s;}
+        .theme-toggle:hover {background: var(--option-hover);}
+
+        .timer-box{background:var(--timer-bg);color:var(--timer-text);padding:5px 12px;border-radius:20px;font-weight:700;font-family:monospace;font-size:1.2em}
+        .student-box{font-weight:600;color:var(--highlight)}
+        
         .container{max-width:900px;margin:0 auto;padding:15px}
-        .question-block{background:white;padding:25px;border-radius:12px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.03);border-left:5px solid #1a237e}
-        .q-label{color:#1a237e;font-weight:700;font-size:1.1em;margin-bottom:5px;display:block}
-        .option-item{display:flex;align-items:center;background:#fafafa;border:1px solid #eee;padding:12px 15px;border-radius:8px;cursor:pointer;margin-bottom:8px;transition:0.2s}
-        .option-item:hover{background:#e8eaf6;border-color:#c5cae9}
+        .question-block{background:var(--block-bg);padding:25px;border-radius:12px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.03);border-left:5px solid #1a237e}
+        .q-label{color:var(--highlight);font-weight:700;font-size:1.1em;margin-bottom:5px;display:block}
+        
+        .option-item{display:flex;align-items:center;background:var(--option-bg);border:1px solid var(--option-border);padding:12px 15px;border-radius:8px;cursor:pointer;margin-bottom:8px;transition:0.2s}
+        .option-item:hover{background:var(--option-hover);border-color:#c5cae9}
         .option-item:has(input:checked){background:#e3f2fd;border-color:#2196f3;color:#0d47a1;font-weight:500}
+        [data-theme="dark"] .option-item:has(input:checked){background:#0d47a1;color:white;border-color:#1976d2}
+
         input[type="radio"]{accent-color:#1a237e;transform:scale(1.2);margin-right:10px}
         
         .alert-rule {background: #fff3e0; border: 1px solid #ffe0b2; color: #e65100; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; display: flex; align-items: center; gap: 10px; font-size: 0.95em;}
-        
-        /* NÚT NỘP BÀI NỔI (STICKY) */
+        [data-theme="dark"] .alert-rule {background: #3e2723; border-color: #5d4037; color: #ffccbc;}
+
         .submit-floating {
             position: fixed; bottom: 30px; right: 30px; z-index: 1500;
             background: linear-gradient(45deg, #d32f2f, #c62828);
@@ -42,8 +78,10 @@
         .btn-start{background:linear-gradient(45deg,#1565c0,#0d47a1);color:white;width:100%;padding:15px;border:none;border-radius:50px;font-weight:bold;font-size:1.1em;cursor:pointer;margin-top:15px}
         .pay-box{border:2px dashed #e91e63;background:#fce4ec;padding:15px;margin:15px 0;border-radius:12px}
         
-        .palette-item{width:35px;height:35px;display:flex;align-items:center;justify-content:center;border:1px solid #ddd;border-radius:6px;cursor:pointer;background:white;font-weight:bold;color:#555}
+        .palette-item{width:35px;height:35px;display:flex;align-items:center;justify-content:center;border:1px solid #ddd;border-radius:6px;cursor:pointer;background:var(--block-bg);font-weight:bold;color:var(--text-color)}
         .palette-item.answered{background:#1a237e;color:white;border-color:#1a237e}
+        [data-theme="dark"] .palette-item.answered{background:#64b5f6;color:#000;border-color:#64b5f6}
+
         .palette-grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
         .res-badge{display:inline-block;padding:5px 10px;border-radius:6px;font-weight:bold;margin-top:10px;font-size:0.9em}
         .res-correct{background:#c8e6c9;color:#1b5e20;border:1px solid #a5d6a7}
@@ -76,29 +114,35 @@
 
 <div class="container" id="main-interface" style="display:none">
     <div class="status-bar">
-        <div class="student-box"><i class="fas fa-user-graduate"></i> <span id="d-name">HS</span> <span id="d-class"></span></div>
+        <div class="student-box">
+            <i class="fas fa-user-graduate"></i> <span id="d-name">HS</span> <span id="d-class"></span>
+        </div>
+        <div class="theme-toggle" onclick="toggleTheme()">
+            <i class="fas fa-moon" id="theme-icon"></i>
+        </div>
         <div class="timer-box"><i class="far fa-clock"></i> <span id="timer">00:00</span></div>
     </div>
     
-    <div style="background:white;padding:15px;margin:15px 0;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.1)">
+    <div style="background:var(--block-bg);padding:15px;margin:15px 0;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.1)">
         <div class="palette-grid" id="palette-grid"></div>
     </div>
 
     <div class="alert-rule">
-        <i class="fas fa-info-circle fa-2x"></i>
+        <i class="fas fa-exclamation-triangle fa-2x"></i>
         <div>
-            <b>LƯU Ý:</b> Máy tính chấp nhận cả dấu phẩy (,) và dấu chấm (.)<br>
-            Ví dụ: Nhập <b>16,98</b> hoặc <b>16.98</b> đều được tính điểm.
+            <b>QUY CHẾ THI:</b><br>
+            - Không được rời khỏi màn hình làm bài.<br>
+            - Vi phạm <b>3 lần</b> hệ thống sẽ <b>TỰ ĐỘNG NỘP BÀI</b>.
         </div>
     </div>
 
-    <div id="result-area" style="display:none;background:white;padding:30px;text-align:center;border-radius:12px;margin-bottom:20px;border-top:5px solid #2e7d32">
+    <div id="result-area" style="display:none;background:var(--block-bg);padding:30px;text-align:center;border-radius:12px;margin-bottom:20px;border-top:5px solid #2e7d32">
         <div style="color:#666">KẾT QUẢ</div>
         <h1 style="color:#2e7d32;font-size:4em;margin:5px 0"><span id="final-score"></span></h1>
         <div id="review-timer" style="color:#c62828;font-weight:bold;margin-top:10px;padding:10px;background:#ffebee;border-radius:4px;border:1px solid #ffcdd2">
             ⏳ Thời gian xem lại bài: <span id="r-time">120</span> giây
         </div>
-        <div style="color:#1565c0;font-weight:bold;margin-top:15px">▼ Kéo xuống để xem lời giải chi tiết ▼</div>
+        <div style="color:var(--highlight);font-weight:bold;margin-top:15px">▼ Kéo xuống để xem lời giải chi tiết ▼</div>
     </div>
 
     <div id="quiz-body"></div>
@@ -109,14 +153,42 @@
 </div>
 
 <script>
-    // 👇👇👇 THẦY DÁN LINK GOOGLE SCRIPT VÀO GIỮA 2 DẤU NHÁY DƯỚI ĐÂY 👇👇👇
+    // 👇 DÁN LINK GOOGLE SCRIPT VÀO ĐÂY ĐỂ LƯU ĐIỂM 👇
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwkdoesopItYMdgey0Zh7Rlru3ILoUbUaJw_b1EmmTtMiHSVYniswKOp1ZIP6gCIqSh/exec'; 
-    // 👆👆👆 (Nếu để trống thì không gửi điểm về Sheet)
+    // 👆
 
     const REVIEW_TIME = 120;
     let rawQ=[], curQ=[], timerDur=0, timerInt;
     let scoresConfig={mcq:0.25, tf:1.0, short:0.5, match:1.0};
     let isEnc=false, userAns={}, stId="", exId="";
+    let cheatCount = 0, isExamActive = false; // Biến theo dõi gian lận
+
+    // --- CẤU HÌNH DARK MODE ---
+    function toggleTheme() {
+        const body = document.body;
+        const icon = document.getElementById('theme-icon');
+        if (body.getAttribute('data-theme') === 'dark') {
+            body.removeAttribute('data-theme');
+            icon.classList.replace('fa-sun', 'fa-moon');
+        } else {
+            body.setAttribute('data-theme', 'dark');
+            icon.classList.replace('fa-moon', 'fa-sun');
+        }
+    }
+
+    // --- LOGIC CHỐNG GIAN LẬN (MỚI) ---
+    document.addEventListener("visibilitychange", () => {
+        if (!isExamActive) return; // Chỉ kiểm tra khi đang thi
+        if (document.hidden) {
+            cheatCount++;
+            if (cheatCount >= 3) {
+                alert("⛔ BẠN ĐÃ VI PHẠM QUY CHẾ 3 LẦN!\nHệ thống sẽ tự động nộp bài ngay lập tức.");
+                submitQuiz();
+            } else {
+                alert(`⚠️ CẢNH BÁO VI PHẠM (${cheatCount}/3)\nBạn đã rời khỏi màn hình thi. Nếu vi phạm 3 lần, bài thi sẽ bị hủy/nộp tự động!`);
+            }
+        }
+    });
 
     // LOAD ĐỀ
     const urlParams=new URLSearchParams(window.location.search);
@@ -180,10 +252,14 @@
         renderUI();
         document.getElementById('welcome-screen').style.display='none';
         document.getElementById('main-interface').style.display='block';
+        
+        // BẮT ĐẦU TÍNH GIỜ & BẬT CHỐNG GIAN LẬN
+        isExamActive = true; 
+        
         timerInt=setInterval(()=>{
             let m=Math.floor(timerDur/60),s=timerDur%60;
             document.getElementById('timer').innerText=`${m}:${s<10?'0'+s:s}`;
-            if(--timerDur<0){clearInterval(timerInt);submitQuiz();alert("Hết giờ!");}
+            if(--timerDur<0){clearInterval(timerInt);submitQuiz();alert("Hết giờ làm bài!");}
         },1000);
     }
 
@@ -200,11 +276,11 @@
                 bh += `<div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">`;
                 q.items.forEach((it, idx) => {
                     let optsHTML = `<option value="">--</option>` + q.options.map((opt, oIdx) => `<option value="${String.fromCharCode(65 + oIdx)}">${String.fromCharCode(65 + oIdx)}</option>`).join('');
-                    bh += `<div style="display:flex;align-items:center;justify-content:space-between;background:#f9f9f9;padding:8px;border-radius:4px"><div style="flex:1;font-size:0.9em"><b>${idx+1})</b> ${it}</div><select style="padding:5px;border:1px solid #ccc;border-radius:4px;color:#1565c0;font-weight:bold" onchange="sv(${i},this.value,${idx})">${optsHTML}</select></div>`;
+                    bh += `<div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg-color);padding:8px;border-radius:4px"><div style="flex:1;font-size:0.9em"><b>${idx+1})</b> ${it}</div><select style="padding:5px;border:1px solid #ccc;border-radius:4px;color:#1565c0;font-weight:bold" onchange="sv(${i},this.value,${idx})">${optsHTML}</select></div>`;
                 });
-                bh += `<div style="margin-top:10px;background:#e3f2fd;padding:10px;border-radius:8px;font-size:0.9em">` + q.options.map((opt, oIdx) => `<div style="margin-bottom:4px"><b>${String.fromCharCode(65 + oIdx)}.</b> ${opt}</div>`).join('') + `</div></div>`;
+                bh += `<div style="margin-top:10px;background:var(--option-hover);padding:10px;border-radius:8px;font-size:0.9em">` + q.options.map((opt, oIdx) => `<div style="margin-bottom:4px"><b>${String.fromCharCode(65 + oIdx)}.</b> ${opt}</div>`).join('') + `</div></div>`;
             }
-            else bh+=`<input type="text" placeholder="Nhập đáp án (VD: 16,98)" oninput="sv(${i},this.value)" style="width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;outline:none;font-weight:bold;color:#1a237e">`;
+            else bh+=`<input type="text" placeholder="Nhập đáp án (VD: 16,98)" oninput="sv(${i},this.value)" style="width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;outline:none;font-weight:bold;color:#1a237e;background:var(--bg-color);color:var(--text-color)">`;
             bh+=`<div id="sol-${i}" style="display:none;margin-top:15px;padding:15px;background:#e8f5e9;border-radius:6px;color:#2e7d32;border:1px dashed #a5d6a7"><b>LỜI GIẢI:</b><br>${q.explain||'Không có.'}</div></div>`;
         });
         document.getElementById('palette-grid').innerHTML=ph; document.getElementById('quiz-body').innerHTML=bh;
@@ -216,7 +292,7 @@
         if(curQ[i].type === 'match' || curQ[i].type === 'tf') userAns[i][s] = v;
         else userAns[i] = v;
         
-        // Đổi màu: Kiểm tra xem đã làm đủ ý chưa
+        // Đổi màu (Đã fix logic kiểm tra rỗng)
         let isDone = false;
         if(curQ[i].type === 'mcq' || curQ[i].type === 'short') {
             if(userAns[i] !== undefined && userAns[i] !== null && userAns[i].toString().trim() !== "") isDone = true;
@@ -226,7 +302,6 @@
         if(isDone) document.getElementById(`pb-${i}`).classList.add('answered');
     }
 
-    // --- SỬA LỖI CONFIRM SUBMIT (Cho phép số 0 - đáp án A) ---
     function confirmSubmit(){
         let un=[];
         curQ.forEach((q,i)=>{
@@ -235,13 +310,12 @@
                 if(count < q.items.length) un.push(i+1); 
             }
             else {
-                // SỬA LỖI TẠI ĐÂY: Kiểm tra kỹ hơn với undefined, null và chuỗi rỗng
                 if(userAns[i] === undefined || userAns[i] === null || userAns[i] === "") un.push(i+1);
             }
         });
 
         if(un.length>0){ 
-            if(!confirm(`⚠️ CÁC CÂU CHƯA LÀM XONG: ${un.join(", ")}\n\nBạn có chắc muốn nộp bài không?`)) return;
+            if(!confirm(`⚠️ CÒN CÂU CHƯA LÀM: ${un.join(", ")}\n\nBạn có chắc muốn nộp bài không?`)) return;
         }
         else { 
             if(!confirm("Xác nhận nộp bài thi?")) return;
@@ -278,14 +352,13 @@
     }
 
     function submitQuiz(){
+        isExamActive = false; // Tắt chống gian lận
         clearInterval(timerInt);
         document.getElementById('btn-submit').style.display='none';
         
         let score=0, max=0;
         curQ.forEach((q,i)=>{
             const bl=document.getElementById(`q-${i}`); document.getElementById(`sol-${i}`).style.display='block';
-            
-            // LẤY ĐIỂM RIÊNG TỪNG CÂU
             let qPoint = (q.point && parseFloat(q.point) > 0) ? parseFloat(q.point) : scoresConfig[q.type];
 
             if(q.type==='mcq' || q.type==='short'){
