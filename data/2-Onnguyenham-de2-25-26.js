@@ -2,7 +2,7 @@ window.EXAM_DATA = {
     "title": "Đề Ôn Tập Nguyên Hàm, Số 2, Năm 2025-2026",
     "subject": "Toan",
     "grade": "12",
-    "time": 90,
+    "time": 60,
     "password": "0441cc2e91e078d08f103804b422feea",
     "encrypted": false,
     "shuffle": true,
