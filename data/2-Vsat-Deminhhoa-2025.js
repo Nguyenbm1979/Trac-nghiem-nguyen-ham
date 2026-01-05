@@ -2,7 +2,7 @@ window.EXAM_DATA = {
     "title": "Đề Minh Họa V-Sat, Đại Học Cần Thơ, Năm 2025",
     "subject": "Toan",   // <--- THÊM DÒNG NÀY
     "grade": "12",
-    "time": 45,
+    "time": 90,
     "password": "858eabb9c6c80b4947777108ced59f12",
     "encrypted": false,
     "start": "2026-01-04T20:53",
