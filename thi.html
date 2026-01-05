@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hệ Thống Thi Trực Tuyến v18.0 (Smart Scoring)</title>
+    <title>Hệ Thống Thi Trực Tuyến v18.1 (Fix Logic)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* CSS GIAO DIỆN CHUẨN */
         body{font-family:'Roboto',sans-serif;background:#f4f7f6;margin:0;color:#333;padding-bottom:100px;user-select:none}
         .status-bar{background:white;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 5px rgba(0,0,0,0.05);border-bottom:1px solid #eee}
         .timer-box{background:#ffebee;color:#c62828;padding:5px 12px;border-radius:20px;font-weight:700;font-family:monospace;font-size:1.2em}
@@ -25,23 +24,24 @@
         input[type="radio"]{accent-color:#1a237e;transform:scale(1.2);margin-right:10px}
         
         .alert-rule {background: #fff3e0; border: 1px solid #ffe0b2; color: #e65100; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; display: flex; align-items: center; gap: 10px; font-size: 0.95em;}
-        .welcome-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(13,71,161,0.95);z-index:2000;display:flex;align-items:center;justify-content:center}
-        .welcome-card{background:white;width:90%;max-width:400px;padding:30px;border-radius:20px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,0.3)}
-        .btn-start{background:linear-gradient(45deg,#1565c0,#0d47a1);color:white;width:100%;padding:15px;border:none;border-radius:50px;font-weight:bold;font-size:1.1em;cursor:pointer;margin-top:15px;box-shadow:0 5px 15px rgba(21,101,192,0.3)}
         
-        /* NÚT NỘP BÀI NỔI (STICKY) - CẢI TIẾN MỚI */
+        /* NÚT NỘP BÀI NỔI (STICKY) */
         .submit-floating {
             position: fixed; bottom: 30px; right: 30px; z-index: 1500;
             background: linear-gradient(45deg, #d32f2f, #c62828);
             color: white; padding: 15px 30px; border-radius: 50px;
             font-weight: bold; box-shadow: 0 5px 20px rgba(198,40,40,0.5);
             border: 2px solid white; cursor: pointer; transition: transform 0.2s;
-            display: flex; align-items: center; gap: 10px;
+            display: flex; align-items: center; gap: 10px; font-size: 1.1em;
         }
         .submit-floating:hover { transform: scale(1.05); }
         .submit-floating:active { transform: scale(0.95); }
 
+        .welcome-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(13,71,161,0.95);z-index:2000;display:flex;align-items:center;justify-content:center}
+        .welcome-card{background:white;width:90%;max-width:400px;padding:30px;border-radius:20px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,0.3)}
+        .btn-start{background:linear-gradient(45deg,#1565c0,#0d47a1);color:white;width:100%;padding:15px;border:none;border-radius:50px;font-weight:bold;font-size:1.1em;cursor:pointer;margin-top:15px}
         .pay-box{border:2px dashed #e91e63;background:#fce4ec;padding:15px;margin:15px 0;border-radius:12px}
+        
         .palette-item{width:35px;height:35px;display:flex;align-items:center;justify-content:center;border:1px solid #ddd;border-radius:6px;cursor:pointer;background:white;font-weight:bold;color:#555}
         .palette-item.answered{background:#1a237e;color:white;border-color:#1a237e}
         .palette-grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
@@ -109,9 +109,11 @@
 </div>
 
 <script>
-    const GOOGLE_SCRIPT_URL = '';
-    const REVIEW_TIME = 120;
+    // 👇👇👇 THẦY DÁN LINK GOOGLE SCRIPT VÀO GIỮA 2 DẤU NHÁY DƯỚI ĐÂY 👇👇👇
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwkdoesopItYMdgey0Zh7Rlru3ILoUbUaJw_b1EmmTtMiHSVYniswKOp1ZIP6gCIqSh/exec'; 
+    // 👆👆👆 (Nếu để trống thì không gửi điểm về Sheet)
 
+    const REVIEW_TIME = 120;
     let rawQ=[], curQ=[], timerDur=0, timerInt;
     let scoresConfig={mcq:0.25, tf:1.0, short:0.5, match:1.0};
     let isEnc=false, userAns={}, stId="", exId="";
@@ -155,7 +157,6 @@
     }
 
     function startLogic(name){
-        // Xáo trộn đề nếu được bật (shuffle: true) hoặc mặc định nếu không có config
         let doShuffle = (window.EXAM_DATA.shuffle !== false); 
 
         function mul32(a){return function(){var t=a+=0x6D2B79F5;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296}}
@@ -172,7 +173,6 @@
             p2.forEach(q=>seedShuf(q.items,rng)); 
             curQ=[...p1,...p2,...p3,...p4]; 
         } else {
-            // Không xáo trộn, giữ nguyên thứ tự, chỉ tạo index cho MCQ
             aq.forEach(q => { if(q.type==='mcq') q.idx = q.options.map((_,i)=>i); });
             curQ = aq;
         }
@@ -194,11 +194,8 @@
             bh+=`<div class="question-block" id="q-${i}"><div style="margin-bottom:15px"><span class="q-label">Câu ${i+1}:</span> <span style="font-weight:500">${q.q.replace(/^Câu \d+[:.]\s*/i,'')}</span></div>`;
             if(q.img)bh+=`<div style="text-align:center"><img src="${q.img}" style="max-width:100%;border-radius:8px;margin:10px auto;border:1px solid #eee"></div>`;
             
-            // MCQ
             if(q.type==='mcq') bh+=`<div style="display:grid;grid-template-columns:1fr;gap:5px">`+q.idx.map((o,d)=>`<label class="option-item"><input type="radio" name="q${i}" value="${o}" onchange="sv(${i},${o})"><span><b>${['A','B','C','D'][d]}.</b> ${q.options[o]}</span></label>`).join('')+`</div>`;
-            // TF
             else if(q.type==='tf') bh+=`<table style="width:100%;border-collapse:collapse;margin-top:5px"><tr><th>Ý</th><th>Đ</th><th>S</th></tr>`+q.items.map((it,s)=>`<tr><td style="border-bottom:1px solid #eee;padding:8px">${it.sub}</td><td align="center" style="border-bottom:1px solid #eee"><input type="radio" name="q${i}_${s}" value="T" onchange="sv(${i},'T',${s})"></td><td align="center" style="border-bottom:1px solid #eee"><input type="radio" name="q${i}_${s}" value="F" onchange="sv(${i},'F',${s})"></td></tr>`).join('')+`</table>`;
-            // MATCH
             else if(q.type==='match') {
                 bh += `<div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">`;
                 q.items.forEach((it, idx) => {
@@ -207,7 +204,6 @@
                 });
                 bh += `<div style="margin-top:10px;background:#e3f2fd;padding:10px;border-radius:8px;font-size:0.9em">` + q.options.map((opt, oIdx) => `<div style="margin-bottom:4px"><b>${String.fromCharCode(65 + oIdx)}.</b> ${opt}</div>`).join('') + `</div></div>`;
             }
-            // SHORT
             else bh+=`<input type="text" placeholder="Nhập đáp án (VD: 16,98)" oninput="sv(${i},this.value)" style="width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;outline:none;font-weight:bold;color:#1a237e">`;
             bh+=`<div id="sol-${i}" style="display:none;margin-top:15px;padding:15px;background:#e8f5e9;border-radius:6px;color:#2e7d32;border:1px dashed #a5d6a7"><b>LỜI GIẢI:</b><br>${q.explain||'Không có.'}</div></div>`;
         });
@@ -220,28 +216,27 @@
         if(curQ[i].type === 'match' || curQ[i].type === 'tf') userAns[i][s] = v;
         else userAns[i] = v;
         
-        // Logic đổi màu câu đã làm: Kiểm tra đủ ý chưa
+        // Đổi màu: Kiểm tra xem đã làm đủ ý chưa
         let isDone = false;
         if(curQ[i].type === 'mcq' || curQ[i].type === 'short') {
-            if(userAns[i] && userAns[i].toString().trim() !== "") isDone = true;
+            if(userAns[i] !== undefined && userAns[i] !== null && userAns[i].toString().trim() !== "") isDone = true;
         } else {
-            // Với TF và Match phải làm đủ số ý
             if(userAns[i] && Object.keys(userAns[i]).length === curQ[i].items.length) isDone = true;
         }
-
         if(isDone) document.getElementById(`pb-${i}`).classList.add('answered');
     }
 
+    // --- SỬA LỖI CONFIRM SUBMIT (Cho phép số 0 - đáp án A) ---
     function confirmSubmit(){
         let un=[];
         curQ.forEach((q,i)=>{
-            // Kiểm tra kỹ hơn cho dạng ghép đôi và đúng sai
             if(q.type==='match' || q.type==='tf'){ 
                 let count = userAns[i] ? Object.keys(userAns[i]).length : 0;
                 if(count < q.items.length) un.push(i+1); 
             }
             else {
-                if(!userAns[i] || userAns[i].toString().trim() === "") un.push(i+1);
+                // SỬA LỖI TẠI ĐÂY: Kiểm tra kỹ hơn với undefined, null và chuỗi rỗng
+                if(userAns[i] === undefined || userAns[i] === null || userAns[i] === "") un.push(i+1);
             }
         });
 
@@ -290,21 +285,18 @@
         curQ.forEach((q,i)=>{
             const bl=document.getElementById(`q-${i}`); document.getElementById(`sol-${i}`).style.display='block';
             
-            // --- CẬP NHẬT: LẤY ĐIỂM RIÊNG TỪNG CÂU (NẾU CÓ) ---
+            // LẤY ĐIỂM RIÊNG TỪNG CÂU
             let qPoint = (q.point && parseFloat(q.point) > 0) ? parseFloat(q.point) : scoresConfig[q.type];
 
-            // CHẤM MCQ & SHORT
             if(q.type==='mcq' || q.type==='short'){
                 max += qPoint;
                 if(chk(userAns[i], q.ans)) { score += qPoint; bg(bl, true, 'Đúng'); } 
                 else bg(bl, false, `Sai. ĐS: ${q.ans}`);
             }
-            // CHẤM TF (ĐÚNG SAI - Chia điểm theo V-SAT/Bộ GD)
             else if(q.type==='tf'){
                 max += qPoint; let c=0;
                 q.items.forEach((it, idx) => { if(chk(userAns[i]?userAns[i][idx]:null, it.ans)) c++; });
                 
-                // Logic tính điểm luỹ tiến cho Đ/S
                 let earned = 0;
                 if(c==1) earned = qPoint * 0.1;
                 else if(c==2) earned = qPoint * 0.25;
@@ -314,11 +306,9 @@
                 score += earned; 
                 bg(bl, earned>0, `Đúng ${c}/${q.items.length} ý (+${earned}đ)`);
             }
-            // CHẤM MATCH (GHÉP CỘT)
             else if(q.type==='match'){
                 max += qPoint; let c=0; let uObj = userAns[i] || {};
                 q.items.forEach((_, idx) => { if(chk(uObj[idx], q.ans[idx])) c++; });
-                
                 let s = (c/q.items.length) * qPoint; 
                 score += s; 
                 bg(bl, s>0, `Đúng ${c}/${q.items.length} cặp (+${s.toFixed(2)}đ)`);
