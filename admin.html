@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Tool v24.0 (Scoring System)</title>
+    <title>Admin Tool v25.0 (Full Control)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
@@ -23,9 +23,8 @@
         .tab-btn.active{background:#00796b;color:white}
         .section{display:none}.section.active{display:block}
         
-        /* GIAO DIỆN 2 CỘT */
         .split-view {display:flex; gap:20px; align-items: flex-start;}
-        .editor-col {flex: 1.2; min-width: 0;} 
+        .editor-col {flex: 1.2; min-width: 0;}
         .preview-col {flex: 0.8; position: sticky; top: 20px; max-height: 90vh; overflow-y: auto; background: white; border-radius: 8px; border: 1px solid #ddd; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); display:none;}
         
         .q-item {background:white; padding:15px; border:1px solid #ccc; border-radius:8px; margin-bottom:15px; border-left:5px solid #009688; position:relative;}
@@ -34,7 +33,6 @@
         .upload-wrapper {display:flex; gap:5px; margin: 5px 0;}
         .file-upload-btn {background:#e0e0e0; color:#333; padding:5px 10px; border-radius:4px; cursor:pointer; display:inline-block; font-size:0.9em; border:1px solid #ccc;}
         
-        /* SCORE BOX (BẢNG ĐIỂM) */
         .score-box {background:#fff3e0; padding:15px; border:1px solid #ffe0b2; border-radius:8px; margin-bottom:20px; text-align:center; color:#e65100; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
         .score-total {font-size:2em; font-weight:bold; color:#d32f2f; display:block;}
         .point-input {width:70px !important; text-align:center; color:#d32f2f; font-weight:bold; border:1px solid #ffab91;}
@@ -89,7 +87,7 @@
 </div>
 
 <div id="main-app">
-    <h1>QUẢN TRỊ v24.0 (TÍNH ĐIỂM)</h1>
+    <h1>QUẢN TRỊ v25.0 (FULL CONTROL)</h1>
     
     <div class="config-box">
         <div class="row">
@@ -132,39 +130,19 @@
             </div>
             
             <div class="row">
-                <div class="col">
-                    <label>Môn Học</label>
-                    <select id="exam-subject">
-                        <option value="Toan">Toán</option>
-                        <option value="Ly">Vật Lý</option>
-                        <option value="Hoa">Hóa Học</option>
-                        <option value="Sinh">Sinh Học</option>
-                        <option value="Anh">Tiếng Anh</option>
-                        <option value="Van">Ngữ Văn</option>
-                        <option value="Su">Lịch Sử</option>
-                        <option value="Dia">Địa Lý</option>
-                        <option value="GDCD">GDCD</option>
-                    </select>
-                </div>
-                <div class="col">
-                    <label>Khối Lớp</label>
-                    <select id="exam-grade">
-                        <option value="12">Khối 12</option>
-                        <option value="11">Khối 11</option>
-                        <option value="10">Khối 10</option>
-                        <option value="9">Khối 9</option>
-                    </select>
-                </div>
+                <div class="col"><label>Môn Học</label><select id="exam-subject"><option value="Toan">Toán</option><option value="Ly">Vật Lý</option><option value="Hoa">Hóa Học</option><option value="Sinh">Sinh Học</option><option value="Anh">Tiếng Anh</option><option value="Van">Ngữ Văn</option><option value="Su">Lịch Sử</option><option value="Dia">Địa Lý</option><option value="GDCD">GDCD</option></select></div>
+                <div class="col"><label>Khối Lớp</label><select id="exam-grade"><option value="12">Khối 12</option><option value="11">Khối 11</option><option value="10">Khối 10</option><option value="9">Khối 9</option></select></div>
                 <div class="col"><label>Thời gian (phút)</label><input type="number" id="exam-time" value="45"></div>
             </div>
 
             <div class="row">
                 <div class="col"><label>Giá (VNĐ)</label><input type="number" id="exam-price" placeholder="0"></div>
                 <div class="col"><label>Mật khẩu</label><input type="text" id="exam-pass" oninput="hashPass()"><input type="hidden" id="exam-pass-hash"></div>
-                <div class="col"><label>Chế độ</label>
-                    <div style="margin-top:5px;display:flex;gap:15px">
+                <div class="col" style="flex:2"><label>Cấu hình thi</label>
+                    <div style="margin-top:5px;display:flex;gap:10px;flex-wrap:wrap">
                         <span><input type="checkbox" id="secure-mode"> Mã hóa</span>
                         <span style="color:#e65100;font-weight:bold"><input type="checkbox" id="exam-shuffle" checked> 🔀 Đảo câu</span>
+                        <span style="color:#2e7d32;font-weight:bold"><input type="checkbox" id="view-detail" checked> 👁️ Xem lời giải</span>
                     </div>
                 </div>
             </div>
@@ -172,6 +150,7 @@
             <div class="row">
                 <div class="col"><label>Mở lúc</label><input type="datetime-local" id="exam-start"></div>
                 <div class="col"><label>Đóng lúc</label><input type="datetime-local" id="exam-end"></div>
+                <div class="col"><label>Làm tối thiểu (%)</label><input type="number" id="min-time-percent" placeholder="VD: 50"></div>
             </div>
         </div>
 
@@ -186,9 +165,8 @@
         <div class="split-view">
             <div class="editor-col" id="editor-area">
                 <div id="questions-list"></div>
-                <p style="text-align:center;color:#666" id="empty-msg">Chưa có câu hỏi. Bấm nút thêm bên trên.</p>
+                <p style="text-align:center;color:#666" id="empty-msg">Chưa có câu hỏi.</p>
             </div>
-            
             <div class="preview-col" id="preview-area">
                 <div class="score-box">
                     <span style="font-size:0.9em;color:#666">TỔNG ĐIỂM TOÀN ĐỀ</span>
@@ -240,7 +218,7 @@
 
     // --- LOGIC CÂU HỎI ---
     function addQ(type) {
-        let defPoint = 0.2; // Điểm mặc định MCQ
+        let defPoint = 0.2; 
         if(type==='tf') defPoint = 1.0;
         if(type==='short') defPoint = 0.5;
         if(type==='match') defPoint = 1.0;
@@ -284,7 +262,6 @@
         EXAM_QUESTIONS.forEach((q,i)=>{
             totalScore += parseFloat(q.point || 0);
 
-            // Nút nhập điểm
             let scoreInput = `<div style="display:flex;align-items:center;margin-right:10px;color:#e65100">
                 <b>Điểm:</b> 
                 <input type="number" class="point-input" step="0.05" value="${q.point||0}" onchange="EXAM_QUESTIONS[${i}].point=this.value; renderEditor()">
@@ -325,10 +302,8 @@
             </div>`);
         });
         
-        // Cập nhật bảng tổng điểm
         document.getElementById('total-score-display').innerText = totalScore.toFixed(2);
         document.getElementById('total-qs').innerText = EXAM_QUESTIONS.length;
-
         renderPreview();
     }
 
@@ -374,7 +349,6 @@
         } catch(e) { alert("❌ Lỗi JSON: " + e.message); }
     }
 
-    // --- CÁC HÀM TƯƠNG TÁC GITHUB ---
     async function deleteFileGeneric(path, name, isFileManager) {
         if(!confirm(`⚠️ XÓA VĨNH VIỄN: ${name}?`)) return;
         const u=document.getElementById('gh-user').value, r=document.getElementById('gh-repo').value, t=document.getElementById('gh-token').value;
@@ -424,6 +398,8 @@
             document.getElementById('exam-pass-hash').value=data.password||"";
             document.getElementById('secure-mode').checked=data.encrypted;
             if(data.shuffle !== undefined) document.getElementById('exam-shuffle').checked = data.shuffle;
+            if(data.viewDetail !== undefined) document.getElementById('view-detail').checked = data.viewDetail;
+            if(data.minTime) document.getElementById('min-time-percent').value = data.minTime;
             
             if(data.start)document.getElementById('exam-start').value=data.start;
             if(data.end)document.getElementById('exam-end').value=data.end;
@@ -453,6 +429,8 @@
             let fQ=JSON.parse(JSON.stringify(EXAM_QUESTIONS));
             let sec=document.getElementById('secure-mode').checked;
             let shuffle = document.getElementById('exam-shuffle').checked;
+            let viewDetail = document.getElementById('view-detail').checked;
+            let minTime = parseInt(document.getElementById('min-time-percent').value) || 0;
 
             fQ.forEach(q=>{
                 if(q.solImg) {
@@ -481,6 +459,8 @@
                 password:document.getElementById('exam-pass-hash').value,
                 encrypted:sec,
                 shuffle: shuffle,
+                viewDetail: viewDetail,
+                minTime: minTime,
                 start:document.getElementById('exam-start').value,
                 end:document.getElementById('exam-end').value,
                 price: price, bank: bankInfo,
