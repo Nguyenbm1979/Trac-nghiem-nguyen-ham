@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hệ Thống Thi Trực Tuyến v17.1 (Fix Grading)</title>
+    <title>Hệ Thống Thi Trực Tuyến v18.0 (Smart Scoring)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* CSS GIAO DIỆN */
-        body{font-family:'Roboto',sans-serif;background:#f4f7f6;margin:0;color:#333;padding-bottom:80px;user-select:none}
+        /* CSS GIAO DIỆN CHUẨN */
+        body{font-family:'Roboto',sans-serif;background:#f4f7f6;margin:0;color:#333;padding-bottom:100px;user-select:none}
         .status-bar{background:white;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 5px rgba(0,0,0,0.05);border-bottom:1px solid #eee}
         .timer-box{background:#ffebee;color:#c62828;padding:5px 12px;border-radius:20px;font-weight:700;font-family:monospace;font-size:1.2em}
         .student-box{font-weight:600;color:#1565c0}
@@ -23,10 +23,24 @@
         .option-item:hover{background:#e8eaf6;border-color:#c5cae9}
         .option-item:has(input:checked){background:#e3f2fd;border-color:#2196f3;color:#0d47a1;font-weight:500}
         input[type="radio"]{accent-color:#1a237e;transform:scale(1.2);margin-right:10px}
+        
         .alert-rule {background: #fff3e0; border: 1px solid #ffe0b2; color: #e65100; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; display: flex; align-items: center; gap: 10px; font-size: 0.95em;}
         .welcome-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(13,71,161,0.95);z-index:2000;display:flex;align-items:center;justify-content:center}
         .welcome-card{background:white;width:90%;max-width:400px;padding:30px;border-radius:20px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,0.3)}
         .btn-start{background:linear-gradient(45deg,#1565c0,#0d47a1);color:white;width:100%;padding:15px;border:none;border-radius:50px;font-weight:bold;font-size:1.1em;cursor:pointer;margin-top:15px;box-shadow:0 5px 15px rgba(21,101,192,0.3)}
+        
+        /* NÚT NỘP BÀI NỔI (STICKY) - CẢI TIẾN MỚI */
+        .submit-floating {
+            position: fixed; bottom: 30px; right: 30px; z-index: 1500;
+            background: linear-gradient(45deg, #d32f2f, #c62828);
+            color: white; padding: 15px 30px; border-radius: 50px;
+            font-weight: bold; box-shadow: 0 5px 20px rgba(198,40,40,0.5);
+            border: 2px solid white; cursor: pointer; transition: transform 0.2s;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .submit-floating:hover { transform: scale(1.05); }
+        .submit-floating:active { transform: scale(0.95); }
+
         .pay-box{border:2px dashed #e91e63;background:#fce4ec;padding:15px;margin:15px 0;border-radius:12px}
         .palette-item{width:35px;height:35px;display:flex;align-items:center;justify-content:center;border:1px solid #ddd;border-radius:6px;cursor:pointer;background:white;font-weight:bold;color:#555}
         .palette-item.answered{background:#1a237e;color:white;border-color:#1a237e}
@@ -88,11 +102,14 @@
     </div>
 
     <div id="quiz-body"></div>
-    <button class="btn-start" onclick="confirmSubmit()" id="btn-submit" style="background:#c62828;margin-top:20px">NỘP BÀI THI</button>
+    
+    <button class="submit-floating" onclick="confirmSubmit()" id="btn-submit">
+        <i class="fas fa-paper-plane"></i> NỘP BÀI THI
+    </button>
 </div>
 
 <script>
-    const GOOGLE_SCRIPT_URL = ''; 
+    const GOOGLE_SCRIPT_URL = '';
     const REVIEW_TIME = 120;
 
     let rawQ=[], curQ=[], timerDur=0, timerInt;
@@ -138,21 +155,31 @@
     }
 
     function startLogic(name){
+        // Xáo trộn đề nếu được bật (shuffle: true) hoặc mặc định nếu không có config
+        let doShuffle = (window.EXAM_DATA.shuffle !== false); 
+
         function mul32(a){return function(){var t=a+=0x6D2B79F5;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296}}
         function cyrb128(s){let h1=1779033703,h2=3144134277,h3=1013904242,h4=2773480762;for(let i=0,k;i<s.length;i++){k=s.charCodeAt(i);h1=h2^Math.imul(h1^k,597399067);h2=h3^Math.imul(h2^k,2869860281);h3=h4^Math.imul(h3^k,951274213);h4=h1^Math.imul(h4^k,2716044179);}return(h1^h2^h3^h4)>>>0}
         function seedShuf(arr,rng){for(let i=arr.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}}
         
-        const rng=mul32(cyrb128(name+exId));
         let aq=JSON.parse(JSON.stringify(rawQ));
-        let p1=aq.filter(q=>q.type==='mcq'), p2=aq.filter(q=>q.type==='tf'), p3=aq.filter(q=>q.type==='short'), p4=aq.filter(q=>q.type==='match');
-        seedShuf(p1,rng); seedShuf(p2,rng); seedShuf(p3,rng); seedShuf(p4,rng);
-        p1.forEach(q=>{q.idx=q.options.map((_,i)=>i);seedShuf(q.idx,rng)}); 
-        p2.forEach(q=>seedShuf(q.items,rng)); 
         
-        curQ=[...p1,...p2,...p3,...p4]; renderUI();
+        if(doShuffle) {
+            const rng=mul32(cyrb128(name+exId));
+            let p1=aq.filter(q=>q.type==='mcq'), p2=aq.filter(q=>q.type==='tf'), p3=aq.filter(q=>q.type==='short'), p4=aq.filter(q=>q.type==='match');
+            seedShuf(p1,rng); seedShuf(p2,rng); seedShuf(p3,rng); seedShuf(p4,rng);
+            p1.forEach(q=>{q.idx=q.options.map((_,i)=>i);seedShuf(q.idx,rng)}); 
+            p2.forEach(q=>seedShuf(q.items,rng)); 
+            curQ=[...p1,...p2,...p3,...p4]; 
+        } else {
+            // Không xáo trộn, giữ nguyên thứ tự, chỉ tạo index cho MCQ
+            aq.forEach(q => { if(q.type==='mcq') q.idx = q.options.map((_,i)=>i); });
+            curQ = aq;
+        }
+
+        renderUI();
         document.getElementById('welcome-screen').style.display='none';
         document.getElementById('main-interface').style.display='block';
-        
         timerInt=setInterval(()=>{
             let m=Math.floor(timerDur/60),s=timerDur%60;
             document.getElementById('timer').innerText=`${m}:${s<10?'0'+s:s}`;
@@ -182,7 +209,6 @@
             }
             // SHORT
             else bh+=`<input type="text" placeholder="Nhập đáp án (VD: 16,98)" oninput="sv(${i},this.value)" style="width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;outline:none;font-weight:bold;color:#1a237e">`;
-            
             bh+=`<div id="sol-${i}" style="display:none;margin-top:15px;padding:15px;background:#e8f5e9;border-radius:6px;color:#2e7d32;border:1px dashed #a5d6a7"><b>LỜI GIẢI:</b><br>${q.explain||'Không có.'}</div></div>`;
         });
         document.getElementById('palette-grid').innerHTML=ph; document.getElementById('quiz-body').innerHTML=bh;
@@ -193,44 +219,57 @@
         if(!userAns[i]) userAns[i]={};
         if(curQ[i].type === 'match' || curQ[i].type === 'tf') userAns[i][s] = v;
         else userAns[i] = v;
-        document.getElementById(`pb-${i}`).classList.add('answered');
+        
+        // Logic đổi màu câu đã làm: Kiểm tra đủ ý chưa
+        let isDone = false;
+        if(curQ[i].type === 'mcq' || curQ[i].type === 'short') {
+            if(userAns[i] && userAns[i].toString().trim() !== "") isDone = true;
+        } else {
+            // Với TF và Match phải làm đủ số ý
+            if(userAns[i] && Object.keys(userAns[i]).length === curQ[i].items.length) isDone = true;
+        }
+
+        if(isDone) document.getElementById(`pb-${i}`).classList.add('answered');
     }
 
     function confirmSubmit(){
-        let un=[]; curQ.forEach((q,i)=>{
-            if(q.type==='tf'||q.type==='match'){ if(!userAns[i] || Object.keys(userAns[i]).length<q.items.length) un.push(i+1); }
-            else if(!userAns[i]) un.push(i+1);
+        let un=[];
+        curQ.forEach((q,i)=>{
+            // Kiểm tra kỹ hơn cho dạng ghép đôi và đúng sai
+            if(q.type==='match' || q.type==='tf'){ 
+                let count = userAns[i] ? Object.keys(userAns[i]).length : 0;
+                if(count < q.items.length) un.push(i+1); 
+            }
+            else {
+                if(!userAns[i] || userAns[i].toString().trim() === "") un.push(i+1);
+            }
         });
-        if(un.length>0){ if(!confirm(`⚠️ CHƯA LÀM XONG CÂU: ${un.join(", ")}\n\nBạn có chắc muốn nộp bài?`)) return; }
-        else { if(!confirm("Xác nhận nộp bài?")) return; }
+
+        if(un.length>0){ 
+            if(!confirm(`⚠️ CÁC CÂU CHƯA LÀM XONG: ${un.join(", ")}\n\nBạn có chắc muốn nộp bài không?`)) return;
+        }
+        else { 
+            if(!confirm("Xác nhận nộp bài thi?")) return;
+        }
         submitQuiz();
     }
 
-    // --- HÀM CHẤM ĐIỂM (BẤT CHẤP MÃ HÓA) ---
     function chk(u, c) {
         if (u === undefined || u === null || u === "") return false;
-        
         let uStr = String(u).trim();
         let cStr = String(c).trim();
         let uClean = uStr.replace(',', '.');
         let cClean = cStr.replace(',', '.');
-
-        // 1. KIỂM TRA TRẦN (PLAIN TEXT) TRƯỚC
-        // Nếu khớp nhau về mặt ký tự (hoặc số) -> ĐÚNG LUÔN (Bỏ qua encrypted flag)
+        
         if (uClean === cClean) return true;
         if (uStr.toLowerCase() === cStr.toLowerCase()) return true;
         
-        // Check TF kiểu Việt Nam
         if (uStr === 'T' && ['true', '1', 'đúng', 'yes'].includes(cStr.toLowerCase())) return true;
         if (uStr === 'F' && ['false', '0', 'sai', 'no'].includes(cStr.toLowerCase())) return true;
 
-        // 2. KIỂM TRA MÃ HÓA (CHỈ KHI PLAIN TEXT KHÔNG KHỚP)
-        // Nếu dữ liệu thực sự đã mã hóa (MD5 dài 32 ký tự)
         if (isEnc) {
             if (CryptoJS.MD5(uStr).toString() === cStr) return true;
-            if (CryptoJS.MD5(uClean).toString() === cStr) return true; // Check 16,98 với Hash
-            
-            // Check Hash cho TF
+            if (CryptoJS.MD5(uClean).toString() === cStr) return true; 
             if (uStr === 'T') { 
                 let trues = ["True", "true", "TRUE", "Đúng", "Dung", "Yes", "1", "T"];
                 for(let t of trues) if(CryptoJS.MD5(t).toString() === cStr) return true;
@@ -240,7 +279,6 @@
                 for(let f of falses) if(CryptoJS.MD5(f).toString() === cStr) return true;
             }
         }
-        
         return false;
     }
 
@@ -252,30 +290,38 @@
         curQ.forEach((q,i)=>{
             const bl=document.getElementById(`q-${i}`); document.getElementById(`sol-${i}`).style.display='block';
             
-            // CHẤM MCQ
-            if(q.type==='mcq'){
-                max+=scoresConfig.mcq;
-                if(chk(userAns[i], q.ans)) { score+=scoresConfig.mcq; bg(bl, true, 'Đúng'); } 
-                else bg(bl, false, 'Sai');
-            }
-            // CHẤM TF
-            else if(q.type==='tf'){
-                max+=scoresConfig.tf; let c=0;
-                q.items.forEach((it, idx) => { if(chk(userAns[i]?userAns[i][idx]:null, it.ans)) c++; });
-                let s=0; if(c==1)s=0.1;else if(c==2)s=0.25;else if(c==3)s=0.5;else if(c==4)s=1.0;
-                s = s * scoresConfig.tf; score += s; bg(bl, s>0, `Đúng ${c}/${q.items.length} ý (${s}đ)`);
-            }
-            // CHẤM MATCH
-            else if(q.type==='match'){
-                max+=scoresConfig.match; let c=0; let uObj = userAns[i] || {};
-                q.items.forEach((_, idx) => { if(chk(uObj[idx], q.ans[idx])) c++; });
-                let s = (c/q.items.length) * scoresConfig.match; score += s; bg(bl, s>0, `Đúng ${c}/${q.items.length} cặp (${s.toFixed(2)}đ)`);
-            }
-            // CHẤM SHORT
-            else {
-                max+=scoresConfig.short;
-                if(chk(userAns[i], q.ans)) { score+=scoresConfig.short; bg(bl, true, 'Đúng'); } 
+            // --- CẬP NHẬT: LẤY ĐIỂM RIÊNG TỪNG CÂU (NẾU CÓ) ---
+            let qPoint = (q.point && parseFloat(q.point) > 0) ? parseFloat(q.point) : scoresConfig[q.type];
+
+            // CHẤM MCQ & SHORT
+            if(q.type==='mcq' || q.type==='short'){
+                max += qPoint;
+                if(chk(userAns[i], q.ans)) { score += qPoint; bg(bl, true, 'Đúng'); } 
                 else bg(bl, false, `Sai. ĐS: ${q.ans}`);
+            }
+            // CHẤM TF (ĐÚNG SAI - Chia điểm theo V-SAT/Bộ GD)
+            else if(q.type==='tf'){
+                max += qPoint; let c=0;
+                q.items.forEach((it, idx) => { if(chk(userAns[i]?userAns[i][idx]:null, it.ans)) c++; });
+                
+                // Logic tính điểm luỹ tiến cho Đ/S
+                let earned = 0;
+                if(c==1) earned = qPoint * 0.1;
+                else if(c==2) earned = qPoint * 0.25;
+                else if(c==3) earned = qPoint * 0.5;
+                else if(c==4) earned = qPoint * 1.0;
+                
+                score += earned; 
+                bg(bl, earned>0, `Đúng ${c}/${q.items.length} ý (+${earned}đ)`);
+            }
+            // CHẤM MATCH (GHÉP CỘT)
+            else if(q.type==='match'){
+                max += qPoint; let c=0; let uObj = userAns[i] || {};
+                q.items.forEach((_, idx) => { if(chk(uObj[idx], q.ans[idx])) c++; });
+                
+                let s = (c/q.items.length) * qPoint; 
+                score += s; 
+                bg(bl, s>0, `Đúng ${c}/${q.items.length} cặp (+${s.toFixed(2)}đ)`);
             }
         });
 
