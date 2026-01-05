@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Tool v24.0 (Scoring & Floating Bar)</title>
+    <title>Admin Tool v24.0 (Scoring System)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
@@ -23,9 +23,10 @@
         .tab-btn.active{background:#00796b;color:white}
         .section{display:none}.section.active{display:block}
         
+        /* GIAO DIỆN 2 CỘT */
         .split-view {display:flex; gap:20px; align-items: flex-start;}
-        .editor-col {flex: 1.2; min-width: 0;} /* Cột trái rộng hơn chút */
-        .preview-col {flex: 0.8; position: sticky; top: 20px; max-height: 90vh; overflow-y: auto; background: white; border-radius: 8px; border: 1px solid #ddd; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);}
+        .editor-col {flex: 1.2; min-width: 0;} 
+        .preview-col {flex: 0.8; position: sticky; top: 20px; max-height: 90vh; overflow-y: auto; background: white; border-radius: 8px; border: 1px solid #ddd; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); display:none;}
         
         .q-item {background:white; padding:15px; border:1px solid #ccc; border-radius:8px; margin-bottom:15px; border-left:5px solid #009688; position:relative;}
         .q-item-header {display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px}
@@ -33,11 +34,11 @@
         .upload-wrapper {display:flex; gap:5px; margin: 5px 0;}
         .file-upload-btn {background:#e0e0e0; color:#333; padding:5px 10px; border-radius:4px; cursor:pointer; display:inline-block; font-size:0.9em; border:1px solid #ccc;}
         
-        /* SCORE BOX */
-        .score-info {background:#fff3e0; padding:10px; border-radius:6px; margin-bottom:15px; border:1px solid #ffe0b2; color:#e65100; font-weight:bold; text-align:center; font-size:1.1em; position:sticky; top:0; z-index:10;}
-        .point-input {width:70px !important; padding:2px 5px !important; text-align:center; border:1px solid #009688; color:#009688; font-weight:bold; margin-right:10px;}
+        /* SCORE BOX (BẢNG ĐIỂM) */
+        .score-box {background:#fff3e0; padding:15px; border:1px solid #ffe0b2; border-radius:8px; margin-bottom:20px; text-align:center; color:#e65100; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
+        .score-total {font-size:2em; font-weight:bold; color:#d32f2f; display:block;}
+        .point-input {width:70px !important; text-align:center; color:#d32f2f; font-weight:bold; border:1px solid #ffab91;}
 
-        /* PREVIEW CSS */
         .preview-header {text-align: center; color: #1a237e; border-bottom: 2px solid #eee; margin-bottom: 15px; padding-bottom: 10px;}
         .p-q-block {background:#fff; margin-bottom:15px; padding-bottom:15px; border-bottom:1px dashed #ccc;}
         .p-label {color:#1a237e; font-weight:bold; font-size:1.1em;}
@@ -88,7 +89,7 @@
 </div>
 
 <div id="main-app">
-    <h1>QUẢN TRỊ v24.0 (TÍNH ĐIỂM CHI TIẾT)</h1>
+    <h1>QUẢN TRỊ v24.0 (TÍNH ĐIỂM)</h1>
     
     <div class="config-box">
         <div class="row">
@@ -163,7 +164,7 @@
                 <div class="col"><label>Chế độ</label>
                     <div style="margin-top:5px;display:flex;gap:15px">
                         <span><input type="checkbox" id="secure-mode"> Mã hóa</span>
-                        <span style="color:#e65100;font-weight:bold"><input type="checkbox" id="exam-shuffle" checked> 🔀 Đảo câu hỏi</span>
+                        <span style="color:#e65100;font-weight:bold"><input type="checkbox" id="exam-shuffle" checked> 🔀 Đảo câu</span>
                     </div>
                 </div>
             </div>
@@ -189,11 +190,11 @@
             </div>
             
             <div class="preview-col" id="preview-area">
-                <div class="score-info">
-                    📊 TỔNG ĐIỂM: <span id="total-score-display" style="font-size:1.3em;color:#d32f2f">0</span> điểm
-                    <br><small style="color:#666;font-weight:normal;font-size:0.8em">Tổng số câu: <span id="total-qs">0</span></small>
+                <div class="score-box">
+                    <span style="font-size:0.9em;color:#666">TỔNG ĐIỂM TOÀN ĐỀ</span>
+                    <span id="total-score-display" class="score-total">0.00</span>
+                    <div style="font-size:0.8em;margin-top:5px">Tổng số câu: <span id="total-qs" style="font-weight:bold">0</span></div>
                 </div>
-                
                 <div class="preview-header"><h3>XEM TRƯỚC (PREVIEW)</h3></div>
                 <div id="preview-content"></div>
             </div>
@@ -237,15 +238,17 @@
     function saveConfig(){ ['gh-user','gh-repo','gh-token','bank-id','bank-acc'].forEach(id=>localStorage.setItem(id,document.getElementById(id).value.trim())); alert("Đã lưu!"); }
     function hashPass(){let p=document.getElementById('exam-pass').value.trim();document.getElementById('exam-pass-hash').value=p?CryptoJS.MD5(p).toString():"";}
 
-    // --- LOGIC CÂU HỎI & ĐIỂM ---
+    // --- LOGIC CÂU HỎI ---
     function addQ(type) {
-        let defP = 0.2; // Điểm mặc định
-        if(type==='tf' || type==='match') defP = 1.0;
-        
-        if(type === 'mcq') EXAM_QUESTIONS.push({type:'mcq', q:'Câu hỏi... [IMG]', point: defP, img:'', options:['A','B','C','D'], ans:0, explain:'Lời giải... [IMG]', solImg:''});
-        if(type === 'tf') EXAM_QUESTIONS.push({type:'tf', q:'Đúng hay sai?', point: defP, img:'', items:[{sub:'Ý 1', ans:'T'},{sub:'Ý 2', ans:'F'},{sub:'Ý 3', ans:'T'},{sub:'Ý 4', ans:'F'}], explain:'', solImg:''});
-        if(type === 'short') EXAM_QUESTIONS.push({type:'short', q:'Điền đáp án:', point: 0.5, img:'', ans:'', explain:'', solImg:''});
-        if(type === 'match') EXAM_QUESTIONS.push({type:'match', q:'Ghép cặp:', point: defP, img:'', items:['Trái 1','Trái 2','Trái 3','Trái 4'], options:['Phải A','Phải B','Phải C','Phải D'], ans:['A','B','C','D'], explain:'', solImg:''});
+        let defPoint = 0.2; // Điểm mặc định MCQ
+        if(type==='tf') defPoint = 1.0;
+        if(type==='short') defPoint = 0.5;
+        if(type==='match') defPoint = 1.0;
+
+        if(type === 'mcq') EXAM_QUESTIONS.push({type:'mcq', q:'Câu hỏi... [IMG]', point:defPoint, img:'', options:['A','B','C','D'], ans:0, explain:'Lời giải... [IMG]', solImg:''});
+        if(type === 'tf') EXAM_QUESTIONS.push({type:'tf', q:'Đúng hay sai?', point:defPoint, img:'', items:[{sub:'Ý 1', ans:'T'},{sub:'Ý 2', ans:'F'},{sub:'Ý 3', ans:'T'},{sub:'Ý 4', ans:'F'}], explain:'', solImg:''});
+        if(type === 'short') EXAM_QUESTIONS.push({type:'short', q:'Điền đáp án:', point:defPoint, img:'', ans:'', explain:'', solImg:''});
+        if(type === 'match') EXAM_QUESTIONS.push({type:'match', q:'Ghép cặp:', point:defPoint, img:'', items:['Trái 1','Trái 2','Trái 3','Trái 4'], options:['Phải A','Phải B','Phải C','Phải D'], ans:['A','B','C','D'], explain:'', solImg:''});
         renderEditor();
     }
 
@@ -274,29 +277,28 @@
 
     function renderEditor(){
         let c=document.getElementById('questions-list'); c.innerHTML="";
-        let totalScore = 0;
-        
         if(EXAM_QUESTIONS.length > 0) { document.getElementById('empty-msg').style.display='none'; document.getElementById('preview-area').style.display='block'; }
         
+        let totalScore = 0;
+
         EXAM_QUESTIONS.forEach((q,i)=>{
-            // Tính tổng điểm
             totalScore += parseFloat(q.point || 0);
 
-            // Giao diện nhập điểm
-            let pointUI = `<div style="display:flex;align-items:center;color:#e65100;">
-                Điểm: <input type="number" class="point-input" step="0.05" value="${q.point||0}" onchange="EXAM_QUESTIONS[${i}].point=this.value; renderEditor()">
+            // Nút nhập điểm
+            let scoreInput = `<div style="display:flex;align-items:center;margin-right:10px;color:#e65100">
+                <b>Điểm:</b> 
+                <input type="number" class="point-input" step="0.05" value="${q.point||0}" onchange="EXAM_QUESTIONS[${i}].point=this.value; renderEditor()">
             </div>`;
 
             let imgQ = `<div class="upload-wrapper" style="background:#f1f8e9; padding:5px; border-radius:4px">
-                <i class="fas fa-image" style="color:#2e7d32"></i>
-                <input type="text" value="${q.img||''}" onchange="EXAM_QUESTIONS[${i}].img=this.value; renderPreview()" style="flex:1" placeholder="Link ảnh [IMG]">
+                <i class="fas fa-image" style="color:#2e7d32"></i> <b>Ảnh Đề:</b>
+                <input type="text" value="${q.img||''}" onchange="EXAM_QUESTIONS[${i}].img=this.value; renderPreview()" style="flex:1" placeholder="Link ảnh... [IMG]">
                 <label class="file-upload-btn"><i class="fas fa-upload"></i> <input type="file" style="display:none" accept="image/*" onchange="handleImageUpload(this, ${i}, 'q')"></label>
                 ${q.img ? `<img src="${q.img}" style="height:30px">` : ''}
             </div>`;
-            
             let imgSol = `<div class="upload-wrapper" style="background:#fffde7; padding:5px; border-radius:4px; margin-top:5px">
-                <i class="fas fa-lightbulb" style="color:#fbc02d"></i>
-                <input type="text" value="${q.solImg||''}" onchange="EXAM_QUESTIONS[${i}].solImg=this.value; renderPreview()" style="flex:1" placeholder="Link ảnh lời giải [IMG]">
+                <i class="fas fa-lightbulb" style="color:#fbc02d"></i> <b>Ảnh Lời Giải:</b>
+                <input type="text" value="${q.solImg||''}" onchange="EXAM_QUESTIONS[${i}].solImg=this.value; renderPreview()" style="flex:1" placeholder="Link ảnh... [IMG]">
                 <label class="file-upload-btn"><i class="fas fa-upload"></i> <input type="file" style="display:none" accept="image/*" onchange="handleImageUpload(this, ${i}, 'sol')"></label>
                 ${q.solImg ? `<img src="${q.solImg}" style="height:30px">` : ''}
             </div>`;
@@ -309,9 +311,9 @@
 
             c.insertAdjacentHTML('beforeend',`<div class="q-item">
                 <div class="q-item-header">
-                    <span style="font-weight:bold; color:#00796b">Câu ${i+1} (${q.type.toUpperCase()})</span>
-                    <div style="display:flex; align-items:center">
-                        ${pointUI}
+                    <span style="font-weight:bold;color:#00796b">Câu ${i+1} (${q.type.toUpperCase()})</span>
+                    <div style="display:flex;align-items:center">
+                        ${scoreInput}
                         <button class="btn btn-red" style="padding:2px 8px;font-size:0.8em" onclick="EXAM_QUESTIONS.splice(${i},1);renderEditor()">Xóa</button>
                     </div>
                 </div>
@@ -323,10 +325,10 @@
             </div>`);
         });
         
-        // CẬP NHẬT TỔNG ĐIỂM
-        document.getElementById('total-score-display').innerText = parseFloat(totalScore.toFixed(2));
+        // Cập nhật bảng tổng điểm
+        document.getElementById('total-score-display').innerText = totalScore.toFixed(2);
         document.getElementById('total-qs').innerText = EXAM_QUESTIONS.length;
-        
+
         renderPreview();
     }
 
@@ -335,7 +337,7 @@
         EXAM_QUESTIONS.forEach((q, i) => {
             let imgHtml = q.img ? `<img src="${q.img}" class="p-img">` : '';
             let solImgHtml = q.solImg ? `<img src="${q.solImg}" class="p-img">` : '';
-            let pt = q.point ? `<span style="float:right;font-size:0.8em;color:red;font-weight:bold">[${q.point}đ]</span>` : '';
+            let pt = q.point ? `<span style="float:right;color:red;font-weight:bold">[${q.point}đ]</span>` : '';
             
             let contentHtml = q.q;
             if(q.img) {
@@ -482,7 +484,7 @@
                 start:document.getElementById('exam-start').value,
                 end:document.getElementById('exam-end').value,
                 price: price, bank: bankInfo,
-                scores:{mcq:0.25,tf:1.0,short:0.5,match:1.0}, // Điểm dự phòng
+                scores:{mcq:0.25,tf:1.0,short:0.5,match:1.0},
                 questions:fQ
             };
             let c=btoa(unescape(encodeURIComponent(`window.EXAM_DATA = ${JSON.stringify(dt,null,4)};`)));
