@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hệ Thống Thi Trực Tuyến v19.0 (Anti-Cheat & DarkMode)</title>
+    <title>Hệ Thống Thi Trực Tuyến v19.1 (Full Monitoring)</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -12,76 +12,33 @@
     
     <style>
         /* --- CẤU HÌNH GIAO DIỆN (HỖ TRỢ DARK MODE) --- */
-        :root {
-            --bg-color: #f4f7f6;
-            --text-color: #333;
-            --block-bg: #ffffff;
-            --highlight: #1a237e;
-            --option-bg: #fafafa;
-            --option-border: #eee;
-            --option-hover: #e8eaf6;
-            --timer-bg: #ffebee;
-            --timer-text: #c62828;
-        }
-
-        /* CHẾ ĐỘ TỐI (DARK MODE) */
-        [data-theme="dark"] {
-            --bg-color: #121212;
-            --text-color: #e0e0e0;
-            --block-bg: #1e1e1e;
-            --highlight: #90caf9;
-            --option-bg: #2c2c2c;
-            --option-border: #444;
-            --option-hover: #333;
-            --timer-bg: #3e2723;
-            --timer-text: #ffab91;
-        }
-
+        :root { --bg-color: #f4f7f6; --text-color: #333; --block-bg: #ffffff; --highlight: #1a237e; --option-bg: #fafafa; --option-border: #eee; --option-hover: #e8eaf6; --timer-bg: #ffebee; --timer-text: #c62828; }
+        [data-theme="dark"] { --bg-color: #121212; --text-color: #e0e0e0; --block-bg: #1e1e1e; --highlight: #90caf9; --option-bg: #2c2c2c; --option-border: #444; --option-hover: #333; --timer-bg: #3e2723; --timer-text: #ffab91; }
         body{font-family:'Roboto',sans-serif;background:var(--bg-color);margin:0;color:var(--text-color);padding-bottom:100px;user-select:none;transition: background 0.3s, color 0.3s;}
-        
         .status-bar{background:var(--block-bg);padding:10px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 5px rgba(0,0,0,0.05);border-bottom:1px solid var(--option-border)}
-        
-        /* Nút chuyển chế độ Sáng/Tối */
         .theme-toggle {cursor: pointer; font-size: 1.2em; padding: 5px; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; transition: 0.3s;}
         .theme-toggle:hover {background: var(--option-hover);}
-
         .timer-box{background:var(--timer-bg);color:var(--timer-text);padding:5px 12px;border-radius:20px;font-weight:700;font-family:monospace;font-size:1.2em}
         .student-box{font-weight:600;color:var(--highlight)}
-        
         .container{max-width:900px;margin:0 auto;padding:15px}
         .question-block{background:var(--block-bg);padding:25px;border-radius:12px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.03);border-left:5px solid #1a237e}
         .q-label{color:var(--highlight);font-weight:700;font-size:1.1em;margin-bottom:5px;display:block}
-        
         .option-item{display:flex;align-items:center;background:var(--option-bg);border:1px solid var(--option-border);padding:12px 15px;border-radius:8px;cursor:pointer;margin-bottom:8px;transition:0.2s}
         .option-item:hover{background:var(--option-hover);border-color:#c5cae9}
         .option-item:has(input:checked){background:#e3f2fd;border-color:#2196f3;color:#0d47a1;font-weight:500}
         [data-theme="dark"] .option-item:has(input:checked){background:#0d47a1;color:white;border-color:#1976d2}
-
         input[type="radio"]{accent-color:#1a237e;transform:scale(1.2);margin-right:10px}
-        
         .alert-rule {background: #fff3e0; border: 1px solid #ffe0b2; color: #e65100; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; display: flex; align-items: center; gap: 10px; font-size: 0.95em;}
         [data-theme="dark"] .alert-rule {background: #3e2723; border-color: #5d4037; color: #ffccbc;}
-
-        .submit-floating {
-            position: fixed; bottom: 30px; right: 30px; z-index: 1500;
-            background: linear-gradient(45deg, #d32f2f, #c62828);
-            color: white; padding: 15px 30px; border-radius: 50px;
-            font-weight: bold; box-shadow: 0 5px 20px rgba(198,40,40,0.5);
-            border: 2px solid white; cursor: pointer; transition: transform 0.2s;
-            display: flex; align-items: center; gap: 10px; font-size: 1.1em;
-        }
-        .submit-floating:hover { transform: scale(1.05); }
-        .submit-floating:active { transform: scale(0.95); }
-
+        .submit-floating { position: fixed; bottom: 30px; right: 30px; z-index: 1500; background: linear-gradient(45deg, #d32f2f, #c62828); color: white; padding: 15px 30px; border-radius: 50px; font-weight: bold; box-shadow: 0 5px 20px rgba(198,40,40,0.5); border: 2px solid white; cursor: pointer; transition: transform 0.2s; display: flex; align-items: center; gap: 10px; font-size: 1.1em; }
+        .submit-floating:hover { transform: scale(1.05); } .submit-floating:active { transform: scale(0.95); }
         .welcome-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(13,71,161,0.95);z-index:2000;display:flex;align-items:center;justify-content:center}
         .welcome-card{background:white;width:90%;max-width:400px;padding:30px;border-radius:20px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,0.3)}
         .btn-start{background:linear-gradient(45deg,#1565c0,#0d47a1);color:white;width:100%;padding:15px;border:none;border-radius:50px;font-weight:bold;font-size:1.1em;cursor:pointer;margin-top:15px}
         .pay-box{border:2px dashed #e91e63;background:#fce4ec;padding:15px;margin:15px 0;border-radius:12px}
-        
         .palette-item{width:35px;height:35px;display:flex;align-items:center;justify-content:center;border:1px solid #ddd;border-radius:6px;cursor:pointer;background:var(--block-bg);font-weight:bold;color:var(--text-color)}
         .palette-item.answered{background:#1a237e;color:white;border-color:#1a237e}
         [data-theme="dark"] .palette-item.answered{background:#64b5f6;color:#000;border-color:#64b5f6}
-
         .palette-grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
         .res-badge{display:inline-block;padding:5px 10px;border-radius:6px;font-weight:bold;margin-top:10px;font-size:0.9em}
         .res-correct{background:#c8e6c9;color:#1b5e20;border:1px solid #a5d6a7}
@@ -97,14 +54,12 @@
         <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" style="width:60px;height:60px;border-radius:50%;margin-bottom:10px">
         <h2 id="exam-title" style="color:#1a237e;margin:0">BÀI KIỂM TRA</h2>
         <p id="exam-info" style="color:#666;font-size:0.9em;margin-bottom:20px"></p>
-        
         <div id="payment-area" class="pay-box" style="display:none">
             <h3 style="margin:0;color:#c2185b;font-size:1em">☕ ỦNG HỘ TÁC GIẢ</h3>
             <p style="font-size:0.85em;color:#880e4f;margin:5px 0">Quét mã để vào thi:</p>
             <img id="vietqr-img" style="width:100%;max-width:200px;border-radius:8px" src="">
             <p id="pay-amount" style="font-weight:bold;font-size:1.4em;color:#d81b60;margin:10px 0"></p>
         </div>
-
         <input type="text" id="s-name" placeholder="Họ và Tên" style="width:100%;padding:12px;margin-bottom:10px;border:1px solid #ccc;border-radius:8px">
         <input type="text" id="s-class" placeholder="Lớp" style="width:100%;padding:12px;margin-bottom:10px;border:1px solid #ccc;border-radius:8px">
         <div id="pass-area" style="display:none"><input type="password" id="s-pass" placeholder="Mật khẩu" style="width:100%;padding:12px;border:1px solid #ccc;border-radius:8px"></div>
@@ -114,12 +69,8 @@
 
 <div class="container" id="main-interface" style="display:none">
     <div class="status-bar">
-        <div class="student-box">
-            <i class="fas fa-user-graduate"></i> <span id="d-name">HS</span> <span id="d-class"></span>
-        </div>
-        <div class="theme-toggle" onclick="toggleTheme()">
-            <i class="fas fa-moon" id="theme-icon"></i>
-        </div>
+        <div class="student-box"><i class="fas fa-user-graduate"></i> <span id="d-name">HS</span> <span id="d-class"></span></div>
+        <div class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon" id="theme-icon"></i></div>
         <div class="timer-box"><i class="far fa-clock"></i> <span id="timer">00:00</span></div>
     </div>
     
@@ -130,67 +81,49 @@
     <div class="alert-rule">
         <i class="fas fa-exclamation-triangle fa-2x"></i>
         <div>
-            <b>QUY CHẾ THI:</b><br>
-            - Không được rời khỏi màn hình làm bài.<br>
-            - Vi phạm <b>3 lần</b> hệ thống sẽ <b>TỰ ĐỘNG NỘP BÀI</b>.
+            <b>QUY CHẾ THI:</b><br>- Không được rời khỏi màn hình làm bài.<br>- Vi phạm <b>3 lần</b> hệ thống sẽ <b>TỰ ĐỘNG NỘP BÀI</b>.
         </div>
     </div>
 
     <div id="result-area" style="display:none;background:var(--block-bg);padding:30px;text-align:center;border-radius:12px;margin-bottom:20px;border-top:5px solid #2e7d32">
         <div style="color:#666">KẾT QUẢ</div>
         <h1 style="color:#2e7d32;font-size:4em;margin:5px 0"><span id="final-score"></span></h1>
-        <div id="review-timer" style="color:#c62828;font-weight:bold;margin-top:10px;padding:10px;background:#ffebee;border-radius:4px;border:1px solid #ffcdd2">
-            ⏳ Thời gian xem lại bài: <span id="r-time">120</span> giây
-        </div>
+        <div id="review-timer" style="color:#c62828;font-weight:bold;margin-top:10px;padding:10px;background:#ffebee;border-radius:4px;border:1px solid #ffcdd2">⏳ Xem lại bài: <span id="r-time">120</span> giây</div>
         <div style="color:var(--highlight);font-weight:bold;margin-top:15px">▼ Kéo xuống để xem lời giải chi tiết ▼</div>
     </div>
 
     <div id="quiz-body"></div>
-    
-    <button class="submit-floating" onclick="confirmSubmit()" id="btn-submit">
-        <i class="fas fa-paper-plane"></i> NỘP BÀI THI
-    </button>
+    <button class="submit-floating" onclick="confirmSubmit()" id="btn-submit"><i class="fas fa-paper-plane"></i> NỘP BÀI THI</button>
 </div>
 
 <script>
-    // 👇 DÁN LINK GOOGLE SCRIPT VÀO ĐÂY ĐỂ LƯU ĐIỂM 👇
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwkdoesopItYMdgey0Zh7Rlru3ILoUbUaJw_b1EmmTtMiHSVYniswKOp1ZIP6gCIqSh/exec'; 
+    // 👇 THẦY DÁN LINK GOOGLE SCRIPT VÀO ĐÂY 👇
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJrLTSNtSQDlcbTQX7xj83Fohih9X_g8yYLwy8kEwMyqJwlzCE5xcc6RllV_2QjJqN/exec'; 
     // 👆
 
     const REVIEW_TIME = 120;
     let rawQ=[], curQ=[], timerDur=0, timerInt;
     let scoresConfig={mcq:0.25, tf:1.0, short:0.5, match:1.0};
     let isEnc=false, userAns={}, stId="", exId="";
-    let cheatCount = 0, isExamActive = false; // Biến theo dõi gian lận
+    let cheatCount = 0, isExamActive = false;
+    let startTimeStr = "", endTimeStr = ""; // Biến lưu thời gian
 
-    // --- CẤU HÌNH DARK MODE ---
     function toggleTheme() {
         const body = document.body;
         const icon = document.getElementById('theme-icon');
-        if (body.getAttribute('data-theme') === 'dark') {
-            body.removeAttribute('data-theme');
-            icon.classList.replace('fa-sun', 'fa-moon');
-        } else {
-            body.setAttribute('data-theme', 'dark');
-            icon.classList.replace('fa-moon', 'fa-sun');
-        }
+        if (body.getAttribute('data-theme') === 'dark') { body.removeAttribute('data-theme'); icon.classList.replace('fa-sun', 'fa-moon'); } 
+        else { body.setAttribute('data-theme', 'dark'); icon.classList.replace('fa-moon', 'fa-sun'); }
     }
 
-    // --- LOGIC CHỐNG GIAN LẬN (MỚI) ---
     document.addEventListener("visibilitychange", () => {
-        if (!isExamActive) return; // Chỉ kiểm tra khi đang thi
+        if (!isExamActive) return;
         if (document.hidden) {
             cheatCount++;
-            if (cheatCount >= 3) {
-                alert("⛔ BẠN ĐÃ VI PHẠM QUY CHẾ 3 LẦN!\nHệ thống sẽ tự động nộp bài ngay lập tức.");
-                submitQuiz();
-            } else {
-                alert(`⚠️ CẢNH BÁO VI PHẠM (${cheatCount}/3)\nBạn đã rời khỏi màn hình thi. Nếu vi phạm 3 lần, bài thi sẽ bị hủy/nộp tự động!`);
-            }
+            if (cheatCount >= 3) { alert("⛔ VI PHẠM 3 LẦN! TỰ ĐỘNG NỘP BÀI."); submitQuiz(); } 
+            else { alert(`⚠️ CẢNH BÁO (${cheatCount}/3): Đã rời màn hình!`); }
         }
     });
 
-    // LOAD ĐỀ
     const urlParams=new URLSearchParams(window.location.search);
     const pId=urlParams.get('id'); exId=pId||"demo";
     if(pId){
@@ -203,18 +136,14 @@
 
     function initExam(d){
         rawQ=d.questions; timerDur=(d.time||45)*60;
-        if(d.scores) scoresConfig={...scoresConfig, ...d.scores}; 
-        isEnc=d.encrypted===true;
-        
+        if(d.scores) scoresConfig={...scoresConfig, ...d.scores}; isEnc=d.encrypted===true;
         document.getElementById('exam-title').innerText=d.title||"BÀI KIỂM TRA";
         document.getElementById('exam-info').innerText=`${rawQ.length} Câu | ${d.time} Phút`;
         if(d.password)document.getElementById('pass-area').style.display='block';
-
         if(d.price > 0 && d.bank) {
              document.getElementById('payment-area').style.display = 'block';
              document.getElementById('pay-amount').innerText = d.price.toLocaleString('vi-VN') + "đ";
-             const qrUrl = `https://img.vietqr.io/image/${d.bank.id}-${d.bank.acc}-compact.png?amount=${d.price}&addInfo=HOCPHI ${exId}`;
-             document.getElementById('vietqr-img').src = qrUrl;
+             document.getElementById('vietqr-img').src = `https://img.vietqr.io/image/${d.bank.id}-${d.bank.acc}-compact.png?amount=${d.price}&addInfo=HOCPHI ${exId}`;
         }
         document.getElementById('loading').style.display='none'; 
         document.getElementById('welcome-screen').style.display='flex';
@@ -229,33 +158,26 @@
     }
 
     function startLogic(name){
-        let doShuffle = (window.EXAM_DATA.shuffle !== false); 
+        // GHI NHẬN THỜI GIAN BẮT ĐẦU
+        startTimeStr = new Date().toLocaleString('vi-VN');
 
+        let doShuffle = (window.EXAM_DATA.shuffle !== false); 
         function mul32(a){return function(){var t=a+=0x6D2B79F5;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296}}
         function cyrb128(s){let h1=1779033703,h2=3144134277,h3=1013904242,h4=2773480762;for(let i=0,k;i<s.length;i++){k=s.charCodeAt(i);h1=h2^Math.imul(h1^k,597399067);h2=h3^Math.imul(h2^k,2869860281);h3=h4^Math.imul(h3^k,951274213);h4=h1^Math.imul(h4^k,2716044179);}return(h1^h2^h3^h4)>>>0}
         function seedShuf(arr,rng){for(let i=arr.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}}
-        
         let aq=JSON.parse(JSON.stringify(rawQ));
-        
         if(doShuffle) {
             const rng=mul32(cyrb128(name+exId));
             let p1=aq.filter(q=>q.type==='mcq'), p2=aq.filter(q=>q.type==='tf'), p3=aq.filter(q=>q.type==='short'), p4=aq.filter(q=>q.type==='match');
             seedShuf(p1,rng); seedShuf(p2,rng); seedShuf(p3,rng); seedShuf(p4,rng);
-            p1.forEach(q=>{q.idx=q.options.map((_,i)=>i);seedShuf(q.idx,rng)}); 
-            p2.forEach(q=>seedShuf(q.items,rng)); 
+            p1.forEach(q=>{q.idx=q.options.map((_,i)=>i);seedShuf(q.idx,rng)}); p2.forEach(q=>seedShuf(q.items,rng)); 
             curQ=[...p1,...p2,...p3,...p4]; 
-        } else {
-            aq.forEach(q => { if(q.type==='mcq') q.idx = q.options.map((_,i)=>i); });
-            curQ = aq;
-        }
+        } else { aq.forEach(q => { if(q.type==='mcq') q.idx = q.options.map((_,i)=>i); }); curQ = aq; }
 
         renderUI();
         document.getElementById('welcome-screen').style.display='none';
         document.getElementById('main-interface').style.display='block';
-        
-        // BẮT ĐẦU TÍNH GIỜ & BẬT CHỐNG GIAN LẬN
         isExamActive = true; 
-        
         timerInt=setInterval(()=>{
             let m=Math.floor(timerDur/60),s=timerDur%60;
             document.getElementById('timer').innerText=`${m}:${s<10?'0'+s:s}`;
@@ -269,7 +191,6 @@
             ph+=`<div class="palette-item" id="pb-${i}" onclick="document.getElementById('q-${i}').scrollIntoView({behavior:'smooth',block:'center'})">${i+1}</div>`;
             bh+=`<div class="question-block" id="q-${i}"><div style="margin-bottom:15px"><span class="q-label">Câu ${i+1}:</span> <span style="font-weight:500">${q.q.replace(/^Câu \d+[:.]\s*/i,'')}</span></div>`;
             if(q.img)bh+=`<div style="text-align:center"><img src="${q.img}" style="max-width:100%;border-radius:8px;margin:10px auto;border:1px solid #eee"></div>`;
-            
             if(q.type==='mcq') bh+=`<div style="display:grid;grid-template-columns:1fr;gap:5px">`+q.idx.map((o,d)=>`<label class="option-item"><input type="radio" name="q${i}" value="${o}" onchange="sv(${i},${o})"><span><b>${['A','B','C','D'][d]}.</b> ${q.options[o]}</span></label>`).join('')+`</div>`;
             else if(q.type==='tf') bh+=`<table style="width:100%;border-collapse:collapse;margin-top:5px"><tr><th>Ý</th><th>Đ</th><th>S</th></tr>`+q.items.map((it,s)=>`<tr><td style="border-bottom:1px solid #eee;padding:8px">${it.sub}</td><td align="center" style="border-bottom:1px solid #eee"><input type="radio" name="q${i}_${s}" value="T" onchange="sv(${i},'T',${s})"></td><td align="center" style="border-bottom:1px solid #eee"><input type="radio" name="q${i}_${s}" value="F" onchange="sv(${i},'F',${s})"></td></tr>`).join('')+`</table>`;
             else if(q.type==='match') {
@@ -291,125 +212,118 @@
         if(!userAns[i]) userAns[i]={};
         if(curQ[i].type === 'match' || curQ[i].type === 'tf') userAns[i][s] = v;
         else userAns[i] = v;
-        
-        // Đổi màu (Đã fix logic kiểm tra rỗng)
         let isDone = false;
-        if(curQ[i].type === 'mcq' || curQ[i].type === 'short') {
-            if(userAns[i] !== undefined && userAns[i] !== null && userAns[i].toString().trim() !== "") isDone = true;
-        } else {
-            if(userAns[i] && Object.keys(userAns[i]).length === curQ[i].items.length) isDone = true;
-        }
+        if(curQ[i].type === 'mcq' || curQ[i].type === 'short') { if(userAns[i] !== undefined && userAns[i] !== null && userAns[i].toString().trim() !== "") isDone = true; } 
+        else { if(userAns[i] && Object.keys(userAns[i]).length === curQ[i].items.length) isDone = true; }
         if(isDone) document.getElementById(`pb-${i}`).classList.add('answered');
     }
 
     function confirmSubmit(){
+        // KIỂM TRA THỜI GIAN LÀM BÀI TỐI THIỂU
+        let totalTime = (window.EXAM_DATA.time || 0) * 60;
+        let minPercent = window.EXAM_DATA.minTime || 0; 
+        let timePassed = totalTime - timerDur;
+        let minSeconds = (totalTime * minPercent) / 100;
+        if(timePassed < minSeconds){
+            let waitMin = Math.ceil((minSeconds - timePassed)/60);
+            return alert(`⛔ CHƯA ĐỦ THỜI GIAN NỘP BÀI!\nQuy định tối thiểu ${minPercent}% thời gian.\nBạn cần làm thêm khoảng ${waitMin} phút.`);
+        }
+
         let un=[];
         curQ.forEach((q,i)=>{
-            if(q.type==='match' || q.type==='tf'){ 
-                let count = userAns[i] ? Object.keys(userAns[i]).length : 0;
-                if(count < q.items.length) un.push(i+1); 
-            }
-            else {
-                if(userAns[i] === undefined || userAns[i] === null || userAns[i] === "") un.push(i+1);
-            }
+            if(q.type==='match' || q.type==='tf'){ let count = userAns[i] ? Object.keys(userAns[i]).length : 0; if(count < q.items.length) un.push(i+1); }
+            else { if(userAns[i] === undefined || userAns[i] === null || userAns[i] === "") un.push(i+1); }
         });
-
-        if(un.length>0){ 
-            if(!confirm(`⚠️ CÒN CÂU CHƯA LÀM: ${un.join(", ")}\n\nBạn có chắc muốn nộp bài không?`)) return;
-        }
-        else { 
-            if(!confirm("Xác nhận nộp bài thi?")) return;
-        }
+        if(un.length>0){ if(!confirm(`⚠️ CÒN CÂU CHƯA LÀM: ${un.join(", ")}\n\nBạn có chắc muốn nộp bài không?`)) return; }
+        else { if(!confirm("Xác nhận nộp bài thi?")) return; }
         submitQuiz();
     }
 
     function chk(u, c) {
         if (u === undefined || u === null || u === "") return false;
-        let uStr = String(u).trim();
-        let cStr = String(c).trim();
-        let uClean = uStr.replace(',', '.');
-        let cClean = cStr.replace(',', '.');
-        
+        let uStr = String(u).trim(); let cStr = String(c).trim();
+        let uClean = uStr.replace(',', '.'); let cClean = cStr.replace(',', '.');
         if (uClean === cClean) return true;
         if (uStr.toLowerCase() === cStr.toLowerCase()) return true;
-        
         if (uStr === 'T' && ['true', '1', 'đúng', 'yes'].includes(cStr.toLowerCase())) return true;
         if (uStr === 'F' && ['false', '0', 'sai', 'no'].includes(cStr.toLowerCase())) return true;
-
         if (isEnc) {
             if (CryptoJS.MD5(uStr).toString() === cStr) return true;
             if (CryptoJS.MD5(uClean).toString() === cStr) return true; 
-            if (uStr === 'T') { 
-                let trues = ["True", "true", "TRUE", "Đúng", "Dung", "Yes", "1", "T"];
-                for(let t of trues) if(CryptoJS.MD5(t).toString() === cStr) return true;
-            }
-            if (uStr === 'F') {
-                let falses = ["False", "false", "FALSE", "Sai", "No", "0", "F"];
-                for(let f of falses) if(CryptoJS.MD5(f).toString() === cStr) return true;
-            }
+            if (uStr === 'T') { let trues = ["True", "true", "TRUE", "Đúng", "Dung", "Yes", "1", "T"]; for(let t of trues) if(CryptoJS.MD5(t).toString() === cStr) return true; }
+            if (uStr === 'F') { let falses = ["False", "false", "FALSE", "Sai", "No", "0", "F"]; for(let f of falses) if(CryptoJS.MD5(f).toString() === cStr) return true; }
         }
         return false;
     }
 
     function submitQuiz(){
-        isExamActive = false; // Tắt chống gian lận
-        clearInterval(timerInt);
+        isExamActive = false; clearInterval(timerInt);
         document.getElementById('btn-submit').style.display='none';
         
+        // GHI NHẬN THỜI GIAN KẾT THÚC
+        endTimeStr = new Date().toLocaleString('vi-VN');
+
+        let allowView = window.EXAM_DATA.viewDetail === true;
+        if(window.EXAM_DATA.end){ let endTime = new Date(window.EXAM_DATA.end).getTime(); if(Date.now() > endTime) allowView = true; }
+
         let score=0, max=0;
         curQ.forEach((q,i)=>{
-            const bl=document.getElementById(`q-${i}`); document.getElementById(`sol-${i}`).style.display='block';
+            const bl=document.getElementById(`q-${i}`); 
             let qPoint = (q.point && parseFloat(q.point) > 0) ? parseFloat(q.point) : scoresConfig[q.type];
+            let isCorrect = false; let detailTxt = "";
 
             if(q.type==='mcq' || q.type==='short'){
                 max += qPoint;
-                if(chk(userAns[i], q.ans)) { score += qPoint; bg(bl, true, 'Đúng'); } 
-                else bg(bl, false, `Sai. ĐS: ${q.ans}`);
+                if(chk(userAns[i], q.ans)) { score += qPoint; isCorrect=true; detailTxt='Đúng'; } 
+                else { isCorrect=false; detailTxt=`Sai. ĐS: ${q.ans}`; }
             }
             else if(q.type==='tf'){
                 max += qPoint; let c=0;
                 q.items.forEach((it, idx) => { if(chk(userAns[i]?userAns[i][idx]:null, it.ans)) c++; });
-                
                 let earned = 0;
-                if(c==1) earned = qPoint * 0.1;
-                else if(c==2) earned = qPoint * 0.25;
-                else if(c==3) earned = qPoint * 0.5;
-                else if(c==4) earned = qPoint * 1.0;
-                
-                score += earned; 
-                bg(bl, earned>0, `Đúng ${c}/${q.items.length} ý (+${earned}đ)`);
+                if(c==1) earned=qPoint*0.1; else if(c==2) earned=qPoint*0.25; else if(c==3) earned=qPoint*0.5; else if(c==4) earned=qPoint*1.0;
+                score += earned; isCorrect = (earned > 0); detailTxt=`Đúng ${c}/${q.items.length} ý`;
             }
             else if(q.type==='match'){
                 max += qPoint; let c=0; let uObj = userAns[i] || {};
                 q.items.forEach((_, idx) => { if(chk(uObj[idx], q.ans[idx])) c++; });
-                let s = (c/q.items.length) * qPoint; 
-                score += s; 
-                bg(bl, s>0, `Đúng ${c}/${q.items.length} cặp (+${s.toFixed(2)}đ)`);
+                let s = (c/q.items.length) * qPoint; score += s; isCorrect = (s > 0); detailTxt=`Đúng ${c}/${q.items.length} cặp`;
             }
+
+            if(allowView) { document.getElementById(`sol-${i}`).style.display='block'; bg(bl, isCorrect, detailTxt); } 
+            else { let inputs = bl.querySelectorAll('input, select'); inputs.forEach(inp => inp.disabled = true); }
         });
 
         let finalS = Math.round(score*100)/100;
         document.getElementById('result-area').style.display='block';
         document.getElementById('final-score').innerText = `${finalS} / ${max}`;
+        if(!allowView) { document.getElementById('result-area').insertAdjacentHTML('beforeend', `<div style="color:#d32f2f;margin-top:10px;font-style:italic">(🔒 Lời giải đang ẩn. Xem lại sau khi hết hạn đề)</div>`); }
+        
         window.scrollTo({top:0,behavior:'smooth'});
         if(GOOGLE_SCRIPT_URL.length > 10) sendToSheet(finalS);
 
         let reviewSec = REVIEW_TIME;
         const rInt = setInterval(() => {
-            reviewSec--;
-            document.getElementById('r-time').innerText = reviewSec;
-            if(reviewSec <= 0) {
-                clearInterval(rInt);
-                document.body.innerHTML = "<div style='height:100vh;display:flex;justify-content:center;align-items:center;background:#263238;color:white;flex-direction:column'><h1>HẾT GIỜ XEM BÀI</h1><button onclick='location.reload()' style='padding:10px'>Quay lại</button></div>";
-            }
+            reviewSec--; document.getElementById('r-time').innerText = reviewSec;
+            if(reviewSec <= 0) { clearInterval(rInt); document.body.innerHTML = "<div style='height:100vh;display:flex;justify-content:center;align-items:center;background:#263238;color:white;flex-direction:column'><h1>HẾT GIỜ XEM BÀI</h1><button onclick='location.reload()' style='padding:10px'>Quay lại</button></div>"; }
         }, 1000);
     }
 
     function bg(el,isT,txt){ el.insertAdjacentHTML('beforeend',`<div class="res-badge ${isT?'res-correct':'res-wrong'}">${txt}</div>`); }
+    
+    // --- HÀM GỬI DỮ LIỆU ĐẦY ĐỦ VỀ SHEET ---
     function sendToSheet(score) {
         fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: document.getElementById('s-name').value, class: document.getElementById('s-class').value, exam: window.EXAM_DATA.title, score: score })
+            body: JSON.stringify({ 
+                name: document.getElementById('s-name').value, 
+                class: document.getElementById('s-class').value, 
+                exam: window.EXAM_DATA.title, 
+                score: score,
+                start: startTimeStr, // THỜI GIAN BẮT ĐẦU
+                end: endTimeStr,     // THỜI GIAN KẾT THÚC
+                violations: cheatCount // SỐ LỖI VI PHẠM
+            })
         });
     }
 </script>
