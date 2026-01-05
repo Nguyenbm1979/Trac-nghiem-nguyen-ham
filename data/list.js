@@ -11,6 +11,6 @@ window.EXAM_LIST = [
         "title": "Đề Minh Họa V-Sat, Đại Học Cần Thơ, Năm 2025",
         "subject": "Toan",
         "grade": "12",
-        "time": 45
+        "time": 90
     }
 ];
