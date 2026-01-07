@@ -506,19 +506,20 @@
         }catch(e){ console.log("List chưa có hoặc lỗi, tạo mới."); }
         
         if(!Array.isArray(l)) l = [];
+        
+        // Xóa đề cũ đi để cập nhật thông tin mới
         l=l.filter(x=>x.id!==id);
         
-        // --- [ĐOẠN CẦN SỬA LÀ Ở ĐÂY] ---
-        // Thêm allowPrint: d.allowPrint vào object này
+        // --- [QUAN TRỌNG] THÊM allowPrint VÀO DANH SÁCH ---
         l.unshift({
             id: id,
             title: d.title,
             subject: d.subject,
             grade: d.grade,
             time: d.time,
-            allowPrint: d.allowPrint // <--- QUAN TRỌNG: Dòng này giúp trang chủ biết có được in hay không
+            allowPrint: d.allowPrint // <--- Dòng này quyết định việc hiện nút In
         });
-        // -------------------------------
+        // ---------------------------------------------------
 
         let c=btoa(unescape(encodeURIComponent(`window.EXAM_LIST = ${JSON.stringify(l,null,4)};`)));
         await upF(u,r,t,`data/list.js`,c,false);
