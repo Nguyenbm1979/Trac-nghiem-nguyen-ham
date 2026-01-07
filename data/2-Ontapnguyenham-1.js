@@ -6,8 +6,12 @@ window.EXAM_DATA = {
     "password": "98eb45b771496fe725ae4e0177604c36",
     "encrypted": false,
     "shuffle": true,
+    "viewDetail": true,
+    "minTime": 0,
+    "music": true,
+    "allowPrint": false,
     "start": "2026-01-05T00:01",
-    "end": "2026-01-07T21:00",
+    "end": "2026-01-10T21:00",
     "price": 0,
     "bank": {
         "id": "",
@@ -311,7 +315,7 @@ window.EXAM_DATA = {
             "type": "short",
             "q": "Cây cà chua khi trồng có chiều cao $5$ cm. Tốc độ tăng chiều cao của cây cà chua sau khi trồng được cho bởi hàm số $ v(t)=-0{,}1t^3+t^2$, trong đó $t$ tính theo tuần, $v(t)$ tính bằng cm/tuần. Gọi $h(t)$ (tính bằng centimét) là độ cao của cây cà chua ở tuần thứ $t$ (Nguồn:A. Bigalke et al., Mathematik, Grundkurs ma-I, Cornelsen 2016). Vào thời điểm cây cà chua đó phát triển nhanh nhất thì cây cà chua sẽ cao bao nhiêu? (làm tròn kết quả đến hàng phần chục).",
             "ans": "54,4",
-            "explain": "Ta có $h(t)=\\displaystyle\\int v(t) \\mathrm{\\,d}t=\\displaystyle\\int \\left(-0{,}1t^3+t^2\n\\right) \\mathrm{\\,d}t=-\\dfrac{1}{40}{t^4}+\\dfrac{t^3}{3}+C$.<br>\nCây cà chua khi trồng có chiều cao $5$ cm nên $h(0)=5\\Rightarrow C=5$.<br>\nVậy độ cao của cây cà chua ở tuần thứ $t$ được cho bởi hàm số \n$h(t)=-\\dfrac{1}{40}{t^4}+\\dfrac{t^3}{3}+5$ $(t\\ge 0)$.<br>\nTa tìm $ t$ $(t\\ge 0)$ sao cho $v(t)$ đạt giá trị lớn nhất.<br>\n$v'(t)=-0{,}3t^2+2t$; $ v'(t)=0\\Leftrightarrow-0{,}3t^2+2t=0\\Leftrightarrow\\left[\\begin{aligned}&t=0\\\\ &t=\\dfrac{20}{3}.\\end{aligned}\\right.$<br>\nBảng biến thiên<br>\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767587829696_912.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\">\nTừ đó ta thấy $v(t)$ đạt giá trị lớn nhất tại $t=\\dfrac{20}{3}$.<br>\nKhi đó, cây cà chua sẽ đạt chiều cao là $h\\left(\\dfrac{20}{3}\\right)=\\dfrac{4\\,405}{81}\\approx 54{,}4$ (cm).",
+            "explain": "Ta có $h(t)=\\displaystyle\\int v(t) \\mathrm{\\,d}t=\\displaystyle\\int \\left(-0{,}1t^3+t^2\n\\right) \\mathrm{\\,d}t=-\\dfrac{1}{40}{t^4}+\\dfrac{t^3}{3}+C$.<br>\nCây cà chua khi trồng có chiều cao $5$ cm nên $h(0)=5\\Rightarrow C=5$.<br>\nVậy độ cao của cây cà chua ở tuần thứ $t$ được cho bởi hàm số \n$h(t)=-\\dfrac{1}{40}{t^4}+\\dfrac{t^3}{3}+5$ $(t\\ge 0)$.<br>\nTa tìm $ t$ $(t\\ge 0)$ sao cho $v(t)$ đạt giá trị lớn nhất.<br>\n$v'(t)=-0{,}3t^2+2t$; $ v'(t)=0\\Leftrightarrow-0{,}3t^2+2t=0\\Leftrightarrow\\left[\\begin{aligned}&t=0\\\\ &t=\\dfrac{20}{3}.\\end{aligned}\\right.$<br>\nBảng biến thiên<br>\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767587829696_912.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\">\nTừ đó ta thấy $v(t)$ đạt giá trị lớn nhất tại $t=\\dfrac{20}{3}$.<br>\nKhi đó, cây cà chua sẽ đạt chiều cao là $h\\left(\\dfrac{20}{3}\\right)=\\dfrac{4\\,405}{81}\\approx 54{,}4$ (cm).<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767587829696_912.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\">",
             "point": "0.5"
         }
     ]
