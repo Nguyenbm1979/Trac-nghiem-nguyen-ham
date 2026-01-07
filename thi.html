@@ -337,6 +337,7 @@ function checkLogin(){
                 alert("Hết giờ làm bài!");
             }
         }, 1000);
+        document.addEventListener("visibilitychange", handleVisibilityChange);
     }
 
     function renderUI(){
@@ -398,12 +399,13 @@ function checkLogin(){
 
     function submitQuiz(){
         clearInterval(timerInt);
+        // Tắt theo dõi chuyển tab
+        document.removeEventListener("visibilitychange", handleVisibilityChange);
         document.getElementById('btn-submit').style.display='none';
         // Tắt nhạc khi nộp bài
         const audio = document.getElementById('bg-music');
         if(!audio.paused) audio.pause();
         document.getElementById('music-control').style.display='none';
-
         let score=0, max=0;
         curQ.forEach((q,i)=>{
             const bl=document.getElementById(`q-${i}`); document.getElementById(`sol-${i}`).style.display='block';
@@ -431,6 +433,21 @@ function checkLogin(){
         window.scrollTo({top:0,behavior:'smooth'});
     }
     function bg(el,isT,txt){ el.insertAdjacentHTML('beforeend',`<div class="res-badge ${isT?'res-correct':'res-wrong'}">${txt}</div>`); }
+    // --- [CODE MỚI] CHỨC NĂNG CHỐNG GIAN LẬN ---
+    let warnCount = 0;
+
+    function handleVisibilityChange() {
+        // Nếu màn hình bị ẩn (chuyển tab hoặc thu nhỏ)
+        if (document.hidden) {
+            warnCount++;
+            if (warnCount >= 3) {
+                alert("⛔ VI PHẠM NGHIÊM TRỌNG!\n\nBạn đã rời khỏi màn hình làm bài quá 3 lần.\nHệ thống buộc phải thu bài ngay lập tức.");
+                submitQuiz();
+            } else {
+                alert(`⚠️ CẢNH BÁO (${warnCount}/3)!\n\nVui lòng tập trung làm bài. Nếu vi phạm 3 lần, bài thi sẽ tự động nộp!`);
+            }
+        }
+    }
 </script>
 </body>
 </html>
