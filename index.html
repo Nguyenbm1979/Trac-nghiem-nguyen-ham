@@ -192,6 +192,11 @@
 
                 let priceTag = ex.price ? `<span style="color:#c62828;font-weight:bold">${parseInt(ex.price).toLocaleString()}đ</span>` : `<span style="color:#2e7d32;font-weight:bold">Miễn phí</span>`;
 
+                // --- CODE MỚI: KIỂM TRA QUYỀN IN & TẠO NÚT ---
+                // (Mặc định là cho phép in nếu không có cấu hình cấm)
+                let printBtn = (ex.allowPrint !== false) 
+                    ? `<a href="thi.html?id=${ex.id}&print=1" target="_blank" class="card-btn" style="flex:1;border-right:1px solid #eee;background:#fff3e0;color:#e65100;display:flex;align-items:center;justify-content:center" title="Xuất file PDF đề thi"><i class="fas fa-print" style="margin-right:5px"></i> IN ĐỀ</a>`
+                    : ``;
                 const html = `
                     <div class="exam-card">
                         <div class="card-top">
@@ -206,13 +211,18 @@
                                 ${priceTag}
                             </div>
                         </div>
-                        <a href="thi.html?id=${ex.id}" class="card-btn">VÀO THI NGAY <i class="fas fa-angle-right"></i></a>
+                        
+                        <div style="display:flex; border-top:1px solid #f0f0f0">
+                            ${printBtn}
+                            <a href="thi.html?id=${ex.id}" class="card-btn" style="flex:2;display:flex;align-items:center;justify-content:center">
+                                VÀO THI NGAY <i class="fas fa-angle-right" style="margin-left:5px"></i>
+                            </a>
+                        </div>
                     </div>
                 `;
                 grid.insertAdjacentHTML('beforeend', html);
             });
         }
-
         function filterExams() {
             const txt = document.getElementById('search-input').value.toLowerCase();
             const sub = document.getElementById('subject-filter').value;
