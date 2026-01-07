@@ -507,7 +507,19 @@
         
         if(!Array.isArray(l)) l = [];
         l=l.filter(x=>x.id!==id);
-        l.unshift({id:id,title:d.title,subject:d.subject,grade:d.grade,time:d.time});
+        
+        // --- [ĐOẠN CẦN SỬA LÀ Ở ĐÂY] ---
+        // Thêm allowPrint: d.allowPrint vào object này
+        l.unshift({
+            id: id,
+            title: d.title,
+            subject: d.subject,
+            grade: d.grade,
+            time: d.time,
+            allowPrint: d.allowPrint // <--- QUAN TRỌNG: Dòng này giúp trang chủ biết có được in hay không
+        });
+        // -------------------------------
+
         let c=btoa(unescape(encodeURIComponent(`window.EXAM_LIST = ${JSON.stringify(l,null,4)};`)));
         await upF(u,r,t,`data/list.js`,c,false);
     }
