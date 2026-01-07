@@ -54,6 +54,19 @@
             #print-area { display: block; position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; }
             @page { size: A4; margin: 2cm; }
         }
+        /* --- [CODE MỚI] GIAO DIỆN DARK MODE --- */
+        body.dark-mode { background: #121212; color: #e0e0e0; }
+        body.dark-mode .status-bar, 
+        body.dark-mode .question-block, 
+        body.dark-mode .palette-item { background: #1e1e1e; border-color: #333; color: #e0e0e0; }
+        body.dark-mode .option-item { background: #2c2c2c; border-color: #444; color: #ccc; }
+        body.dark-mode .option-item:hover { background: #3c3c3c; }
+        body.dark-mode .option-item:has(input:checked) { background: #0d47a1; color: white; border-color: #1976d2; }
+        body.dark-mode .student-box { color: #90caf9; }
+        body.dark-mode input[type="text"], 
+        body.dark-mode input[type="password"] { background: #333; color: white; border-color: #555; }
+        body.dark-mode #result-area { background: #1e1e1e; border-top-color: #4caf50; }
+        body.dark-mode select { background: #333; color: white; border-color: #555; }
     </style>
 </head>
 <body>
@@ -63,8 +76,8 @@
 <div id="print-area"></div>
 
 <audio id="bg-music" loop>
-    <source src="https://docs.google.com/uc?export=download&id=1jC5-lJk-uM_YqFjVpQ5UjQjX8qQjX8qQ" type="audio/mp3">
-    <source src="https://github.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/blob/3c9ee2c76b73e1120a063e6f76d5121a786461da/Softness%20And%20Light.mp3" type="audio/mp3">
+    <source src="./Softness And Light.mp3" type="audio/mp3">
+    <source src="https://nguyenbm1979.github.io/Trac-nghiem-nguyen-ham/Softness%20And%20Light.mp3" type="audio/mp3">
 </audio>
 <div id="music-control" onclick="toggleMusic()" style="display:none; position:fixed; bottom:100px; right:30px; z-index:1500; width:50px; height:50px; background:#e91e63; color:white; border-radius:50%; align-items:center; justify-content:center; box-shadow:0 5px 15px rgba(233,30,99,0.4); cursor:pointer; font-size:1.2em; transition:0.3s">
     <i class="fas fa-music"></i>
@@ -82,8 +95,11 @@
 </div>
 
 <div class="container" id="main-interface" style="display:none">
-    <div class="status-bar">
+   <div class="status-bar">
         <div class="student-box"><i class="fas fa-user-graduate"></i> <span id="d-name">HS</span> <span id="d-class"></span></div>
+        <div id="theme-toggle" onclick="toggleTheme()" style="cursor:pointer;font-size:1.3em;margin-right:15px;color:#1a237e" title="Chế độ Sáng/Tối">
+            <i class="fas fa-moon"></i>
+        </div>
         <div class="timer-box"><i class="far fa-clock"></i> <span id="timer">00:00</span></div>
     </div>
     <div style="background:white;padding:15px;margin:15px 0;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.1)">
@@ -126,7 +142,20 @@
             btn.style.animation = "none";
         }
     }
-
+    // --- [CODE MỚI] HÀM CHUYỂN ĐỔI SÁNG/TỐI ---
+    function toggleTheme() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        const btn = document.getElementById('theme-toggle');
+        
+        if (isDark) {
+            btn.innerHTML = '<i class="fas fa-sun"></i>';
+            btn.style.color = "#fdd835"; // Màu vàng mặt trời
+        } else {
+            btn.innerHTML = '<i class="fas fa-moon"></i>';
+            btn.style.color = "#1a237e"; // Màu xanh mặt trăng
+        }
+    }
     // --- PHẦN 2: LOAD ĐỀ & KIỂM TRA CHẾ ĐỘ ---
     const urlParams=new URLSearchParams(window.location.search);
     const pId=urlParams.get('id'); exId=pId||"demo";
