@@ -11,63 +11,86 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* CSS CHUNG */
-        body{font-family:'Roboto',sans-serif;background:#f4f7f6;margin:0;color:#333;padding-bottom:100px;user-select:none}
-        
-        /* GIAO DIỆN THI (MẶC ĐỊNH) */
-        .status-bar{background:white;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 5px rgba(0,0,0,0.05);border-bottom:1px solid #eee}
-        .timer-box{background:#ffebee;color:#c62828;padding:5px 12px;border-radius:20px;font-weight:700;font-family:monospace;font-size:1.2em}
-        .student-box{font-weight:600;color:#1565c0}
-        .container{max-width:900px;margin:0 auto;padding:15px}
-        .question-block{background:white;padding:25px;border-radius:12px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.03);border-left:5px solid #1a237e}
-        .option-item{display:flex;align-items:center;background:#fafafa;border:1px solid #eee;padding:12px 15px;border-radius:8px;cursor:pointer;margin-bottom:8px;transition:0.2s}
-        .option-item:hover{background:#e8eaf6;border-color:#c5cae9}
-        .option-item:has(input:checked){background:#e3f2fd;border-color:#2196f3;color:#0d47a1;font-weight:500}
-        input[type="radio"]{accent-color:#1a237e;transform:scale(1.2);margin-right:10px}
-        
-        .submit-floating {position: fixed; bottom: 30px; right: 30px; z-index: 1500; background: linear-gradient(45deg, #d32f2f, #c62828); color: white; padding: 15px 30px; border-radius: 50px; font-weight: bold; box-shadow: 0 5px 20px rgba(198,40,40,0.5); border: 2px solid white; cursor: pointer; transition: transform 0.2s; display: flex; align-items: center; gap: 10px; font-size: 1.1em;}
-        .palette-item{width:35px;height:35px;display:flex;align-items:center;justify-content:center;border:1px solid #ddd;border-radius:6px;cursor:pointer;background:white;font-weight:bold;color:#555}
-        .palette-item.answered{background:#1a237e;color:white;border-color:#1a237e}
-        .palette-grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-        
-        /* MÀN HÌNH CHÀO */
-        .welcome-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(13,71,161,0.95);z-index:2000;display:flex;align-items:center;justify-content:center}
-        .welcome-card{background:white;width:90%;max-width:400px;padding:30px;border-radius:20px;text-align:center}
-        .btn-start{background:linear-gradient(45deg,#1565c0,#0d47a1);color:white;width:100%;padding:15px;border:none;border-radius:50px;font-weight:bold;font-size:1.1em;cursor:pointer;margin-top:15px}
+    /* --- 1. CSS CHUNG & GIAO DIỆN THI ONLINE --- */
+    body{font-family:'Roboto',sans-serif;background:#f4f7f6;margin:0;color:#333;padding-bottom:100px;user-select:none}
+    
+    .status-bar{background:white;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;box-shadow:0 2px 5px rgba(0,0,0,0.05);border-bottom:1px solid #eee}
+    .timer-box{background:#ffebee;color:#c62828;padding:5px 12px;border-radius:20px;font-weight:700;font-family:monospace;font-size:1.2em}
+    .student-box{font-weight:600;color:#1565c0}
+    .container{max-width:900px;margin:0 auto;padding:15px}
+    .question-block{background:white;padding:25px;border-radius:12px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.03);border-left:5px solid #1a237e}
+    .option-item{display:flex;align-items:center;background:#fafafa;border:1px solid #eee;padding:12px 15px;border-radius:8px;cursor:pointer;margin-bottom:8px;transition:0.2s}
+    .option-item:hover{background:#e8eaf6;border-color:#c5cae9}
+    .option-item:has(input:checked){background:#e3f2fd;border-color:#2196f3;color:#0d47a1;font-weight:500}
+    input[type="radio"]{accent-color:#1a237e;transform:scale(1.2);margin-right:10px}
+    
+    .submit-floating {position: fixed; bottom: 30px; right: 30px; z-index: 1500; background: linear-gradient(45deg, #d32f2f, #c62828); color: white; padding: 15px 30px; border-radius: 50px; font-weight: bold; box-shadow: 0 5px 20px rgba(198,40,40,0.5); border: 2px solid white; cursor: pointer; transition: transform 0.2s; display: flex; align-items: center; gap: 10px; font-size: 1.1em;}
+    .palette-item{width:35px;height:35px;display:flex;align-items:center;justify-content:center;border:1px solid #ddd;border-radius:6px;cursor:pointer;background:white;font-weight:bold;color:#555}
+    .palette-item.answered{background:#1a237e;color:white;border-color:#1a237e}
+    .palette-grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+    
+    /* MÀN HÌNH CHÀO */
+    .welcome-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(13,71,161,0.95);z-index:2000;display:flex;align-items:center;justify-content:center}
+    .welcome-card{background:white;width:90%;max-width:400px;padding:30px;border-radius:20px;text-align:center}
+    .btn-start{background:linear-gradient(45deg,#1565c0,#0d47a1);color:white;width:100%;padding:15px;border:none;border-radius:50px;font-weight:bold;font-size:1.1em;cursor:pointer;margin-top:15px}
 
-        /* HIỆU ỨNG NHẠC */
-        @keyframes spin { 100% { transform: rotate(360deg); } }
+    /* HIỆU ỨNG NHẠC */
+    @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* --- CSS CHO CHẾ ĐỘ IN (PRINT MODE) --- */
-        #print-area { display: none; background: white; color: black; padding: 20px; font-family: "Times New Roman", serif; }
-        .print-header { display: flex; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
-        .print-header div { text-align: center; }
-        .print-q { margin-bottom: 15px; page-break-inside: avoid; }
-        .print-q b { font-weight: bold; }
-        .print-opts { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 5px; }
-        .print-opt { min-width: 20%; }
+    /* --- 2. CSS MỚI: CHUYÊN DỤNG CHO IN ẤN (Print Mode) --- */
+    #print-area { display: none; font-family: "Times New Roman", serif; line-height: 1.3; color: #000; }
+    
+    /* Header đề thi chuẩn */
+    .print-header-table { width: 100%; margin-bottom: 15px; border-bottom: 1px solid #000; padding-bottom: 5px; }
+    .print-header-table td { vertical-align: top; }
+    .ph-left { text-align: center; width: 40%; font-weight: normal; }
+    .ph-right { text-align: center; width: 60%; font-weight: bold; }
+    .ph-school { font-weight: bold; text-transform: uppercase; }
+    
+    /* Khung thông tin thí sinh */
+    .student-info-box { margin-bottom: 15px; border: 1px solid #000; padding: 10px; font-size: 14px; }
+    
+    /* Câu hỏi */
+    .print-q { margin-bottom: 12px; text-align: justify; page-break-inside: avoid; } /* Tránh bị ngắt đôi câu khi sang trang */
+    .print-q b { font-weight: bold; }
+    .print-img-box { text-align: center; margin: 5px 0; }
+    
+    /* Lưới đáp án trắc nghiệm thông minh */
+    .opts-grid { display: grid; gap: 5px; margin-top: 5px; margin-left: 20px; }
+    .cols-4 { grid-template-columns: repeat(4, 1fr); } /* 4 đáp án 1 dòng */
+    .cols-2 { grid-template-columns: repeat(2, 1fr); } /* 2 đáp án 1 dòng */
+    .cols-1 { grid-template-columns: 1fr; }            /* 1 đáp án 1 dòng */
+    
+    /* Bảng Đúng/Sai */
+    .tf-table { width: 100%; border-collapse: collapse; margin-top: 5px; font-size: 14px; }
+    .tf-table th, .tf-table td { border: 1px solid #333; padding: 4px 8px; }
+    .tf-table th { background: #f0f0f0; text-align: center; }
 
-        /* KHI IN THÌ ẨN GIAO DIỆN WEB, HIỆN GIAO DIỆN IN */
-        @media print {
-            body * { visibility: hidden; }
-            #print-area, #print-area * { visibility: visible; }
-            #print-area { display: block; position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; }
-            @page { size: A4; margin: 2cm; }
-        }
-        /* --- [CODE MỚI] GIAO DIỆN DARK MODE --- */
-        body.dark-mode { background: #121212; color: #e0e0e0; }
-        body.dark-mode .status-bar, 
-        body.dark-mode .question-block, 
-        body.dark-mode .palette-item { background: #1e1e1e; border-color: #333; color: #e0e0e0; }
-        body.dark-mode .option-item { background: #2c2c2c; border-color: #444; color: #ccc; }
-        body.dark-mode .option-item:hover { background: #3c3c3c; }
-        body.dark-mode .option-item:has(input:checked) { background: #0d47a1; color: white; border-color: #1976d2; }
-        body.dark-mode .student-box { color: #90caf9; }
-        body.dark-mode input[type="text"], 
-        body.dark-mode input[type="password"] { background: #333; color: white; border-color: #555; }
-        body.dark-mode #result-area { background: #1e1e1e; border-top-color: #4caf50; }
-        body.dark-mode select { background: #333; color: white; border-color: #555; }
-    </style>
+    /* CẤU HÌNH TRANG IN (Khi bấm Ctrl+P) */
+    @media print {
+        @page { size: A4; margin: 1.5cm 1.5cm 1.5cm 1.5cm; } /* Căn lề chuẩn A4 */
+        body * { visibility: hidden; } /* Ẩn toàn bộ web */
+        #print-area, #print-area * { visibility: visible; } /* Chỉ hiện vùng in */
+        #print-area { display: block; position: absolute; left: 0; top: 0; width: 100%; }
+        
+        /* Ẩn các nút rác */
+        .submit-floating, .status-bar, #music-control, #theme-toggle { display: none !important; }
+    }
+
+    /* --- 3. CSS GIAO DIỆN DARK MODE --- */
+    body.dark-mode { background: #121212; color: #e0e0e0; }
+    body.dark-mode .status-bar, 
+    body.dark-mode .question-block, 
+    body.dark-mode .palette-item { background: #1e1e1e; border-color: #333; color: #e0e0e0; }
+    body.dark-mode .option-item { background: #2c2c2c; border-color: #444; color: #ccc; }
+    body.dark-mode .option-item:hover { background: #3c3c3c; }
+    body.dark-mode .option-item:has(input:checked) { background: #0d47a1; color: white; border-color: #1976d2; }
+    body.dark-mode .student-box { color: #90caf9; }
+    body.dark-mode input[type="text"], 
+    body.dark-mode input[type="password"] { background: #333; color: white; border-color: #555; }
+    body.dark-mode #result-area { background: #1e1e1e; border-top-color: #4caf50; }
+    body.dark-mode select { background: #333; color: white; border-color: #555; }
+</style>
 </head>
 <body>
 
