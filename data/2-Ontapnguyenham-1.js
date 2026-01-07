@@ -9,7 +9,7 @@ window.EXAM_DATA = {
     "viewDetail": true,
     "minTime": 0,
     "music": true,
-    "allowPrint": false,
+    "allowPrint": true,
     "start": "2026-01-05T00:01",
     "end": "2026-01-10T21:00",
     "price": 0,
