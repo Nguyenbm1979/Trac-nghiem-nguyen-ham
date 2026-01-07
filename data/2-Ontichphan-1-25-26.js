@@ -6,8 +6,12 @@ window.EXAM_DATA = {
     "password": "2afba7e5bf6e676c5798e444f8b1b261",
     "encrypted": false,
     "shuffle": true,
+    "viewDetail": true,
+    "minTime": 50,
+    "music": true,
+    "allowPrint": true,
     "start": "2026-01-05T22:15",
-    "end": "2026-01-08T21:15",
+    "end": "2026-01-11T21:15",
     "price": 0,
     "bank": {
         "id": "",
