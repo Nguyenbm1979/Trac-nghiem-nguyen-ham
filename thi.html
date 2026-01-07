@@ -166,10 +166,19 @@
         s.src=`data/${pId}.js?v=`+Date.now();
         s.onload=()=>{
             if(window.EXAM_DATA) {
+                // --- CODE BỔ SUNG: KIỂM TRA QUYỀN IN ---
+                if(isPrintMode && window.EXAM_DATA.allowPrint !== true) {
+                    alert("⛔ Đề thi này KHÔNG CHO PHÉP IN!");
+                    // Quay về chế độ thi bình thường (xóa ?print=1)
+                    window.location.href = window.location.pathname + "?id=" + pId; 
+                    return;
+                }
+                // ----------------------------------------
+
                 if(isPrintMode) {
-                    renderPrintMode(window.EXAM_DATA); // Chuyển sang chế độ in ngay
+                    renderPrintMode(window.EXAM_DATA); 
                 } else {
-                    initExam(window.EXAM_DATA); // Chế độ thi bình thường
+                    initExam(window.EXAM_DATA); 
                 }
             }
         };
