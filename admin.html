@@ -139,10 +139,12 @@
                 <div class="col"><label>Giá (VNĐ)</label><input type="number" id="exam-price" placeholder="0"></div>
                 <div class="col"><label>Mật khẩu</label><input type="text" id="exam-pass" oninput="hashPass()"><input type="hidden" id="exam-pass-hash"></div>
                 <div class="col" style="flex:2"><label>Cấu hình thi</label>
-                    <div style="margin-top:5px;display:flex;gap:10px;flex-wrap:wrap">
+                    <div style="margin-top:5px;display:flex;gap:15px;flex-wrap:wrap">
                         <span><input type="checkbox" id="secure-mode"> Mã hóa</span>
                         <span style="color:#e65100;font-weight:bold"><input type="checkbox" id="exam-shuffle" checked> 🔀 Đảo câu</span>
-                        <span style="color:#2e7d32;font-weight:bold"><input type="checkbox" id="view-detail" checked> 👁️ Xem lời giải</span>
+                        <span style="color:#2e7d32;font-weight:bold"><input type="checkbox" id="view-detail" checked> 👁️ Xem giải</span>
+                        <span style="color:#c2185b;font-weight:bold"><input type="checkbox" id="exam-music"> 🎵 Nhạc nền</span>
+                        <span style="color:#00796b;font-weight:bold"><input type="checkbox" id="allow-print" checked> 🖨️ Cho phép in</span>
                     </div>
                 </div>
             </div>
@@ -400,6 +402,9 @@
             if(data.shuffle !== undefined) document.getElementById('exam-shuffle').checked = data.shuffle;
             if(data.viewDetail !== undefined) document.getElementById('view-detail').checked = data.viewDetail;
             if(data.minTime) document.getElementById('min-time-percent').value = data.minTime;
+            // --- CODE MỚI ---
+            if(data.music !== undefined) document.getElementById('exam-music').checked = data.music;
+            if(data.allowPrint !== undefined) document.getElementById('allow-print').checked = data.allowPrint;
             
             if(data.start)document.getElementById('exam-start').value=data.start;
             if(data.end)document.getElementById('exam-end').value=data.end;
@@ -452,20 +457,29 @@
                 }
             });
             let dt={
-                title:document.getElementById('exam-title').value,
-                subject:document.getElementById('exam-subject').value, 
-                grade:document.getElementById('exam-grade').value,
-                time:parseInt(document.getElementById('exam-time').value),
-                password:document.getElementById('exam-pass-hash').value,
-                encrypted:sec,
+                title: document.getElementById('exam-title').value,
+                subject: document.getElementById('exam-subject').value, 
+                grade: document.getElementById('exam-grade').value,
+                time: parseInt(document.getElementById('exam-time').value),
+                password: document.getElementById('exam-pass-hash').value,
+                encrypted: sec,
+                
+                // Các biến đã khai báo bên trên (shuffle, viewDetail, minTime)
                 shuffle: shuffle,
                 viewDetail: viewDetail,
                 minTime: minTime,
-                start:document.getElementById('exam-start').value,
-                end:document.getElementById('exam-end').value,
-                price: price, bank: bankInfo,
-                scores:{mcq:0.25,tf:1.0,short:0.5,match:1.0},
-                questions:fQ
+
+                // --- CODE BỔ SUNG MỚI (NHẠC & IN) ---
+                music: document.getElementById('exam-music').checked,
+                allowPrint: document.getElementById('allow-print').checked,
+                // -------------------------------------
+
+                start: document.getElementById('exam-start').value,
+                end: document.getElementById('exam-end').value,
+                price: price, 
+                bank: bankInfo,
+                scores: {mcq:0.25, tf:1.0, short:0.5, match:1.0},
+                questions: fQ
             };
             let c=btoa(unescape(encodeURIComponent(`window.EXAM_DATA = ${JSON.stringify(dt,null,4)};`)));
             await upF(u,r,t,`data/${id}.js`,c,false);
