@@ -4,7 +4,8 @@ window.EXAM_LIST = [
         "title": "Đề Ôn Tập Nguyên Hàm, Số 1, Năm 2025-2026",
         "subject": "Toan",
         "grade": "12",
-        "time": 60
+        "time": 60,
+        "allowPrint": true
     },
     {
         "id": "2-De-OnTichPhan-2-25-26",
