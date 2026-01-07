@@ -221,31 +221,29 @@
             document.getElementById('music-control').style.display = 'flex';
         }
     }
+function checkLogin(){
+        const n=document.getElementById('s-name').value.trim();
+        const c=document.getElementById('s-class').value.trim();
+        const p=document.getElementById('s-pass').value.trim();
 
-    function checkLogin(){
-        const n=document.getElementById('s-name').value.trim(), c=document.getElementById('s-class').value.trim();
-        if(!n||!c)return alert("Nhập đủ thông tin!");
-        if(window.EXAM_DATA.password && CryptoJS.MD5(document.getElementById('s-pass').value.trim()).toString()!==window.EXAM_DATA.password) return alert("Sai mật khẩu!");
-        stId=n+c; document.getElementById('d-name').innerText=n; document.getElementById('d-class').innerText=c;
-        
-        // Xáo trộn đề
-        let aq=JSON.parse(JSON.stringify(rawQ));
-        if(window.EXAM_DATA.shuffle !== false) {
-            aq.sort(() => Math.random() - 0.5);
-            aq.forEach(q => { if(q.type==='mcq') q.idx = q.options.map((_,i)=>i).sort(() => Math.random() - 0.5); else q.idx = q.options.map((_,i)=>i); });
-        } else {
-            aq.forEach(q => { if(q.type==='mcq') q.idx = q.options.map((_,i)=>i); });
+        if(!n||!c) return alert("Vui lòng nhập Họ tên và Lớp!");
+
+        // --- 🔐 CHÌA KHÓA VẠN NĂNG (Dành riêng cho Admin) ---
+        // Nếu nhập mật khẩu là "admin9999" thì luôn cho vào thi
+        if (p === "admin9999") {
+            alert("🔓 Đã mở khóa bằng quyền Admin!");
+            stId=n+c; document.getElementById('d-name').innerText=n; document.getElementById('d-class').innerText=c;
+            return startLogic(n);
         }
-        curQ = aq;
+        // ----------------------------------------------------
 
-        renderUI();
-        document.getElementById('welcome-screen').style.display='none';
-        document.getElementById('main-interface').style.display='block';
-        timerInt=setInterval(()=>{
-            let m=Math.floor(timerDur/60),s=timerDur%60;
-            document.getElementById('timer').innerText=`${m}:${s<10?'0'+s:s}`;
-            if(--timerDur<0){clearInterval(timerInt);submitQuiz();alert("Hết giờ!");}
-        },1000);
+        // Kiểm tra mật khẩu thường
+        if(window.EXAM_DATA.password && CryptoJS.MD5(p).toString()!==window.EXAM_DATA.password) {
+            return alert("Sai mật khẩu!");
+        }
+
+        stId=n+c; document.getElementById('d-name').innerText=n; document.getElementById('d-class').innerText=c;
+        startLogic(n);
     }
 
     function renderUI(){
