@@ -255,6 +255,60 @@ function checkLogin(){
         // Lệnh quan trọng nhất để chuyển cảnh:
         startLogic(n);
     }
+    // --- [CODE BỔ SUNG] HÀM BẮT ĐẦU THI (Bị thiếu) ---
+    function startLogic(name){
+        // 1. Xử lý trộn đề (Shuffle)
+        let aq = JSON.parse(JSON.stringify(rawQ));
+        let doShuffle = (window.EXAM_DATA.shuffle !== false);
+
+        if(doShuffle) {
+            // Tạo bộ sinh số ngẫu nhiên theo tên (để cùng tên thì đề giống nhau, tránh F5 đổi đề)
+            let seed = 0;
+            for(let i=0; i<name.length; i++) seed += name.charCodeAt(i);
+            const random = () => {
+                var x = Math.sin(seed++) * 10000;
+                return x - Math.floor(x);
+            };
+
+            // Trộn thứ tự câu hỏi
+            aq.sort(() => random() - 0.5);
+            
+            // Trộn thứ tự đáp án (chỉ cho câu trắc nghiệm MCQ)
+            aq.forEach(q => { 
+                if(q.type === 'mcq') {
+                    q.idx = q.options.map((_,i)=>i).sort(() => random() - 0.5);
+                } else {
+                    q.idx = q.options ? q.options.map((_,i)=>i) : [];
+                }
+            });
+        } else {
+            // Không trộn
+            aq.forEach(q => { 
+                if(q.type === 'mcq') q.idx = q.options.map((_,i)=>i); 
+            });
+        }
+        curQ = aq;
+
+        // 2. Chuyển đổi giao diện
+        renderUI(); // Vẽ câu hỏi
+        document.getElementById('welcome-screen').style.display = 'none'; // Ẩn màn hình chào
+        document.getElementById('main-interface').style.display = 'block'; // Hiện đề thi
+
+        // 3. Bắt đầu tính giờ
+        clearInterval(timerInt);
+        timerInt = setInterval(() => {
+            let m = Math.floor(timerDur / 60);
+            let s = timerDur % 60;
+            document.getElementById('timer').innerText = `${m}:${s<10?'0'+s:s}`;
+            
+            // Hết giờ
+            if (--timerDur < 0) {
+                clearInterval(timerInt);
+                submitQuiz();
+                alert("Hết giờ làm bài!");
+            }
+        }, 1000);
+    }
 
     function renderUI(){
         let bh='', ph='';
