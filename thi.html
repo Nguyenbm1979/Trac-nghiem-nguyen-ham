@@ -222,27 +222,37 @@
         }
     }
 function checkLogin(){
-        const n=document.getElementById('s-name').value.trim();
-        const c=document.getElementById('s-class').value.trim();
-        const p=document.getElementById('s-pass').value.trim();
+        // 1. Lấy dữ liệu
+        const n = document.getElementById('s-name').value.trim();
+        const c = document.getElementById('s-class').value.trim();
+        const p = document.getElementById('s-pass').value.trim();
 
-        if(!n||!c) return alert("Vui lòng nhập Họ tên và Lớp!");
+        // 2. Kiểm tra tên lớp
+        if(!n || !c) return alert("Vui lòng nhập Họ tên và Lớp!");
 
-        // --- 🔐 CHÌA KHÓA VẠN NĂNG (Dành riêng cho Admin) ---
-        // Nếu nhập mật khẩu là "admin9999" thì luôn cho vào thi
+        // 3. (Tùy chọn) Mã vạn năng cho Admin
         if (p === "admin9999") {
-            alert("🔓 Đã mở khóa bằng quyền Admin!");
-            stId=n+c; document.getElementById('d-name').innerText=n; document.getElementById('d-class').innerText=c;
-            return startLogic(n);
-        }
-        // ----------------------------------------------------
-
-        // Kiểm tra mật khẩu thường
-        if(window.EXAM_DATA.password && CryptoJS.MD5(p).toString()!==window.EXAM_DATA.password) {
-            return alert("Sai mật khẩu!");
+            stId = n + c;
+            document.getElementById('d-name').innerText = n;
+            document.getElementById('d-class').innerText = c;
+            startLogic(n); // Vào ngay
+            return;
         }
 
-        stId=n+c; document.getElementById('d-name').innerText=n; document.getElementById('d-class').innerText=c;
+        // 4. KIỂM TRA MẬT KHẨU CỦA ĐỀ
+        if(window.EXAM_DATA.password && window.EXAM_DATA.password !== "") {
+            // So sánh mật khẩu người dùng nhập (đã mã hóa MD5) với mật khẩu trong file đề
+            if(CryptoJS.MD5(p).toString() !== window.EXAM_DATA.password) {
+                return alert("Sai mật khẩu! Vui lòng thử lại.");
+            }
+        }
+
+        // 5. NẾU ĐÚNG HẾT -> VÀO THI
+        stId = n + c;
+        document.getElementById('d-name').innerText = n;
+        document.getElementById('d-class').innerText = c;
+        
+        // Lệnh quan trọng nhất để chuyển cảnh:
         startLogic(n);
     }
 
