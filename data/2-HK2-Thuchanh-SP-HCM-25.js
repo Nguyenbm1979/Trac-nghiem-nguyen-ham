@@ -3,7 +3,7 @@ window.EXAM_DATA = {
     "subject": "Toan",
     "grade": "12",
     "time": 90,
-    "password": "bd05927b3c5fb70c7c877a4f77af3667",
+    "password": "81dc9bdb52d04dc20036dbd8313ed055",
     "encrypted": false,
     "shuffle": true,
     "viewDetail": true,
