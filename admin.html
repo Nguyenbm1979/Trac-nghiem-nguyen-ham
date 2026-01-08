@@ -274,13 +274,18 @@
 </div>
 
 <script>
-    const ADMIN_HASH = "55ab43ebd8eb2635766c3944cb192e72"; // Mã hóa MD5 của mật khẩu admin
+   const ADMIN_HASH = "55ab43ebd8eb2635766c3944cb192e72"; // Mật khẩu: binhminh
     let EXAM_QUESTIONS = [];
 
-    // --- HỆ THỐNG ---
-    // --- HỆ THỐNG (Đã sửa lỗi nhập password) ---
+    // --- HỆ THỐNG: ĐĂNG NHẬP (Đã thêm trim() sửa lỗi nhập) ---
     function checkAdmin(){
-        // Lấy mật khẩu và cắt bỏ khoảng trắng thừa
+        // Kiểm tra thư viện mã hóa đã tải chưa
+        if(typeof CryptoJS === 'undefined') {
+            alert("Lỗi: Mất mạng hoặc chưa tải được thư viện mã hóa!");
+            return;
+        }
+        
+        // Lấy mật khẩu và cắt bỏ khoảng trắng thừa (quan trọng)
         let pass = document.getElementById('admin-pass-input').value.trim();
         
         if(CryptoJS.MD5(pass).toString() === ADMIN_HASH){
@@ -288,11 +293,10 @@
             document.getElementById('main-app').style.display='block';
             sessionStorage.setItem('admin_ok','1');
         } else {
-            alert("Sai mật khẩu! Thầy vui lòng kiểm tra lại (chú ý tắt bộ gõ tiếng Việt).");
+            alert("Sai mật khẩu! (Lưu ý: Thầy nhập là '" + pass + "')");
             document.getElementById('login-msg').style.display='block';
         }
     }
-    if(sessionStorage.getItem('admin_ok')) checkAdmin();
     if(sessionStorage.getItem('admin_ok')) checkAdmin();
 
     function switchTab(t){
@@ -318,33 +322,27 @@
         else if(type==='short') { def.point=0.5; def.q='Điền đáp án:'; def.ans=''; }
         else if(type==='match') { def.point=1.0; def.q='Ghép cặp:'; def.items=['Trái 1','Trái 2']; def.options=['Phải A','Phải B']; def.ans=['A','B']; }
         
-        EXAM_QUESTIONS.push(def);
-        renderEditor();
+        EXAM_QUESTIONS.push(def); renderEditor();
     }
 
     async function handleImageUpload(input, index, field) {
-        const file = input.files[0];
-        if(!file) return;
+        const file = input.files[0]; if(!file) return;
         const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value;
         if(!t) return alert("Chưa có Token GitHub!");
         
         input.parentElement.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Upload...`;
-        
         try {
             const ext = file.name.split('.').pop();
             const fileName = `img_${Date.now()}_${Math.floor(Math.random()*1000)}.${ext}`;
             const path = `images/${fileName}`;
-            
             const base64 = await new Promise(r => { let fr=new FileReader(); fr.onload=()=>r(fr.result.split(',')[1]); fr.readAsDataURL(file); });
             const res = await fetch(`https://api.github.com/repos/${u}/${r}/contents/${path}`, {
                 method: 'PUT', headers: { Authorization: `token ${t}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: `Upload ${fileName}`, content: base64 })
             });
-            
             if(!res.ok) throw new Error("Lỗi Upload GitHub");
             const data = await res.json();
             const rawUrl = data.content.download_url;
-            
             if(field === 'q') EXAM_QUESTIONS[index].img = rawUrl; else EXAM_QUESTIONS[index].solImg = rawUrl;
             renderEditor(); 
         } catch(e) { alert("Upload thất bại: " + e.message); renderEditor(); }
@@ -355,16 +353,11 @@
         if(EXAM_QUESTIONS.length > 0) { document.getElementById('empty-msg').style.display='none'; document.getElementById('preview-area').style.display='block'; }
         
         let totalScore = 0;
-
         EXAM_QUESTIONS.forEach((q,i)=>{
             totalScore += parseFloat(q.point || 0);
-            
-            // UI Helpers
             const mkInput = (val, fn) => `<input value="${val}" onchange="${fn}" style="flex:1">`;
-            
             let ansUI = "";
             
-            // --- CẬP NHẬT GIAO DIỆN MCQ (TRẮC NGHIỆM) ---
             if(q.type === 'mcq') {
                 ansUI = q.options.map((opt, idx) => `
                     <div class="mcq-row">
@@ -376,15 +369,12 @@
                             <textarea placeholder="Nhập nội dung phương án ${['A','B','C','D'][idx]}..." 
                                 oninput="EXAM_QUESTIONS[${i}].options[${idx}]=this.value;renderPreview()">${opt}</textarea>
                         </div>
-                    </div>
-                `).join('');
+                    </div>`).join('');
             }
-            // ---------------------------------------------
-            
             else if (q.type === 'tf') ansUI = q.items.map((it,idx)=>`<div style="display:flex;gap:5px;margin-bottom:3px"><b style="width:30px">Ý ${idx+1}</b>${mkInput(it.sub, `EXAM_QUESTIONS[${i}].items[${idx}].sub=this.value;renderPreview()`)}<select onchange="EXAM_QUESTIONS[${i}].items[${idx}].ans=this.value;renderPreview()"><option value="T" ${it.ans=='T'?'selected':''}>ĐÚNG</option><option value="F" ${it.ans=='F'?'selected':''}>SAI</option></select></div>`).join('');
             else if (q.type === 'short') ansUI = `<b>Đáp án:</b> ${mkInput(q.ans, `EXAM_QUESTIONS[${i}].ans=this.value;renderPreview()`)}`;
             else if (q.type === 'match') ansUI = q.items.map((it,idx)=>`<div style="display:flex;gap:5px;margin-bottom:3px">${mkInput(it, `EXAM_QUESTIONS[${i}].items[${idx}]=this.value;renderPreview()`)} - ${mkInput(q.options[idx], `EXAM_QUESTIONS[${i}].options[${idx}]=this.value;renderPreview()`)} - Đ.Án: <input style="width:40px" value="${q.ans[idx]}" onchange="EXAM_QUESTIONS[${i}].ans[${idx}]=this.value;renderPreview()"></div>`).join('');
-
+            
             c.insertAdjacentHTML('beforeend',`<div class="q-item">
                 <div class="q-item-header">
                     <span style="font-weight:bold;color:#00796b">Câu ${i+1} (${q.type.toUpperCase()})</span>
@@ -394,18 +384,14 @@
                         <button class="btn btn-red" style="padding:2px 8px;font-size:0.8em;margin-left:10px" onclick="EXAM_QUESTIONS.splice(${i},1);renderEditor()">Xóa</button>
                     </div>
                 </div>
-                
                 <div style="margin-bottom:5px"><b>Nội dung câu hỏi:</b></div>
                 <textarea class="smart-textarea" oninput="EXAM_QUESTIONS[${i}].q=this.value; renderPreview()">${q.q}</textarea>
-                
                 <div class="upload-wrapper" style="background:#f1f8e9; padding:5px; border-radius:4px">
                     <i class="fas fa-image" style="color:#2e7d32"></i>
                     <input type="text" value="${q.img||''}" onchange="EXAM_QUESTIONS[${i}].img=this.value; renderPreview()" style="flex:1" placeholder="Link ảnh... [IMG]">
                     <label class="file-upload-btn"><i class="fas fa-upload"></i> <input type="file" style="display:none" accept="image/*" onchange="handleImageUpload(this, ${i}, 'q')"></label>
                 </div>
-                
                 <div style="margin:15px 0;">${ansUI}</div>
-                
                 <div style="margin-bottom:5px"><b>Lời giải chi tiết:</b></div>
                 <textarea class="smart-textarea" placeholder="Lời giải..." oninput="EXAM_QUESTIONS[${i}].explain=this.value; renderPreview()" style="height:50px;border-color:#a5d6a7">${q.explain||''}</textarea>
                 <div class="upload-wrapper" style="background:#fffde7; padding:5px; border-radius:4px; margin-top:5px">
@@ -415,7 +401,6 @@
                 </div>
             </div>`);
         });
-        
         document.getElementById('total-score-display').innerText = totalScore.toFixed(2);
         document.getElementById('total-qs').innerText = EXAM_QUESTIONS.length;
         renderPreview();
@@ -427,22 +412,16 @@
             if(!img) return txt;
             return txt.includes('[IMG]') ? txt.replace('[IMG]', `<img src="${img}" class="p-img">`) : txt + `<br><img src="${img}" class="p-img">`;
         };
-        
         EXAM_QUESTIONS.forEach((q, i) => {
             let pt = q.point ? `<span style="float:right;color:red;font-weight:bold">[${q.point}đ]</span>` : '';
             let body = '';
-            
-            // --- CẬP NHẬT HIỂN THỊ PREVIEW MCQ ---
             if(q.type === 'mcq') {
                 body = q.options.map((opt, idx) => `
                     <div class="p-opt-row ${q.ans==idx ? 'correct-ans' : ''}">
                         <div class="p-opt-label">${['A','B','C','D'][idx]}.</div>
                         <div class="p-opt-content">${opt}</div>
-                    </div>
-                `).join('');
+                    </div>`).join('');
             }
-            // --------------------------------------
-            
             else if (q.type === 'tf') body = `<table width="100%"><tr><th>Ý</th><th>Nội dung</th><th>Đ/S</th></tr>` + q.items.map((it, idx) => `<tr><td>${idx+1}</td><td>${it.sub}</td><td><b>${it.ans=='T'?'Đ':'S'}</b></td></tr>`).join('') + `</table>`;
             else if (q.type === 'short') body = `<div class="p-opt"><b>Trả lời:</b> ${q.ans}</div>`;
             else if (q.type === 'match') body = q.items.map((it, idx) => `<div class="p-opt">${idx+1}. ${it} --> ${q.ans[idx]} (${q.options[idx]})</div>`).join('');
@@ -456,6 +435,7 @@
         document.getElementById('preview-content').innerHTML = h;
         if(window.MathJax) MathJax.typesetPromise();
     }
+    
     function parseDataSafe() {
         try {
             let data = JSON.parse(document.getElementById('json-input').value.trim());
@@ -504,25 +484,20 @@
             const json=await res.json(), content=decodeURIComponent(escape(atob(json.content)));
             let dataStr = content.substring(content.indexOf('{'), content.lastIndexOf('}')+1);
             let data=JSON.parse(dataStr);
-            
-            // Fill Form
             document.getElementById('exam-id').value=name.replace('.js','');
             ['title','time','price','subject','grade','start','end','minTime'].forEach(k => {
                  if(data[k] !== undefined) {
-    let elId = (k==='minTime') ? 'min-time-percent' : 'exam-'+k;
-    let el = document.getElementById(elId);
-    if(el) el.value = data[k].toString().replace('K','');
-}
+                    let elId = (k==='minTime') ? 'min-time-percent' : 'exam-'+k;
+                    let el = document.getElementById(elId);
+                    if(el) el.value = data[k].toString().replace('K','');
+                }
             });
-            
             document.getElementById('exam-pass-hash').value=data.password||"";
             document.getElementById('secure-mode').checked=data.encrypted;
             document.getElementById('exam-shuffle').checked = (data.shuffle !== false);
             document.getElementById('view-detail').checked = (data.viewDetail !== false);
             document.getElementById('exam-music').checked = (data.music === true);
             document.getElementById('allow-print').checked = (data.allowPrint === true);
-            
-            // Xử lý ảnh trong câu hỏi cũ
             EXAM_QUESTIONS = (data.questions||[]).map(q => {
                 if(q.explain && q.explain.includes('<img')) {
                     let match = q.explain.match(/src="([^"]+)"/);
@@ -536,15 +511,14 @@
                 }
                 return q;
             });
-            renderEditor(); 
-            ov.style.display='none'; switchTab('create');
+            renderEditor(); ov.style.display='none'; switchTab('create');
         }catch(e){ alert("Lỗi tải đề: "+e.message); ov.style.display='none'; }
     }
+
     async function publishExam(){
         const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value,id=document.getElementById('exam-id').value;
         if(!u||!r||!t||!id)return alert("Thiếu ID hoặc Cấu hình!");
         
-        // Kiểm tra thời gian
         let sTime = document.getElementById('exam-start').value;
         let eTime = document.getElementById('exam-end').value;
         if(sTime && eTime && new Date(sTime) >= new Date(eTime)){
@@ -557,7 +531,6 @@
             let fQ=JSON.parse(JSON.stringify(EXAM_QUESTIONS));
             let sec=document.getElementById('secure-mode').checked;
             
-            // Xử lý ảnh và mã hóa câu hỏi
             fQ.forEach(q=>{
                 if(q.solImg) {
                     q.explain = (q.explain || "") + (q.explain.includes('[IMG]') ? "" : `<br><img src="${q.solImg}" style="max-width:100%;margin-top:10px;border-radius:5px">`);
@@ -578,7 +551,6 @@
                 }
             });
 
-            // Tạo dữ liệu JSON
             let dt={
                 title: document.getElementById('exam-title').value,
                 subject: document.getElementById('exam-subject').value, 
@@ -599,29 +571,24 @@
                 questions: fQ
             };
 
-            // Upload file đề
             let c=btoa(unescape(encodeURIComponent(`window.EXAM_DATA = ${JSON.stringify(dt,null,4)};`)));
             await upF(u,r,t,`data/${id}.js`,c,false);
-            
-            // Cập nhật danh sách
             await updateList(u,r,t,id,dt);
 
-            // --- GỬI MẬT KHẨU SANG GOOGLE SHEET (Đã sửa lỗi vị trí đặt code) ---
+            // --- ĐOẠN GỬI GOOGLE SHEET (Đã sửa lỗi) ---
             let gsUrl = document.getElementById('gs-url').value.trim();
             let rawPass = document.getElementById('exam-pass').value.trim();
-            
             if (gsUrl && rawPass) {
                 let fd = new FormData();
                 fd.append("action", "savePass");
                 fd.append("id", id);
                 fd.append("title", dt.title);
                 fd.append("pass", rawPass);
-                // Gửi ngầm, không chờ kết quả để tránh treo
                 fetch(gsUrl, { method: "POST", body: fd, mode: "no-cors" }).catch(e=>console.log(e));
             }
-            // ----------------------------------------------------------------
+            // ----------------------------------------
 
-            alert("✅ Thành công! Đề đã được xuất bản."); 
+            alert("✅ Xuất bản thành công!"); 
             loadDataFiles();
 
         } catch(e){
@@ -629,8 +596,6 @@
         } finally {
             ov.style.display='none';
         }
-    } catch(e) { alert(e.message); ov.style.display='none'; }
-}
     }
 
     async function upF(u,r,t,p,c,isF){let s=null;try{let k=await fetch(`https://api.github.com/repos/${u}/${r}/contents/${p}`,{headers:{Authorization:`token ${t}`}});if(k.ok)s=(await k.json()).sha;}catch(e){}let b={message:"Up",content:isF?await toB64(c):c};if(s)b.sha=s;let rs=await fetch(`https://api.github.com/repos/${u}/${r}/contents/${p}`,{method:'PUT',headers:{Authorization:`token ${t}`,'Content-Type':'application/json'},body:JSON.stringify(b)});if(!rs.ok){let j=await rs.json();throw new Error(j.message);}}
@@ -654,7 +619,7 @@
         l.unshift({
             id: id, title: d.title, subject: d.subject, grade: d.grade, time: d.time,
             allowPrint: d.allowPrint, 
-            start: d.start, end: d.end // Lưu thêm thời gian vào danh sách chung
+            start: d.start, end: d.end
         });
         let c=btoa(unescape(encodeURIComponent(`window.EXAM_LIST = ${JSON.stringify(l,null,4)};`)));
         await upF(u,r,t,`data/list.js`,c,false);
