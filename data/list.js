@@ -1,5 +1,15 @@
 window.EXAM_LIST = [
     {
+        "id": "2-GHK2-ThuchanhSP-HCM-25",
+        "title": "Đề thi giữa học kỳ 2, trường THPT, Thực hành sư phạm, HCM, 2025",
+        "subject": "Toan",
+        "grade": "12",
+        "time": 90,
+        "allowPrint": false,
+        "start": "",
+        "end": ""
+    },
+    {
         "id": "2-Onnguyenham-de2-25-26",
         "title": "Đề Ôn Tập Nguyên Hàm, Số 2, Năm 2025-2026",
         "subject": "Toan",
