@@ -138,6 +138,14 @@
 
 <script>
     let rawQ=[], curQ=[], timerDur=0, timerInt;
+    let startTime = ""; // <--- THÊM BIẾN NÀY
+    // --- CẤU HÌNH GỬI ĐIỂM ---
+    // 1. Dán Link Web App Google Sheet của thầy vào giữa dấu nháy kép dưới đây:
+    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbytrDWBeAQhWyIFx_dYTs7VC4x67WJ0X9Z-Ta4A4z-crR51Jm8311EMuNBtDjh4dmY/exec";
+
+    // 2. Khai báo biến thời gian và vi phạm
+    let startTime = new Date().toLocaleString('vi-VN'); // Lấy giờ lúc mới vào trang
+    let warnCount = 0; // Đếm số lần vi phạm
     let scoresConfig={mcq:0.25, tf:1.0, short:0.5, match:1.0};
     let isEnc=false, userAns={}, stId="", exId="";
 
@@ -319,6 +327,8 @@ function checkLogin(){
     // --- [CODE BỔ SUNG] HÀM BẮT ĐẦU THI (Bị thiếu) ---
     function startLogic(name){
         // 1. Xử lý trộn đề (Shuffle)
+        // Ghi nhận thời gian bắt đầu làm bài
+        startTime = new Date().toLocaleString('vi-VN');
         let aq = JSON.parse(JSON.stringify(rawQ));
         let doShuffle = (window.EXAM_DATA.shuffle !== false);
 
@@ -460,6 +470,7 @@ function checkLogin(){
             }
         });
         let finalS = Math.round(score*100)/100;
+        sendToGoogleSheet(finalS, max);
         document.getElementById('result-area').style.display='block';
         document.getElementById('final-score').innerText = `${finalS} / ${max}`;
         window.scrollTo({top:0,behavior:'smooth'});
@@ -479,6 +490,47 @@ function checkLogin(){
                 alert(`⚠️ CẢNH BÁO (${warnCount}/3)!\n\nVui lòng tập trung làm bài. Nếu vi phạm 3 lần, bài thi sẽ tự động nộp!`);
             }
         }
+    }
+    // --- HÀM GỬI DỮ LIỆU VỀ GOOGLE SHEET ---
+    function sendToGoogleSheet(score, maxScore) {
+        // Nếu chưa điền link thì không gửi
+        if (!GOOGLE_SHEET_URL || GOOGLE_SHEET_URL.includes("DÁN_LINK")) {
+            console.log("Chưa cấu hình Link Google Sheet!");
+            return;
+        }
+
+        const formData = new FormData();
+        // 1. Thông tin cơ bản
+        formData.append("name", document.getElementById('s-name').value);
+        formData.append("class", document.getElementById('s-class').value);
+        formData.append("score", `${score}/${maxScore}`);
+        
+        // 2. Thông tin bổ sung (Ngày giờ, vi phạm)
+        formData.append("startTime", startTime); 
+        formData.append("violations", warnCount);
+
+        // 3. Chi tiết đáp án
+        let details = curQ.map((q, i) => {
+            let u = userAns[i];
+            let val = "";
+            if(typeof u === 'object' && u !== null) val = JSON.stringify(u);
+            else if(q.type === 'mcq' && u !== undefined) val = q.options[u] ? String.fromCharCode(65 + q.options.findIndex(opt => opt === q.options[u])) : '?';
+            else val = u || "_";
+            return `C${i+1}:${val}`;
+        }).join(" | ");
+        
+        formData.append("detail", details);
+
+        // 4. Gửi dữ liệu đi
+        fetch(GOOGLE_SHEET_URL, {
+            method: "POST",
+            body: formData,
+            mode: "no-cors" // Quan trọng: Để không bị chặn bảo mật
+        }).then(() => {
+            console.log("✅ Đã gửi điểm thành công!");
+        }).catch(err => {
+            console.error("❌ Lỗi gửi điểm:", err);
+        });
     }
 </script>
 </body>
