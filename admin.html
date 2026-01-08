@@ -279,7 +279,7 @@
 
     // --- HỆ THỐNG ---
     function checkAdmin(){
-        if(CryptoJS.MD5(document.getElementById('admin-pass-input').value).toString()===ADMIN_HASH){
+if(CryptoJS.MD5(document.getElementById('admin-pass-input').value.trim()).toString()===ADMIN_HASH){
             document.getElementById('login-screen').style.display='none';
             document.getElementById('main-app').style.display='block';
             sessionStorage.setItem('admin_ok','1');
