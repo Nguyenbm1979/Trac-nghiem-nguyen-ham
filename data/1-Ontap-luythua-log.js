@@ -36,7 +36,7 @@ window.EXAM_DATA = {
             "ans": 0,
             "explain": "<br><b>-</b> $(a^m)^n = a^{m \\cdot n} = (a^n)^m$ (đúng). <br><b>-</b> $a^m \\cdot a^n = a^{m+n}$ (đáp án B sai). <br><b>-</b> $a^m + a^n \\neq a^{m+n}$ (đáp án C sai). <br><b>-</b> $\\dfrac{a^m}{a^n} = a^{m-n}$ (đáp án D sai).",
             "id": "1D6N3-1",
-            "point": "0.36"
+            "point": "0.3"
         },
         {
             "type": "short",
@@ -58,7 +58,7 @@ window.EXAM_DATA = {
             "ans": 2,
             "explain": "Ta có $P=x^{\\frac{2}{5}} \\cdot \\sqrt{x} = x^{\\frac{2}{5}} \\cdot x^{\\frac{1}{3}} = x^{\\frac{2}{5}+\\frac{1}{3}}=x^{\\frac{11}{15}}$.",
             "id": "1D6N1-2",
-            "point": "0.36"
+            "point": "0.3"
         },
         {
             "type": "mcq",
@@ -72,7 +72,7 @@ window.EXAM_DATA = {
             "ans": 3,
             "explain": "Dựa vào lý thuyết ta thấy $\\sqrt{a^n}=\\sqrt{a^m}$ là sai.",
             "id": "1D6N1-1",
-            "point": "0.36"
+            "point": "0.3"
         },
         {
             "type": "mcq",
@@ -86,7 +86,7 @@ window.EXAM_DATA = {
             "ans": 3,
             "explain": "Ta có $a^m a^n=a^{m+n}$; $(a b)^n=a^n b^n$; $(a^m)^n=a^{m n}$.<br> Do đó $a^m b^n=(a b)^{m+n}$ là khẳng định sai.",
             "id": "1D6N1-2",
-            "point": "0.36"
+            "point": "0.3"
         },
         {
             "type": "tf",
@@ -125,7 +125,7 @@ window.EXAM_DATA = {
             "ans": 2,
             "explain": "$P=\\sqrt{x^5}=x^\\frac{5}{4}$.",
             "id": "1D6H1-2",
-            "point": "0.36"
+            "point": "0.3"
         },
         {
             "type": "mcq",
@@ -175,7 +175,7 @@ window.EXAM_DATA = {
             "ans": "$2{,}5$",
             "explain": "$P = \\log_a(a\\sqrt{a^3}) = \\log_a \\left( a \\cdot a^{\\tfrac{3}{2}} \\right) = \\log_a \\left( a^{\\tfrac{5}{2}}\\right) = \\dfrac{5}{2}=2{,}5$.",
             "id": "1D6H2-1",
-            "point": "0.72"
+            "point": "0.62"
         },
         {
             "type": "mcq",
