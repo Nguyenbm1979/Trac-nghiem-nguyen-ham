@@ -7,11 +7,11 @@ window.EXAM_DATA = {
     "encrypted": false,
     "shuffle": true,
     "viewDetail": true,
-    "minTime": 0,
     "music": true,
     "allowPrint": false,
+    "minTime": 0,
     "start": "2026-01-08T07:08",
-    "end": "2026-01-08T07:40",
+    "end": "2026-01-10T07:40",
     "price": 0,
     "bank": {
         "id": "",
