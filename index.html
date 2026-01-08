@@ -371,5 +371,123 @@
     init();
     animate();
 </script>
+    <style>
+    /* CSS cho Canvas Pháo hoa: Nằm cố định, không che chắn thao tác chuột */
+    #fireworks-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1; /* -1 để nằm dưới nội dung web (làm nền) */
+        pointer-events: none; /* Cho phép bấm xuyên qua để chọn đề thi */
+        background: transparent; /* Nền trong suốt để thấy web cũ */
+    }
+</style>
+
+<canvas id="fireworks-canvas"></canvas>
+
+<script>
+(function() { // Đóng gói code để không đụng chạm biến cũ
+    const fwCanvas = document.getElementById('fireworks-canvas');
+    if (!fwCanvas) return; // Nếu chưa có canvas thì thôi
+
+    const fwCtx = fwCanvas.getContext('2d');
+    let fwWidth = window.innerWidth;
+    let fwHeight = window.innerHeight;
+    
+    fwCanvas.width = fwWidth;
+    fwCanvas.height = fwHeight;
+
+    let fwParticles = [];
+
+    // Hàm chọn màu ngẫu nhiên (Màu tươi sáng cho nổi trên nền web)
+    function fwRandomColor() {
+        const colors = ['#ff0043', '#14fc56', '#1e7fff', '#e60aff', '#ffbf36', '#ffffff'];
+        return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    class FwParticle {
+        constructor(x, y, color) {
+            this.x = x;
+            this.y = y;
+            this.color = color;
+            const angle = Math.random() * Math.PI * 2;
+            const velocity = Math.random() * 6 + 2;
+            this.vx = Math.cos(angle) * velocity;
+            this.vy = Math.sin(angle) * velocity;
+            this.friction = 0.96;
+            this.gravity = 0.04;
+            this.alpha = 1;
+            this.decay = Math.random() * 0.02 + 0.01;
+        }
+        update() {
+            this.vx *= this.friction;
+            this.vy *= this.friction;
+            this.vy += this.gravity;
+            this.x += this.vx;
+            this.y += this.vy;
+            this.alpha -= this.decay;
+        }
+        draw() {
+            fwCtx.save();
+            fwCtx.globalAlpha = this.alpha;
+            fwCtx.beginPath();
+            fwCtx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+            fwCtx.fillStyle = this.color;
+            fwCtx.fill();
+            fwCtx.restore();
+        }
+    }
+
+    function fwCreateFirework(x, y) {
+        const count = 60; // Số lượng hạt
+        const color = fwRandomColor();
+        for (let i = 0; i < count; i++) {
+            fwParticles.push(new FwParticle(x, y, color));
+        }
+    }
+
+    function fwAnimate() {
+        // Xóa frame cũ (giữ lại 1 chút để tạo vệt mờ)
+        fwCtx.globalCompositeOperation = 'destination-out';
+        fwCtx.fillStyle = 'rgba(0, 0, 0, 0.1)'; 
+        fwCtx.fillRect(0, 0, fwWidth, fwHeight);
+        
+        fwCtx.globalCompositeOperation = 'lighter'; // Chế độ hòa trộn màu sáng
+
+        fwParticles.forEach((p, i) => {
+            if (p.alpha > 0) {
+                p.update();
+                p.draw();
+            } else {
+                fwParticles.splice(i, 1);
+            }
+        });
+        requestAnimationFrame(fwAnimate);
+    }
+
+    // Tự động bắn
+    setInterval(() => {
+        const x = Math.random() * fwWidth;
+        const y = Math.random() * fwHeight * 0.5;
+        fwCreateFirework(x, y);
+    }, 1500); // 1.5 giây bắn 1 quả
+
+    // Click chuột bắn pháo (nhưng vẫn bấm được nút web)
+    window.addEventListener('mousedown', (e) => {
+        fwCreateFirework(e.clientX, e.clientY);
+    });
+
+    window.addEventListener('resize', () => {
+        fwWidth = window.innerWidth;
+        fwHeight = window.innerHeight;
+        fwCanvas.width = fwWidth;
+        fwCanvas.height = fwHeight;
+    });
+
+    fwAnimate();
+})();
+</script>
 </body>
 </html>
