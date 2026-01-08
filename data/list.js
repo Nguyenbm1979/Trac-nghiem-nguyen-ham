@@ -1,5 +1,15 @@
 window.EXAM_LIST = [
     {
+        "id": "1-Ontap-luythua-log",
+        "title": "Ôn tập lũy thừa và Logarit, 11 VIP",
+        "subject": "Toan",
+        "grade": "11",
+        "time": 45,
+        "allowPrint": false,
+        "start": "",
+        "end": ""
+    },
+    {
         "id": "2-Onnguyenham-de2-25-26",
         "title": "Đề Ôn Tập Nguyên Hàm, Số 2, Năm 2025-2026",
         "subject": "Toan",
