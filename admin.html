@@ -171,6 +171,7 @@
         <div class="row" style="margin-top:10px">
             <div class="col"><label>Ngân hàng</label><input type="text" id="bank-id" placeholder="MB"></div>
             <div class="col"><label>Số Tài Khoản</label><input type="text" id="bank-acc"></div>
+            <div class="col"><label>Link Google Sheet (Script)</label><input type="text" id="gs-url" placeholder="https://script.google.com/macros/s/AKfycbyvrYa-XEHWk_Pcn2_9x4ZOLpdqfi_1KFPn1Y6I6QeaHihDVBNwu2lLfE43D1z96f9_zQ/exec"></div>
             <div class="col"><button class="btn btn-gray" style="margin-top:22px;width:100%" onclick="saveConfig()">💾 Lưu Cấu Hình</button></div>
         </div>
     </div>
@@ -296,7 +297,7 @@
     }
     
     // --- CẤU HÌNH ---
-    const IDS = ['gh-user','gh-repo','gh-token','bank-id','bank-acc'];
+    const IDS = ['gh-user','gh-repo','gh-token','bank-id','bank-acc', 'gs-url'];
     window.onload=()=>{ IDS.forEach(id=>{if(localStorage.getItem(id))document.getElementById(id).value=localStorage.getItem(id)}); }
     function saveConfig(){ IDS.forEach(id=>localStorage.setItem(id,document.getElementById(id).value.trim())); alert("Đã lưu!"); }
     function hashPass(){let p=document.getElementById('exam-pass').value.trim();document.getElementById('exam-pass-hash').value=p?CryptoJS.MD5(p).toString():"";}
@@ -595,6 +596,28 @@
             await updateList(u,r,t,id,dt);
             alert("Thành công! Đề đã được xuất bản."); ov.style.display='none'; loadDataFiles();
         }catch(e){alert(e.message); ov.style.display='none';}
+        // ... (Code cũ của hàm publishExam nằm ở trên) ...
+        
+        // --- ĐOẠN CODE MỚI: TỰ ĐỘNG LƯU MẬT KHẨU VÀO SHEET ---
+        let gsUrl = document.getElementById('gs-url').value.trim();
+        let rawPass = document.getElementById('exam-pass').value.trim();
+        
+        if (gsUrl && rawPass) {
+            let fd = new FormData();
+            fd.append("action", "savePass"); // Báo hiệu là lưu pass
+            fd.append("id", id);
+            fd.append("title", dt.title);
+            fd.append("pass", rawPass); // Gửi mật khẩu gốc (chưa mã hóa)
+
+            fetch(gsUrl, { method: "POST", body: fd, mode: "no-cors" })
+                .then(() => console.log("Đã gửi mật khẩu sang Sheet"))
+                .catch(e => console.log("Lỗi gửi pass: " + e));
+        }
+        // -----------------------------------------------------
+
+        alert("Thành công! Đề đã được xuất bản."); ov.style.display='none'; loadDataFiles();
+    } catch(e) { alert(e.message); ov.style.display='none'; }
+}
     }
 
     async function upF(u,r,t,p,c,isF){let s=null;try{let k=await fetch(`https://api.github.com/repos/${u}/${r}/contents/${p}`,{headers:{Authorization:`token ${t}`}});if(k.ok)s=(await k.json()).sha;}catch(e){}let b={message:"Up",content:isF?await toB64(c):c};if(s)b.sha=s;let rs=await fetch(`https://api.github.com/repos/${u}/${r}/contents/${p}`,{method:'PUT',headers:{Authorization:`token ${t}`,'Content-Type':'application/json'},body:JSON.stringify(b)});if(!rs.ok){let j=await rs.json();throw new Error(j.message);}}
