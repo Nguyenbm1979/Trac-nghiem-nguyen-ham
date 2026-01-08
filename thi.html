@@ -270,6 +270,19 @@
     function initExam(d){
         rawQ = d.questions; timerDur = (d.time||45)*60;
         if(d.scores) scoresConfig = {...scoresConfig, ...d.scores}; 
+        // --- ĐOẠN CODE THÊM VÀO THI.HTML ĐỂ CHẶN GIỜ ---
+let now = new Date();
+if (d.start && now < new Date(d.start)) {
+    alert("⛔ CHƯA ĐẾN GIỜ MỞ ĐỀ!\nThời gian mở: " + new Date(d.start).toLocaleString('vi-VN'));
+    window.location.href = "index.html"; // Quay về trang chủ
+    return;
+}
+if (d.end && now > new Date(d.end)) {
+    alert("⛔ ĐỀ THI ĐÃ ĐÓNG!\nThời gian đóng: " + new Date(d.end).toLocaleString('vi-VN'));
+    window.location.href = "index.html"; // Quay về trang chủ
+    return;
+}
+// -----------------------------------------------
         isEnc = d.encrypted===true;
         document.getElementById('exam-title').innerText = d.title||"BÀI KIỂM TRA";
         document.getElementById('exam-info').innerText = `${rawQ.length} Câu | ${d.time} Phút`;
