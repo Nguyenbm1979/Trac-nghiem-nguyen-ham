@@ -445,7 +445,10 @@
             }
         });
         let finalS = Math.round(score*100)/100;
+        
+        // GỌI HÀM GỬI ĐIỂM
         sendToGoogleSheet(finalS, max);
+        
         document.getElementById('result-area').style.display='block';
         document.getElementById('final-score').innerText = `${finalS} / ${max}`;
         window.scrollTo({top:0,behavior:'smooth'});
@@ -466,7 +469,7 @@
         }
     }
 
-    // --- HÀM GỬI DỮ LIỆU VỀ GOOGLE SHEET ---
+    // --- HÀM GỬI DỮ LIỆU VỀ GOOGLE SHEET (ĐÃ CẬP NHẬT) ---
     function sendToGoogleSheet(score, maxScore) {
         if (!GOOGLE_SHEET_URL || GOOGLE_SHEET_URL.includes("DÁN_LINK")) {
             console.log("Chưa cấu hình Link Google Sheet!");
@@ -474,18 +477,25 @@
         }
 
         const formData = new FormData();
+        // 1. Lấy thông tin học sinh
         formData.append("name", document.getElementById('s-name').value);
         formData.append("class", document.getElementById('s-class').value);
+        
+        // 2. Lấy thông tin bài thi (MỚI)
+        formData.append("examTitle", document.getElementById('exam-title').innerText);
         formData.append("score", `${score}/${maxScore}`);
+        
+        // 3. Thông tin thời gian & giám sát
         formData.append("startTime", startTime); 
         formData.append("violations", warnCount);
 
+        // 4. Chi tiết đáp án
         let details = curQ.map((q, i) => {
             let u = userAns[i];
             let val = "";
             if(typeof u === 'object' && u !== null) val = JSON.stringify(u);
             else if(q.type === 'mcq' && u !== undefined) {
-                // TỐI ƯU HÓA CODE LẤY ĐÁP ÁN ABCD
+                // Chuyển số 0,1,2 thành A,B,C
                 val = String.fromCharCode(65 + parseInt(u));
             }
             else val = u || "_";
@@ -494,6 +504,7 @@
         
         formData.append("detail", details);
 
+        // 5. Gửi đi
         fetch(GOOGLE_SHEET_URL, {
             method: "POST",
             body: formData,
