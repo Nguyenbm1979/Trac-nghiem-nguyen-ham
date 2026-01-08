@@ -10,8 +10,8 @@ window.EXAM_DATA = {
     "minTime": 0,
     "music": true,
     "allowPrint": false,
-    "start": "2026-01-05T21:15",
-    "end": "2026-01-10T21:15",
+    "start": "2026-01-08T07:08",
+    "end": "2026-01-08T07:40",
     "price": 0,
     "bank": {
         "id": "",
