@@ -499,7 +499,11 @@
             // Fill Form
             document.getElementById('exam-id').value=name.replace('.js','');
             ['title','time','price','subject','grade','start','end','minTime'].forEach(k => {
-                 if(data[k] !== undefined) document.getElementById('exam-'+(k==='minTime'?'min-time-percent':k)).value = data[k].toString().replace('K','');
+                 if(data[k] !== undefined) {
+    let elId = (k==='minTime') ? 'min-time-percent' : 'exam-'+k;
+    let el = document.getElementById(elId);
+    if(el) el.value = data[k].toString().replace('K','');
+}
             });
             
             document.getElementById('exam-pass-hash').value=data.password||"";
