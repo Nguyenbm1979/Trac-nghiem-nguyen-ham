@@ -279,11 +279,33 @@
 
     // --- HỆ THỐNG ---
     function checkAdmin(){
-if(CryptoJS.MD5(document.getElementById('admin-pass-input').value.trim()).toString()===ADMIN_HASH){
+        // 1. Kiểm tra xem thư viện đã tải được chưa
+        if (typeof CryptoJS === 'undefined') {
+            alert("LỖI: Máy tính chưa kết nối mạng hoặc không tải được thư viện mã hóa! Vui lòng kiểm tra lại Internet.");
+            return;
+        }
+
+        let passInput = document.getElementById('admin-pass-input').value;
+        // Kiểm tra xem có nhập gì chưa
+        if (!passInput) {
+            alert("Thầy chưa nhập mật khẩu!");
+            return;
+        }
+
+        // 2. Tính toán và hiện thông báo để kiểm tra (Debug)
+        let passTrim = passInput.trim(); 
+        let hash = CryptoJS.MD5(passTrim).toString();
+
+        if(hash === ADMIN_HASH){
+            alert("Đăng nhập thành công! (Mật khẩu đúng: " + passTrim + ")");
             document.getElementById('login-screen').style.display='none';
             document.getElementById('main-app').style.display='block';
             sessionStorage.setItem('admin_ok','1');
-        } else document.getElementById('login-msg').style.display='block';
+        } else {
+            // Hiện rõ máy tính đang hiểu mật khẩu là gì để thầy biết sai ở đâu
+            alert("SAI MẬT KHẨU!\n\nThầy nhập là: [" + passTrim + "]\nMã hóa ra: " + hash + "\n(Khác với mã gốc trong code)");
+            document.getElementById('login-msg').style.display='block';
+        }
     }
     if(sessionStorage.getItem('admin_ok')) checkAdmin();
 
