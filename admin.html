@@ -278,35 +278,21 @@
     let EXAM_QUESTIONS = [];
 
     // --- HỆ THỐNG ---
+    // --- HỆ THỐNG (Đã sửa lỗi nhập password) ---
     function checkAdmin(){
-        // 1. Kiểm tra xem thư viện đã tải được chưa
-        if (typeof CryptoJS === 'undefined') {
-            alert("LỖI: Máy tính chưa kết nối mạng hoặc không tải được thư viện mã hóa! Vui lòng kiểm tra lại Internet.");
-            return;
-        }
-
-        let passInput = document.getElementById('admin-pass-input').value;
-        // Kiểm tra xem có nhập gì chưa
-        if (!passInput) {
-            alert("Thầy chưa nhập mật khẩu!");
-            return;
-        }
-
-        // 2. Tính toán và hiện thông báo để kiểm tra (Debug)
-        let passTrim = passInput.trim(); 
-        let hash = CryptoJS.MD5(passTrim).toString();
-
-        if(hash === ADMIN_HASH){
-            alert("Đăng nhập thành công! (Mật khẩu đúng: " + passTrim + ")");
+        // Lấy mật khẩu và cắt bỏ khoảng trắng thừa
+        let pass = document.getElementById('admin-pass-input').value.trim();
+        
+        if(CryptoJS.MD5(pass).toString() === ADMIN_HASH){
             document.getElementById('login-screen').style.display='none';
             document.getElementById('main-app').style.display='block';
             sessionStorage.setItem('admin_ok','1');
         } else {
-            // Hiện rõ máy tính đang hiểu mật khẩu là gì để thầy biết sai ở đâu
-            alert("SAI MẬT KHẨU!\n\nThầy nhập là: [" + passTrim + "]\nMã hóa ra: " + hash + "\n(Khác với mã gốc trong code)");
+            alert("Sai mật khẩu! Thầy vui lòng kiểm tra lại (chú ý tắt bộ gõ tiếng Việt).");
             document.getElementById('login-msg').style.display='block';
         }
     }
+    if(sessionStorage.getItem('admin_ok')) checkAdmin();
     if(sessionStorage.getItem('admin_ok')) checkAdmin();
 
     function switchTab(t){
@@ -554,25 +540,24 @@
             ov.style.display='none'; switchTab('create');
         }catch(e){ alert("Lỗi tải đề: "+e.message); ov.style.display='none'; }
     }
-
     async function publishExam(){
         const u=document.getElementById('gh-user').value,r=document.getElementById('gh-repo').value,t=document.getElementById('gh-token').value,id=document.getElementById('exam-id').value;
         if(!u||!r||!t||!id)return alert("Thiếu ID hoặc Cấu hình!");
         
-        // --- KIỂM TRA THỜI GIAN HỢP LỆ (MỚI) ---
+        // Kiểm tra thời gian
         let sTime = document.getElementById('exam-start').value;
         let eTime = document.getElementById('exam-end').value;
         if(sTime && eTime && new Date(sTime) >= new Date(eTime)){
             alert("⛔ LỖI: Thời gian Đóng đề phải SAU thời gian Mở đề!");
             return;
         }
-        // ----------------------------------------
 
-        const ov=document.getElementById('loading-overlay');ov.style.display='flex';
+        const ov=document.getElementById('loading-overlay'); ov.style.display='flex';
         try{
             let fQ=JSON.parse(JSON.stringify(EXAM_QUESTIONS));
             let sec=document.getElementById('secure-mode').checked;
-
+            
+            // Xử lý ảnh và mã hóa câu hỏi
             fQ.forEach(q=>{
                 if(q.solImg) {
                     q.explain = (q.explain || "") + (q.explain.includes('[IMG]') ? "" : `<br><img src="${q.solImg}" style="max-width:100%;margin-top:10px;border-radius:5px">`);
@@ -593,6 +578,7 @@
                 }
             });
 
+            // Tạo dữ liệu JSON
             let dt={
                 title: document.getElementById('exam-title').value,
                 subject: document.getElementById('exam-subject').value, 
@@ -612,32 +598,37 @@
                 scores: {mcq:0.25, tf:1.0, short:0.5, match:1.0},
                 questions: fQ
             };
-            
+
+            // Upload file đề
             let c=btoa(unescape(encodeURIComponent(`window.EXAM_DATA = ${JSON.stringify(dt,null,4)};`)));
             await upF(u,r,t,`data/${id}.js`,c,false);
+            
+            // Cập nhật danh sách
             await updateList(u,r,t,id,dt);
-            alert("Thành công! Đề đã được xuất bản."); ov.style.display='none'; loadDataFiles();
-        }catch(e){alert(e.message); ov.style.display='none';}
-        // ... (Code cũ của hàm publishExam nằm ở trên) ...
-        
-        // --- ĐOẠN CODE MỚI: TỰ ĐỘNG LƯU MẬT KHẨU VÀO SHEET ---
-        let gsUrl = document.getElementById('gs-url').value.trim();
-        let rawPass = document.getElementById('exam-pass').value.trim();
-        
-        if (gsUrl && rawPass) {
-            let fd = new FormData();
-            fd.append("action", "savePass"); // Báo hiệu là lưu pass
-            fd.append("id", id);
-            fd.append("title", dt.title);
-            fd.append("pass", rawPass); // Gửi mật khẩu gốc (chưa mã hóa)
 
-            fetch(gsUrl, { method: "POST", body: fd, mode: "no-cors" })
-                .then(() => console.log("Đã gửi mật khẩu sang Sheet"))
-                .catch(e => console.log("Lỗi gửi pass: " + e));
+            // --- GỬI MẬT KHẨU SANG GOOGLE SHEET (Đã sửa lỗi vị trí đặt code) ---
+            let gsUrl = document.getElementById('gs-url').value.trim();
+            let rawPass = document.getElementById('exam-pass').value.trim();
+            
+            if (gsUrl && rawPass) {
+                let fd = new FormData();
+                fd.append("action", "savePass");
+                fd.append("id", id);
+                fd.append("title", dt.title);
+                fd.append("pass", rawPass);
+                // Gửi ngầm, không chờ kết quả để tránh treo
+                fetch(gsUrl, { method: "POST", body: fd, mode: "no-cors" }).catch(e=>console.log(e));
+            }
+            // ----------------------------------------------------------------
+
+            alert("✅ Thành công! Đề đã được xuất bản."); 
+            loadDataFiles();
+
+        } catch(e){
+            alert("❌ Lỗi: " + e.message);
+        } finally {
+            ov.style.display='none';
         }
-        // -----------------------------------------------------
-
-        alert("Thành công! Đề đã được xuất bản."); ov.style.display='none'; loadDataFiles();
     } catch(e) { alert(e.message); ov.style.display='none'; }
 }
     }
