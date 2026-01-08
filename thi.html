@@ -137,28 +137,25 @@
 </div>
 
 <script>
-    let rawQ=[], curQ=[], timerDur=0, timerInt;
-    let startTime = ""; // <--- THÊM BIẾN NÀY
-    // --- CẤU HÌNH GỬI ĐIỂM ---
-    // 1. Dán Link Web App Google Sheet của thầy vào giữa dấu nháy kép dưới đây:
+    // --- KHAI BÁO BIẾN TOÀN CỤC ---
+    let rawQ = [], curQ = [], timerDur = 0, timerInt;
+    // CẤU HÌNH LIÊN KẾT GOOGLE SHEET
     const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbytrDWBeAQhWyIFx_dYTs7VC4x67WJ0X9Z-Ta4A4z-crR51Jm8311EMuNBtDjh4dmY/exec";
-
-    // 2. Khai báo biến thời gian và vi phạm
-    let startTime = new Date().toLocaleString('vi-VN'); // Lấy giờ lúc mới vào trang
-    let warnCount = 0; // Đếm số lần vi phạm
-    let scoresConfig={mcq:0.25, tf:1.0, short:0.5, match:1.0};
-    let isEnc=false, userAns={}, stId="", exId="";
+    
+    // Khởi tạo thời gian và biến đếm vi phạm
+    let startTime = new Date().toLocaleString('vi-VN'); 
+    let warnCount = 0; 
+    let scoresConfig = {mcq: 0.25, tf: 1.0, short: 0.5, match: 1.0};
+    let isEnc = false, userAns = {}, stId = "", exId = "";
 
     // --- PHẦN 1: XỬ LÝ NHẠC ---
     function toggleMusic() {
         const audio = document.getElementById('bg-music');
         const btn = document.getElementById('music-control');
         
-        // Buộc trình duyệt nhận tương tác người dùng
         if (audio.paused) {
-            audio.volume = 0.5; // Âm lượng vừa phải
+            audio.volume = 0.5;
             var playPromise = audio.play();
-            
             if (playPromise !== undefined) {
                 playPromise.then(_ => {
                     btn.innerHTML = '<i class="fas fa-pause"></i>';
@@ -173,7 +170,8 @@
             btn.style.animation = "none";
         }
     }
-    // --- [CODE MỚI] HÀM CHUYỂN ĐỔI SÁNG/TỐI ---
+
+    // --- HÀM CHUYỂN ĐỔI SÁNG/TỐI ---
     function toggleTheme() {
         document.body.classList.toggle('dark-mode');
         const isDark = document.body.classList.contains('dark-mode');
@@ -181,31 +179,30 @@
         
         if (isDark) {
             btn.innerHTML = '<i class="fas fa-sun"></i>';
-            btn.style.color = "#fdd835"; // Màu vàng mặt trời
+            btn.style.color = "#fdd835"; 
         } else {
             btn.innerHTML = '<i class="fas fa-moon"></i>';
-            btn.style.color = "#1a237e"; // Màu xanh mặt trăng
+            btn.style.color = "#1a237e"; 
         }
     }
+
     // --- PHẦN 2: LOAD ĐỀ & KIỂM TRA CHẾ ĐỘ ---
-    const urlParams=new URLSearchParams(window.location.search);
-    const pId=urlParams.get('id'); exId=pId||"demo";
-    const isPrintMode = urlParams.get('print') === '1'; // Kiểm tra có phải chế độ in không
+    const urlParams = new URLSearchParams(window.location.search);
+    const pId = urlParams.get('id'); exId = pId || "demo";
+    const isPrintMode = urlParams.get('print') === '1'; 
 
     if(pId){
-        const s=document.createElement('script');
-        s.src=`data/${pId}.js?v=`+Date.now();
-        s.onload=()=>{
+        const s = document.createElement('script');
+        s.src = `data/${pId}.js?v=` + Date.now();
+        s.onload = () => {
             if(window.EXAM_DATA) {
-                // --- CODE BỔ SUNG: KIỂM TRA QUYỀN IN ---
+                // KIỂM TRA QUYỀN IN
                 if(isPrintMode && window.EXAM_DATA.allowPrint !== true) {
                     alert("⛔ Đề thi này KHÔNG CHO PHÉP IN!");
-                    // Quay về chế độ thi bình thường (xóa ?print=1)
                     window.location.href = window.location.pathname + "?id=" + pId; 
                     return;
                 }
-                // ----------------------------------------
-
+                
                 if(isPrintMode) {
                     renderPrintMode(window.EXAM_DATA); 
                 } else {
@@ -213,16 +210,15 @@
                 }
             }
         };
-        s.onerror=()=>document.getElementById('loading').innerText="Lỗi tải đề!";
+        s.onerror = () => document.getElementById('loading').innerText = "Lỗi tải đề!";
         document.head.appendChild(s);
-    }else document.getElementById('loading').innerText="Thiếu ID đề.";
+    } else document.getElementById('loading').innerText = "Thiếu ID đề.";
 
     // --- PHẦN 3: HÀM DÀNH RIÊNG CHO CHẾ ĐỘ IN (PRINT MODE) ---
     function renderPrintMode(d) {
         document.getElementById('loading').style.display='none';
-        document.body.style.background = "white"; // Nền trắng để in
+        document.body.style.background = "white"; 
         
-        // Header tờ giấy thi
         let h = `<div class="print-header">
             <div><b>SỞ GIÁO DỤC VÀ ĐÀO TẠO</b><br>TRƯỜNG THPT BÌNH MINH</div>
             <div><b>ĐỀ KIỂM TRA: ${d.title}</b><br>Thời gian: ${d.time} phút</div>
@@ -232,12 +228,10 @@
             <br><b>Số báo danh:</b> ..............................................................................................................
         </div>`;
 
-        // Render toàn bộ câu hỏi
         d.questions.forEach((q, i) => {
             let imgHtml = q.img ? `<img src="${q.img}" style="max-height:150px;display:block;margin:5px 0">` : '';
             let contentHtml = q.q.replace('[IMG]', imgHtml);
             
-            // Xử lý hiển thị các loại câu hỏi cho bản in
             h += `<div class="print-q">
                 <b>Câu ${i+1}:</b> ${contentHtml} ${imgHtml}
                 <div class="print-opts">`;
@@ -258,11 +252,9 @@
             h += `</div></div>`;
         });
 
-        // Đưa nội dung vào vùng in
         document.getElementById('print-area').innerHTML = h;
         document.getElementById('print-area').style.display = 'block';
         
-        // Đợi MathJax xử lý công thức xong thì tự động mở hộp thoại in
         setTimeout(() => {
             if(window.MathJax) {
                 MathJax.typesetPromise().then(() => {
@@ -276,64 +268,53 @@
 
     // --- PHẦN 4: HÀM CHO CHẾ ĐỘ THI (NORMAL MODE) ---
     function initExam(d){
-        rawQ=d.questions; timerDur=(d.time||45)*60;
-        if(d.scores) scoresConfig={...scoresConfig, ...d.scores}; 
-        isEnc=d.encrypted===true;
-        document.getElementById('exam-title').innerText=d.title||"BÀI KIỂM TRA";
-        document.getElementById('exam-info').innerText=`${rawQ.length} Câu | ${d.time} Phút`;
-        if(d.password)document.getElementById('pass-area').style.display='block';
+        rawQ = d.questions; timerDur = (d.time||45)*60;
+        if(d.scores) scoresConfig = {...scoresConfig, ...d.scores}; 
+        isEnc = d.encrypted===true;
+        document.getElementById('exam-title').innerText = d.title||"BÀI KIỂM TRA";
+        document.getElementById('exam-info').innerText = `${rawQ.length} Câu | ${d.time} Phút`;
+        if(d.password) document.getElementById('pass-area').style.display='block';
         document.getElementById('loading').style.display='none'; 
         document.getElementById('welcome-screen').style.display='flex';
 
-        // Hiện nút nhạc nếu Admin cho phép
         if (d.music === true) {
             document.getElementById('music-control').style.display = 'flex';
         }
     }
-function checkLogin(){
-        // 1. Lấy dữ liệu
+
+    function checkLogin(){
         const n = document.getElementById('s-name').value.trim();
         const c = document.getElementById('s-class').value.trim();
         const p = document.getElementById('s-pass').value.trim();
 
-        // 2. Kiểm tra tên lớp
         if(!n || !c) return alert("Vui lòng nhập Họ tên và Lớp!");
 
-        // 3. (Tùy chọn) Mã vạn năng cho Admin
         if (p === "admin9999") {
             stId = n + c;
             document.getElementById('d-name').innerText = n;
             document.getElementById('d-class').innerText = c;
-            startLogic(n); // Vào ngay
+            startLogic(n);
             return;
         }
 
-        // 4. KIỂM TRA MẬT KHẨU CỦA ĐỀ
         if(window.EXAM_DATA.password && window.EXAM_DATA.password !== "") {
-            // So sánh mật khẩu người dùng nhập (đã mã hóa MD5) với mật khẩu trong file đề
             if(CryptoJS.MD5(p).toString() !== window.EXAM_DATA.password) {
                 return alert("Sai mật khẩu! Vui lòng thử lại.");
             }
         }
 
-        // 5. NẾU ĐÚNG HẾT -> VÀO THI
         stId = n + c;
         document.getElementById('d-name').innerText = n;
         document.getElementById('d-class').innerText = c;
-        
-        // Lệnh quan trọng nhất để chuyển cảnh:
         startLogic(n);
     }
-    // --- [CODE BỔ SUNG] HÀM BẮT ĐẦU THI (Bị thiếu) ---
+
     function startLogic(name){
-        // 1. Xử lý trộn đề (Shuffle)
-        // Ghi nhận thời gian bắt đầu làm bài
         startTime = new Date().toLocaleString('vi-VN');
         let aq = JSON.parse(JSON.stringify(rawQ));
         let doShuffle = (window.EXAM_DATA.shuffle !== false);
 
         if(doShuffle) {
-            // Tạo bộ sinh số ngẫu nhiên theo tên (để cùng tên thì đề giống nhau, tránh F5 đổi đề)
             let seed = 0;
             for(let i=0; i<name.length; i++) seed += name.charCodeAt(i);
             const random = () => {
@@ -341,10 +322,8 @@ function checkLogin(){
                 return x - Math.floor(x);
             };
 
-            // Trộn thứ tự câu hỏi
             aq.sort(() => random() - 0.5);
             
-            // Trộn thứ tự đáp án (chỉ cho câu trắc nghiệm MCQ)
             aq.forEach(q => { 
                 if(q.type === 'mcq') {
                     q.idx = q.options.map((_,i)=>i).sort(() => random() - 0.5);
@@ -353,26 +332,22 @@ function checkLogin(){
                 }
             });
         } else {
-            // Không trộn
             aq.forEach(q => { 
                 if(q.type === 'mcq') q.idx = q.options.map((_,i)=>i); 
             });
         }
         curQ = aq;
 
-        // 2. Chuyển đổi giao diện
-        renderUI(); // Vẽ câu hỏi
-        document.getElementById('welcome-screen').style.display = 'none'; // Ẩn màn hình chào
-        document.getElementById('main-interface').style.display = 'block'; // Hiện đề thi
+        renderUI();
+        document.getElementById('welcome-screen').style.display = 'none';
+        document.getElementById('main-interface').style.display = 'block';
 
-        // 3. Bắt đầu tính giờ
         clearInterval(timerInt);
         timerInt = setInterval(() => {
             let m = Math.floor(timerDur / 60);
             let s = timerDur % 60;
             document.getElementById('timer').innerText = `${m}:${s<10?'0'+s:s}`;
             
-            // Hết giờ
             if (--timerDur < 0) {
                 clearInterval(timerInt);
                 submitQuiz();
@@ -441,13 +416,13 @@ function checkLogin(){
 
     function submitQuiz(){
         clearInterval(timerInt);
-        // Tắt theo dõi chuyển tab
         document.removeEventListener("visibilitychange", handleVisibilityChange);
         document.getElementById('btn-submit').style.display='none';
-        // Tắt nhạc khi nộp bài
+        
         const audio = document.getElementById('bg-music');
         if(!audio.paused) audio.pause();
         document.getElementById('music-control').style.display='none';
+        
         let score=0, max=0;
         curQ.forEach((q,i)=>{
             const bl=document.getElementById(`q-${i}`); document.getElementById(`sol-${i}`).style.display='block';
@@ -475,12 +450,11 @@ function checkLogin(){
         document.getElementById('final-score').innerText = `${finalS} / ${max}`;
         window.scrollTo({top:0,behavior:'smooth'});
     }
+    
     function bg(el,isT,txt){ el.insertAdjacentHTML('beforeend',`<div class="res-badge ${isT?'res-correct':'res-wrong'}">${txt}</div>`); }
-    // --- [CODE MỚI] CHỨC NĂNG CHỐNG GIAN LẬN ---
-    let warnCount = 0;
-
+    
+    // --- CHỨC NĂNG CHỐNG GIAN LẬN ---
     function handleVisibilityChange() {
-        // Nếu màn hình bị ẩn (chuyển tab hoặc thu nhỏ)
         if (document.hidden) {
             warnCount++;
             if (warnCount >= 3) {
@@ -491,41 +465,39 @@ function checkLogin(){
             }
         }
     }
+
     // --- HÀM GỬI DỮ LIỆU VỀ GOOGLE SHEET ---
     function sendToGoogleSheet(score, maxScore) {
-        // Nếu chưa điền link thì không gửi
         if (!GOOGLE_SHEET_URL || GOOGLE_SHEET_URL.includes("DÁN_LINK")) {
             console.log("Chưa cấu hình Link Google Sheet!");
             return;
         }
 
         const formData = new FormData();
-        // 1. Thông tin cơ bản
         formData.append("name", document.getElementById('s-name').value);
         formData.append("class", document.getElementById('s-class').value);
         formData.append("score", `${score}/${maxScore}`);
-        
-        // 2. Thông tin bổ sung (Ngày giờ, vi phạm)
         formData.append("startTime", startTime); 
         formData.append("violations", warnCount);
 
-        // 3. Chi tiết đáp án
         let details = curQ.map((q, i) => {
             let u = userAns[i];
             let val = "";
             if(typeof u === 'object' && u !== null) val = JSON.stringify(u);
-            else if(q.type === 'mcq' && u !== undefined) val = q.options[u] ? String.fromCharCode(65 + q.options.findIndex(opt => opt === q.options[u])) : '?';
+            else if(q.type === 'mcq' && u !== undefined) {
+                // TỐI ƯU HÓA CODE LẤY ĐÁP ÁN ABCD
+                val = String.fromCharCode(65 + parseInt(u));
+            }
             else val = u || "_";
             return `C${i+1}:${val}`;
         }).join(" | ");
         
         formData.append("detail", details);
 
-        // 4. Gửi dữ liệu đi
         fetch(GOOGLE_SHEET_URL, {
             method: "POST",
             body: formData,
-            mode: "no-cors" // Quan trọng: Để không bị chặn bảo mật
+            mode: "no-cors"
         }).then(() => {
             console.log("✅ Đã gửi điểm thành công!");
         }).catch(err => {
