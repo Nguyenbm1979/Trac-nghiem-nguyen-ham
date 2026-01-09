@@ -1,5 +1,5 @@
 window.EXAM_DATA = {
-    "title": "Đề Cuối H2, Thực hành sư phạm, HCM, Năm 2024-2025",
+    "title": "Đề Cuối HK2, Thực hành sư phạm, HCM, Năm 2024-2025",
     "subject": "Toan",
     "grade": "12",
     "time": 90,
