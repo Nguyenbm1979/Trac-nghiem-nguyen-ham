@@ -7,9 +7,9 @@ window.EXAM_DATA = {
     "encrypted": false,
     "shuffle": true,
     "viewDetail": true,
-    "minTime": 50,
     "music": true,
     "allowPrint": true,
+    "minTime": 50,
     "start": "2026-01-05T22:15",
     "end": "2026-01-12T21:15",
     "price": 0,
@@ -104,9 +104,10 @@ window.EXAM_DATA = {
                 "$I=-\\dfrac{4}{3}$"
             ],
             "ans": 0,
-            "explain": "Ta có $x^2 - 2x=0 \\Leftrightarrow x=0$ hoặc $x=2$.<br> Bảng xét dấu <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767749056531_121.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\"> $I= \\displaystyle \\int\\limits_{-1}^{2} \\left|x^2 - 2x\\right| \\mathrm{d}x$<br>$ = \\displaystyle \\int\\limits_{-1}^{0} \\left(x^2 - 2x\\right) \\mathrm{d}x - \\displaystyle \\int\\limits_{0}^{2} \\left(x^2 - 2x\\right) \\mathrm{d}x$<br>$ = \\left(\\dfrac{x^3}{3} - x^2\\right)\\bigg|_{-1}^0 - \\left(\\dfrac{x^3}{3} - x^2\\right)\\bigg|_{0}^2$ <br> $ = \\left[0 - \\left(-\\dfrac{1}{3}-1\\right)\\right] - \\left[\\left(\\dfrac{8}{3}-4\\right)-0\\right] = \\dfrac{8}{3}. $<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767749056531_121.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\">",
+            "explain": "Ta có $x^2 - 2x=0 \\Leftrightarrow x=0$ hoặc $x=2$.<br> Bảng xét dấu\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767749056531_121.png\" style=\"display: block; margin-left: auto; margin-right: auto; width: 100%;\"> \n $I= \\displaystyle \\int\\limits_{-1}^{2} \\left|x^2 - 2x\\right| \\mathrm{d}x$<br>$ = \\displaystyle \\int\\limits_{-1}^{0} \\left(x^2 - 2x\\right) \\mathrm{d}x - \\displaystyle \\int\\limits_{0}^{2} \\left(x^2 - 2x\\right) \\mathrm{d}x$<br>$ = \\left(\\dfrac{x^3}{3} - x^2\\right)\\bigg|_{-1}^0 - \\left(\\dfrac{x^3}{3} - x^2\\right)\\bigg|_{0}^2$ <br> $ = \\left[0 - \\left(-\\dfrac{1}{3}-1\\right)\\right] - \\left[\\left(\\dfrac{8}{3}-4\\right)-0\\right] = \\dfrac{8}{3}. $",
             "id": "2D4H2-5",
-            "point": "0.25"
+            "point": "0.25",
+            "solImg": ""
         },
         {
             "type": "mcq",
@@ -269,7 +270,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "tf",
-            "q": "Cho hàm số $y=f(x)$ liên tục trên $\\mathbb{R}$, đồ thị hàm số $(C)\\colon y=f'(x)$ trên đoạn $[-3;6]$ là đường gấp khúc như hình vẽ. Khi đó <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767750091369_18.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\">",
+            "q": "Cho hàm số $y=f(x)$ liên tục trên $\\mathbb{R}$, đồ thị hàm số $(C)\\colon y=f'(x)$ trên đoạn $[-3;6]$ là đường gấp khúc như hình vẽ. Khi đó \n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767750091369_18.png\" style=\"display: block; margin-left: auto; margin-right: auto; width: 70%;\"> ",
             "items": [
                 {
                     "sub": "$\\displaystyle \\int\\limits_{-3}^{-1} f'(x)\\mathrm{\\,d}x=-2$",
@@ -290,7 +291,8 @@ window.EXAM_DATA = {
             ],
             "explain": "<br><b>-</b> Đúng.<br> Ta có $A(-3;-2)$, $B(2;3)$ $\\Rightarrow AB\\colon y=x+1$.<br> Khi đó $\\displaystyle \\int\\limits_{-3}^{-1} f'(x)\\mathrm{\\,d}x= \\displaystyle\\int\\limits_{-3}^{-1} (x+1)\\mathrm{\\,d}x=-2$. <br><b>-</b> Đúng. Vì $\\displaystyle \\int\\limits_{0}^{1} f'(x) \\mathrm{\\,d}x= \\displaystyle\\int\\limits_{0}^{1}(x+1)\\mathrm{\\,d}x=\\dfrac{3}{2}$. <br><b>-</b> Sai.<br> Ta có $B(2;3)$, $E(5;0)\\Rightarrow BC\\colon y=-x+5$.<br> Khi đó $\\displaystyle \\int\\limits_{2}^{6} f'(x)\\mathrm{\\,d}x= \\displaystyle\\int\\limits_{2}^{6}(-x+5) \\mathrm{\\,d}x = 4$.<br> Vì vậy $f(2)-f(6)=-\\displaystyle \\int\\limits_{2}^{6} f'(x)\\mathrm{\\,d}x=-4$. <br><b>-</b> Sai.<br> Ta có $\\displaystyle \\int\\limits_{-3}^{2} f'(x)\\mathrm{\\,d}x= \\displaystyle\\int\\limits_{-3}^{2} (x+1)\\mathrm{\\,d}x=\\dfrac{5}{2}=f(2)-f(-3)$.<br> Mặt khác $\\displaystyle \\int\\limits_{2}^{5} f'(x)\\mathrm{\\,d}x= \\displaystyle\\int\\limits_{2}^{5}(-x+5)\\mathrm{\\,d}x=\\dfrac{9}{2}=f(5)-f(2)$.<br> Vì vậy $f(5)+f(-3)-2f(2)=\\dfrac{9}{2}-\\dfrac{5}{2}=2$.",
             "id": "2D4V2-2",
-            "point": "1"
+            "point": "1",
+            "img": ""
         },
         {
             "type": "short",
@@ -326,11 +328,13 @@ window.EXAM_DATA = {
         },
         {
             "type": "short",
-            "q": "Ba Tí muốn làm cửa sắt được thiết kế như hình bên dưới. Vòm cổng có hình dạng là một Parabol. Giá $1$ m$^2$ cửa sắt là $660\\,000$ đồng. Cửa sắt có giá (nghìn đồng) là bao nhiêu? <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767750156377_34.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\">",
+            "q": "Ba Tí muốn làm cửa sắt được thiết kế như hình bên dưới. Vòm cổng có hình dạng là một Parabol. Giá $1$ m$^2$ cửa sắt là $660\\,000$ đồng. Cửa sắt có giá (nghìn đồng) là bao nhiêu? \n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767750156377_34.png\" style=\"display: block; margin-left: auto; margin-right: auto; width: 60%;\"> \n",
             "ans": "$6050$",
-            "explain": "<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767750166185_146.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\"> Từ hình vẽ ta chia cửa rào sắt ra thành $2$ phần như trên.<br> Khi đó $S = S_1 + S_2 = S_1 + 5\\cdot 1{,}5 = S_1 + 7{,}5$.<br> Để tính $S_1$ ta vận dụng kiến thức tính diện tích hình phẳng của tích phân.<br> Gắn hệ trục $Oxy$ trong đó $O$ trung với trung điểm của $AB$, $OB\\subset Ox$, $OC \\subset Oy$.<br> Theo đề bài ta có đường cong có dạng hình Parabol. Giả sử $(P)\\colon y=ax^2+bx+c$.<br> Khi đó $\\left\\{\\begin{aligned}A\\left(-\\dfrac{5}{2}; 0\\right)\\in (P)\\\\B\\left(\\dfrac{5}{2}; 0\\right)\\in (P)\\\\C\\left(0;\\dfrac{1}{2}\\right)\\in (P)\\end{aligned}\\right. \\Leftrightarrow\\left\\{\\begin{aligned}\\dfrac{25}{4}a-\\dfrac{5}{2}b+c=0\\\\\\dfrac{25}{4}a+ \\dfrac{5}{2}b+c=0\\\\c=\\dfrac{1}{2}\\end{aligned}\\right. \\Leftrightarrow \\left\\{\\begin{aligned}a= -\\dfrac{2}{25}\\\\b = 0\\\\c=\\dfrac{1}{2}.\\end{aligned}\\right.$<br> $\\Rightarrow (P) \\colon y = -\\dfrac{2}{25} x^2 + \\dfrac{1}{2}$.<br> Diện tích $S_2 = 2\\displaystyle\\int\\limits_{0}^{2{,}5} \\left(-\\dfrac{2}{25} x^2 + \\dfrac{1}{2}\\right) \\mathrm{d}x = \\dfrac{10}{6}\\ (\\mathrm{m}^2)$.<br> $\\Rightarrow S = \\dfrac{55}{6}$ (m$^2$).<br> Vậy giá tiền cửa sắt là $\\dfrac{55}{6} \\cdot 660\\,000= 6050$ (nghìn đồng).<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767750166185_146.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\">",
+            "explain": "<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767750166185_146.png\" style=\"display: block; margin-left: auto; margin-right: auto; width: 60%;\">\nTừ hình vẽ ta chia cửa rào sắt ra thành $2$ phần như trên.<br> Khi đó $S = S_1 + S_2 = S_1 + 5\\cdot 1{,}5 = S_1 + 7{,}5$.<br> Để tính $S_1$ ta vận dụng kiến thức tính diện tích hình phẳng của tích phân.<br> Gắn hệ trục $Oxy$ trong đó $O$ trung với trung điểm của $AB$, $OB\\subset Ox$, $OC \\subset Oy$.<br> Theo đề bài ta có đường cong có dạng hình Parabol. Giả sử $(P)\\colon y=ax^2+bx+c$.<br> Khi đó $\\left\\{\\begin{aligned}A\\left(-\\dfrac{5}{2}; 0\\right)\\in (P)\\\\B\\left(\\dfrac{5}{2}; 0\\right)\\in (P)\\\\C\\left(0;\\dfrac{1}{2}\\right)\\in (P)\\end{aligned}\\right. \\Leftrightarrow\\left\\{\\begin{aligned}\\dfrac{25}{4}a-\\dfrac{5}{2}b+c=0\\\\\\dfrac{25}{4}a+ \\dfrac{5}{2}b+c=0\\\\c=\\dfrac{1}{2}\\end{aligned}\\right. \\Leftrightarrow \\left\\{\\begin{aligned}a= -\\dfrac{2}{25}\\\\b = 0\\\\c=\\dfrac{1}{2}.\\end{aligned}\\right.$<br> $\\Rightarrow (P) \\colon y = -\\dfrac{2}{25} x^2 + \\dfrac{1}{2}$.<br> Diện tích $S_2 = 2\\displaystyle\\int\\limits_{0}^{2{,}5} \\left(-\\dfrac{2}{25} x^2 + \\dfrac{1}{2}\\right) \\mathrm{d}x = \\dfrac{10}{6}\\ (\\mathrm{m}^2)$.<br> $\\Rightarrow S = \\dfrac{55}{6}$ (m$^2$).<br> Vậy giá tiền cửa sắt là $\\dfrac{55}{6} \\cdot 660\\,000= 6050$ (nghìn đồng).",
             "id": "2D4V2-6",
-            "point": "0.5"
+            "point": "0.5",
+            "solImg": "",
+            "img": ""
         },
         {
             "type": "short",
