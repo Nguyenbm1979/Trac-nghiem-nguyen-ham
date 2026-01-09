@@ -1,5 +1,15 @@
 window.EXAM_LIST = [
     {
+        "id": "2-HK2-Thuchanh-SP-HCM-25",
+        "title": "Đề Cuối H2, Thực hành sư phạm, HCM, Năm 2024-2025",
+        "subject": "Toan",
+        "grade": "12",
+        "time": 90,
+        "allowPrint": true,
+        "start": "",
+        "end": ""
+    },
+    {
         "id": "2-GHK2-ThuchanhSP-HCM-25",
         "title": "Đề thi giữa học kỳ 2, trường THPT, Thực hành sư phạm, HCM, 2025",
         "subject": "Toan",
@@ -68,12 +78,5 @@ window.EXAM_LIST = [
         "allowPrint": false,
         "start": "",
         "end": ""
-    },
-    {
-        "id": "2-HK2-Thuchanh-SP-HCM-25",
-        "title": "Đề Cuối HK2, Thực hành sư phạm, HCM, Năm 2024-2025",
-        "subject": "Toan",
-        "grade": "12",
-        "time": 90
     }
 ];
