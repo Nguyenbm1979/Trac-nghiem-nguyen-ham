@@ -194,14 +194,14 @@ window.EXAM_DATA = {
                 },
                 {
                     "sub": "$\\displaystyle\\int \\left[ f(x)-g(x) \\right]^2 \\mathrm{d}x=x+\\cos x+C$ ($C$ là một hằng số)",
-                    "ans": "F"
+                    "ans": "T"
                 },
                 {
                     "sub": "$\\displaystyle\\int \\dfrac{1}{[2f(x)\\cdot g(x)]^2}\\mathrm{d}x=-\\cot x+C$ ($C$ là một hằng số)",
                     "ans": "T"
                 }
             ],
-            "explain": "<ul>\n<li>Vì $F'(x)=-\\sin \\dfrac{x}{2},\\forall x\\in R$ nên  $F(x)=2\\cos \\dfrac{x}{2}$  không là một nguyên hàm của hàm số $F(x)$ trên $\\mathbb{R}$.  Sai</li>\n<li>Vì $G'(x)=\\cos \\dfrac{x}{2}, \\forall x\\in \\mathbb{R}$ nên  $G(x)=2\\sin \\dfrac{x}{2}+\\dfrac{1}{2}$ là một nguyên hàm của hàm số $g(x)$ trên $R$.  Đúng</li>\n<li>$\\displaystyle\\int [f(x)-g(x)]^2\\mathrm{d}x=\\int \\left( \\sin\\dfrac{x}{2}-\\cos\\frac{x}{2} \\right)^2\\mathrm{d}x$<br>\n$=\\int \\left(\\sin ^2\\frac{x}{2}+2\\sin\\frac{x}{2}\\cos\\frac{x}{2}+\\cos^2\\frac{x}{2}\\right)\\mathrm{d}x$<br>\n$=\\int( 1+\\sin x )\\mathrm{d}x=x-\\cos x+C$.  Sai</li>\n<li>$\\displaystyle\\int \\frac{1}{[2f(x)\\cdot g(x)]^2}\\mathrm{d}x=\\int \\frac{1}{(2\\sin\\frac{x}{2}\\cos\\frac{x}{2})^2}\\mathrm{d}x$<br>\n$=\\int \\frac{1}{\\sin^2 x}\\mathrm{d}x=-\\cot x+C$.  Đúng</li>\n</ul>",
+            "explain": "<ul>\n<li>Vì $F'(x)=-\\sin \\dfrac{x}{2},\\forall x\\in R$ nên  $F(x)=2\\cos \\dfrac{x}{2}$  không là một nguyên hàm của hàm số $F(x)$ trên $\\mathbb{R}$.  Sai</li>\n<li>Vì $G'(x)=\\cos \\dfrac{x}{2}, \\forall x\\in \\mathbb{R}$ nên  $G(x)=2\\sin \\dfrac{x}{2}+\\dfrac{1}{2}$ là một nguyên hàm của hàm số $g(x)$ trên $R$.  Đúng</li>\n<li>$\\displaystyle\\int [f(x)-g(x)]^2\\mathrm{d}x=\\int \\left( \\sin\\dfrac{x}{2}-\\cos\\frac{x}{2} \\right)^2\\mathrm{d}x$<br>\n$=\\int \\left(\\sin ^2\\frac{x}{2}-2\\sin\\frac{x}{2}\\cos\\frac{x}{2}+\\cos^2\\frac{x}{2}\\right)\\mathrm{d}x$<br>\n$=\\int( 1-\\sin x )\\mathrm{d}x=x+\\cos x+C$.  Đúng</li>\n<li>$\\displaystyle\\int \\frac{1}{[2f(x)\\cdot g(x)]^2}\\mathrm{d}x=\\int \\frac{1}{(2\\sin\\frac{x}{2}\\cos\\frac{x}{2})^2}\\mathrm{d}x$<br>\n$=\\int \\frac{1}{\\sin^2 x}\\mathrm{d}x=-\\cot x+C$.  Đúng</li>\n</ul>",
             "point": "1"
         },
         {
