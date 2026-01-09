@@ -7,11 +7,11 @@ window.EXAM_DATA = {
     "encrypted": false,
     "shuffle": true,
     "viewDetail": true,
-    "minTime": 50,
     "music": true,
     "allowPrint": true,
+    "minTime": 50,
     "start": "2026-01-05T22:15",
-    "end": "2026-01-11T21:15",
+    "end": "2026-01-17T21:15",
     "price": 0,
     "bank": {
         "id": "",
@@ -280,7 +280,7 @@ window.EXAM_DATA = {
             "type": "short",
             "q": "Một xe ô tô đang di chuyển với tốc độ $22$ m/s thì gặp chướng ngại vật. Người lái xe phản ứng $3$ giây sau đó và đạp phanh khẩn cấp, kể từ thời điểm đạp phanh, ô tô chuyển động chậm dần đều với tốc độ $v(t)=36-6 t$ m/s, trong đó $t$ là thời gian tính bằng giây kể từ lúc đạp phanh. Hỏi quãng đường ô tô đi được từ lúc phát hiện chướng ngại vật đến khi ô tô dừng hẳn là bao nhiêu mét?",
             "ans": "174",
-            "explain": "Quãng đường ô tô đi được từ lúc phát hiện chướng ngại vật đến khi đạp phanh là $66$ m.\\\\ Xe ô tô dừng hẳn khi $v(t)=0 \\Leftrightarrow 36-6 t=0 \\Leftrightarrow t=6$.\\\\ Quãng đường ô tô đi được từ lúc đạp phanh đến lúc dừng lại là $\\displaystyle\\int\\limits_0^6(36-6 t) \\mathrm{\\,d} t=108$ m.\\\\ Vậy quãng đường ô tô đi được từ lúc phát hiện chướng ngại vật đến khi ô tô dừng hẳn là $66+108=174$ m.",
+            "explain": "Quãng đường ô tô đi được từ lúc phát hiện chướng ngại vật đến khi đạp phanh là $66$ m.<br> Xe ô tô dừng hẳn khi $v(t)=0 \\Leftrightarrow 36-6 t=0 \\Leftrightarrow t=6$.<br> Quãng đường ô tô đi được từ lúc đạp phanh đến lúc dừng lại là $\\displaystyle\\int\\limits_0^6(36-6 t) \\mathrm{\\,d} t=108$ m.<br> Vậy quãng đường ô tô đi được từ lúc phát hiện chướng ngại vật đến khi ô tô dừng hẳn là $66+108=174$ m.",
             "point": "0.5"
         },
         {
@@ -294,7 +294,7 @@ window.EXAM_DATA = {
             "type": "short",
             "q": "Biết rằng $\\displaystyle\\int\\limits_0^2 \\dfrac{x^2}{x+1} \\mathrm{\\,d} x=a+\\ln b$ với $a, b \\in \\mathbb{Z}$, $b>0$. Tính $2a+b$.",
             "ans": "3",
-            "explain": "Ta có $\\displaystyle\\int\\limits_0^2 \\dfrac{x^2}{x+1} \\mathrm{~d} x=\\displaystyle\\int\\limits_0^2\\left(x-1+\\dfrac{1}{x+1}\\right) \\mathrm{d} x=\\left(\\dfrac{x^2}{2}-x+\\ln |x+1|\\right)\\bigg|_0 ^2=\\ln 3$.\\\\ Suy ra $a=0$, $b=3$. Vậy $2 a+b=3$.",
+            "explain": "Ta có $\\displaystyle\\int\\limits_0^2 \\dfrac{x^2}{x+1} \\mathrm{~d} x=\\displaystyle\\int\\limits_0^2\\left(x-1+\\dfrac{1}{x+1}\\right) \\mathrm{d} x=\\left(\\dfrac{x^2}{2}-x+\\ln |x+1|\\right)\\bigg|_0 ^2=\\ln 3$.<br>Suy ra $a=0$, $b=3$. Vậy $2 a+b=3$.",
             "point": "0.5"
         },
         {
@@ -315,7 +315,7 @@ window.EXAM_DATA = {
             "type": "short",
             "q": "Một ô tô chuyển động nhanh dần đều với vận tốc $v(t)=7 t$ m/s. Đi được $5$ s người lái xe phát hiện chướng ngại vật và phanh gấp, ô tô tiếp tục chuyển động chậm dần đều với gia tốc $a=-35 \\mathrm{~m} / \\mathrm{s}^2$. Tính quãng đường của ô tô đi được từ lúc bắt đầu chuyển bánh cho đến khi dừng hẳn? (quãng đường tính theo đơn vị m).",
             "ans": "105",
-            "explain": "Quãng đường ô tô đi được trong $5$ s đầu là $s_1=\\displaystyle\\int\\limits_0^5 7 t \\mathrm{\\,d} t=7 \\dfrac{t^2}{2}\\,\\bigg|_0 ^5=87{,}5$.\\\\ Phương trình vận tốc của ô tô khi người lái xe phát hiện chướng ngại vật là $v_2(t)=35-35 t$.\\\\ Khi xe dừng lại hẳn thì $v_2(t)=0 \\Leftrightarrow 35-35 t=0 \\Leftrightarrow t=1$.\\\\ Quãng đường ô tô đi được từ khi phanh gấp đến khi dừng lại hẳn là \\[ s_2=\\displaystyle\\int\\limits_0^1\\left(35-35 t\\right) \\mathrm{d} t=\\left(35 t-35 \\dfrac{t^2}{2}\\right)\\bigg|_0 ^1=17{,}5.\\] Do đó quãng đường của ô tô đi được từ lúc bắt đầu chuyển bánh cho đến khi dừng hẳn là \\[s=s_1+s_2=87{,}5+17{,}5=105.\\]",
+            "explain": "Quãng đường ô tô đi được trong $5$ s đầu là $s_1=\\displaystyle\\int\\limits_0^5 7 t \\mathrm{\\,d} t=7 \\dfrac{t^2}{2}\\,\\bigg|_0 ^5=87{,}5$.<br> Phương trình vận tốc của ô tô khi người lái xe phát hiện chướng ngại vật là $v_2(t)=35-35 t$.<br> Khi xe dừng lại hẳn thì $v_2(t)=0 \\Leftrightarrow 35-35 t=0 \\Leftrightarrow t=1$.<br> Quãng đường ô tô đi được từ khi phanh gấp đến khi dừng lại hẳn là \\[ s_2=\\displaystyle\\int\\limits_0^1\\left(35-35 t\\right) \\mathrm{d} t=\\left(35 t-35 \\dfrac{t^2}{2}\\right)\\bigg|_0 ^1=17{,}5.\\] Do đó quãng đường của ô tô đi được từ lúc bắt đầu chuyển bánh cho đến khi dừng hẳn là \\[s=s_1+s_2=87{,}5+17{,}5=105.\\]",
             "point": "0.5"
         }
     ]
