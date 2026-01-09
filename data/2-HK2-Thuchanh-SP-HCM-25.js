@@ -1,15 +1,15 @@
 window.EXAM_DATA = {
-    "title": "Đề Cuối HK2, Thực hành sư phạm, HCM, Năm 2024-2025",
+    "title": "Đề Cuối H2, Thực hành sư phạm, HCM, Năm 2024-2025",
     "subject": "Toan",
     "grade": "12",
     "time": 90,
-    "password": "827ccb0eea8a706c4c34a16891f84e7b",
+    "password": "2afba7e5bf6e676c5798e444f8b1b261",
     "encrypted": false,
     "shuffle": true,
     "viewDetail": true,
-    "minTime": 0,
     "music": true,
     "allowPrint": true,
+    "minTime": 0,
     "start": "",
     "end": "",
     "price": 0,
@@ -68,7 +68,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "mcq",
-            "q": "Cho hàm số $y=f(x)$ có đồ thị như hình bên. Gọi $H$ là diện tích hình phẳng được tô màu. <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774582741_975.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"> Thể tích $V$ của khối tròn xoay được tạo thành khi quay hình phẳng $H$ quanh trục $Ox$ là",
+            "q": "Cho hàm số $y=f(x)$ có đồ thị như hình bên. Gọi $H$ là diện tích hình phẳng được tô màu. <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774582741_975.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"> Thể tích $V$ của khối tròn xoay được tạo thành khi quay hình phẳng $H$ quanh trục $Ox$ là<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774582741_975.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\">",
             "options": [
                 "$V=\\pi \\displaystyle\\int\\limits_{2}^{0} \\left[f(x)\\right]^2 \\mathrm{\\,d}x$",
                 "$V= \\displaystyle\\int\\limits_{2}^{0} \\left[f(x)\\right]^2 \\mathrm{\\,d}x$",
@@ -302,7 +302,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "short",
-            "q": "Gọi $H_1$; $H_2$; $H_3$; $H_4$ là các hình phẳng giới hạn bởi đồ thị hàm số liên tục $y=f(x)$ và trục hoành với $x$ lần lượt thuộc các đoạn $[1;2]$, $[2;3]$, $[3;4]$, $[4;5]$ <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774663327_884.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\">. Biết rằng các hình $H_1$; $H_2$; $H_3$; $H_4$ lần lượt có diện tích bằng $\\dfrac{9}{4}$, $\\dfrac{11}{12}$, $\\dfrac{11}{12}$, $\\dfrac{9}{4}$. Giá trị $\\displaystyle\\int\\limits_{1}^{5} f(x) \\mathrm{\\,d}x$ bằng bao nhiêu?",
+            "q": "Gọi $H_1$; $H_2$; $H_3$; $H_4$ là các hình phẳng giới hạn bởi đồ thị hàm số liên tục $y=f(x)$ và trục hoành với $x$ lần lượt thuộc các đoạn $[1;2]$, $[2;3]$, $[3;4]$, $[4;5]$ <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774663327_884.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\">. Biết rằng các hình $H_1$; $H_2$; $H_3$; $H_4$ lần lượt có diện tích bằng $\\dfrac{9}{4}$, $\\dfrac{11}{12}$, $\\dfrac{11}{12}$, $\\dfrac{9}{4}$. Giá trị $\\displaystyle\\int\\limits_{1}^{5} f(x) \\mathrm{\\,d}x$ bằng bao nhiêu?<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774663327_884.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\">",
             "ans": "$0$",
             "explain": "Ta có \\begin{eqnarray*} \\displaystyle\\int\\limits_{1}^{5} f(x) \\mathrm{\\,d}x &= & \\displaystyle\\int\\limits_{1}^{2} f(x) \\mathrm{\\,d}x+\\displaystyle\\int\\limits_{2}^{3} f(x) \\mathrm{\\,d}x+\\displaystyle\\int\\limits_{3}^{4} f(x) \\mathrm{\\,d}x+\\displaystyle\\int\\limits_{4}^{5} f(x) \\mathrm{\\,d}x<br> &= & \\dfrac{9}{4}-\\dfrac{11}{12}+\\dfrac{11}{12}-\\dfrac{9}{4}<br> &=& 0. \\end{eqnarray*} Vậy $\\displaystyle\\int\\limits_{1}^{5} f(x) \\mathrm{\\,d}x=0$.",
             "id": "2D4H3-1",
@@ -310,7 +310,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "short",
-            "q": "Bạn Hải nhận thiết kế logo hình con mắt (phần được tô đậm) cho một cơ sở y tế: Logo là hình phẳng giới hạn bởi hai parabol $y=f(x)$ và $y=g(x)$ như hình vẽ (đơn vị trên mỗi trục toạ độ là decimét). <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774702666_702.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"> Bạn Hải cần tính diện tích của logo để báo giá cho cơ sở y tế đó trước khi kí hợp đồng. Diện tích của logo là bao nhiêu decimét vuông (làm tròn kết quả đến hàng phần mười).",
+            "q": "Bạn Hải nhận thiết kế logo hình con mắt (phần được tô đậm) cho một cơ sở y tế: Logo là hình phẳng giới hạn bởi hai parabol $y=f(x)$ và $y=g(x)$ như hình vẽ (đơn vị trên mỗi trục toạ độ là decimét). <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774702666_702.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"> Bạn Hải cần tính diện tích của logo để báo giá cho cơ sở y tế đó trước khi kí hợp đồng. Diện tích của logo là bao nhiêu decimét vuông (làm tròn kết quả đến hàng phần mười).<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774702666_702.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\">",
             "ans": "$9{,}8$",
             "explain": "Đặt $f(x)=ax^2+bx+c$ $(a\\ne 0)$. Theo hình vẽ ta thấy đồ thị hàm số $y=f(x)$ nhận trục $Oy$ làm trục đối xứng, cắt trục $Oy$ tại điểm có tung độ bằng $-1$ và đi qua điểm $(2;0)$. Ta có hệ phương trình: $$\\left\\{\\begin{aligned}-\\dfrac{b}{2a}=0\\\\c=-1\\\\4a+2b+c=0\\end{aligned}\\right.\\Leftrightarrow \\left\\{\\begin{aligned}a=\\dfrac{1}{4}\\\\b=0\\\\c=-1\\end{aligned}\\right.\\Rightarrow f(x)=\\dfrac{1}{4}x^2-1.$$ Đặt $g(x)=mx^2+nx+p$ $(m\\ne 0)$. Theo hình vẽ ta thấy đồ thị hàm số $y=g(x)$ nhận trục $Oy$ làm trục đối xứng, cắt trục $Oy$ tại điểm có tung độ bằng $2$ và đi qua điểm $(2;1)$. Ta có hệ phương trình: $$\\left\\{\\begin{aligned}-\\dfrac{n}{2m}=0\\\\p=2\\\\4m+2n+p=1\\end{aligned}\\right.\\Leftrightarrow \\left\\{\\begin{aligned}m=-\\dfrac{1}{4}\\\\n=0\\\\p=2\\end{aligned}\\right.\\Rightarrow g(x)=-\\dfrac{1}{4}x^2+2.$$ Ta có $\\dfrac{1}{4}x^2-1=-\\dfrac{1}{4}x^2+2\\Leftrightarrow \\dfrac{1}{2}x^2-3=0\\Leftrightarrow x=\\pm \\sqrt{6}$.<br> Diện tích của logo là $S=\\displaystyle\\int\\limits_{\\sqrt{6}}^{\\sqrt{6}} \\left|f(x)-g(x)\\right| \\mathrm{\\,d}x=\\displaystyle\\int\\limits_{-\\sqrt{6}}^{\\sqrt{6}} \\left|\\dfrac{1}{2}x^2-3\\right| \\mathrm{\\,d}x\\approx 9{,}8\\left(\\text{dm}^2\\right)$.",
             "id": "2D4V3-2",
