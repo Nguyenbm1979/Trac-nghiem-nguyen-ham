@@ -3,12 +3,12 @@ window.EXAM_DATA = {
     "subject": "Toan",
     "grade": "12",
     "time": 90,
-    "password": "2afba7e5bf6e676c5798e444f8b1b261",
+    "password": "11565d025c229add555c58aac1690786",
     "encrypted": false,
     "shuffle": true,
     "viewDetail": true,
     "music": true,
-    "allowPrint": true,
+    "allowPrint": false,
     "minTime": 0,
     "start": "",
     "end": "",
@@ -68,7 +68,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "mcq",
-            "q": "Cho hàm số $y=f(x)$ có đồ thị như hình bên. Gọi $H$ là diện tích hình phẳng được tô màu. <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774582741_975.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"> Thể tích $V$ của khối tròn xoay được tạo thành khi quay hình phẳng $H$ quanh trục $Ox$ là<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774582741_975.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\">",
+            "q": "Cho hàm số $y=f(x)$ có đồ thị như hình bên. Gọi $H$ là diện tích hình phẳng được tô màu. <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774582741_975.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"> Thể tích $V$ của khối tròn xoay được tạo thành khi quay hình phẳng $H$ quanh trục $Ox$ là",
             "options": [
                 "$V=\\pi \\displaystyle\\int\\limits_{2}^{0} \\left[f(x)\\right]^2 \\mathrm{\\,d}x$",
                 "$V= \\displaystyle\\int\\limits_{2}^{0} \\left[f(x)\\right]^2 \\mathrm{\\,d}x$",
@@ -78,7 +78,8 @@ window.EXAM_DATA = {
             "ans": 3,
             "explain": "Ta có $V=\\pi \\displaystyle\\int\\limits_{0}^{2} \\left[f(x)\\right]^2 \\mathrm{\\,d}x$.",
             "id": "2D4N3-3",
-            "point": "0.25"
+            "point": "0.25",
+            "img": ""
         },
         {
             "type": "mcq",
@@ -263,9 +264,10 @@ window.EXAM_DATA = {
                     "ans": "T"
                 }
             ],
-            "explain": "<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774623461_934.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\"> Ta có $A(0;0;0)$, $B(3;0;0)$, $A'(0;5;0)$, $D(0;0;4)$. <br><b>-</b> Sai.<br> Tọa độ đỉnh $B$ là $(3;0;0)$. <br><b>-</b> Đúng.<br> Tứ giác $DCB'A'$ là hình chữ nhật nên $IC=ID=IB'=IA'$.\\quad(1)<br> Tứ giác $D'C'BA$ là hình chữ nhật nên $ID'=IC'=IB=IA$.\\quad(2)<br> Tứ giác $CD'A'B$ là hình chữ nhật nên $IC=ID'$.\\quad(3)<br> Từ (1), (2), (3) suy ra $IA=IB=IC=ID=IA'=IB'=IC'=ID'$.<br> Suy ra các đỉnh của hình hộp chữ nhật thuộc mặt cầu tâm $I$. <br><b>-</b> Đúng.<br> Vì tứ giác $AA'B'B$ là hình chữ nhật nên ta có $$\\overrightarrow{BB'}=\\overrightarrow{AA'}\\Leftrightarrow \\left\\{\\begin{aligned}x_{B'}-3=0-0\\\\y_{B'}-0=5-0\\\\z_{B'}-0=0-0\\end{aligned}\\right.\\Leftrightarrow \\left\\{\\begin{aligned}x_{B'}=3\\\\y_{B'}=5\\\\z_{B'}=0\\end{aligned}\\right.\\Rightarrow B'(3;5;0).$$ Vì $I$ là trung điểm của $DB'$ nên ta có $\\left\\{\\begin{aligned}x_I=\\dfrac{0+3}{2}=\\dfrac{3}{2}\\\\y_I=\\dfrac{0+5}{2}=\\dfrac{5}{2}\\\\z_I=\\dfrac{4+0}{2}=2\\end{aligned}\\right.\\Rightarrow I\\left(\\dfrac{3}{2};\\dfrac{5}{2};2\\right)$. <br><b>-</b> Đúng.<br> Bán kính mặt cầu là $$R=IB=\\sqrt{\\left(3-\\dfrac{3}{2}\\right)^2+\\left(0-\\dfrac{5}{2}\\right)^2+\\left(0-2\\right)^2}=\\dfrac{5\\sqrt{2}}{2}.$$ Phương trình mặt cầu có tâm $I$ và bán kính $IB$ là $$\\left(x-\\dfrac{3}{2}\\right)^2+\\left(y-\\dfrac{5}{2}\\right)^2+(z-2)^2=\\dfrac{25}{2}.$$<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774623461_934.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\">",
+            "explain": "<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774623461_934.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\"> Ta có $A(0;0;0)$, $B(3;0;0)$, $A'(0;5;0)$, $D(0;0;4)$. <br><b>-</b> Sai.<br> Tọa độ đỉnh $B$ là $(3;0;0)$. <br><b>-</b> Đúng.<br> Tứ giác $DCB'A'$ là hình chữ nhật nên $IC=ID=IB'=IA'$.\\quad(1)<br> Tứ giác $D'C'BA$ là hình chữ nhật nên $ID'=IC'=IB=IA$.\\quad(2)<br> Tứ giác $CD'A'B$ là hình chữ nhật nên $IC=ID'$.\\quad(3)<br> Từ (1), (2), (3) suy ra $IA=IB=IC=ID=IA'=IB'=IC'=ID'$.<br> Suy ra các đỉnh của hình hộp chữ nhật thuộc mặt cầu tâm $I$. <br><b>-</b> Đúng.<br> Vì tứ giác $AA'B'B$ là hình chữ nhật nên ta có $$\\overrightarrow{BB'}=\\overrightarrow{AA'}\\Leftrightarrow \\left\\{\\begin{aligned}x_{B'}-3=0-0\\\\y_{B'}-0=5-0\\\\z_{B'}-0=0-0\\end{aligned}\\right.\\Leftrightarrow \\left\\{\\begin{aligned}x_{B'}=3\\\\y_{B'}=5\\\\z_{B'}=0\\end{aligned}\\right.\\Rightarrow B'(3;5;0).$$ Vì $I$ là trung điểm của $DB'$ nên ta có $\\left\\{\\begin{aligned}x_I=\\dfrac{0+3}{2}=\\dfrac{3}{2}\\\\y_I=\\dfrac{0+5}{2}=\\dfrac{5}{2}\\\\z_I=\\dfrac{4+0}{2}=2\\end{aligned}\\right.\\Rightarrow I\\left(\\dfrac{3}{2};\\dfrac{5}{2};2\\right)$. <br><b>-</b> Đúng.<br> Bán kính mặt cầu là $$R=IB=\\sqrt{\\left(3-\\dfrac{3}{2}\\right)^2+\\left(0-\\dfrac{5}{2}\\right)^2+\\left(0-2\\right)^2}=\\dfrac{5\\sqrt{2}}{2}.$$ Phương trình mặt cầu có tâm $I$ và bán kính $IB$ là $$\\left(x-\\dfrac{3}{2}\\right)^2+\\left(y-\\dfrac{5}{2}\\right)^2+(z-2)^2=\\dfrac{25}{2}.$$",
             "id": "2H5H3-3",
-            "point": "1"
+            "point": "1",
+            "solImg": ""
         },
         {
             "type": "tf",
@@ -302,27 +304,30 @@ window.EXAM_DATA = {
         },
         {
             "type": "short",
-            "q": "Gọi $H_1$; $H_2$; $H_3$; $H_4$ là các hình phẳng giới hạn bởi đồ thị hàm số liên tục $y=f(x)$ và trục hoành với $x$ lần lượt thuộc các đoạn $[1;2]$, $[2;3]$, $[3;4]$, $[4;5]$ <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774663327_884.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\">. Biết rằng các hình $H_1$; $H_2$; $H_3$; $H_4$ lần lượt có diện tích bằng $\\dfrac{9}{4}$, $\\dfrac{11}{12}$, $\\dfrac{11}{12}$, $\\dfrac{9}{4}$. Giá trị $\\displaystyle\\int\\limits_{1}^{5} f(x) \\mathrm{\\,d}x$ bằng bao nhiêu?<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774663327_884.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\">",
+            "q": "Gọi $H_1$; $H_2$; $H_3$; $H_4$ là các hình phẳng giới hạn bởi đồ thị hàm số liên tục $y=f(x)$ và trục hoành với $x$ lần lượt thuộc các đoạn $[1;2]$, $[2;3]$, $[3;4]$, $[4;5]$ <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774663327_884.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\">. Biết rằng các hình $H_1$; $H_2$; $H_3$; $H_4$ lần lượt có diện tích bằng $\\dfrac{9}{4}$, $\\dfrac{11}{12}$, $\\dfrac{11}{12}$, $\\dfrac{9}{4}$. Giá trị $\\displaystyle\\int\\limits_{1}^{5} f(x) \\mathrm{\\,d}x$ bằng bao nhiêu?",
             "ans": "$0$",
             "explain": "Ta có \\begin{eqnarray*} \\displaystyle\\int\\limits_{1}^{5} f(x) \\mathrm{\\,d}x &= & \\displaystyle\\int\\limits_{1}^{2} f(x) \\mathrm{\\,d}x+\\displaystyle\\int\\limits_{2}^{3} f(x) \\mathrm{\\,d}x+\\displaystyle\\int\\limits_{3}^{4} f(x) \\mathrm{\\,d}x+\\displaystyle\\int\\limits_{4}^{5} f(x) \\mathrm{\\,d}x<br> &= & \\dfrac{9}{4}-\\dfrac{11}{12}+\\dfrac{11}{12}-\\dfrac{9}{4}<br> &=& 0. \\end{eqnarray*} Vậy $\\displaystyle\\int\\limits_{1}^{5} f(x) \\mathrm{\\,d}x=0$.",
             "id": "2D4H3-1",
-            "point": "0.5"
+            "point": "0.5",
+            "img": ""
         },
         {
             "type": "short",
-            "q": "Bạn Hải nhận thiết kế logo hình con mắt (phần được tô đậm) cho một cơ sở y tế: Logo là hình phẳng giới hạn bởi hai parabol $y=f(x)$ và $y=g(x)$ như hình vẽ (đơn vị trên mỗi trục toạ độ là decimét). <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774702666_702.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"> Bạn Hải cần tính diện tích của logo để báo giá cho cơ sở y tế đó trước khi kí hợp đồng. Diện tích của logo là bao nhiêu decimét vuông (làm tròn kết quả đến hàng phần mười).<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774702666_702.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\">",
+            "q": "Bạn Hải nhận thiết kế logo hình con mắt (phần được tô đậm) cho một cơ sở y tế: Logo là hình phẳng giới hạn bởi hai parabol $y=f(x)$ và $y=g(x)$ như hình vẽ (đơn vị trên mỗi trục toạ độ là decimét). <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774702666_702.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"> Bạn Hải cần tính diện tích của logo để báo giá cho cơ sở y tế đó trước khi kí hợp đồng. Diện tích của logo là bao nhiêu decimét vuông (làm tròn kết quả đến hàng phần mười).",
             "ans": "$9{,}8$",
             "explain": "Đặt $f(x)=ax^2+bx+c$ $(a\\ne 0)$. Theo hình vẽ ta thấy đồ thị hàm số $y=f(x)$ nhận trục $Oy$ làm trục đối xứng, cắt trục $Oy$ tại điểm có tung độ bằng $-1$ và đi qua điểm $(2;0)$. Ta có hệ phương trình: $$\\left\\{\\begin{aligned}-\\dfrac{b}{2a}=0\\\\c=-1\\\\4a+2b+c=0\\end{aligned}\\right.\\Leftrightarrow \\left\\{\\begin{aligned}a=\\dfrac{1}{4}\\\\b=0\\\\c=-1\\end{aligned}\\right.\\Rightarrow f(x)=\\dfrac{1}{4}x^2-1.$$ Đặt $g(x)=mx^2+nx+p$ $(m\\ne 0)$. Theo hình vẽ ta thấy đồ thị hàm số $y=g(x)$ nhận trục $Oy$ làm trục đối xứng, cắt trục $Oy$ tại điểm có tung độ bằng $2$ và đi qua điểm $(2;1)$. Ta có hệ phương trình: $$\\left\\{\\begin{aligned}-\\dfrac{n}{2m}=0\\\\p=2\\\\4m+2n+p=1\\end{aligned}\\right.\\Leftrightarrow \\left\\{\\begin{aligned}m=-\\dfrac{1}{4}\\\\n=0\\\\p=2\\end{aligned}\\right.\\Rightarrow g(x)=-\\dfrac{1}{4}x^2+2.$$ Ta có $\\dfrac{1}{4}x^2-1=-\\dfrac{1}{4}x^2+2\\Leftrightarrow \\dfrac{1}{2}x^2-3=0\\Leftrightarrow x=\\pm \\sqrt{6}$.<br> Diện tích của logo là $S=\\displaystyle\\int\\limits_{\\sqrt{6}}^{\\sqrt{6}} \\left|f(x)-g(x)\\right| \\mathrm{\\,d}x=\\displaystyle\\int\\limits_{-\\sqrt{6}}^{\\sqrt{6}} \\left|\\dfrac{1}{2}x^2-3\\right| \\mathrm{\\,d}x\\approx 9{,}8\\left(\\text{dm}^2\\right)$.",
             "id": "2D4V3-2",
-            "point": "0.5"
+            "point": "0.5",
+            "img": ""
         },
         {
             "type": "short",
             "q": "Trong không gian $Oxyz$, cho các điểm $A(2;2;0)$, $B(2;0;-2)$ và mặt phẳng $(P)\\colon x+2y-z-1=0$. Xét điểm $M(a;b;c)$ thuộc mặt phẳng $(P)$ sao cho $MA=MB$ và số đo góc $\\widehat{AMB}$ lớn nhất. Khi đó giá trị $a+b+c$ (làm tròn đến hàng phần trăm) bằng bao nhiêu?",
             "ans": "$1{,}27$",
-            "explain": "<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774760897_631.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\"> Gọi $K$ là trung điểm của $AB\\Rightarrow K(2;1;-1)$.<br> Vì $MA=MB$ nên $M$ thuộc mặt phẳng $(Q)$ là mặt phẳng trung trực của đoạn $AB$.<br> Mặt phẳng $(Q)$ đi qua điểm $K(2;1;-1)$ và nhận <br> véc-tơ $\\overrightarrow{AB}=(0;-2;-2)$ làm véc-tơ pháp tuyến.<br> Phương trình mặt phẳng $(Q)$ là<br> $0(x-2)-2(y-1)-2(z+1)=0\\Leftrightarrow y+z=0$.<br> Tọa độ điểm $M$ thỏa mãn hệ phương trình<br> $\\left\\{\\begin{aligned}x+2y-z-1=0\\\\y+z=0\\end{aligned}\\right.\\Leftrightarrow \\left\\{\\begin{aligned}x=1-3t\\\\y=t\\\\z=-t.\\end{aligned}\\right.$<br> $\\Rightarrow M(1-3t;t;-t)$.  Vì tam giác $AMB$ cân tại $M$ nên $\\widehat{AMB}=2\\widehat{AMK}$.<br> Mà $0^\\circ<\\widehat{AMK}<90^\\circ$ nên số đo góc $\\widehat{AMK}$ lớn nhất khi và chỉ khi $\\sin \\widehat{AMK}$ lớn nhất.<br> Lại có $\\sin \\widehat{AMK}=\\dfrac{AK}{AM}$, mà $AK$ cố định nên $\\sin \\widehat{AMK}$ đạt giá trị lớn nhất khi và chỉ khi $AM$ đạt giá trị nhỏ nhất.<br> Ta có $AM=\\sqrt{(1-3t-2)^2+(t-2)^2+(-t-0)^2}=\\sqrt{11t^2+2t+5}$.<br> Hàm số $f(t)=11t^2+2t+5$ đạt giá trị nhỏ nhất bằng $\\dfrac{54}{11}$ khi $t=-\\dfrac{1}{11}$.<br> Vậy $M\\left(\\dfrac{14}{11};-\\dfrac{1}{11};\\dfrac{1}{11}\\right)$.<br> Khi đó $a+b+c=\\dfrac{14}{11}-\\dfrac{1}{11}+\\dfrac{1}{11}=\\dfrac{14}{11}\\approx1{,}27$.<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774760897_631.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\">",
+            "explain": "<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774760897_631.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\"> Gọi $K$ là trung điểm của $AB\\Rightarrow K(2;1;-1)$.<br> Vì $MA=MB$ nên $M$ thuộc mặt phẳng $(Q)$ là mặt phẳng trung trực của đoạn $AB$.<br> Mặt phẳng $(Q)$ đi qua điểm $K(2;1;-1)$ và nhận <br> véc-tơ $\\overrightarrow{AB}=(0;-2;-2)$ làm véc-tơ pháp tuyến.<br> Phương trình mặt phẳng $(Q)$ là<br> $0(x-2)-2(y-1)-2(z+1)=0\\Leftrightarrow y+z=0$.<br> Tọa độ điểm $M$ thỏa mãn hệ phương trình<br> $\\left\\{\\begin{aligned}x+2y-z-1=0\\\\y+z=0\\end{aligned}\\right.\\Leftrightarrow \\left\\{\\begin{aligned}x=1-3t\\\\y=t\\\\z=-t.\\end{aligned}\\right.$<br> $\\Rightarrow M(1-3t;t;-t)$.  Vì tam giác $AMB$ cân tại $M$ nên $\\widehat{AMB}=2\\widehat{AMK}$.<br> Mà $0^\\circ<\\widehat{AMK}<90^\\circ$ nên số đo góc $\\widehat{AMK}$ lớn nhất khi và chỉ khi $\\sin \\widehat{AMK}$ lớn nhất.<br> Lại có $\\sin \\widehat{AMK}=\\dfrac{AK}{AM}$, mà $AK$ cố định nên $\\sin \\widehat{AMK}$ đạt giá trị lớn nhất khi và chỉ khi $AM$ đạt giá trị nhỏ nhất.<br> Ta có $AM=\\sqrt{(1-3t-2)^2+(t-2)^2+(-t-0)^2}=\\sqrt{11t^2+2t+5}$.<br> Hàm số $f(t)=11t^2+2t+5$ đạt giá trị nhỏ nhất bằng $\\dfrac{54}{11}$ khi $t=-\\dfrac{1}{11}$.<br> Vậy $M\\left(\\dfrac{14}{11};-\\dfrac{1}{11};\\dfrac{1}{11}\\right)$.<br> Khi đó $a+b+c=\\dfrac{14}{11}-\\dfrac{1}{11}+\\dfrac{1}{11}=\\dfrac{14}{11}\\approx1{,}27$.",
             "id": "2H5C1-2",
-            "point": "0.5"
+            "point": "0.5",
+            "solImg": ""
         },
         {
             "type": "short",
@@ -336,9 +341,10 @@ window.EXAM_DATA = {
             "type": "short",
             "q": "Trong khối pha lê hình lập phương $ABCD.A'B'C'D'$ cạnh $8$ cm có mặt cầu cách đều các mặt của hình lập phương $ABCD.A'B'C'D'$ một khoảng $1$ cm. Chọn hệ trục tọa độ $Oxyz$ sao cho đỉnh $A$ trùng với gốc toạ độ $O$, đỉnh $B$ thuộc tia $Ox$, đỉnh $D$ thuộc tia $Oy$, đỉnh $A'$ thuộc tia $Oz$. Khi đó, phương trình của mặt cầu bên trong khối pha lê hình lập phương là $x^2+y^2+z^2+2ax+2by+2cz+d=0$. Tìm giá trị của $a+b+c+d$.<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774801041_644.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\">",
             "ans": "$51$",
-            "explain": "<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774824437_158.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\"> Ta có $A(0;0;0)$, $B(8;0;0)$, $D(0;8;0)$, $A'(0;0;8)$.<br> Vì tứ giác $ABCD$ là hình bình hành nên ta có $$\\overrightarrow{AB}=\\overrightarrow{DC}\\Leftrightarrow \\left\\{\\begin{aligned}8-0=x_C-0\\\\0-0=y_C-8\\\\0-0=z_C-0\\end{aligned}\\right.\\Leftrightarrow \\left\\{\\begin{aligned}x_C=8\\\\y_C=8\\\\z_C=0\\end{aligned}\\right.\\Rightarrow C(8;8;0).$$ Gọi $I$ là tâm mặt cầu cần viết phương trình.<br> Ta có $I$ là trung điểm của $A'C\\Rightarrow I(4;4;4)$.<br> Bán kính mặt cầu là $R=\\dfrac{8}{2}-1=3$ (cm).<br> Khi đó ta có $a=4$, $b=4$, $c=4$, $d=a^2+b^2+c^2-R^2=39$.<br> Vậy $a+b+c+d=51.$<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774824437_158.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\">",
+            "explain": "<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767774824437_158.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\"> Ta có $A(0;0;0)$, $B(8;0;0)$, $D(0;8;0)$, $A'(0;0;8)$.<br> Vì tứ giác $ABCD$ là hình bình hành nên ta có $$\\overrightarrow{AB}=\\overrightarrow{DC}\\Leftrightarrow \\left\\{\\begin{aligned}8-0=x_C-0\\\\0-0=y_C-8\\\\0-0=z_C-0\\end{aligned}\\right.\\Leftrightarrow \\left\\{\\begin{aligned}x_C=8\\\\y_C=8\\\\z_C=0\\end{aligned}\\right.\\Rightarrow C(8;8;0).$$ Gọi $I$ là tâm mặt cầu cần viết phương trình.<br> Ta có $I$ là trung điểm của $A'C\\Rightarrow I(4;4;4)$.<br> Bán kính mặt cầu là $R=\\dfrac{8}{2}-1=3$ (cm).<br> Khi đó ta có $a=4$, $b=4$, $c=4$, $d=a^2+b^2+c^2-R^2=39$.<br> Vậy $a+b+c+d=51.$",
             "id": "2H5H3-3",
-            "point": "0.5"
+            "point": "0.5",
+            "solImg": ""
         }
     ]
 };
