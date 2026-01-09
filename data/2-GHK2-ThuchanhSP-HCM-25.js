@@ -3,12 +3,12 @@ window.EXAM_DATA = {
     "subject": "Toan",
     "grade": "12",
     "time": 90,
-    "password": "9b7c4b231be2223e21cc8a1816b8b9a0",
+    "password": "2afba7e5bf6e676c5798e444f8b1b261",
     "encrypted": false,
     "shuffle": true,
     "viewDetail": true,
     "music": true,
-    "allowPrint": false,
+    "allowPrint": true,
     "minTime": 0,
     "start": "",
     "end": "",
@@ -327,7 +327,8 @@ window.EXAM_DATA = {
             ],
             "explain": "Dựa vào hệ trục tọa độ suy ra các đỉnh có tọa độ như sau $A(0;0;0)$,$D (0;2;0)$, $C(1;1;0)$, $B\\ (1;0;0)$, $S\\ (0;0;1)$, $M\\left(\\dfrac{1}{2};0;\\dfrac{1}{2}\\right)$, $N\\left(\\dfrac{1}{2};\\dfrac{3}{2};0\\right)$. <br><b>-</b> Ta có $C(1;1;0)$, $D(0;2;0)$, $S(0;0;1)$. <br><b>-</b> Ta có $\\overrightarrow{SA}=(0;0;-1)$, $\\overrightarrow{SC}=(1;1;-1)$.<br> Mặt phẳng $(SAC)$ có véc-tơ pháp tuyến là \\[\\overrightarrow{n}=\\left[\\overrightarrow{SA}, \\overrightarrow{SC}\\right]=(-1;-1;0). \\] <br><b>-</b> Phương trình mặt phẳng $(SAC)$ là $x+y=0$.<br> Đường cao của hình chóp $B.SAC$ là \\[\\mathrm{d}\\left(B, (SAC)\\right)=\\dfrac{\\left|1\\right|}{\\sqrt{2}}=\\dfrac{1}{\\sqrt{2}}=\\dfrac{\\sqrt{2}}{2}. \\] <br><b>-</b> Một véc-tơ chỉ phương của đường thẳng $MN$ là $\\overrightarrow{u}_{MN}=\\left(0;\\dfrac{3}{2};-\\dfrac{1}{2}\\right)$.<br> Một véc-tơ chỉ phương của đường thẳng $\\Delta$ là $\\overrightarrow{u}_\\Delta=(1;1;1)$.<br> Ta có hai véc-tơ $\\overrightarrow{u}_{MN}$ và $\\overrightarrow{u}_\\Delta$ không cùng phương. Do đó $MN$ cắt $\\Delta$ hoặc chéo nhau.<br> Phương trình $MN$ là $\\left\\{\\begin{aligned}x=\\dfrac{1}{2}\\\\y=3t'\\\\z=\\dfrac{1}{2}-t'.\\end{aligned}\\right.$<br> Xét hệ phương trình $\\left\\{\\begin{aligned}x=\\dfrac{1}{2}\\\\y=3t'\\\\z=\\dfrac{1}{2}-t'\\\\x=2+t\\\\y=4+t\\\\z=1-t\\end{aligned}\\right.\\Leftrightarrow t,t'\\in\\varnothing$.<br> Do đó $MN$ và $\\Delta$ chéo nhau.",
             "id": "2H2N1-2",
-            "point": "1"
+            "point": "1.5",
+            "img": ""
         },
         {
             "type": "tf",
@@ -352,7 +353,8 @@ window.EXAM_DATA = {
             ],
             "explain": "Xét đồ thị có phần parabol. Đặt $(P)\\colon v(t)=at^2+bt+c$ ($a\\ne0$) với $t\\in[0;3]$.<br> Vì $(P)$ đi qua các điểm $O(0;0)$, đỉnh $I(2;9)$ nên ta có hệ phương trình \\[\\left\\{\\begin{aligned}c=0\\\\-\\dfrac{b}{2a}=2\\\\4a+2b+c=9\\end{aligned}\\right.\\Leftrightarrow \\left\\{\\begin{aligned}a=-\\dfrac{9}{4}\\\\b=9.\\end{aligned}\\right. \\] Vậy $v(t)=-\\dfrac{9}{4}t^2+9t$ với $t\\in[0;3]$.<br> <br><b>-</b> Ta có $v(3)=\\dfrac{27}{4}$. <br><b>-</b> Ta có $v'(t)=-\\dfrac{9}{2}t^2+9$.<br> Gia tốc của vật tại thời điểm $t=2$ là $a(2)=-\\dfrac{9}{2}\\cdot2^2+9=-9$ m/s$^2$. <br><b>-</b> Tại thời điểm $t=3$ s suy ra $v(3)=-\\dfrac{9}{4}\\cdot3^2+9\\cdot3=\\dfrac{27}{4}$ m/s.<br> Quãng đường vật di chuyển được từ thời điểm $t=3$ đến $t=4$ là $\\dfrac{27}{4}\\cdot(4-3)=\\dfrac{27}{4}$ m. <br><b>-</b> Quãng đường mà vật di chuyển được trong $4$ giây là \\[S=\\displaystyle\\int\\limits_0^3\\left(-\\dfrac{9}{4}t^2+9t\\right)\\mathrm{\\,d}t+\\dfrac{27}{4}=27\\text{ m }. \\]",
             "id": "2D4V2-6",
-            "point": "1"
+            "point": "1.5",
+            "img": ""
         },
         {
             "type": "short",
