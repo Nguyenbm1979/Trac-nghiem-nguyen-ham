@@ -48,7 +48,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "mcq",
-            "q": "Rút gọn biểu thức $P=x^{\\frac{2}{5}} \\cdot \\sqrt{x}$, với $x$ là số thực dương, được kết quả là",
+            "q": "Rút gọn biểu thức $P=x^{\\frac{2}{5}} \\cdot \\sqrt[3]{x}$, với $x$ là số thực dương, được kết quả là",
             "options": [
                 "$P=x^{\\frac{17}{5}}$",
                 "$P=x^{\\frac{2}{15}}$",
@@ -56,13 +56,13 @@ window.EXAM_DATA = {
                 "$P=x^{\\frac{6}{5}}$"
             ],
             "ans": 2,
-            "explain": "Ta có $P=x^{\\frac{2}{5}} \\cdot \\sqrt{x} = x^{\\frac{2}{5}} \\cdot x^{\\frac{1}{3}} = x^{\\frac{2}{5}+\\frac{1}{3}}=x^{\\frac{11}{15}}$.",
+            "explain": "Ta có $P=x^{\\frac{2}{5}} \\cdot \\sqrt[3]{x} = x^{\\frac{2}{5}} \\cdot x^{\\frac{1}{3}} = x^{\\frac{2}{5}+\\frac{1}{3}}=x^{\\frac{11}{15}}$.",
             "id": "1D6N1-2",
             "point": "0.3"
         },
         {
             "type": "mcq",
-            "q": "Giả sử các biểu thức xuất hiện đã cho là có nghĩa. Khẳng định nào sau đây là { sai}?",
+            "q": "Giả sử các biểu thức xuất hiện đã cho là có nghĩa. Khẳng định nào sau đây là sai?",
             "options": [
                 "$\\left( \\sqrt{a}\\right) ^n=\\sqrt{a^n}$",
                 "$\\sqrt{a}\\sqrt{b}=\\sqrt{ab}$",
@@ -76,7 +76,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "mcq",
-            "q": "Cho $a$, $b$ là hai số thực dương và $m$, $n$ là hai số thực tùy ý. Đẳng thức nào sau đây là { sai}?",
+            "q": "Cho $a$, $b$ là hai số thực dương và $m$, $n$ là hai số thực tùy ý. Đẳng thức nào sau đây là sai?",
             "options": [
                 "$a^m a^n=a^{m+n}$",
                 "$(a b)^n=a^n b^n$",
@@ -109,7 +109,7 @@ window.EXAM_DATA = {
                     "ans": "F"
                 }
             ],
-            "explain": "<br><b>-</b> <b>Đúng</b>.<br> Ta có $(x^m)^n=x^{mn}=(x^n)^m$. <br><b>-</b> <b>Đúng</b>.<br> Ta có $x^{2m}=(x^m)^2$. <br><b>-</b> <b>Sai</b>.<br> Ta có $\\log_5 25x=\\log_{5}5^2+\\log_5 x=2+\\log_5 x$. <br><b>-</b> <b>Sai</b>.<br> \\allowdisplaybreaks \\begin{eqnarray*} \\log _{\\sqrt{3}} x+\\log _{\\frac{1}{3}}\\left(3x^3 y\\right)+\\log_9(3y^3)&=&\\log _{3^{\\frac{1}{2}}} x+\\log _{3^{-1}}\\left(3x^3 y\\right)+\\log_{3^2}(3y^3)<br> &=&2\\cdot \\log _{3} x-1\\cdot\\log_{3}\\left(3x^3 y\\right)+\\dfrac{1}{2}\\cdot \\log_{3}(3y^3)<br> &=&2\\log _{3} x-\\left(1+3\\log_{3}x+\\log_{3}y\\right)+\\dfrac{1}{2}\\cdot \\left(1+3\\log_{3}y\\right)<br> &=&-\\log _{3} x+\\dfrac{1}{2}\\log_{3}y-\\dfrac{1}{2}. \\end{eqnarray*}",
+            "explain": "<br><b>-</b> <b>Đúng</b>.<br> Ta có $(x^m)^n=x^{mn}=(x^n)^m$. <br><b>-</b> <b>Đúng</b>.<br> Ta có $x^{2m}=(x^m)^2$. <br><b>-</b> <b>Sai</b>.<br> Ta có $\\log_5 25x=\\log_{5}5^2+\\log_5 x=2+\\log_5 x$. <br><b>-</b> <b>Sai</b>.<br>$ \\log _{\\sqrt{3}} x+\\log _{\\frac{1}{3}}\\left(3x^3 y\\right)+\\log_9(3y^3)$<br>$=log _{3^{\\frac{1}{2}}} x+\\log _{3^{-1}}\\left(3x^3 y\\right)+\\log_{3^2}(3y^3)$<br> $=2\\cdot \\log _{3} x-1\\cdot\\log_{3}\\left(3x^3 y\\right)+\\dfrac{1}{2}\\cdot \\log_{3}(3y^3)$<br> $=2\\log _{3} x-\\left(1+3\\log_{3}x+\\log_{3}y\\right)+\\dfrac{1}{2}\\cdot \\left(1+3\\log_{3}y\\right)$<br> $=-\\log _{3} x+\\dfrac{1}{2}\\log_{3}y-\\dfrac{1}{2}. $",
             "id": "1D6V2-3",
             "point": "1.4"
         },
@@ -118,12 +118,12 @@ window.EXAM_DATA = {
             "q": "Cho biểu thức $P=\\sqrt{x^5}$, với $x>0$. Khẳng định nào sau đây đúng?",
             "options": [
                 "$P=x^9$",
-                "$P=\\dfrac{4}{5}x^5$",
-                "$P=x^\\frac{5}{4}$",
-                "$P=x^\\frac{4}{5}$"
+                "$P=\\dfrac{2}{5}x^5$",
+                "$P=x^\\frac{5}{2}$",
+                "$P=x^\\frac{2}{5}$"
             ],
             "ans": 2,
-            "explain": "$P=\\sqrt{x^5}=x^\\frac{5}{4}$.",
+            "explain": "$P=\\sqrt{x^5}=x^{\\frac{5}{2}}$.",
             "id": "1D6H1-2",
             "point": "0.3"
         },
@@ -151,7 +151,7 @@ window.EXAM_DATA = {
                 "$K=54$"
             ],
             "ans": 1,
-            "explain": "Ta có \\begin{eqnarray*} K&=&\\left(\\dfrac{1}{81}\\right)^{-0{,}75}+\\left(\\dfrac{1}{27}\\right)^{-\\tfrac{4}{3}}<br> &=&81^{0{,}75}+27^{\\frac{4}{3}}<br> &=&3^{4\\cdot 0{,}75}+3^{3\\cdot \\tfrac{4}{3}}<br> &=&3^3+3^{4}<br> &=&27+81<br> &=&=108. \\end{eqnarray*} Vậy $K=108$.",
+            "explain": "Ta có $K=\\left(\\dfrac{1}{81}\\right)^{-0{,}75}+\\left(\\dfrac{1}{27}\\right)^{-\\tfrac{4}{3}}$<br> $=81^{0{,}75}+27^{\\frac{4}{3}}$<br> $=3^{4\\cdot 0{,}75}+3^{3\\cdot \\tfrac{4}{3}}$<br> $=3^3+3^{4}=27+81=108.$ Vậy $K=108$.",
             "id": "1D6H1-2",
             "point": "0.36"
         },
@@ -237,7 +237,7 @@ window.EXAM_DATA = {
                 "$\\log_a\\left(a^5 b^3\\right)=\\dfrac{1}{5}+\\dfrac{1}{3} \\log_a b$"
             ],
             "ans": 0,
-            "explain": "Ta có \\allowdisplaybreaks \\begin{eqnarray*} \\log_a\\left(a^5 b^3\\right)&=&\\log_{a}a^5+\\log_a b^3<br> &=&5\\log_{a}a+3\\log_a b<br> &=&5+3\\log_a b. \\end{eqnarray*}",
+            "explain": "Ta có $ \\log_a\\left(a^5 b^3\\right)=\\log_{a}a^5+\\log_a b^3$<br> $=5\\log_{a}a+3\\log_a b=5+3\\log_a b. $",
             "id": "1D6H2-2",
             "point": "0.36"
         },
@@ -271,7 +271,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "short",
-            "q": "%[Dự án đề kiểm tra NH24-25 -đợt 9 - Nhật Thiện]%[THPT An Lương Đông - Huế]Với $a$, $b$ là các số thực dương tùy ý thỏa mãn $a\\ne 1$ và $\\log_a b=-2$, giá trị của $\\log_a \\left(\\dfrac{b}{a}\\right)$ bằng bao nhiêu?",
+            "q": "Với $a$, $b$ là các số thực dương tùy ý thỏa mãn $a\\ne 1$ và $\\log_a b=-2$, giá trị của $\\log_a \\left(\\dfrac{b}{a}\\right)$ bằng bao nhiêu?",
             "ans": "-3",
             "explain": "Ta có $\\log_a \\left(\\dfrac{b}{a}\\right)=\\log_a b-\\log_aa=-2-1=-3$.",
             "id": "1D6H2-1",
@@ -279,7 +279,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "mcq",
-            "q": "%[Dự án tex đề GHKII THPT Edison - Hải Phòng- 24-25][Nguyễn Hữu Đức] Với $ a$ là số thực dương tùy ý, giá trị của $\\log_7(7a)$ bằng bao nhiêu?",
+            "q": "Với $ a$ là số thực dương tùy ý, giá trị của $\\log_7(7a)$ bằng bao nhiêu?",
             "options": [
                 "$1 - \\log_7 a$",
                 "$1 + a$",
