@@ -3,7 +3,7 @@ window.EXAM_DATA = {
     "subject": "Toan",
     "grade": "12",
     "time": 90,
-    "password": "8f7e6c09016e059f4b4086f82f3c9689",
+    "password": "2afba7e5bf6e676c5798e444f8b1b261",
     "encrypted": false,
     "shuffle": true,
     "viewDetail": true,
@@ -98,7 +98,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "tf",
-            "q": "Bảng sau đây tóm tắt kết quả phân tích quá trình tự phân hủy (sự phá hủy tế bào sau khi tế bào chết do hoạt động của các enzym của chính tế bào) và sự thối rữa (sự phân hủy chất hữu cơ, đặc biệt là protein, bởi vi sinh vật dẫn đến tạo ra mùi hôi thối) của các con bọ cánh cứng chết:<br>Chọn ngẫu nhiên một con bọ cánh cứng trong các mẫu phân tích trên.\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765122662_769.png\" style=\"display: block; margin-left: auto; margin-right: auto; width: 80%;\">",
+            "q": "Bảng sau đây tóm tắt kết quả phân tích quá trình tự phân hủy (sự phá hủy tế bào sau khi tế bào chết do hoạt động của các enzym của chính tế bào) và sự thối rữa (sự phân hủy chất hữu cơ, đặc biệt là protein, bởi vi sinh vật dẫn đến tạo ra mùi hôi thối) của các con bọ cánh cứng chết:<br>Chọn ngẫu nhiên một con bọ cánh cứng trong các mẫu phân tích trên.\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765122662_769.png\" style=\"display: block; margin-left: auto; margin-right: auto; width: 80%;\"><br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765122662_769.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\">",
             "items": [
                 {
                     "sub": "Xác suất để mẫu chọn ra có quá trình tự phân hủy cao là $\\dfrac{7}{50}$",
@@ -118,8 +118,7 @@ window.EXAM_DATA = {
                 }
             ],
             "explain": "Tổng số mẫu: $n(\\Omega) = 14 + 59 + 18 + 9 = 100$.<br>Gọi biến cố $A$: \"Tự phân hủy cao\", $B$: \"Thối rữa cao\".<br>Ta có bảng số liệu:<ul><li>$n(A) = 14 + 18 = 32$.</li><li>$n(B) = 14 + 59 = 73$.</li><li>$n(\\overline{B})$ (Thối rữa thấp) $= 18 + 9 = 27$.</li><li>$n(A \\cap \\overline{B})$ (Tự phân hủy cao và Thối rữa thấp) $= 18$.</li><li>$n(A \\cap B)$ (Tự phân hủy cao và Thối rữa cao) $= 14$.</li></ul><ul><li><b>Sai.</b> $P(A) = \\dfrac{32}{100} = \\dfrac{8}{25}$. (Đề bài ghi $\\dfrac{7}{50}$).</li><li><b>Đúng.</b> $P(A \\cap \\overline{B}) = \\dfrac{18}{100} = \\dfrac{9}{50}$.</li><li><b>Đúng.</b> Xác suất cần tính là xác suất có điều kiện: $P(\\overline{B} | A) = \\dfrac{n(A \\cap \\overline{B})}{n(A)} = \\dfrac{18}{32} = \\dfrac{9}{16}$.</li><li><b>Đúng.</b> Xác suất cần tính là xác suất có điều kiện: $P(A | B) = \\dfrac{n(A \\cap B)}{n(B)} = \\dfrac{14}{73}$.</li></ul>",
-            "point": "1",
-            "img": ""
+            "point": "1"
         },
         {
             "type": "tf",
@@ -214,9 +213,8 @@ window.EXAM_DATA = {
                     "ans": "F"
                 }
             ],
-            "explain": "<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765154288_154.png\" style=\"display: block; margin-left: auto; margin-right: auto; width: 80%;\">\n<ul><li><b>Sai.</b> Diện tích đáy $S_{ABCD} = \\dfrac{(BC+AD)AB}{2} = \\dfrac{(a+2a)a}{2} = \\dfrac{3a^2}{2}$.<br>Thể tích $V = \\dfrac{1}{3} \\cdot SA \\cdot S_{ABCD} = \\dfrac{1}{3} \\cdot a \\cdot \\dfrac{3a^2}{2} = \\dfrac{a^3}{2}$.</li><li><b>Sai.</b> Hình chiếu của $S$ lên $(ABCD)$ là $A$. Góc giữa $SC$ và đáy là $\\widehat{SCA}$.<br>$AC = \\sqrt{AB^2+BC^2} = a\\sqrt{2}$. $\\tan \\widehat{SCA} = \\dfrac{SA}{AC} = \\dfrac{a}{a\\sqrt{2}} = \\dfrac{1}{\\sqrt{2}} \\neq 1 \\Rightarrow \\widehat{SCA} \\neq 45^\\circ$.</li><li><b>Đúng.</b> Gọi $H$ là hình chiếu của $C$ lên $AD$. Vì $ABCD$ là hình thang vuông nên $ABCH$ là hình vuông cạnh $a \\Rightarrow HD= a$.<br>Tam giác $CHD$ vuông cân tại $H$ ($CH=HD=a$) nên $\\widehat{CDH} = 45^\\circ$.<br>Trong mặt phẳng đáy, $\\mathrm{d}(A, CD) = AC$ (do $\\triangle ADC$ có $ AC \\perp CD$).<br>Vậy $\\mathrm{d}(A, CD) = AC = a\\sqrt{2}$.</li><li><b>Sai.</b> Ta có $V_{S.BCD} = \\dfrac{1}{3} \\cdot SA \\cdot S_{BCD} = \\dfrac{1}{3} \\cdot a \\cdot \\dfrac{1}{2}a^2 = \\dfrac{a^3}{6}$.<br>Ta có $CD \\perp AC$ và $CD \\perp SA \\Rightarrow CD \\perp (SAC) \\Rightarrow CD \\perp SC$.<br>Tam giác $SCD$ vuông tại $C$: $S_{SCD} = \\dfrac{1}{2} SC \\cdot CD = \\dfrac{1}{2} \\cdot a\\sqrt{3} \\cdot a\\sqrt{2} = \\dfrac{a^2\\sqrt{6}}{2}$.<br>vậy $\\mathrm{d}(B, (SCD)) = \\dfrac{3V_{S.BCD}}{S_{SCD}} =\\dfrac{a}{\\sqrt{6}}$.</li></ul>",
-            "point": "1",
-            "solImg": ""
+            "explain": "<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765154288_154.png\" style=\"display: block; margin-left: auto; margin-right: auto; width: 80%;\">\n<ul><li><b>Sai.</b> Diện tích đáy $S_{ABCD} = \\dfrac{(BC+AD)AB}{2} = \\dfrac{(a+2a)a}{2} = \\dfrac{3a^2}{2}$.<br>Thể tích $V = \\dfrac{1}{3} \\cdot SA \\cdot S_{ABCD} = \\dfrac{1}{3} \\cdot a \\cdot \\dfrac{3a^2}{2} = \\dfrac{a^3}{2}$.</li><li><b>Sai.</b> Hình chiếu của $S$ lên $(ABCD)$ là $A$. Góc giữa $SC$ và đáy là $\\widehat{SCA}$.<br>$AC = \\sqrt{AB^2+BC^2} = a\\sqrt{2}$. $\\tan \\widehat{SCA} = \\dfrac{SA}{AC} = \\dfrac{a}{a\\sqrt{2}} = \\dfrac{1}{\\sqrt{2}} \\neq 1 \\Rightarrow \\widehat{SCA} \\neq 45^\\circ$.</li><li><b>Đúng.</b> Gọi $H$ là hình chiếu của $C$ lên $AD$. Vì $ABCD$ là hình thang vuông nên $ABCH$ là hình vuông cạnh $a \\Rightarrow HD= a$.<br>Tam giác $CHD$ vuông cân tại $H$ ($CH=HD=a$) nên $\\widehat{CDH} = 45^\\circ$.<br>Trong mặt phẳng đáy, $\\mathrm{d}(A, CD) = AC$ (do $\\triangle ADC$ có $ AC \\perp CD$).<br>Vậy $\\mathrm{d}(A, CD) = AC = a\\sqrt{2}$.</li><li><b>Sai.</b> Ta có $V_{S.BCD} = \\dfrac{1}{3} \\cdot SA \\cdot S_{BCD} = \\dfrac{1}{3} \\cdot a \\cdot \\dfrac{1}{2}a^2 = \\dfrac{a^3}{6}$.<br>Ta có $CD \\perp AC$ và $CD \\perp SA \\Rightarrow CD \\perp (SAC) \\Rightarrow CD \\perp SC$.<br>Tam giác $SCD$ vuông tại $C$: $S_{SCD} = \\dfrac{1}{2} SC \\cdot CD = \\dfrac{1}{2} \\cdot a\\sqrt{3} \\cdot a\\sqrt{2} = \\dfrac{a^2\\sqrt{6}}{2}$.<br>vậy $\\mathrm{d}(B, (SCD)) = \\dfrac{3V_{S.BCD}}{S_{SCD}} =\\dfrac{a}{\\sqrt{6}}$.</li></ul><br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765154288_154.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\">",
+            "point": "1"
         },
         {
             "type": "tf",
@@ -283,7 +281,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "mcq",
-            "q": "Thời gian trung bình sử dụng ChatGPT trên một ngày của một nhóm học sinh được ghi lại trong bảng dưới đây:<br>Tính tứ phân vị thứ nhất của mẫu số liệu ghép nhóm trên (làm tròn kết quả đến hàng phần chục; đơn vị: phút).\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765184686_60.png\" style=\"display: block; margin-left: auto; margin-right: auto; width: 70%;\">",
+            "q": "Thời gian trung bình sử dụng ChatGPT trên một ngày của một nhóm học sinh được ghi lại trong bảng dưới đây:<br>Tính tứ phân vị thứ nhất của mẫu số liệu ghép nhóm trên (làm tròn kết quả đến hàng phần chục; đơn vị: phút).\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765184686_60.png\" style=\"display: block; margin-left: auto; margin-right: auto; width: 70%;\"><br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765184686_60.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\">",
             "options": [
                 "$11{,}4$",
                 "$11{,}3$",
@@ -292,12 +290,11 @@ window.EXAM_DATA = {
             ],
             "ans": 0,
             "explain": "Cỡ mẫu là $n = 3 + 11 + 6 + 15 + 5 = 40$.<br>Gọi $x_1, x_2, \\dots, x_{40}$ là mẫu số liệu được xếp theo thứ tự không giảm.<br>Tứ phân vị thứ nhất của mẫu số liệu là $\\dfrac{x_{10} + x_{11}}{2}$, thuộc nhóm $[5; 15)$.<br>Ta có $n=40$, $C=10$, $a_p=5$, $m_p=3$, $m_q=11$, $L=15-5=10$.<br>Tứ phân vị thứ nhất của mẫu số liệu ghép nhóm là<br>$$Q_1 = a_p + \\dfrac{\\dfrac{n}{4} - m_p}{m_q} \\cdot L = 5 + \\dfrac{\\dfrac{40}{4} - 3}{11} \\cdot 10 = 5 + \\dfrac{70}{11} \\approx 11{,}36.$$<br>Làm tròn đến hàng phần chục ta được $11{,}4$.",
-            "point": "0.25",
-            "img": ""
+            "point": "0.25"
         },
         {
             "type": "mcq",
-            "q": "Thời gian trung bình sử dụng ChatGPT trên một ngày của một nhóm học sinh được ghi lại trong bảng dưới đây:<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765184686_60.png\" style=\"display: block; margin-left: auto; margin-right: auto; width: 70%;\">\n<br>Chọn ngẫu nhiên một bạn học sinh trong nhóm trên. Tính xác suất để thời gian trung bình bạn đó sử dụng Chat GPT lớn hơn hoặc bằng $25$ phút một ngày (làm tròn kết quả đến hàng phần trăm).",
+            "q": "Thời gian trung bình sử dụng ChatGPT trên một ngày của một nhóm học sinh được ghi lại trong bảng dưới đây:<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765184686_60.png\" style=\"display: block; margin-left: auto; margin-right: auto; width: 70%;\">\n<br>Chọn ngẫu nhiên một bạn học sinh trong nhóm trên. Tính xác suất để thời gian trung bình bạn đó sử dụng Chat GPT lớn hơn hoặc bằng $25$ phút một ngày (làm tròn kết quả đến hàng phần trăm).<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765184686_60.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\">",
             "options": [
                 "$0{,}50$",
                 "$0{,}38$",
@@ -306,12 +303,11 @@ window.EXAM_DATA = {
             ],
             "ans": 0,
             "explain": "Tổng số học sinh là $n=40$.<br>Số học sinh sử dụng Chat GPT lớn hơn hoặc bằng $25$ phút một ngày là số học sinh thuộc các nhóm $[25; 30)$ và $[30; 35)$.<br>Số lượng là: $15 + 5 = 20$ (học sinh).<br>Xác suất cần tính là $P = \\dfrac{20}{40} = 0{,}50$.",
-            "point": "0.25",
-            "img": ""
+            "point": "0.25"
         },
         {
             "type": "mcq",
-            "q": "Thời gian trung bình sử dụng ChatGPT trên một ngày của một nhóm học sinh được ghi lại trong bảng dưới đây:<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765184686_60.png\" style=\"display: block; margin-left: auto; margin-right: auto; width: 70%;\"><br>Do sai sót trong quá trình nhập và xử lý số liệu, tất cả các mốc thời gian trong bảng trên đã bị ghi lùi $5$ phút so với thực tế và người ta điều chỉnh lại bảng số liệu ban đầu cho đúng. Gọi $s_1, s_2$ lần lượt là độ lệch chuẩn của mẫu số liệu ghép nhóm trước và sau khi chỉnh sửa. Chọn khẳng định đúng nhất.",
+            "q": "Thời gian trung bình sử dụng ChatGPT trên một ngày của một nhóm học sinh được ghi lại trong bảng dưới đây:<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765184686_60.png\" style=\"display: block; margin-left: auto; margin-right: auto; width: 70%;\"><br>Do sai sót trong quá trình nhập và xử lý số liệu, tất cả các mốc thời gian trong bảng trên đã bị ghi lùi $5$ phút so với thực tế và người ta điều chỉnh lại bảng số liệu ban đầu cho đúng. Gọi $s_1, s_2$ lần lượt là độ lệch chuẩn của mẫu số liệu ghép nhóm trước và sau khi chỉnh sửa. Chọn khẳng định đúng nhất.<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765184686_60.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\">",
             "options": [
                 "$s_1 = s_2$",
                 "$s_1 > s_2$",
@@ -320,12 +316,11 @@ window.EXAM_DATA = {
             ],
             "ans": 0,
             "explain": "Khi cộng thêm cùng một hằng số $c$ (ở đây $c=5$) vào tất cả các giá trị của mẫu số liệu thì phương sai và độ lệch chuẩn của mẫu số liệu không thay đổi.<br>Do đó $s_1 = s_2$.",
-            "point": "0.25",
-            "img": ""
+            "point": "0.25"
         },
         {
             "type": "match",
-            "q": "Cho hàm số $y=f(x)$ xác định và có bảng biến thiên trên $[-2;4]$ như sau:\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765222539_405.png\" style=\"display: block; margin-left: auto; margin-right: auto; width: 80%;\">",
+            "q": "Cho hàm số $y=f(x)$ xác định và có bảng biến thiên trên $[-2;4]$ như sau:\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765222539_405.png\" style=\"display: block; margin-left: auto; margin-right: auto; width: 80%;\"><br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765222539_405.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\">",
             "items": [
                 "Hàm số $f(x)$ đạt cực đại tại điểm $x_{\\text{CĐ}}=$",
                 "Hàm số $f(x)$ đạt cực tiểu tại điểm $x_{\\text{CT}}=$",
@@ -347,8 +342,7 @@ window.EXAM_DATA = {
                 "B"
             ],
             "explain": "Dựa vào bảng biến thiên ta có:<ul><li>Đạo hàm đổi dấu từ dương sang âm tại $x=-1$ nên hàm số đạt cực đại tại $x_{\\text{CĐ}} = -1$.</li><li>Đạo hàm đổi dấu từ âm sang dương tại $x=3$ nên hàm số đạt cực tiểu tại $x_{\\text{CT}} = 3$.</li><li>Giá trị cực đại của hàm số là $y_{\\text{CĐ}} = f(-1) = 6$.</li><li>Giá trị cực tiểu của hàm số là $y_{\\text{CT}} = f(3) = -26$.</li></ul><ul><li>Hàm số $f(x)$ đạt cực đại tại điểm $x_{\\text{CĐ}}=$ ghép với $-1$.</li><li>Hàm số $f(x)$ đạt cực tiểu tại điểm $x_{\\text{CT}}=$ ghép với $3$.</li><li>Giá trị cực đại của hàm số $f(x)$ là $y_{\\text{CĐ}}=$ ghép với $6$.</li><li>Giá trị cực tiểu của hàm số $f(x)$ là $y_{\\text{CT}}=$ ghép với $-26$.</li></ul>",
-            "point": "1",
-            "img": ""
+            "point": "1"
         },
         {
             "type": "match",
@@ -373,9 +367,8 @@ window.EXAM_DATA = {
                 "F",
                 "B"
             ],
-            "explain": "<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765236788_14.png\" style=\"display: block; margin-left: auto; margin-right: auto; width: 80%;\">\n<ul><li>Vì $CD \\parallel AB$ nên $(CD, SB) = (AB, SB) = \\widehat{SBA}$ (do $\\triangle SAB$ vuông tại $A$).<br>$\\tan \\widehat{SBA} = \\dfrac{SA}{AB} = \\dfrac{2\\sqrt{3}a}{a} = 2\\sqrt{3}$.</li><li>Hình chiếu của $S$ lên $(ABCD)$ là $A$, nên $(SC, (ABCD)) = (SC, AC) = \\widehat{SCA}$.<br>$AC = \\sqrt{AB^2+AD^2} = \\sqrt{a^2 + 3a^2} = 2a$.<br>$\\tan \\widehat{SCA} = \\dfrac{SA}{AC} = \\dfrac{2\\sqrt{3}a}{2a} = \\sqrt{3}$.</li><li>Ta có $\\left\\{\\begin{aligned}&CD \\perp AD \\\\ &CD \\perp SA\\end{aligned}\\right. \\Rightarrow CD \\perp (SAD) \\Rightarrow CD \\perp SD$. <br>Vậy góc nhị diện $[S, CD, A]$ là góc $\\widehat{SDA}$.<br>$\\tan \\widehat{SDA} = \\dfrac{SA}{AD} = \\dfrac{2\\sqrt{3}a}{\\sqrt{3}a} = 2$.</li><li>Vì $SA \\perp (ABCD)$ nên $SA \\perp AC$ và $SA \\perp AD$. Góc nhị diện $[C, SA, D]$ chính là góc $\\widehat{CAD}$.<br>$\\tan \\widehat{CAD} = \\dfrac{CD}{AD} = \\dfrac{AB}{AD} = \\dfrac{a}{\\sqrt{3}a} = \\dfrac{\\sqrt{3}}{3}$.</li></ul>",
-            "point": "1",
-            "solImg": ""
+            "explain": "<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765236788_14.png\" style=\"display: block; margin-left: auto; margin-right: auto; width: 80%;\">\n<ul><li>Vì $CD \\parallel AB$ nên $(CD, SB) = (AB, SB) = \\widehat{SBA}$ (do $\\triangle SAB$ vuông tại $A$).<br>$\\tan \\widehat{SBA} = \\dfrac{SA}{AB} = \\dfrac{2\\sqrt{3}a}{a} = 2\\sqrt{3}$.</li><li>Hình chiếu của $S$ lên $(ABCD)$ là $A$, nên $(SC, (ABCD)) = (SC, AC) = \\widehat{SCA}$.<br>$AC = \\sqrt{AB^2+AD^2} = \\sqrt{a^2 + 3a^2} = 2a$.<br>$\\tan \\widehat{SCA} = \\dfrac{SA}{AC} = \\dfrac{2\\sqrt{3}a}{2a} = \\sqrt{3}$.</li><li>Ta có $\\left\\{\\begin{aligned}&CD \\perp AD \\\\ &CD \\perp SA\\end{aligned}\\right. \\Rightarrow CD \\perp (SAD) \\Rightarrow CD \\perp SD$. <br>Vậy góc nhị diện $[S, CD, A]$ là góc $\\widehat{SDA}$.<br>$\\tan \\widehat{SDA} = \\dfrac{SA}{AD} = \\dfrac{2\\sqrt{3}a}{\\sqrt{3}a} = 2$.</li><li>Vì $SA \\perp (ABCD)$ nên $SA \\perp AC$ và $SA \\perp AD$. Góc nhị diện $[C, SA, D]$ chính là góc $\\widehat{CAD}$.<br>$\\tan \\widehat{CAD} = \\dfrac{CD}{AD} = \\dfrac{AB}{AD} = \\dfrac{a}{\\sqrt{3}a} = \\dfrac{\\sqrt{3}}{3}$.</li></ul><br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765236788_14.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\">",
+            "point": "1"
         },
         {
             "type": "match",
@@ -431,7 +424,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "match",
-            "q": "Cho hàm số $y=f(x)$, với $f(x)$ là đa thức bậc bốn, có đồ thị hàm số $y=f'(x)$ như hình vẽ.\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765254897_874.png\" style=\"display: block; margin-left: auto; margin-right: auto; width: 80%;\">\n<br>Đặt $g(x)=f\\left(-x^2+3x-m\\right)$.",
+            "q": "Cho hàm số $y=f(x)$, với $f(x)$ là đa thức bậc bốn, có đồ thị hàm số $y=f'(x)$ như hình vẽ.\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765254897_874.png\" style=\"display: block; margin-left: auto; margin-right: auto; width: 80%;\">\n<br>Đặt $g(x)=f\\left(-x^2+3x-m\\right)$.<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765254897_874.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\">",
             "items": [
                 "Khi $m=1$, số điểm cực trị của hàm số $g(x)$ là",
                 "Số giá trị nguyên của tham số $m$ để hàm số $g(x)$ có đúng $3$ điểm cực trị là",
@@ -452,10 +445,8 @@ window.EXAM_DATA = {
                 "B",
                 "D"
             ],
-            "explain": "Ta có $g'(x)=(-2x+3)f'\\left(-x^2+3x-m\\right)$.<br>$g'(x)=0 \\Leftrightarrow \\left[\\begin{aligned}& -2x+3=0 \\\\ & f'\\left(-x^2+3x-m\\right)=0\\end{aligned}\\right.$<br>$\\Leftrightarrow \\left[\\begin{aligned}& x=1{,}5 \\\\ & -x^2+3x-m = -1 \\quad (1) \\\\ & -x^2+3x-m = 1 \\quad \\quad (2) \\\\ & -x^2+3x-m = 4. \\quad \\quad (3)\\end{aligned}\\right.$<br>Xét hàm số $h(x)=-x^2+3x$ có đỉnh tại $x=1{,}5$, giá trị lớn nhất là $h(1{,}5)=2{,}25$.\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765264571_737.png\" style=\"display: block; margin-left: auto; margin-right: auto; width: 80%;\">\n<br>Phương trình $h(x)=k$ có $2$ nghiệm phân biệt khác $1{,}5$ khi $k < 2{,}25$ và vô nghiệm khi $k > 2{,}25$.<br>Biến đổi các phương trình $(1)$, $(2)$, $(3)$ về dạng $h(x)=m-1$, $h(x)=m+1$, $h(x)=m+4$.<br>Ta luôn có thứ tự $m-1 < m+1 < m+4$.<br>Số điểm cực trị của $g(x)$ bằng $1$ (nghiệm $x=1{,}5$) cộng với số nghiệm đơn khác $1{,}5$ của ba phương trình trên.<ul><li><b>Ghép với C.</b><br>Khi $m=1$, các đường thẳng là $y=0$, $y=2$, $y=5$.<br>Vì $0 < 2{,}25$ (2 nghiệm); $2 < 2{,}25$ (2 nghiệm); $5 > 2{,}25$ (0 nghiệm).<br>Tổng số điểm cực trị là $1+2+2=5$.</li><li><b>Ghép với A.</b><br>Để có đúng $3$ cực trị, cần đúng $1$ phương trình có $2$ nghiệm (hai phương trình kia vô nghiệm).<br>Điều kiện: $\\left\\{\\begin{aligned}& m-1 < 2{,}25 \\\\ & m+1 > 2{,}25\\end{aligned}\\right. \\Leftrightarrow \\left\\{\\begin{aligned}& m < 3{,}25 \\\\ & m > 1{,}25.\\end{aligned}\\right.$<br>Vì $m \\in \\mathbb{Z} \\Rightarrow m \\in \\{2; 3\\}$. Có $2$ giá trị.</li><li><b>Ghép với B.</b><br>Để có đúng $5$ cực trị, cần đúng $2$ phương trình có $2$ nghiệm (phương trình lớn nhất vô nghiệm).<br>Điều kiện: $\\left\\{\\begin{aligned}& m+1 < 2{,}25 \\\\ & m+4 > 2{,}25\\end{aligned}\\right. \\Leftrightarrow \\left\\{\\begin{aligned}& m < 1{,}25 \\\\ & m > -1{,}75.\\end{aligned}\\right.$<br>Vì $m \\in \\mathbb{Z} \\Rightarrow m \\in \\{-1; 0; 1\\}$. Có $3$ giá trị.</li><li><b>Ghép với D.</b><br>Để có $7$ điểm cực trị, cả $3$ phương trình đều phải có $2$ nghiệm phân biệt $\\Rightarrow m+4 < 2{,}25 \\Leftrightarrow m < -1{,}75$.<br>Để các cực trị thuộc $(-2; 5)$, các nghiệm của $h(x)=k$ phải nằm trong $(-2; 5)$.<br>Kiểm tra biên: $h(-2)=-10$, $h(5)=-10$.<br>Vậy yêu cầu bài toán tương đương các đường thẳng cắt đồ thị $h(x)$ tại phần nằm trên $y=-10$.<br>Tức là $m-1 > -10 \\Leftrightarrow m > -9$.<br>Kết hợp điều kiện: $-9 < m < -1{,}75$.<br>Các giá trị nguyên là $m \\in \\{-8; -7; \\dots; -2\\}$. Có $7$ giá trị.</li></ul>",
-            "point": "1",
-            "solImg": "",
-            "img": ""
+            "explain": "Ta có $g'(x)=(-2x+3)f'\\left(-x^2+3x-m\\right)$.<br>$g'(x)=0 \\Leftrightarrow \\left[\\begin{aligned}& -2x+3=0 \\\\ & f'\\left(-x^2+3x-m\\right)=0\\end{aligned}\\right.$<br>$\\Leftrightarrow \\left[\\begin{aligned}& x=1{,}5 \\\\ & -x^2+3x-m = -1 \\quad (1) \\\\ & -x^2+3x-m = 1 \\quad \\quad (2) \\\\ & -x^2+3x-m = 4. \\quad \\quad (3)\\end{aligned}\\right.$<br>Xét hàm số $h(x)=-x^2+3x$ có đỉnh tại $x=1{,}5$, giá trị lớn nhất là $h(1{,}5)=2{,}25$.\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765264571_737.png\" style=\"display: block; margin-left: auto; margin-right: auto; width: 80%;\">\n<br>Phương trình $h(x)=k$ có $2$ nghiệm phân biệt khác $1{,}5$ khi $k < 2{,}25$ và vô nghiệm khi $k > 2{,}25$.<br>Biến đổi các phương trình $(1)$, $(2)$, $(3)$ về dạng $h(x)=m-1$, $h(x)=m+1$, $h(x)=m+4$.<br>Ta luôn có thứ tự $m-1 < m+1 < m+4$.<br>Số điểm cực trị của $g(x)$ bằng $1$ (nghiệm $x=1{,}5$) cộng với số nghiệm đơn khác $1{,}5$ của ba phương trình trên.<ul><li><b>Ghép với C.</b><br>Khi $m=1$, các đường thẳng là $y=0$, $y=2$, $y=5$.<br>Vì $0 < 2{,}25$ (2 nghiệm); $2 < 2{,}25$ (2 nghiệm); $5 > 2{,}25$ (0 nghiệm).<br>Tổng số điểm cực trị là $1+2+2=5$.</li><li><b>Ghép với A.</b><br>Để có đúng $3$ cực trị, cần đúng $1$ phương trình có $2$ nghiệm (hai phương trình kia vô nghiệm).<br>Điều kiện: $\\left\\{\\begin{aligned}& m-1 < 2{,}25 \\\\ & m+1 > 2{,}25\\end{aligned}\\right. \\Leftrightarrow \\left\\{\\begin{aligned}& m < 3{,}25 \\\\ & m > 1{,}25.\\end{aligned}\\right.$<br>Vì $m \\in \\mathbb{Z} \\Rightarrow m \\in \\{2; 3\\}$. Có $2$ giá trị.</li><li><b>Ghép với B.</b><br>Để có đúng $5$ cực trị, cần đúng $2$ phương trình có $2$ nghiệm (phương trình lớn nhất vô nghiệm).<br>Điều kiện: $\\left\\{\\begin{aligned}& m+1 < 2{,}25 \\\\ & m+4 > 2{,}25\\end{aligned}\\right. \\Leftrightarrow \\left\\{\\begin{aligned}& m < 1{,}25 \\\\ & m > -1{,}75.\\end{aligned}\\right.$<br>Vì $m \\in \\mathbb{Z} \\Rightarrow m \\in \\{-1; 0; 1\\}$. Có $3$ giá trị.</li><li><b>Ghép với D.</b><br>Để có $7$ điểm cực trị, cả $3$ phương trình đều phải có $2$ nghiệm phân biệt $\\Rightarrow m+4 < 2{,}25 \\Leftrightarrow m < -1{,}75$.<br>Để các cực trị thuộc $(-2; 5)$, các nghiệm của $h(x)=k$ phải nằm trong $(-2; 5)$.<br>Kiểm tra biên: $h(-2)=-10$, $h(5)=-10$.<br>Vậy yêu cầu bài toán tương đương các đường thẳng cắt đồ thị $h(x)$ tại phần nằm trên $y=-10$.<br>Tức là $m-1 > -10 \\Leftrightarrow m > -9$.<br>Kết hợp điều kiện: $-9 < m < -1{,}75$.<br>Các giá trị nguyên là $m \\in \\{-8; -7; \\dots; -2\\}$. Có $7$ giá trị.</li></ul><br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765264571_737.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\">",
+            "point": "1"
         },
         {
             "type": "short",
@@ -487,11 +478,10 @@ window.EXAM_DATA = {
         },
         {
             "type": "short",
-            "q": "Một người đàn ông đang ở vị trí điểm $A$ trên bờ một đoạn sông thẳng, rộng $300\\text{m}$ và muốn đến điểm $B$, ở bờ đối diện, xuôi về phía hạ lưu $2\\text{km}$ (xem hình vẽ). Biết người này có một chiếc thuyền, với vận tốc trung bình khi chèo thuyền trên đoạn sông này là $6\\text{km/h}$. Nhưng nếu có thể lên bờ và chạy bộ thì vận tốc trung bình mà anh ta có thể đạt được là $8\\text{km/h}$. Hãy tính thời gian nhanh nhất mà anh ta có thể đạt được để di chuyển từ $A$ đến $B$, theo đơn vị phút, làm tròn đến hàng đơn vị. <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765283982_928.png\" style=\"display: block; margin-left: auto; margin-right: auto; width: 50%;\">",
+            "q": "Một người đàn ông đang ở vị trí điểm $A$ trên bờ một đoạn sông thẳng, rộng $300\\text{m}$ và muốn đến điểm $B$, ở bờ đối diện, xuôi về phía hạ lưu $2\\text{km}$ (xem hình vẽ). Biết người này có một chiếc thuyền, với vận tốc trung bình khi chèo thuyền trên đoạn sông này là $6\\text{km/h}$. Nhưng nếu có thể lên bờ và chạy bộ thì vận tốc trung bình mà anh ta có thể đạt được là $8\\text{km/h}$. Hãy tính thời gian nhanh nhất mà anh ta có thể đạt được để di chuyển từ $A$ đến $B$, theo đơn vị phút, làm tròn đến hàng đơn vị. <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765283982_928.png\" style=\"display: block; margin-left: auto; margin-right: auto; width: 50%;\"><br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1767765283982_928.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\">",
             "ans": "17",
             "explain": "Đổi đơn vị: $300\\text{m} = 0{,}3\\text{km}$.<br>Gọi $x$ (km) là khoảng cách từ $H$ đến điểm cập bến $C$ trên bờ đối diện ($0 \\le x \\le 2$).<br>Quãng đường chèo thuyền $AC = \\sqrt{0{,}3^2 + x^2} = \\sqrt{0{,}09+x^2}$.<br>Quãng đường chạy bộ $CB = 2 - x$.<br>Thời gian di chuyển: $t(x) = \\dfrac{\\sqrt{0{,}09+x^2}}{6} + \\dfrac{2-x}{8}$.<br>Xét hàm số trên $[0; 2]$.<br>$t'(x) = \\dfrac{x}{6\\sqrt{0{,}09+x^2}} - \\dfrac{1}{8}$.<br>$t'(x) = 0 \\Leftrightarrow 8x = 6\\sqrt{0{,}09+x^2}$<br> $\\Leftrightarrow 4x = 3\\sqrt{0{,}09+x^2} \\Leftrightarrow 16x^2 = 9(0{,}09+x^2)$<br>\n$\\Leftrightarrow 16x^2 = 0{,}81 + 9x^2 \\Leftrightarrow 7x^2 = 0{,}81$.<br>$\\Rightarrow x = \\dfrac{0{,}9}{\\sqrt{7}}$, (thỏa mãn $x \\in [0; 2]$).<br>Giá trị cực tiểu tại $x_0 = \\dfrac{0{,}9}{\\sqrt{7}}$.<br>$t_{\\min} = t\\left(\\dfrac{0{,}9}{\\sqrt{7}}\\right) = \\dfrac{\\sqrt{7}}{80} + \\dfrac{1}{4}$ (giờ).<br>Đổi ra phút: $60 \\left( \\dfrac{\\sqrt{7}}{80} + \\dfrac{1}{4} \\right)\\approx 17$ (phút).",
-            "point": "0.5",
-            "img": ""
+            "point": "0.5"
         }
     ]
 };
