@@ -5,7 +5,7 @@ window.EXAM_LIST = [
         "subject": "Toan",
         "grade": "12",
         "time": 90,
-        "allowPrint": true,
+        "allowPrint": false,
         "start": "",
         "end": ""
     },
