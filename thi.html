@@ -315,8 +315,10 @@ if (d.end && now > new Date(d.end)) {
                 return alert("Sai mật khẩu! Vui lòng thử lại.");
             }
         }
-
         stId = n + c;
+        // --- THÊM DÒNG NÀY: Tạo khóa lưu trữ riêng cho học sinh này với đề này ---
+        window.storageKey = "exam_save_" + exId + "_" + stId.replace(/\s/g,''); 
+        // -----------------------------------------------------------------------
         document.getElementById('d-name').innerText = n;
         document.getElementById('d-class').innerText = c;
         startLogic(n);
@@ -352,6 +354,19 @@ if (d.end && now > new Date(d.end)) {
         curQ = aq;
 
         renderUI();
+        
+        // --- CODE MỚI: KHÔI PHỤC BÀI CŨ NẾU CÓ ---
+        let savedData = localStorage.getItem(window.storageKey);
+        if(savedData){
+            try {
+                let d = JSON.parse(savedData);
+                userAns = d.ans || {};
+                timerDur = d.time || timerDur; // Lấy lại thời gian cũ
+                restoreUI(); // Hàm này sẽ tự viết ở Bước 4
+            } catch(e) {}
+        }
+        // ------------------------------------------
+
         document.getElementById('welcome-screen').style.display = 'none';
         document.getElementById('main-interface').style.display = 'block';
 
@@ -360,7 +375,9 @@ if (d.end && now > new Date(d.end)) {
             let m = Math.floor(timerDur / 60);
             let s = timerDur % 60;
             document.getElementById('timer').innerText = `${m}:${s<10?'0'+s:s}`;
-            
+            if(timerDur % 5 === 0 && window.storageKey) {
+                 localStorage.setItem(window.storageKey, JSON.stringify({ans: userAns, time: timerDur}));
+            }
             if (--timerDur < 0) {
                 clearInterval(timerInt);
                 submitQuiz();
@@ -399,6 +416,7 @@ if (d.end && now > new Date(d.end)) {
         if(!userAns[i]) userAns[i]={};
         if(curQ[i].type === 'match' || curQ[i].type === 'tf') userAns[i][s] = v;
         else userAns[i] = v;
+        localStorage.setItem(window.storageKey, JSON.stringify({ans: userAns, time: timerDur}));
         let isDone = false;
         if(curQ[i].type === 'mcq' || curQ[i].type === 'short') { if(userAns[i] !== undefined && userAns[i] !== null && userAns[i].toString().trim() !== "") isDone = true; } 
         else { if(userAns[i] && Object.keys(userAns[i]).length === curQ[i].items.length) isDone = true; }
@@ -428,6 +446,7 @@ if (d.end && now > new Date(d.end)) {
     }
 
     function submitQuiz(){
+        if(window.storageKey) localStorage.removeItem(window.storageKey);
         clearInterval(timerInt);
         document.removeEventListener("visibilitychange", handleVisibilityChange);
         document.getElementById('btn-submit').style.display='none';
@@ -526,6 +545,44 @@ if (d.end && now > new Date(d.end)) {
             console.log("✅ Đã gửi điểm thành công!");
         }).catch(err => {
             console.error("❌ Lỗi gửi điểm:", err);
+        });
+    }
+    // --- HÀM MỚI: ĐIỀN LẠI ĐÁP ÁN ĐÃ LƯU LÊN MÀN HÌNH ---
+    function restoreUI(){
+        Object.keys(userAns).forEach(i => {
+            let u = userAns[i];
+            let type = curQ[i].type;
+            
+            // Đánh dấu trên thanh palette
+            document.getElementById(`pb-${i}`).classList.add('answered');
+
+            if(type === 'mcq') {
+                // Chọn lại Radio trắc nghiệm
+                let rad = document.querySelector(`input[name="q${i}"][value="${u}"]`);
+                if(rad) rad.checked = true;
+            } 
+            else if(type === 'short') {
+                // Điền lại text điền khuyết
+                let inp = document.querySelector(`#q-${i} input[type="text"]`);
+                if(inp) inp.value = u;
+            }
+            else if(type === 'tf') {
+                // Chọn lại đúng sai
+                Object.keys(u).forEach(idx => {
+                    let rad = document.querySelector(`input[name="q${i}_${idx}"][value="${u[idx]}"]`);
+                    if(rad) rad.checked = true;
+                });
+            }
+            else if(type === 'match') {
+                // Chọn lại select box ghép đôi
+                Object.keys(u).forEach(idx => {
+                    let sel = document.querySelector(`#q-${i} select`); 
+                    // Lưu ý: Logic tìm thẻ select của ghép đôi hơi phức tạp, cần dùng selector chính xác
+                    // Cách đơn giản nhất cho ghép đôi là thầy tìm thẻ select thứ `idx` trong câu đó
+                    let selects = document.querySelectorAll(`#q-${i} select`);
+                    if(selects[idx]) selects[idx].value = u[idx];
+                });
+            }
         });
     }
 </script>
