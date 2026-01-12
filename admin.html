@@ -238,8 +238,27 @@
             <div style="flex:1"></div>
             <button class="btn btn-red" onclick="publishExam()">🚀 XUẤT BẢN NGAY</button>
         </div>
-
         <div class="split-view">
+        <div class="config-box" style="background:#e8f5e9;border-color:#a5d6a7;display:flex;align-items:center;gap:15px;flex-wrap:wrap">
+            <b style="color:#2e7d32"><i class="fas fa-calculator"></i> CHIA ĐIỂM NHANH:</b>
+            <div style="display:flex;align-items:center;gap:5px">
+                <small>Tổng điểm TN:</small>
+                <input type="number" id="total-mcq" placeholder="VD: 7" style="width:60px;font-weight:bold;color:#1565c0">
+            </div>
+            <div style="display:flex;align-items:center;gap:5px">
+                <small>Tổng điểm Đ/S:</small>
+                <input type="number" id="total-tf" placeholder="VD: 1" style="width:60px;font-weight:bold;color:#2e7d32">
+            </div>
+            <div style="display:flex;align-items:center;gap:5px">
+                <small>Tổng điểm Điền:</small>
+                <input type="number" id="total-short" placeholder="VD: 1" style="width:60px;font-weight:bold;color:#ef6c00">
+            </div>
+             <div style="display:flex;align-items:center;gap:5px">
+                <small>Tổng điểm Ghép:</small>
+                <input type="number" id="total-match" placeholder="VD: 1" style="width:60px;font-weight:bold;color:#607d8b">
+            </div>
+            <button class="btn btn-blue" onclick="autoDistributePoints()" style="padding:5px 15px;font-size:0.9em">⚡ CHIA ĐỀU NGAY</button>
+        </div>
             <div class="editor-col" id="editor-area">
                 <div id="questions-list"></div>
                 <p style="text-align:center;color:#666" id="empty-msg">Chưa có câu hỏi.</p>
@@ -666,6 +685,55 @@
             });
             document.getElementById('image-gallery').innerHTML=h;
         }catch(e){}
+    }
+    // --- HÀM TỰ ĐỘNG CHIA ĐIỂM (MỚI) ---
+    function autoDistributePoints() {
+        // 1. Lấy tổng điểm người dùng nhập (nếu không nhập thì coi như 0)
+        let tMCQ = parseFloat(document.getElementById('total-mcq').value) || 0;
+        let tTF = parseFloat(document.getElementById('total-tf').value) || 0;
+        let tShort = parseFloat(document.getElementById('total-short').value) || 0;
+        let tMatch = parseFloat(document.getElementById('total-match').value) || 0;
+
+        // 2. Đếm số lượng câu hỏi mỗi loại hiện có
+        let cMCQ = EXAM_QUESTIONS.filter(q => q.type === 'mcq').length;
+        let cTF = EXAM_QUESTIONS.filter(q => q.type === 'tf').length;
+        let cShort = EXAM_QUESTIONS.filter(q => q.type === 'short').length;
+        let cMatch = EXAM_QUESTIONS.filter(q => q.type === 'match').length;
+
+        // 3. Tính toán và chia điểm (Chỉ chia nếu có nhập tổng điểm và có câu hỏi)
+        let count = 0;
+
+        if (tMCQ > 0 && cMCQ > 0) {
+            let p = tMCQ / cMCQ;
+            EXAM_QUESTIONS.forEach(q => { if(q.type === 'mcq') q.point = parseFloat(p.toFixed(3)); }); 
+            count++;
+        }
+        
+        if (tTF > 0 && cTF > 0) {
+            let p = tTF / cTF;
+            EXAM_QUESTIONS.forEach(q => { if(q.type === 'tf') q.point = parseFloat(p.toFixed(3)); });
+            count++;
+        }
+
+        if (tShort > 0 && cShort > 0) {
+            let p = tShort / cShort;
+            EXAM_QUESTIONS.forEach(q => { if(q.type === 'short') q.point = parseFloat(p.toFixed(3)); });
+            count++;
+        }
+
+        if (tMatch > 0 && cMatch > 0) {
+            let p = tMatch / cMatch;
+            EXAM_QUESTIONS.forEach(q => { if(q.type === 'match') q.point = parseFloat(p.toFixed(3)); });
+            count++;
+        }
+
+        // 4. Cập nhật giao diện
+        if(count > 0) {
+            renderEditor();
+            alert("✅ Đã chia đều điểm thành công!");
+        } else {
+            alert("⚠️ Thầy chưa nhập tổng điểm hoặc chưa có câu hỏi nào để chia!");
+        }
     }
 </script>
 </body>
