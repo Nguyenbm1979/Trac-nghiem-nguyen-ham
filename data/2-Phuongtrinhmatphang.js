@@ -5,7 +5,7 @@ window.EXAM_DATA = {
     "time": 45,
     "password": "",
     "encrypted": false,
-    "shuffle": true,
+    "shuffle": false,
     "viewDetail": true,
     "music": true,
     "allowPrint": false,
