@@ -1,5 +1,15 @@
 window.EXAM_LIST = [
     {
+        "id": "2-HSG12-NamTienHai-HungYen-25",
+        "title": "Đề khảo sát HSG Khối 12, THPT Nam Tiền Hải, Hưng Yên 2025",
+        "subject": "Toan",
+        "grade": "12",
+        "time": 180,
+        "allowPrint": false,
+        "start": "",
+        "end": ""
+    },
+    {
         "id": "2-HK2-Thuchanh-SP-HCM-25",
         "title": "Đề Cuối HK2, Thực hành sư phạm, HCM, Năm 2024-2025",
         "subject": "Toan",
