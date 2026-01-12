@@ -1,5 +1,15 @@
 window.EXAM_LIST = [
     {
+        "id": "2-Phuongtrinhmatphang",
+        "title": "Bài tập phương trình mặt phẳng",
+        "subject": "Toan",
+        "grade": "12",
+        "time": 45,
+        "allowPrint": false,
+        "start": "",
+        "end": ""
+    },
+    {
         "id": "2-HSG12-NamTienHai-HungYen-25",
         "title": "Đề khảo sát HSG Khối 12, THPT Nam Tiền Hải, Hưng Yên 2025",
         "subject": "Toan",
