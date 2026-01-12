@@ -239,26 +239,29 @@
             <button class="btn btn-red" onclick="publishExam()">🚀 XUẤT BẢN NGAY</button>
         </div>
         <div class="split-view">
-        <div class="config-box" style="background:#e8f5e9;border-color:#a5d6a7;display:flex;align-items:center;gap:15px;flex-wrap:wrap">
-            <b style="color:#2e7d32"><i class="fas fa-calculator"></i> CHIA ĐIỂM NHANH:</b>
-            <div style="display:flex;align-items:center;gap:5px">
-                <small>Tổng điểm TN:</small>
-                <input type="number" id="total-mcq" placeholder="VD: 7" style="width:60px;font-weight:bold;color:#1565c0">
+        <div style="background:white; border:1px solid #cfd8dc; padding:10px 15px; border-radius:6px; margin-bottom:15px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; box-shadow:0 1px 3px rgba(0,0,0,0.05)">
+            <div style="display:flex; align-items:center; gap:10px">
+                <b style="color:#2e7d32; font-size:1.1em"><i class="fas fa-magic"></i> CHIA ĐIỂM TỰ ĐỘNG:</b>
             </div>
-            <div style="display:flex;align-items:center;gap:5px">
-                <small>Tổng điểm Đ/S:</small>
-                <input type="number" id="total-tf" placeholder="VD: 1" style="width:60px;font-weight:bold;color:#2e7d32">
+            <div style="display:flex; gap:15px; align-items:center; flex-wrap:wrap">
+                <div style="display:flex; align-items:center; background:#f1f8e9; padding:2px 8px; border-radius:4px; border:1px solid #c5e1a5">
+                    <span style="font-size:0.85em; font-weight:bold; color:#33691e; margin-right:5px">TN:</span>
+                    <input type="number" id="total-mcq" placeholder="VD: 7" style="width:50px; border:none; background:transparent; font-weight:bold; color:#2e7d32; text-align:center; outline:none">
+                </div>
+                <div style="display:flex; align-items:center; background:#e3f2fd; padding:2px 8px; border-radius:4px; border:1px solid #90caf9">
+                    <span style="font-size:0.85em; font-weight:bold; color:#0d47a1; margin-right:5px">Đ/S:</span>
+                    <input type="number" id="total-tf" placeholder="VD: 1" style="width:50px; border:none; background:transparent; font-weight:bold; color:#1565c0; text-align:center; outline:none">
+                </div>
+                <div style="display:flex; align-items:center; background:#fff3e0; padding:2px 8px; border-radius:4px; border:1px solid #ffcc80">
+                    <span style="font-size:0.85em; font-weight:bold; color:#e65100; margin-right:5px">Điền:</span>
+                    <input type="number" id="total-short" placeholder="VD: 1" style="width:50px; border:none; background:transparent; font-weight:bold; color:#ef6c00; text-align:center; outline:none">
+                </div>
+                <div style="display:flex; align-items:center; background:#eceff1; padding:2px 8px; border-radius:4px; border:1px solid #b0bec5">
+                    <span style="font-size:0.85em; font-weight:bold; color:#455a64; margin-right:5px">Ghép:</span>
+                    <input type="number" id="total-match" placeholder="VD: 1" style="width:50px; border:none; background:transparent; font-weight:bold; color:#546e7a; text-align:center; outline:none">
+                </div>
+                <button class="btn btn-blue" onclick="autoDistributePoints()" style="padding:4px 12px; font-size:0.85em; height:30px">⚡ ÁP DỤNG</button>
             </div>
-            <div style="display:flex;align-items:center;gap:5px">
-                <small>Tổng điểm Điền:</small>
-                <input type="number" id="total-short" placeholder="VD: 1" style="width:60px;font-weight:bold;color:#ef6c00">
-            </div>
-             <div style="display:flex;align-items:center;gap:5px">
-                <small>Tổng điểm Ghép:</small>
-                <input type="number" id="total-match" placeholder="VD: 1" style="width:60px;font-weight:bold;color:#607d8b">
-            </div>
-            <button class="btn btn-blue" onclick="autoDistributePoints()" style="padding:5px 15px;font-size:0.9em">⚡ CHIA ĐỀU NGAY</button>
-        </div>
             <div class="editor-col" id="editor-area">
                 <div id="questions-list"></div>
                 <p style="text-align:center;color:#666" id="empty-msg">Chưa có câu hỏi.</p>
