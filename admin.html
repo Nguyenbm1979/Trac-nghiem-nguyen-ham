@@ -481,7 +481,7 @@
         const ov=document.getElementById('loading-overlay'); ov.style.display='flex';
         try{
             const res=await fetch(`https://api.github.com/repos/${u}/${r}/contents/${path}`,{headers:{Authorization:`token ${t}`}});
-            const json=await res.json(), content=decodeURIComponent(escape(atob(json.content)));
+            const json=await res.json(), content=decodeURIComponent(escape(atob(json.content.replace(/\s/g, ''))));
             let dataStr = content.substring(content.indexOf('{'), content.lastIndexOf('}')+1);
             let data=JSON.parse(dataStr);
             document.getElementById('exam-id').value=name.replace('.js','');
@@ -608,7 +608,7 @@
             let k=await fetch(url,{headers:{Authorization:`token ${t}`}});
             if(k.ok){
                 let j=await k.json(); s=j.sha;
-                let content = decodeURIComponent(escape(atob(j.content)));
+                let content = decodeURIComponent(escape(atob(j.content.replace(/\s/g, ''))));
                 let jsonStr = content.substring(content.indexOf('['), content.lastIndexOf(']')+1);
                 if(jsonStr) l = JSON.parse(jsonStr);
             }
