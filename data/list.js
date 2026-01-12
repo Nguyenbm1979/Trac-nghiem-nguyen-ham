@@ -4,7 +4,7 @@ window.EXAM_LIST = [
         "title": "Bài tập phương trình mặt phẳng",
         "subject": "Toan",
         "grade": "12",
-        "time": 45,
+        "time": 60,
         "allowPrint": false,
         "start": "",
         "end": ""
