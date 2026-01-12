@@ -26,9 +26,23 @@
         .section{display:none}.section.active{display:block;animation:fadeIn 0.3s}
         @keyframes fadeIn{from{opacity:0}to{opacity:1}}
         
-        .split-view {display:flex; gap:20px; align-items: flex-start;}
-        .editor-col {flex: 1; min-width: 0;}
-        .preview-col {flex: 1; position: sticky; top: 20px; max-height: 90vh; overflow-y: auto; background: white; border-radius: 8px; border: 1px solid #ddd; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); display:none;}
+        .split-view { display:flex; gap:20px; align-items: flex-start; margin-top: 20px; }
+        .editor-col { 
+            flex: 1; /* Chiếm 50% */
+            min-width: 0;
+        }
+        
+        .preview-col { 
+            flex: 1; /* Chiếm 50% */
+            position: sticky; top: 20px; 
+            max-height: 90vh; overflow-y: auto;
+            background: white; border-radius: 8px; border: 1px solid #ddd; padding: 15px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: none; /* Mặc định ẩn, sẽ hiện khi có câu hỏi */
+        }
+        
+        /* Ẩn thùng rác Score-box cũ vì đã đưa lên trên */
+        .score-box { display: none !important; }
         
         .q-item {background:white; padding:15px; border:1px solid #ccc; border-radius:8px; margin-bottom:15px; border-left:5px solid #009688; position:relative;}
         .q-item-header {display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px}
@@ -195,20 +209,17 @@
         </div>
         <div id="fm-list" style="background:white;border:1px solid #ddd;border-radius:6px"></div>
     </div>
-
-    <div id="sec-create" class="section">
-        <div class="config-box" style="background:#fff3e0;border-color:#ffe0b2">
+<div id="sec-create" class="section">
+        <div class="config-box" style="background:#fff3e0;border-color:#ffe0b2; margin-bottom: 10px;">
             <div class="row">
                 <div class="col"><label>Mã Đề (ID) <span style="color:red">*</span></label><input type="text" id="exam-id" placeholder="vd: de-toan-giua-ky-1" style="font-weight:bold;color:#c62828"></div>
                 <div class="col" style="flex:2"><label>Tiêu Đề <span style="color:red">*</span></label><input type="text" id="exam-title"></div>
             </div>
-            
             <div class="row">
                 <div class="col"><label>Môn Học</label><select id="exam-subject"><option value="Toan">Toán</option><option value="Ly">Vật Lý</option><option value="Hoa">Hóa Học</option><option value="Sinh">Sinh Học</option><option value="Anh">Tiếng Anh</option><option value="Van">Ngữ Văn</option><option value="Su">Lịch Sử</option><option value="Dia">Địa Lý</option><option value="GDCD">GDCD</option></select></div>
                 <div class="col"><label>Khối Lớp</label><select id="exam-grade"><option value="12">Khối 12</option><option value="11">Khối 11</option><option value="10">Khối 10</option><option value="9">Khối 9</option></select></div>
                 <div class="col"><label>Thời gian (phút)</label><input type="number" id="exam-time" value="45"></div>
             </div>
-
             <div class="row">
                 <div class="col"><label>Giá (VNĐ)</label><input type="number" id="exam-price" placeholder="0"></div>
                 <div class="col"><label>Mật khẩu Đề</label><input type="text" id="exam-pass" oninput="hashPass()"><input type="hidden" id="exam-pass-hash"></div>
@@ -222,15 +233,53 @@
                     </div>
                 </div>
             </div>
-            
             <div class="row" style="border:1px dashed #ef6c00;padding:10px;border-radius:5px;background:#fff8e1">
                 <div class="col"><label>🕒 Mở đề lúc:</label><input type="datetime-local" id="exam-start"></div>
                 <div class="col"><label>⛔ Đóng đề lúc:</label><input type="datetime-local" id="exam-end"></div>
                 <div class="col"><label>Làm tối thiểu (%)</label><input type="number" id="min-time-percent" placeholder="VD: 50"></div>
             </div>
         </div>
-
-        <div style="margin-bottom:15px;display:flex;gap:10px;flex-wrap:wrap">
+        <div style="background:white; border:1px solid #cfd8dc; padding:10px 15px; border-radius:6px; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; box-shadow:0 1px 3px rgba(0,0,0,0.05)">
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; flex:1">
+                <b style="color:#2e7d32; font-size:1.1em"><i class="fas fa-calculator"></i> CHIA ĐIỂM:</b>
+                
+                <div style="display:flex; align-items:center; background:#f1f8e9; padding:2px 5px; border-radius:4px; border:1px solid #c5e1a5">
+                    <span style="font-size:0.8em; font-weight:bold; color:#33691e; margin-right:3px">TN:</span>
+                    <input type="number" id="total-mcq" placeholder="7" style="width:40px; border:none; background:transparent; font-weight:bold; color:#2e7d32; text-align:center; outline:none">
+                </div>
+                <div style="display:flex; align-items:center; background:#e3f2fd; padding:2px 5px; border-radius:4px; border:1px solid #90caf9">
+                    <span style="font-size:0.8em; font-weight:bold; color:#0d47a1; margin-right:3px">Đ/S:</span>
+                    <input type="number" id="total-tf" placeholder="1" style="width:40px; border:none; background:transparent; font-weight:bold; color:#1565c0; text-align:center; outline:none">
+                </div>
+                <div style="display:flex; align-items:center; background:#fff3e0; padding:2px 5px; border-radius:4px; border:1px solid #ffcc80">
+                    <span style="font-size:0.8em; font-weight:bold; color:#e65100; margin-right:3px">Điền:</span>
+                    <input type="number" id="total-short" placeholder="1" style="width:40px; border:none; background:transparent; font-weight:bold; color:#ef6c00; text-align:center; outline:none">
+                </div>
+                <div style="display:flex; align-items:center; background:#eceff1; padding:2px 5px; border-radius:4px; border:1px solid #b0bec5">
+                    <span style="font-size:0.8em; font-weight:bold; color:#455a64; margin-right:3px">Ghép:</span>
+                    <input type="number" id="total-match" placeholder="1" style="width:40px; border:none; background:transparent; font-weight:bold; color:#546e7a; text-align:center; outline:none">
+                </div>
+                <button class="btn btn-blue" onclick="autoDistributePoints()" style="padding:4px 10px; font-size:0.8em; height:28px">⚡ CHIA</button>
+            </div>
+            <div style="border-left:2px solid #eee; padding-left:15px; margin-left:15px; text-align:right">
+                <span style="font-size:0.85em; color:#666; display:block">TỔNG ĐIỂM / CÂU</span>
+                <span style="font-size:1.4em; font-weight:bold; color:#d32f2f">
+                    <span id="total-score-display">0.00</span> 
+                    <small style="color:#999; font-size:0.6em">/ <span id="total-qs">0</span></small>
+                </span>
+            </div>
+        </div>
+        <div style="margin-bottom:15px; border:1px dashed #ccc; padding:10px; border-radius:6px; background:#fafafa">
+            <div style="display:flex; justify-content:space-between; cursor:pointer" onclick="let b=document.getElementById('json-import-box'); b.style.display=b.style.display==='none'?'block':'none'">
+                <b style="color:#546e7a"><i class="fas fa-file-code"></i> Nạp dữ liệu JSON (Click để mở)</b>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div id="json-import-box" style="display:none; margin-top:10px">
+                <textarea id="json-input" style="width:100%;height:80px;font-family:monospace;font-size:0.9em;margin-bottom:5px" placeholder='Dán mã JSON vào đây...'></textarea>
+                <button class="btn btn-gray" onclick="parseDataSafe()">📥 Nạp Ngay</button>
+            </div>
+        </div>
+        <div style="margin-bottom:15px;display:flex;gap:10px;flex-wrap:wrap;border-bottom:2px solid #eee;padding-bottom:15px">
             <button class="btn btn-blue" onclick="addQ('mcq')">➕ Trắc Nghiệm</button>
             <button class="btn btn-green" onclick="addQ('tf')">➕ Đúng/Sai</button>
             <button class="btn btn-orange" onclick="addQ('short')">➕ Điền Khuyết</button>
@@ -239,53 +288,17 @@
             <button class="btn btn-red" onclick="publishExam()">🚀 XUẤT BẢN NGAY</button>
         </div>
         <div class="split-view">
-        <div style="background:white; border:1px solid #cfd8dc; padding:10px 15px; border-radius:6px; margin-bottom:15px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; box-shadow:0 1px 3px rgba(0,0,0,0.05)">
-            <div style="display:flex; align-items:center; gap:10px">
-                <b style="color:#2e7d32; font-size:1.1em"><i class="fas fa-magic"></i> CHIA ĐIỂM TỰ ĐỘNG:</b>
-            </div>
-            <div style="display:flex; gap:15px; align-items:center; flex-wrap:wrap">
-                <div style="display:flex; align-items:center; background:#f1f8e9; padding:2px 8px; border-radius:4px; border:1px solid #c5e1a5">
-                    <span style="font-size:0.85em; font-weight:bold; color:#33691e; margin-right:5px">TN:</span>
-                    <input type="number" id="total-mcq" placeholder="VD: 7" style="width:50px; border:none; background:transparent; font-weight:bold; color:#2e7d32; text-align:center; outline:none">
-                </div>
-                <div style="display:flex; align-items:center; background:#e3f2fd; padding:2px 8px; border-radius:4px; border:1px solid #90caf9">
-                    <span style="font-size:0.85em; font-weight:bold; color:#0d47a1; margin-right:5px">Đ/S:</span>
-                    <input type="number" id="total-tf" placeholder="VD: 1" style="width:50px; border:none; background:transparent; font-weight:bold; color:#1565c0; text-align:center; outline:none">
-                </div>
-                <div style="display:flex; align-items:center; background:#fff3e0; padding:2px 8px; border-radius:4px; border:1px solid #ffcc80">
-                    <span style="font-size:0.85em; font-weight:bold; color:#e65100; margin-right:5px">Điền:</span>
-                    <input type="number" id="total-short" placeholder="VD: 1" style="width:50px; border:none; background:transparent; font-weight:bold; color:#ef6c00; text-align:center; outline:none">
-                </div>
-                <div style="display:flex; align-items:center; background:#eceff1; padding:2px 8px; border-radius:4px; border:1px solid #b0bec5">
-                    <span style="font-size:0.85em; font-weight:bold; color:#455a64; margin-right:5px">Ghép:</span>
-                    <input type="number" id="total-match" placeholder="VD: 1" style="width:50px; border:none; background:transparent; font-weight:bold; color:#546e7a; text-align:center; outline:none">
-                </div>
-                <button class="btn btn-blue" onclick="autoDistributePoints()" style="padding:4px 12px; font-size:0.85em; height:30px">⚡ ÁP DỤNG</button>
-            </div>
             <div class="editor-col" id="editor-area">
                 <div id="questions-list"></div>
-                <p style="text-align:center;color:#666" id="empty-msg">Chưa có câu hỏi.</p>
+                <p style="text-align:center;color:#666;margin-top:20px" id="empty-msg">Chưa có câu hỏi nào. Hãy bấm nút thêm bên trên!</p>
             </div>
+            
             <div class="preview-col" id="preview-area">
-                <div class="score-box">
-                    <span style="font-size:0.9em;color:#666">TỔNG ĐIỂM TOÀN ĐỀ</span>
-                    <span id="total-score-display" class="score-total">0.00</span>
-                    <div style="font-size:0.8em;margin-top:5px">Tổng số câu: <span id="total-qs" style="font-weight:bold">0</span></div>
-                </div>
                 <div class="preview-header"><h3>XEM TRƯỚC (PREVIEW)</h3></div>
                 <div id="preview-content"></div>
             </div>
         </div>
-        
-        <div style="margin-top:20px;border-top:1px dashed #ccc;padding-top:10px">
-            <small style="cursor:pointer;color:#999" onclick="document.getElementById('json-import-box').style.display='block'">▼ Nạp dữ liệu JSON</small>
-            <div id="json-import-box" style="display:none">
-                <textarea id="json-input" style="width:100%;height:100px;font-family:monospace;font-size:0.9em" placeholder='Dán mã JSON vào đây...'></textarea>
-                <button class="btn btn-gray" onclick="parseDataSafe()">📥 Nạp Dữ Liệu</button>
-            </div>
-        </div>
     </div>
-
     <div id="sec-images" class="section">
         <div style="margin-bottom:15px; display:flex; justify-content:space-between">
             <h3>KHO ẢNH TRÊN GITHUB</h3>
