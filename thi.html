@@ -326,46 +326,19 @@ if (d.end && now > new Date(d.end)) {
 
     function startLogic(name){
         startTime = new Date().toLocaleString('vi-VN');
-        function startLogic(name){
-        startTime = new Date().toLocaleString('vi-VN');
-        
-        // --- LOGIC MỚI: XÁO TRỘN, LỌC CÂU HỎI VÀ ƯU TIÊN CÂU GHIM ---
         let aq = JSON.parse(JSON.stringify(rawQ));
         let doShuffle = (window.EXAM_DATA.shuffle !== false);
-        let take = window.EXAM_DATA.take || 0; // Số lượng câu cần lấy
-
-        // Hàm random theo tên học sinh (để mỗi em 1 đề khác nhau)
-        let seed = 0;
-        for(let i=0; i<name.length; i++) seed += name.charCodeAt(i);
-        const random = () => { var x = Math.sin(seed++) * 10000; return x - Math.floor(x); };
 
         if(doShuffle) {
-            // 1. Tách nhóm GHIM và nhóm THƯỜNG
-            let fixedQs = aq.filter(q => q.mustTake === true);
-            let normalQs = aq.filter(q => !q.mustTake);
+            let seed = 0;
+            for(let i=0; i<name.length; i++) seed += name.charCodeAt(i);
+            const random = () => {
+                var x = Math.sin(seed++) * 10000;
+                return x - Math.floor(x);
+            };
 
-            // 2. Tính toán lấy thêm bao nhiêu câu thường
-            let finalSet = [];
-            if (take > 0) {
-                let needMore = take - fixedQs.length;
-                if (needMore < 0) needMore = 0; // Nếu câu ghim nhiều hơn số cần lấy -> lấy hết câu ghim
-
-                // Xáo trộn nhóm thường và lấy đủ số lượng
-                normalQs.sort(() => random() - 0.5);
-                let pickedNormal = normalQs.slice(0, needMore);
-                
-                // Gộp lại
-                finalSet = fixedQs.concat(pickedNormal);
-            } else {
-                // Lấy tất cả
-                finalSet = aq;
-            }
-
-            // 3. Xáo trộn lần cuối để câu ghim không nằm tụm lại
-            finalSet.sort(() => random() - 0.5);
-            aq = finalSet;
-
-            // 4. Xáo trộn đáp án từng câu
+            aq.sort(() => random() - 0.5);
+            
             aq.forEach(q => { 
                 if(q.type === 'mcq') {
                     q.idx = q.options.map((_,i)=>i).sort(() => random() - 0.5);
@@ -373,20 +346,12 @@ if (d.end && now > new Date(d.end)) {
                     q.idx = q.options ? q.options.map((_,i)=>i) : [];
                 }
             });
-
         } else {
-            // Nếu KHÔNG ĐẢO CÂU: Chỉ cắt bớt nếu cần
-            if(take > 0 && take < aq.length) {
-                aq = aq.slice(0, take);
-            }
-            aq.forEach(q => { if(q.type === 'mcq') q.idx = q.options.map((_,i)=>i); });
+            aq.forEach(q => { 
+                if(q.type === 'mcq') q.idx = q.options.map((_,i)=>i); 
+            });
         }
-
         curQ = aq;
-        // -----------------------------------------------------------
-
-        renderUI();
-        // ... (Các đoạn code bên dưới giữ nguyên) ...
 
         renderUI();
         
