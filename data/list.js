@@ -1,15 +1,5 @@
 window.EXAM_LIST = [
     {
-        "id": "2-Chuyende1-25",
-        "title": "Đề kiểm tra chuyên đề 1, Toán 12, Năm 2025-2026",
-        "subject": "Toan",
-        "grade": "12",
-        "time": 30,
-        "allowPrint": false,
-        "start": "",
-        "end": ""
-    },
-    {
         "id": "2-Ontapnguyenham-1",
         "title": "Đề Ôn Tập Nguyên Hàm, Số 1, Năm 2025-2026",
         "subject": "Toan",
