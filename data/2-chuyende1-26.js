@@ -3,7 +3,7 @@ window.EXAM_DATA = {
     "subject": "Toan",
     "grade": "12",
     "time": 30,
-    "password": "4bef2b0bc08ba71ef7662b7f5df09171",
+    "password": "fdd6aec7ac5117edb595e53b984b4e0d",
     "encrypted": false,
     "shuffle": true,
     "viewDetail": false,
@@ -120,7 +120,8 @@ window.EXAM_DATA = {
             "ans": 2,
             "explain": "Xác suất để xảy ra ít nhất một ca cấp cứu là $\\mathrm{P}(X \\ge 1)$.<br> Ta có: $\\mathrm{P}(X \\ge 1) = 1 - \\mathrm{P}(X < 1) = 1 - \\mathrm{P}(X=0)$.<br> Theo bảng phân bố xác suất, $\\mathrm{P}(X=0) = 0{,}12$.<br> Vậy $\\mathrm{P}(X \\ge 1) = 1 - 0{,}12 = 0{,}88$.",
             "id": "",
-            "point": 0.5
+            "point": 0.5,
+            "img": ""
         },
         {
             "type": "mcq",
