@@ -218,7 +218,18 @@
             <div class="row">
                 <div class="col"><label>Môn Học</label><select id="exam-subject"><option value="Toan">Toán</option><option value="Ly">Vật Lý</option><option value="Hoa">Hóa Học</option><option value="Sinh">Sinh Học</option><option value="Anh">Tiếng Anh</option><option value="Van">Ngữ Văn</option><option value="Su">Lịch Sử</option><option value="Dia">Địa Lý</option><option value="GDCD">GDCD</option></select></div>
                 <div class="col"><label>Khối Lớp</label><select id="exam-grade"><option value="12">Khối 12</option><option value="11">Khối 11</option><option value="10">Khối 10</option><option value="9">Khối 9</option></select></div>
-                <div class="col"><label>Thời gian (phút)</label><input type="number" id="exam-time" value="45"></div>
+                <div class="col">
+    <div style="display:flex; gap:10px">
+        <div style="flex:1">
+            <label>Thời gian (phút)</label>
+            <input type="number" id="exam-time" value="45">
+        </div>
+        <div style="flex:1">
+            <label>Lấy SL câu (0=Tất cả)</label>
+            <input type="number" id="exam-take" placeholder="VD: 20" style="font-weight:bold;color:#d32f2f">
+        </div>
+    </div>
+</div>
             </div>
             <div class="row">
                 <div class="col"><label>Giá (VNĐ)</label><input type="number" id="exam-price" placeholder="0"></div>
@@ -416,6 +427,11 @@
                     <div style="display:flex;align-items:center">
                         <b style="color:#e65100;margin-right:5px">Điểm:</b> 
                         <input type="number" class="point-input" step="0.05" value="${q.point||0}" onchange="EXAM_QUESTIONS[${i}].point=this.value; renderEditor()">
+                       
+                        <label style="margin-left:10px; display:flex; align-items:center; cursor:pointer; background:${q.mustTake?'#e8eaf6':'#f5f5f5'}; padding:3px 8px; border-radius:4px; border:1px solid ${q.mustTake?'#3f51b5':'#ccc'}">
+                        <input type="checkbox" ${q.mustTake?'checked':''} onchange="EXAM_QUESTIONS[${i}].mustTake=this.checked; renderEditor()" style="transform:scale(1.2); margin-right:5px">
+                        <span style="font-size:0.85em; font-weight:bold; color:${q.mustTake?'#3f51b5':'#777'}">${q.mustTake ? '📌 Đã Ghim' : 'Ghim câu này'}</span>
+                        </label>
                         <button class="btn btn-red" style="padding:2px 8px;font-size:0.8em;margin-left:10px" onclick="EXAM_QUESTIONS.splice(${i},1);renderEditor()">Xóa</button>
                     </div>
                 </div>
@@ -520,7 +536,7 @@
             let dataStr = content.substring(content.indexOf('{'), content.lastIndexOf('}')+1);
             let data=JSON.parse(dataStr);
             document.getElementById('exam-id').value=name.replace('.js','');
-            ['title','time','price','subject','grade','start','end','minTime'].forEach(k => {
+            ['title','time','take','price','subject','grade','start','end','minTime'].forEach(k => {
                  if(data[k] !== undefined) {
                     let elId = (k==='minTime') ? 'min-time-percent' : 'exam-'+k;
                     let el = document.getElementById(elId);
@@ -591,6 +607,7 @@
                 subject: document.getElementById('exam-subject').value, 
                 grade: document.getElementById('exam-grade').value,
                 time: parseInt(document.getElementById('exam-time').value),
+                take: parseInt(document.getElementById('exam-take').value) || 0, // <--- THÊM DÒNG NÀY
                 password: document.getElementById('exam-pass-hash').value,
                 encrypted: sec,
                 shuffle: document.getElementById('exam-shuffle').checked,
