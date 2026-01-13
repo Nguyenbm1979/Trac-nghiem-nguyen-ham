@@ -446,6 +446,23 @@ if (d.end && now > new Date(d.end)) {
     }
 
     function submitQuiz(){
+        let minPercent = window.EXAM_DATA.minTime || 0; // Lấy % tối thiểu từ Admin
+        // 1. Đếm số câu đã làm
+        let count = 0;
+        Object.keys(userAns).forEach(k => { if(userAns[k]) count++; });
+        
+        // 2. Tính phần trăm thực tế
+        let total = curQ.length;
+        let currentPercent = (count / total) * 100;
+
+        // 3. Chặn nộp nếu chưa đủ
+        if(currentPercent < minPercent){
+            alert(`⚠️ CẢNH BÁO:\nThầy yêu cầu làm tối thiểu ${minPercent}% mới được nộp bài.\n\nHiện tại bạn mới làm được: ${currentPercent.toFixed(1)}% (${count}/${total} câu).\nVui lòng làm tiếp!`);
+            return; // Dừng lại, không cho nộp
+        }
+        // ------------------------------------------
+
+        if(!confirm('Bạn có chắc chắn muốn nộp bài? Thời gian còn lại sẽ bị hủy.')) return;
         if(window.storageKey) localStorage.removeItem(window.storageKey);
         clearInterval(timerInt);
         document.removeEventListener("visibilitychange", handleVisibilityChange);
