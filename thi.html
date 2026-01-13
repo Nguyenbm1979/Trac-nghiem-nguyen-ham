@@ -446,23 +446,23 @@ if (d.end && now > new Date(d.end)) {
     }
 
     function submitQuiz(){
-        let minPercent = window.EXAM_DATA.minTime || 0; // Lấy % tối thiểu từ Admin
-        // 1. Đếm số câu đã làm
+        // --- 1. KIỂM TRA % LÀM BÀI (Code cũ của thầy) ---
+        let minPercent = window.EXAM_DATA.minTime || 0; 
         let count = 0;
         Object.keys(userAns).forEach(k => { if(userAns[k]) count++; });
         
-        // 2. Tính phần trăm thực tế
         let total = curQ.length;
         let currentPercent = (count / total) * 100;
 
-        // 3. Chặn nộp nếu chưa đủ
         if(currentPercent < minPercent){
             alert(`⚠️ CẢNH BÁO:\nThầy yêu cầu làm tối thiểu ${minPercent}% mới được nộp bài.\n\nHiện tại bạn mới làm được: ${currentPercent.toFixed(1)}% (${count}/${total} câu).\nVui lòng làm tiếp!`);
-            return; // Dừng lại, không cho nộp
+            return; 
         }
-        // ------------------------------------------
+        // ------------------------------------------------
 
         if(!confirm('Bạn có chắc chắn muốn nộp bài? Thời gian còn lại sẽ bị hủy.')) return;
+        
+        // Dọn dẹp bộ nhớ và dừng nhạc/giờ
         if(window.storageKey) localStorage.removeItem(window.storageKey);
         clearInterval(timerInt);
         document.removeEventListener("visibilitychange", handleVisibilityChange);
@@ -472,6 +472,7 @@ if (d.end && now > new Date(d.end)) {
         if(!audio.paused) audio.pause();
         document.getElementById('music-control').style.display='none';
         
+        // --- 2. TÍNH ĐIỂM (Code cũ của thầy) ---
         let score=0, max=0;
         curQ.forEach((q,i)=>{
             const bl=document.getElementById(`q-${i}`); document.getElementById(`sol-${i}`).style.display='block';
@@ -495,11 +496,42 @@ if (d.end && now > new Date(d.end)) {
         });
         let finalS = Math.round(score*100)/100;
         
-        // GỌI HÀM GỬI ĐIỂM
+        // Gửi điểm sang Google Sheet
         sendToGoogleSheet(finalS, max);
         
-        document.getElementById('result-area').style.display='block';
-        document.getElementById('final-score').innerText = `${finalS} / ${max}`;
+        // --- 3. HIỂN THỊ KẾT QUẢ (CODE MỚI ĐỂ ẨN NÚT XEM GIẢI) ---
+        
+        // Tạo nút Xem giải (chỉ hiện nếu được phép)
+        let viewBtn = '';
+        if (window.EXAM_DATA.viewDetail !== false) {
+            viewBtn = `<button class="btn btn-green" onclick="reviewExam()">Xem chi tiết & Lời giải</button>`;
+        } else {
+            viewBtn = `<p style="color:#d32f2f; font-weight:bold; margin-top:10px; background:#ffebee; padding:10px; border-radius:5px">⛔ Đề thi này không cho xem lời giải chi tiết.</p>`;
+        }
+
+        let msg = finalS >= max/2 ? "Chúc mừng bạn đã hoàn thành!" : "Cố gắng hơn lần sau nhé!";
+        let color = finalS >= max/2 ? "#2e7d32" : "#d32f2f";
+        let icon = finalS >= max/2 ? "🎉" : "💪";
+
+        // Thay thế toàn bộ màn hình bằng bảng điểm
+        let resultHtml = `
+            <div style="text-align:center;padding:50px 20px; background:white; min-height:100vh">
+                <div style="font-size:50px;margin-bottom:20px">${icon}</div>
+                <h2>${msg}</h2>
+                <p>Bạn đã hoàn thành bài thi với số điểm:</p>
+                <h1 style="font-size:3em;color:${color}">${finalS} / ${max}</h1>
+                
+                <div style="margin-top:30px;display:flex;justify-content:center;gap:15px;flex-wrap:wrap;flex-direction:column;align-items:center">
+                    <div>
+                        <button class="btn btn-blue" onclick="location.reload()">Làm lại đề này</button>
+                    </div>
+                    <div>
+                        ${viewBtn} </div>
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('main-interface').innerHTML = resultHtml;
         window.scrollTo({top:0,behavior:'smooth'});
     }
     
