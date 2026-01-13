@@ -9,7 +9,7 @@ window.EXAM_DATA = {
     "viewDetail": false,
     "music": false,
     "allowPrint": false,
-    "minTime": 70,
+    "minTime": 50,
     "start": "",
     "end": "",
     "price": 0,
@@ -110,7 +110,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "mcq",
-            "q": "Giả sử số ca cấp cứu ở một bệnh viện vào tối thứ Bảy là một biến ngẫu nhiên rời rạc $X$ có bảng phân bố xác suất như sau: [IMG] Tính xác suất để xảy ra ít nhất một ca cấp cứu ở bệnh viện đó vào tối thứ Bảy.",
+            "q": "Giả sử số ca cấp cứu ở một bệnh viện vào tối thứ Bảy là một biến ngẫu nhiên rời rạc $X$ có bảng phân bố xác suất như sau: <style>\n  .flex-container {\n    display: flex;\n    justify-content: center; /* Canh giữa theo chiều ngang */\n    align-items: center;     /* Canh giữa theo chiều dọc (nếu có chiều cao) */\n  }\n</style>\n<div class=\"flex-container\">\n  <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768342231549_460.png\">\n</div> Tính xác suất để xảy ra ít nhất một ca cấp cứu ở bệnh viện đó vào tối thứ Bảy.",
             "options": [
                 "$0{,}12$",
                 "$0{,}28$",
@@ -124,7 +124,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "mcq",
-            "q": "Giả sử số ca cấp cứu ở một bệnh viện vào tối thứ Bảy là một biến ngẫu nhiên rời rạc $X$ có bảng phân bố xác suất như sau: <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768342231549_460.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"> Biết rằng nếu có hơn $3$ ca cấp cứu thì bệnh viện phải tăng cường thêm bác sĩ trực. Tính xác suất phải tăng cường bác sĩ trực vào tối thứ Bảy ở bệnh viện đó.",
+            "q": "Giả sử số ca cấp cứu ở một bệnh viện vào tối thứ Bảy là một biến ngẫu nhiên rời rạc $X$ có bảng phân bố xác suất như sau: <style>\n  .flex-container {\n    display: flex;\n    justify-content: center; /* Canh giữa theo chiều ngang */\n    align-items: center;     /* Canh giữa theo chiều dọc (nếu có chiều cao) */\n  }\n</style>\n<div class=\"flex-container\">\n  <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768342231549_460.png\">\n</div> Biết rằng nếu có hơn $3$ ca cấp cứu thì bệnh viện phải tăng cường thêm bác sĩ trực. Tính xác suất phải tăng cường bác sĩ trực vào tối thứ Bảy ở bệnh viện đó.",
             "options": [
                 "$0{,}10$",
                 "$0{,}19$",
@@ -134,7 +134,8 @@ window.EXAM_DATA = {
             "ans": 0,
             "explain": "Biến cố \"phải tăng cường thêm bác sĩ trực\" tương ứng với $X > 3$.<br> Dựa vào bảng phân bố xác suất, ta có các giá trị của $X$ thỏa mãn là $X=4$ và $X=5$.<br> Vậy xác suất cần tìm là: $$\\mathrm{P}(X > 3) = \\mathrm{P}(X=4) + \\mathrm{P}(X=5) = 0{,}08 + 0{,}02 = 0{,}10.$$",
             "id": "",
-            "point": 0.5
+            "point": 0.5,
+            "img": ""
         },
         {
             "type": "mcq",
