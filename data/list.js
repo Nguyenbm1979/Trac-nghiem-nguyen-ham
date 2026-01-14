@@ -1,20 +1,20 @@
 window.EXAM_LIST = [
     {
-        "id": "2-Ontap-phuongtrinhduongthang-26",
-        "title": "Ôn tập phương trình đường thẳng, Toán 12, Lớp LTĐH, Năm 2026",
+        "id": "1-Chuyende1-26",
+        "title": "Ôn tập chuyên đề 1, Toán 11, Lớp Toán 11 VIP, Năm 2026",
         "subject": "Toan",
-        "grade": "12",
-        "time": 45,
+        "grade": "11",
+        "time": 60,
         "allowPrint": false,
         "start": "",
         "end": ""
     },
     {
-        "id": "1-Chuyende1-26",
-        "title": "Ôn tập chuyên đề 1, Toán 11, Năm 2026",
+        "id": "2-Ontap-phuongtrinhduongthang-26",
+        "title": "Ôn tập phương trình đường thẳng, Toán 12, Lớp LTĐH, Năm 2026",
         "subject": "Toan",
-        "grade": "11",
-        "time": 60,
+        "grade": "12",
+        "time": 45,
         "allowPrint": false,
         "start": "",
         "end": ""
