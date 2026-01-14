@@ -110,7 +110,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "mcq",
-            "q": "Giả sử số ca cấp cứu ở một bệnh viện vào tối thứ Bảy là một biến ngẫu nhiên rời rạc $X$ có bảng phân bố xác suất như sau: <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768355415884_578.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"> Tính xác suất để xảy ra ít nhất một ca cấp cứu ở bệnh viện đó vào tối thứ Bảy.",
+            "q": "Giả sử số ca cấp cứu ở một bệnh viện vào tối thứ Bảy là một biến ngẫu nhiên rời rạc $X$ có bảng phân bố xác suất như sau: \n<style>\n  .center-img {\n    display: block;\n    margin-left: auto;\n    margin-right: auto;\n    width: 60%; /* Tùy chỉnh kích thước ảnh */\n  }\n</style>\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768355415884_578.png\" class=\"center-img\">\n</style>\n Tính xác suất để xảy ra ít nhất một ca cấp cứu ở bệnh viện đó vào tối thứ Bảy.",
             "options": [
                 "$0{,}12$",
                 "$0{,}28$",
@@ -120,11 +120,12 @@ window.EXAM_DATA = {
             "ans": 2,
             "explain": "Xác suất để xảy ra ít nhất một ca cấp cứu là $\\mathrm{P}(X \\ge 1)$.<br> Ta có: $\\mathrm{P}(X \\ge 1) = 1 - \\mathrm{P}(X < 1) = 1 - \\mathrm{P}(X=0)$.<br> Theo bảng phân bố xác suất, $\\mathrm{P}(X=0) = 0{,}12$.<br> Vậy $\\mathrm{P}(X \\ge 1) = 1 - 0{,}12 = 0{,}88$.",
             "id": "",
-            "point": 0.2
+            "point": 0.2,
+            "img": ""
         },
         {
             "type": "mcq",
-            "q": "Giả sử số ca cấp cứu ở một bệnh viện vào tối thứ Bảy là một biến ngẫu nhiên rời rạc $X$ có bảng phân bố xác suất như sau: <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768355415884_578.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"> Biết rằng nếu có hơn $3$ ca cấp cứu thì bệnh viện phải tăng cường thêm bác sĩ trực. Tính xác suất phải tăng cường bác sĩ trực vào tối thứ Bảy ở bệnh viện đó.",
+            "q": "Giả sử số ca cấp cứu ở một bệnh viện vào tối thứ Bảy là một biến ngẫu nhiên rời rạc $X$ có bảng phân bố xác suất như sau: <style>\n  .center-img {\n    display: block;\n    margin-left: auto;\n    margin-right: auto;\n    width: 60%; /* Tùy chỉnh kích thước ảnh */\n  }\n</style>\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768355415884_578.png\" class=\"center-img\">\n</style> Biết rằng nếu có hơn $3$ ca cấp cứu thì bệnh viện phải tăng cường thêm bác sĩ trực. Tính xác suất phải tăng cường bác sĩ trực vào tối thứ Bảy ở bệnh viện đó.",
             "options": [
                 "$0{,}10$",
                 "$0{,}19$",
@@ -134,11 +135,12 @@ window.EXAM_DATA = {
             "ans": 0,
             "explain": "Biến cố \"phải tăng cường thêm bác sĩ trực\" tương ứng với $X > 3$.<br> Dựa vào bảng phân bố xác suất, ta có các giá trị của $X$ thỏa mãn là $X=4$ và $X=5$.<br> Vậy xác suất cần tìm là: $$\\mathrm{P}(X > 3) = \\mathrm{P}(X=4) + \\mathrm{P}(X=5) = 0{,}08 + 0{,}02 = 0{,}10.$$",
             "id": "",
-            "point": 0.2
+            "point": 0.2,
+            "img": ""
         },
         {
             "type": "mcq",
-            "q": "Giả sử số ca cấp cứu ở một bệnh viện vào tối thứ Bảy là một biến ngẫu nhiên rời rạc $X$ có bảng phân bố xác suất như sau: <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768355415884_578.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"> Số ca cấp cứu trung bình (kỳ vọng $E(X)$) vào tối thứ Bảy tại bệnh viện này là bao nhiêu?",
+            "q": "Giả sử số ca cấp cứu ở một bệnh viện vào tối thứ Bảy là một biến ngẫu nhiên rời rạc $X$ có bảng phân bố xác suất như sau: <style>\n  .center-img {\n    display: block;\n    margin-left: auto;\n    margin-right: auto;\n    width: 60%; /* Tùy chỉnh kích thước ảnh */\n  }\n</style>\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768355415884_578.png\" class=\"center-img\">\n</style> Số ca cấp cứu trung bình (kỳ vọng $E(X)$) vào tối thứ Bảy tại bệnh viện này là bao nhiêu?",
             "options": [
                 "$2{,}00$",
                 "$1{,}50$",
@@ -148,7 +150,8 @@ window.EXAM_DATA = {
             "ans": 2,
             "explain": "Kỳ vọng của biến ngẫu nhiên $X$ được tính theo công thức: $E(X) = \\sum x_i p_i$.<br> Ta có: \\begin{eqnarray*} E(X) &=& 0 \\cdot 0{,}12 + 1 \\cdot 0{,}28 + 2 \\cdot 0{,}31 + 3 \\cdot 0{,}19 + 4 \\cdot 0{,}08 + 5 \\cdot 0{,}02 <br> &=& 0 + 0{,}28 + 0{,}62 + 0{,}57 + 0{,}32 + 0{,}10 <br> &=& 1{,}89. \\end{eqnarray*} Vậy số ca cấp cứu trung bình là $1{,}89$ ca.",
             "id": "",
-            "point": 0.2
+            "point": 0.2,
+            "img": ""
         },
         {
             "type": "mcq",
@@ -194,7 +197,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "mcq",
-            "q": "Số cuộc điện thoại gọi đến một trung tâm cứu hộ trong khoảng thời gian từ $12$ giờ đến $13$ giờ là một biến ngẫu nhiên rời rạc $X$ có bảng phân bố xác suất như sau: <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768355476329_858.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"> Xác suất để xảy ra ít nhất $2$ cuộc gọi đến trung tâm cứu hộ đó là",
+            "q": "Số cuộc điện thoại gọi đến một trung tâm cứu hộ trong khoảng thời gian từ $12$ giờ đến $13$ giờ là một biến ngẫu nhiên rời rạc $X$ có bảng phân bố xác suất như sau: <style>\n  .center-img {\n    display: block;\n    margin-left: auto;\n    margin-right: auto;\n    width: 60%; /* Tùy chỉnh kích thước ảnh */\n  }\n</style>\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768355476329_858.png\" class=\"center-img\">\n</style> Xác suất để xảy ra ít nhất $2$ cuộc gọi đến trung tâm cứu hộ đó là",
             "options": [
                 "$0{,}45$",
                 "$0{,}55$",
@@ -204,11 +207,12 @@ window.EXAM_DATA = {
             "ans": 1,
             "explain": "Yêu cầu bài toán là tính $\\mathrm{P}(X \\ge 2)$.<br> Ta có $\\mathrm{P}(X \\ge 2) = \\mathrm{P}(X=2) + \\mathrm{P}(X=3) + \\mathrm{P}(X=4) + \\mathrm{P}(X=5)$.<br> $\\mathrm{P}(X \\ge 2) = 0{,}15 + 0{,}15 + 0{,}13 + 0{,}12 = 0{,}55$.",
             "id": "",
-            "point": 0.2
+            "point": 0.2,
+            "img": ""
         },
         {
             "type": "mcq",
-            "q": "Số cuộc điện thoại gọi đến một trung tâm cứu hộ trong khoảng thời gian từ $12$ giờ đến $13$ giờ là một biến ngẫu nhiên rời rạc $X$ có bảng phân bố xác suất như sau: <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768355476329_858.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"> Kỳ vọng $E(X)$ của biến ngẫu nhiên $X$ là",
+            "q": "Số cuộc điện thoại gọi đến một trung tâm cứu hộ trong khoảng thời gian từ $12$ giờ đến $13$ giờ là một biến ngẫu nhiên rời rạc $X$ có bảng phân bố xác suất như sau: <style>\n  .center-img {\n    display: block;\n    margin-left: auto;\n    margin-right: auto;\n    width: 60%; /* Tùy chỉnh kích thước ảnh */\n  }\n</style>\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768355476329_858.png\" class=\"center-img\">\n</style> Kỳ vọng $E(X)$ của biến ngẫu nhiên $X$ là",
             "options": [
                 "$2{,}5$",
                 "$2{,}0$",
@@ -218,11 +222,12 @@ window.EXAM_DATA = {
             "ans": 2,
             "explain": "Kỳ vọng của biến ngẫu nhiên $X$ được tính theo công thức $E(X) = \\sum x_i p_i$.<br> $E(X) = 0 \\cdot 0{,}25 + 1 \\cdot 0{,}2 + 2 \\cdot 0{,}15 + 3 \\cdot 0{,}15 + 4 \\cdot 0{,}13 + 5 \\cdot 0{,}12$.<br> $E(X) = 0 + 0{,}2 + 0{,}3 + 0{,}45 + 0{,}52 + 0{,}6 = 2{,}07$.",
             "id": "",
-            "point": 0.2
+            "point": 0.2,
+            "img": ""
         },
         {
             "type": "mcq",
-            "q": "Số cuộc điện thoại gọi đến một trung tâm cứu hộ trong khoảng thời gian từ $12$ giờ đến $13$ giờ là một biến ngẫu nhiên rời rạc $X$ có bảng phân bố xác suất như sau: <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768355476329_858.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"> Phương sai $V(X)$ của biến ngẫu nhiên $X$ gần nhất với giá trị nào sau đây?",
+            "q": "Số cuộc điện thoại gọi đến một trung tâm cứu hộ trong khoảng thời gian từ $12$ giờ đến $13$ giờ là một biến ngẫu nhiên rời rạc $X$ có bảng phân bố xác suất như sau: <style>\n  .center-img {\n    display: block;\n    margin-left: auto;\n    margin-right: auto;\n    width: 60%; /* Tùy chỉnh kích thước ảnh */\n  }\n</style>\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768355476329_858.png\" class=\"center-img\">\n</style> Phương sai $V(X)$ của biến ngẫu nhiên $X$ gần nhất với giá trị nào sau đây?",
             "options": [
                 "$3{,}95$",
                 "$2{,}95$",
@@ -232,7 +237,8 @@ window.EXAM_DATA = {
             "ans": 1,
             "explain": "Ta có $E(X) = 2{,}07$.<br> Tính $E(X^2) = \\sum x_i^2 p_i = 0^2 \\cdot 0{,}25 + 1^2 \\cdot 0{,}2 + 2^2 \\cdot 0{,}15 + 3^2 \\cdot 0{,}15 + 4^2 \\cdot 0{,}13 + 5^2 \\cdot 0{,}12$.<br> $E(X^2) = 0 + 0{,}2 + 0{,}6 + 1{,}35 + 2{,}08 + 3 = 7{,}23$.<br> Phương sai $V(X) = E(X^2) - [E(X)]^2 = 7{,}23 - (2{,}07)^2 = 7{,}23 - 4{,}2849 = 2{,}9451$.<br> Vậy $V(X) \\approx 2{,}95$.",
             "id": "",
-            "point": 0.2
+            "point": 0.2,
+            "img": ""
         },
         {
             "type": "mcq",
@@ -628,7 +634,7 @@ window.EXAM_DATA = {
         },
         {
             "type": "mcq",
-            "q": "Chọn ngẫu nhiên một ngày thứ Bảy trong các ngày thứ Bảy của năm $2022$ mà một cửa hàng kinh doanh ô tô có mở cửa bán hàng. Gọi $X$ là số ô tô mà cửa hàng bán ra trong ngày thứ Bảy đó. Bảng phân bố xác suất của $X$ như sau: <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768355588599_428.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"> Tính xác suất để trong ngày thứ Bảy đó cửa hàng bán được đúng $2$ chiếc ô tô.",
+            "q": "Chọn ngẫu nhiên một ngày thứ Bảy trong các ngày thứ Bảy của năm $2022$ mà một cửa hàng kinh doanh ô tô có mở cửa bán hàng. Gọi $X$ là số ô tô mà cửa hàng bán ra trong ngày thứ Bảy đó. Bảng phân bố xác suất của $X$ như sau: <style>\n  .center-img {\n    display: block;\n    margin-left: auto;\n    margin-right: auto;\n    width: 60%; /* Tùy chỉnh kích thước ảnh */\n  }\n</style>\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768355588599_428.png\" class=\"center-img\">\n</style> Tính xác suất để trong ngày thứ Bảy đó cửa hàng bán được đúng $2$ chiếc ô tô.",
             "options": [
                 "$0{,}18$",
                 "$0{,}24$",
@@ -638,11 +644,12 @@ window.EXAM_DATA = {
             "ans": 2,
             "explain": "Dựa vào bảng phân bố xác suất, ta thấy xác suất để biến ngẫu nhiên $X$ nhận giá trị bằng $2$ là $0{,}39$.<br> Vậy xác suất để cửa hàng bán được đúng $2$ chiếc ô tô là $\\mathrm{P}(X=2) = 0{,}39$.",
             "id": "",
-            "point": 0.2
+            "point": 0.2,
+            "img": ""
         },
         {
             "type": "mcq",
-            "q": "Chọn ngẫu nhiên một ngày thứ Bảy trong các ngày thứ Bảy của năm $2022$ mà một cửa hàng kinh doanh ô tô có mở cửa bán hàng. Gọi $X$ là số ô tô mà cửa hàng bán ra. Bảng phân bố xác suất của $X$ như sau: <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768355588599_428.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"> Tính xác suất để cửa hàng bán được <b>không quá</b> $4$ chiếc ô tô.",
+            "q": "Chọn ngẫu nhiên một ngày thứ Bảy trong các ngày thứ Bảy của năm $2022$ mà một cửa hàng kinh doanh ô tô có mở cửa bán hàng. Gọi $X$ là số ô tô mà cửa hàng bán ra. Bảng phân bố xác suất của $X$ như sau: <style>\n  .center-img {\n    display: block;\n    margin-left: auto;\n    margin-right: auto;\n    width: 60%; /* Tùy chỉnh kích thước ảnh */\n  }\n</style>\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768355588599_428.png\" class=\"center-img\">\n</style> Tính xác suất để cửa hàng bán được <b>không quá</b> $4$ chiếc ô tô.",
             "options": [
                 "$0{,}14$",
                 "$0{,}95$",
@@ -652,11 +659,12 @@ window.EXAM_DATA = {
             "ans": 1,
             "explain": "Biến cố \"bán được không quá $4$ chiếc ô tô\" tương ứng với $X \\le 4$, tức là $X \\in \\{1; 2; 3; 4\\}$.<br> Ta có: $$\\mathrm{P}(X \\le 4) = \\mathrm{P}(X=1) + \\mathrm{P}(X=2) + \\mathrm{P}(X=3) + \\mathrm{P}(X=4)$$ $$= 0{,}18 + 0{,}39 + 0{,}24 + 0{,}14 = 0{,}95.$$ \\textit{Cách khác:} Sử dụng biến cố đối \"bán được nhiều hơn $4$ chiếc\" ($X \\in \\{5; 6\\}$). $$\\mathrm{P}(X \\le 4) = 1 - [\\mathrm{P}(X=5) + \\mathrm{P}(X=6)] = 1 - (0{,}04 + 0{,}01) = 1 - 0{,}05 = 0{,}95.$$",
             "id": "",
-            "point": 0.2
+            "point": 0.2,
+            "img": ""
         },
         {
             "type": "mcq",
-            "q": "Chọn ngẫu nhiên một ngày thứ Bảy trong các ngày thứ Bảy của năm $2022$ mà một cửa hàng kinh doanh ô tô có mở cửa bán hàng. Gọi $X$ là số ô tô mà cửa hàng bán ra. Bảng phân bố xác suất của $X$ là: <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768355588599_428.png\" style=\"max-width:100%;margin:10px 0;border-radius:5px\"> Tính số ô tô trung bình bán được trong một ngày thứ Bảy (kỳ vọng của $X$).",
+            "q": "Chọn ngẫu nhiên một ngày thứ Bảy trong các ngày thứ Bảy của năm $2022$ mà một cửa hàng kinh doanh ô tô có mở cửa bán hàng. Gọi $X$ là số ô tô mà cửa hàng bán ra. Bảng phân bố xác suất của $X$ là: <style>\n  .center-img {\n    display: block;\n    margin-left: auto;\n    margin-right: auto;\n    width: 60%; /* Tùy chỉnh kích thước ảnh */\n  }\n</style>\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768355588599_428.png\" class=\"center-img\">\n</style> Tính số ô tô trung bình bán được trong một ngày thứ Bảy (kỳ vọng của $X$).",
             "options": [
                 "$2{,}00$",
                 "$3{,}50$",
@@ -666,7 +674,8 @@ window.EXAM_DATA = {
             "ans": 3,
             "explain": "Số ô tô trung bình bán được chính là kỳ vọng $\\mathrm{E}(X)$. \\begin{eqnarray*} \\mathrm{E}(X) &=& 1 \\cdot 0{,}18 + 2 \\cdot 0{,}39 + 3 \\cdot 0{,}24 + 4 \\cdot 0{,}14 + 5 \\cdot 0{,}04 + 6 \\cdot 0{,}01<br> &=& 0{,}18 + 0{,}78 + 0{,}72 + 0{,}56 + 0{,}20 + 0{,}06<br> &=& 2{,}50. \\end{eqnarray*} Vậy trung bình mỗi ngày thứ Bảy cửa hàng bán được $2{,}5$ chiếc ô tô.",
             "id": "",
-            "point": 0.2
+            "point": 0.2,
+            "img": ""
         },
         {
             "type": "mcq",
