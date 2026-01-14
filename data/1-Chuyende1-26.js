@@ -1,5 +1,5 @@
 window.EXAM_DATA = {
-    "title": "Ôn tập chuyên đề 1, Toán 11, Năm 2026",
+    "title": "Ôn tập chuyên đề 1, Toán 11, Lớp Toán 11 VIP, Năm 2026",
     "subject": "Toan",
     "grade": "11",
     "time": 60,
@@ -174,9 +174,8 @@ window.EXAM_DATA = {
                 "Điểm $F$"
             ],
             "ans": 2,
-            "explain": "<style>\n  .center-img {\n    display: block;\n    margin-left: auto;\n    margin-right: auto;\n    width: 50%; /* Tùy chỉnh kích thước ảnh */\n  }\n</style>\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768376252844_794.png\" class=\"center-img\">\nVì $\\vec{OE}=\\vec{BO}$ nên điểm $O$ biến thành điểm $E$.",
+            "explain": "<style>\n  .center-img {\n    display: block;\n    margin-left: auto;\n    margin-right: auto;\n    width: 50%; /* Tùy chỉnh kích thước ảnh */\n  }\n</style>\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768376252844_794.png\" class=\"center-img\">\nVì $\\vec{OE}=\\vec{BO}$ nên điểm $O$ biến thành điểm $E$.<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768376252844_794.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\">",
             "id": "1H1B2-2",
-            "solImg": "",
             "point": 0.222
         },
         {
@@ -189,9 +188,8 @@ window.EXAM_DATA = {
                 "$\\overrightarrow{MN}$"
             ],
             "ans": 0,
-            "explain": "<style>\n  .center-img {\n    display: block;\n    margin-left: auto;\n    margin-right: auto;\n    width: 30%; /* Tùy chỉnh kích thước ảnh */\n  }\n</style>\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768376310753_280.png\" class=\"center-img\">Ta có $\\overrightarrow{AM}=\\overrightarrow{MD}=\\overrightarrow{IM}$; $\\overrightarrow{AI}=\\overrightarrow{MN}$. Do đó phép tịnh tiến véc-tơ $\\overrightarrow{AM}$ biến $\\triangle AMI$ thành $\\triangle MDN$. ",
+            "explain": "<style>\n  .center-img {\n    display: block;\n    margin-left: auto;\n    margin-right: auto;\n    width: 30%; /* Tùy chỉnh kích thước ảnh */\n  }\n</style>\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768376310753_280.png\" class=\"center-img\">Ta có $\\overrightarrow{AM}=\\overrightarrow{MD}=\\overrightarrow{IM}$; $\\overrightarrow{AI}=\\overrightarrow{MN}$. Do đó phép tịnh tiến véc-tơ $\\overrightarrow{AM}$ biến $\\triangle AMI$ thành $\\triangle MDN$.<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768376310753_280.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\">",
             "id": "HoaLeXuan-11EX-HKI-1819",
-            "solImg": "",
             "point": 0.222
         },
         {
@@ -316,9 +314,8 @@ window.EXAM_DATA = {
                 "$\\sqrt{10}$"
             ],
             "ans": 0,
-            "explain": "<style>\n  .center-img {\n    display: block;\n    margin-left: auto;\n    margin-right: auto;\n    width: 50%; /* Tùy chỉnh kích thước ảnh */\n  }\n</style>\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768376421561_140.png\" class=\"center-img\">\nThay tọa độ điểm $P$ và $Q$ vào vế trái phương trình đường thẳng $\\Delta$. Ta có $2\\cdot 3+2-3=5>0$ và $2\\cdot 4+(-1)-3=4>0$. Do đó $P$ và $Q$ nằm về cùng một phía so với đường thẳng $\\Delta$. Gọi $P'$ là điểm đối xứng của $P$ qua $\\Delta$. Khi đó $MP=MP~\\forall M\\in\\Delta$. Do đó giá trị nhỏ nhất của $MP+MQ=P'M+MQ$ là $P'Q$, đạt được khi $M$ nằm giữa $P'$ và $Q$.<br> Phương trình đường thẳng đi qua $P$ và vuông góc với $\\Delta$ [IMG] là $x-3-2(y-2)=0$. Gọi $H$ là hình chiếu của $P$ lên $\\Delta$. Khi đó tọa độ điểm $H$ là nghiệm của hệ phương trình $\\left\\{\\begin{aligned} 2x+y-3=0\\\\ x-3-2(y-2)=0\\end{aligned}\\right.$. Giải hệ này ta được $x_H=1$, $y_H=1$. Vì $H$ là trung điểm của $PP'$ nên $x_{P'}=2x_H-x_P=2\\cdot 1-3=-1$ và $y_{P'}=2y_H-y_P=2\\cdot 1-2=0$. Ta có $P'(-1;0)$, suy ra $P'Q=\\sqrt{26}$.",
+            "explain": "<style>\n  .center-img {\n    display: block;\n    margin-left: auto;\n    margin-right: auto;\n    width: 50%; /* Tùy chỉnh kích thước ảnh */\n  }\n</style>\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768376421561_140.png\" class=\"center-img\">\nThay tọa độ điểm $P$ và $Q$ vào vế trái phương trình đường thẳng $\\Delta$. Ta có $2\\cdot 3+2-3=5>0$ và $2\\cdot 4+(-1)-3=4>0$. Do đó $P$ và $Q$ nằm về cùng một phía so với đường thẳng $\\Delta$. Gọi $P'$ là điểm đối xứng của $P$ qua $\\Delta$. Khi đó $MP=MP~\\forall M\\in\\Delta$. Do đó giá trị nhỏ nhất của $MP+MQ=P'M+MQ$ là $P'Q$, đạt được khi $M$ nằm giữa $P'$ và $Q$.<br> Phương trình đường thẳng đi qua $P$ và vuông góc với $\\Delta$ <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768376421561_140.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\"> là $x-3-2(y-2)=0$. Gọi $H$ là hình chiếu của $P$ lên $\\Delta$. Khi đó tọa độ điểm $H$ là nghiệm của hệ phương trình $\\left\\{\\begin{aligned} 2x+y-3=0\\\\ x-3-2(y-2)=0\\end{aligned}\\right.$. Giải hệ này ta được $x_H=1$, $y_H=1$. Vì $H$ là trung điểm của $PP'$ nên $x_{P'}=2x_H-x_P=2\\cdot 1-3=-1$ và $y_{P'}=2y_H-y_P=2\\cdot 1-2=0$. Ta có $P'(-1;0)$, suy ra $P'Q=\\sqrt{26}$.",
             "id": "1H1K3-4",
-            "solImg": "",
             "point": 0.222
         },
         {
@@ -387,9 +384,8 @@ window.EXAM_DATA = {
                 "$\\mathrm{Q}_{\\left(I,144^{\\circ}\\right)}(BC)=EA$"
             ],
             "ans": 3,
-            "explain": "<style>\n  .center-img {\n    display: block;\n    margin-left: auto;\n    margin-right: auto;\n    width: 50%; /* Tùy chỉnh kích thước ảnh */\n  }\n</style>\n\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768376518652_409.png\" class=\"center-img\">\n$\\mathrm{Q}_{\\left(I,144^{\\circ}\\right)}(BC)=EA$ sai vì $\\mathrm{Q}_{\\left(I,144^{\\circ}\\right)}(BC)=DE$. [IMG]",
+            "explain": "<style>\n  .center-img {\n    display: block;\n    margin-left: auto;\n    margin-right: auto;\n    width: 50%; /* Tùy chỉnh kích thước ảnh */\n  }\n</style>\n\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768376518652_409.png\" class=\"center-img\">\n$\\mathrm{Q}_{\\left(I,144^{\\circ}\\right)}(BC)=EA$ sai vì $\\mathrm{Q}_{\\left(I,144^{\\circ}\\right)}(BC)=DE$. <img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768376518652_409.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\">",
             "id": "1H1B5-2",
-            "solImg": "",
             "point": 0.222
         },
         {
@@ -416,9 +412,8 @@ window.EXAM_DATA = {
                 "$3$"
             ],
             "ans": 0,
-            "explain": "<style>\n  .center-img {\n    display: block;\n    margin-left: auto;\n    margin-right: auto;\n    width: 50%; /* Tùy chỉnh kích thước ảnh */\n  }\n</style>\n\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768376557306_547.png\" class=\"center-img\">Phép quay biến hình chữ nhật thành chính nó là $\\mathrm{Q}_{\\left(O,\\alpha\\right)}$ với <br><b>-</b> $\\alpha=0$. <br><b>-</b> $\\alpha=\\pi$. ",
+            "explain": "<style>\n  .center-img {\n    display: block;\n    margin-left: auto;\n    margin-right: auto;\n    width: 50%; /* Tùy chỉnh kích thước ảnh */\n  }\n</style>\n\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768376557306_547.png\" class=\"center-img\">Phép quay biến hình chữ nhật thành chính nó là $\\mathrm{Q}_{\\left(O,\\alpha\\right)}$ với <br><b>-</b> $\\alpha=0$. <br><b>-</b> $\\alpha=\\pi$.<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768376557306_547.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\">",
             "id": "1H1B5-2",
-            "solImg": "",
             "point": 0.222
         },
         {
@@ -557,9 +552,8 @@ window.EXAM_DATA = {
                 "Phép vị tự tâm $A$, tỉ số $k=\\dfrac{1}{2}$"
             ],
             "ans": 1,
-            "explain": "<style>\n  .center-img {\n    display: block;\n    margin-left: auto;\n    margin-right: auto;\n    width: 50%; /* Tùy chỉnh kích thước ảnh */\n  }\n</style>\n\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768376691809_801.png\" class=\"center-img\">Ta có $\\vec{GM}=-\\dfrac{1}{2}\\vec{GA}$ nên $\\mathrm{V}_{\\left(G,-\\frac{1}{2}\\right)}(A)=M$.<br> Tương tự ta có $\\mathrm{V}_{\\left(G,-\\frac{1}{2}\\right)}(B)=N, \\mathrm{V}_{\\left(G,-\\frac{1}{2}\\right)}(C)=P$.<br> Phép vị tự tâm $G$, tỉ số $k=-\\dfrac{1}{2}$ thỏa mãn yêu cầu. ",
+            "explain": "<style>\n  .center-img {\n    display: block;\n    margin-left: auto;\n    margin-right: auto;\n    width: 50%; /* Tùy chỉnh kích thước ảnh */\n  }\n</style>\n\n<img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768376691809_801.png\" class=\"center-img\">Ta có $\\vec{GM}=-\\dfrac{1}{2}\\vec{GA}$ nên $\\mathrm{V}_{\\left(G,-\\frac{1}{2}\\right)}(A)=M$.<br> Tương tự ta có $\\mathrm{V}_{\\left(G,-\\frac{1}{2}\\right)}(B)=N, \\mathrm{V}_{\\left(G,-\\frac{1}{2}\\right)}(C)=P$.<br> Phép vị tự tâm $G$, tỉ số $k=-\\dfrac{1}{2}$ thỏa mãn yêu cầu.<br><img src=\"https://raw.githubusercontent.com/Nguyenbm1979/Trac-nghiem-nguyen-ham/main/images/img_1768376691809_801.png\" style=\"max-width:100%;margin-top:10px;border-radius:5px\">",
             "id": "1H1B7-2",
-            "solImg": "",
             "point": 0.222
         },
         {
