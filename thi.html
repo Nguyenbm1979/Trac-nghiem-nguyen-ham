@@ -326,32 +326,57 @@ if (d.end && now > new Date(d.end)) {
 
     function startLogic(name){
         startTime = new Date().toLocaleString('vi-VN');
-        let aq = JSON.parse(JSON.stringify(rawQ));
-        let doShuffle = (window.EXAM_DATA.shuffle !== false);
+        // --- ĐOẠN CODE MỚI: TRỘN ĐỀ THÔNG MINH (GHIM + NGẪU NHIÊN) ---
+    let aq = JSON.parse(JSON.stringify(rawQ));
+    let doShuffle = (window.EXAM_DATA.shuffle !== false);
+    let takeCount = parseInt(window.EXAM_DATA.take) || 0; // Số câu cần lấy
 
-        if(doShuffle) {
-            let seed = 0;
-            for(let i=0; i<name.length; i++) seed += name.charCodeAt(i);
-            const random = () => {
-                var x = Math.sin(seed++) * 10000;
-                return x - Math.floor(x);
-            };
+    // Tạo bộ sinh số ngẫu nhiên theo tên
+    let seed = 0;
+    for(let i=0; i<name.length; i++) seed += name.charCodeAt(i);
+    const random = () => { var x = Math.sin(seed++) * 10000; return x - Math.floor(x); };
 
-            aq.sort(() => random() - 0.5);
-            
-            aq.forEach(q => { 
-                if(q.type === 'mcq') {
-                    q.idx = q.options.map((_,i)=>i).sort(() => random() - 0.5);
-                } else {
-                    q.idx = q.options ? q.options.map((_,i)=>i) : [];
-                }
-            });
+    if(doShuffle) {
+        // BƯỚC 1: Tách nhóm Ghim và Không Ghim
+        let fixedQs = aq.filter(q => q.mustTake === true); 
+        let poolQs  = aq.filter(q => !q.mustTake);         
+
+        // BƯỚC 2: Tính toán và rút câu hỏi
+        let finalSet = [];
+        if (takeCount > 0 && takeCount < aq.length) {
+            let needMore = takeCount - fixedQs.length;
+            if (needMore < 0) needMore = 0;
+
+            poolQs.sort(() => random() - 0.5); // Trộn ngân hàng
+            let pickedFromPool = poolQs.slice(0, needMore); // Rút thêm
+            finalSet = fixedQs.concat(pickedFromPool); // Gộp lại
         } else {
-            aq.forEach(q => { 
-                if(q.type === 'mcq') q.idx = q.options.map((_,i)=>i); 
-            });
+            finalSet = aq; // Lấy hết nếu không giới hạn
         }
-        curQ = aq;
+
+        // BƯỚC 3: Trộn đều lần cuối
+        finalSet.sort(() => random() - 0.5);
+        aq = finalSet;
+
+        // BƯỚC 4: Trộn đáp án trắc nghiệm
+        aq.forEach(q => { 
+            if(q.type === 'mcq') {
+                q.idx = q.options.map((_,i)=>i).sort(() => random() - 0.5);
+            } else {
+                q.idx = q.options ? q.options.map((_,i)=>i) : [];
+            }
+        });
+
+    } else {
+        // TRƯỜNG HỢP KHÔNG ĐẢO (Lấy theo thứ tự từ trên xuống)
+        if (takeCount > 0 && takeCount < aq.length) {
+            aq = aq.slice(0, takeCount);
+        }
+        aq.forEach(q => { if(q.type === 'mcq') q.idx = q.options.map((_,i)=>i); });
+    }
+
+    curQ = aq; // Gán danh sách câu hỏi cuối cùng
+    // -----------------------------------------------------------
 
         renderUI();
         
