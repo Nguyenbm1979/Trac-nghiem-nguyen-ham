@@ -285,7 +285,11 @@ if (d.end && now > new Date(d.end)) {
 // -----------------------------------------------
         isEnc = d.encrypted===true;
         document.getElementById('exam-title').innerText = d.title||"BÀI KIỂM TRA";
-        document.getElementById('exam-info').innerText = `${rawQ.length} Câu | ${d.time} Phút`;
+       // --- SỬA LẠI ĐOẠN HIỂN THỊ SỐ CÂU ---
+        // Nếu có thiết lập lấy ít hơn tổng số, thì hiện số lượng lấy
+        let realCount = (d.take && d.take > 0 && d.take < rawQ.length) ? d.take : rawQ.length;
+        document.getElementById('exam-info').innerText = `${realCount} Câu | ${d.time} Phút`;
+        // ------------------------------------
         if(d.password) document.getElementById('pass-area').style.display='block';
         document.getElementById('loading').style.display='none'; 
         document.getElementById('welcome-screen').style.display='flex';
