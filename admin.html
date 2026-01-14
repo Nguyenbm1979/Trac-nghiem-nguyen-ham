@@ -8,6 +8,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+    <script src="https://tikzjax.com/v1/tikzjax.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
@@ -399,6 +401,22 @@
         let totalScore = 0;
         EXAM_QUESTIONS.forEach((q,i)=>{
             totalScore += parseFloat(q.point || 0);
+            
+            // --- 1. ĐOẠN CODE MỚI: XỬ LÝ HIỂN THỊ HÌNH ẢNH & TIKZ NGAY TRONG ADMIN ---
+            let previewHtml = q.q;
+            
+            // Xử lý TikZ
+            previewHtml = previewHtml.replace(/\[TIKZ\]([\s\S]*?)\[\/TIKZ\]/g, function(match, tikzCode){
+                return `<div style="text-align:center;margin:5px 0"><script type="text/tikz">${tikzCode}</script></div>`;
+            });
+            
+            // Xử lý thẻ [IMG] (chuyển thành rỗng để không hiện chữ [IMG])
+            previewHtml = previewHtml.replace('[IMG]', '');
+            
+            // Nếu có ảnh upload thì hiện thêm ảnh
+            if(q.img) previewHtml += `<div style="text-align:center"><img src="${q.img}" style="max-height:100px; border:1px solid #ccc; margin:5px 0"></div>`;
+            // -----------------------------------------------------------------------
+
             const mkInput = (val, fn) => `<input value="${val}" onchange="${fn}" style="flex:1">`;
             let ansUI = "";
             
@@ -434,6 +452,10 @@
                     </div>
                 </div>
                 <div style="margin-bottom:5px"><b>Nội dung câu hỏi:</b></div>
+                
+                <div style="background:#f9f9f9; padding:10px; border:1px dashed #ddd; margin-bottom:5px; border-radius:4px">
+                    ${previewHtml}
+                </div>
                 <textarea class="smart-textarea" oninput="EXAM_QUESTIONS[${i}].q=this.value; renderPreview()">${q.q}</textarea>
                 <div class="upload-wrapper" style="background:#f1f8e9; padding:5px; border-radius:4px">
                     <i class="fas fa-image" style="color:#2e7d32"></i>
