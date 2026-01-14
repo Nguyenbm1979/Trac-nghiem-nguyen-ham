@@ -1,7 +1,7 @@
 window.EXAM_LIST = [
     {
         "id": "2-chuyende1-26",
-        "title": "Đề kiểm tra chương 1, Chuyên đề 1, Toán 12, năm 2026",
+        "title": "Đề kiểm tra chương 1 lớp 12A9, Chuyên đề 1, Toán 12, năm 2026",
         "subject": "Toan",
         "grade": "12",
         "time": 30,
