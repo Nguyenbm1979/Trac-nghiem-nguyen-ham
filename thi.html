@@ -446,93 +446,109 @@ if (d.end && now > new Date(d.end)) {
     }
 
     function submitQuiz(){
-        // --- 1. KIỂM TRA % LÀM BÀI (Code cũ của thầy) ---
+        // 1. KIỂM TRA % LÀM BÀI (Giữ nguyên logic của thầy)
         let minPercent = window.EXAM_DATA.minTime || 0; 
         let count = 0;
         Object.keys(userAns).forEach(k => { if(userAns[k]) count++; });
-        
         let total = curQ.length;
         let currentPercent = (count / total) * 100;
-
         if(currentPercent < minPercent){
             alert(`⚠️ CẢNH BÁO:\nThầy yêu cầu làm tối thiểu ${minPercent}% mới được nộp bài.\n\nHiện tại bạn mới làm được: ${currentPercent.toFixed(1)}% (${count}/${total} câu).\nVui lòng làm tiếp!`);
             return; 
         }
-        // ------------------------------------------------
 
         if(!confirm('Bạn có chắc chắn muốn nộp bài? Thời gian còn lại sẽ bị hủy.')) return;
         
-        // Dọn dẹp bộ nhớ và dừng nhạc/giờ
+        // Dọn dẹp hệ thống (Giữ nguyên)
         if(window.storageKey) localStorage.removeItem(window.storageKey);
         clearInterval(timerInt);
         document.removeEventListener("visibilitychange", handleVisibilityChange);
         document.getElementById('btn-submit').style.display='none';
-        
         const audio = document.getElementById('bg-music');
         if(!audio.paused) audio.pause();
         document.getElementById('music-control').style.display='none';
         
-        // --- 2. TÍNH ĐIỂM (Code cũ của thầy) ---
+        // --- 2. TÍNH ĐIỂM & XỬ LÝ HIỂN THỊ (LOGIC BẢO MẬT) ---
         let score=0, max=0;
+        
+        // Lấy quyền xem giải từ dữ liệu Admin
+        // Nếu admin không tích -> biến này sẽ là FALSE -> Hệ thống sẽ chặn hết
+        let allowView = (window.EXAM_DATA.viewDetail === true); 
+
         curQ.forEach((q,i)=>{
-            const bl=document.getElementById(`q-${i}`); document.getElementById(`sol-${i}`).style.display='block';
+            const bl=document.getElementById(`q-${i}`); 
+            
+            // CHỈ HIỆN LỜI GIẢI NẾU CHO PHÉP (Nếu cấm thì ẩn luôn)
+            if(allowView) {
+                document.getElementById(`sol-${i}`).style.display='block';
+            }
+
             let qPoint = (q.point && parseFloat(q.point) > 0) ? parseFloat(q.point) : scoresConfig[q.type];
+            
+            // --- TÍNH ĐIỂM NGẦM (Vẫn tính điểm nhưng chỉ hiện màu nếu được phép) ---
             if(q.type==='mcq' || q.type==='short'){
                 max += qPoint;
-                if(chk(userAns[i], q.ans)) { score += qPoint; bg(bl, true, 'Đúng'); } else bg(bl, false, `Sai. ĐS: ${q.ans}`);
+                if(chk(userAns[i], q.ans)) { 
+                    score += qPoint; 
+                    if(allowView) bg(bl, true, 'Đúng'); // Chỉ tô màu Xanh nếu được phép
+                } else {
+                    if(allowView) bg(bl, false, `Sai. ĐS: ${q.ans}`); // Chỉ tô màu Đỏ & hiện ĐS nếu được phép
+                }
             }
             else if(q.type==='tf'){
                 max += qPoint; let c=0;
                 q.items.forEach((it, idx) => { if(chk(userAns[i]?userAns[i][idx]:null, it.ans)) c++; });
                 let earned = 0;
                 if(c==1) earned = qPoint * 0.1; else if(c==2) earned = qPoint * 0.25; else if(c==3) earned = qPoint * 0.5; else if(c==4) earned = qPoint * 1.0;
-                score += earned; bg(bl, earned>0, `Đúng ${c}/${q.items.length} ý (+${earned}đ)`);
+                score += earned; 
+                
+                if(allowView) bg(bl, earned>0, `Đúng ${c}/${q.items.length} ý (+${earned}đ)`);
             }
             else if(q.type==='match'){
                 max += qPoint; let c=0; let uObj = userAns[i] || {};
                 q.items.forEach((_, idx) => { if(chk(uObj[idx], q.ans[idx])) c++; });
-                let s = (c/q.items.length) * qPoint; score += s; bg(bl, s>0, `Đúng ${c}/${q.items.length} cặp (+${s.toFixed(2)}đ)`);
+                let s = (c/q.items.length) * qPoint; score += s; 
+                
+                if(allowView) bg(bl, s>0, `Đúng ${c}/${q.items.length} cặp (+${s.toFixed(2)}đ)`);
             }
         });
+        
         let finalS = Math.round(score*100)/100;
+        sendToGoogleSheet(finalS, max); // Vẫn gửi điểm về Sheet bình thường
         
-        // Gửi điểm sang Google Sheet
-        sendToGoogleSheet(finalS, max);
-        
-        // --- 3. HIỂN THỊ KẾT QUẢ (CODE MỚI ĐỂ ẨN NÚT XEM GIẢI) ---
-        
-        // Tạo nút Xem giải (chỉ hiện nếu được phép)
+        // --- 3. HIỂN THỊ KẾT QUẢ CUỐI CÙNG ---
+        let msg = finalS >= max/2 ? "Chúc mừng bạn đã hoàn thành!" : "Cố gắng hơn lần sau nhé!";
+        let color = finalS >= max/2 ? "#2e7d32" : "#d32f2f";
+        let icon = finalS >= max/2 ? "🎉" : "💪";
+
+        // Tạo nút bấm tùy theo quyền hạn
         let viewBtn = '';
-        if (window.EXAM_DATA.viewDetail !== false) {
+        if (allowView) {
             viewBtn = `<button class="btn btn-green" onclick="reviewExam()">Xem chi tiết & Lời giải</button>`;
         } else {
             viewBtn = `<p style="color:#d32f2f; font-weight:bold; margin-top:10px; background:#ffebee; padding:10px; border-radius:5px">⛔ Đề thi này không cho xem lời giải chi tiết.</p>`;
         }
 
-        let msg = finalS >= max/2 ? "Chúc mừng bạn đã hoàn thành!" : "Cố gắng hơn lần sau nhé!";
-        let color = finalS >= max/2 ? "#2e7d32" : "#d32f2f";
-        let icon = finalS >= max/2 ? "🎉" : "💪";
-
-        // Thay thế toàn bộ màn hình bằng bảng điểm
-        let resultHtml = `
-            <div style="text-align:center;padding:50px 20px; background:white; min-height:100vh">
-                <div style="font-size:50px;margin-bottom:20px">${icon}</div>
-                <h2>${msg}</h2>
-                <p>Bạn đã hoàn thành bài thi với số điểm:</p>
-                <h1 style="font-size:3em;color:${color}">${finalS} / ${max}</h1>
-                
-                <div style="margin-top:30px;display:flex;justify-content:center;gap:15px;flex-wrap:wrap;flex-direction:column;align-items:center">
-                    <div>
-                        <button class="btn btn-blue" onclick="location.reload()">Làm lại đề này</button>
+        // Tạo màn hình kết quả (Overlay)
+        let overlayHtml = `
+            <div id="result-overlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:9999; overflow-y:auto; display:flex; flex-direction:column; align-items:center; justify-content:center">
+                <div style="text-align:center; padding:20px; max-width:600px; width:90%">
+                    <div style="font-size:60px; margin-bottom:20px">${icon}</div>
+                    <h2 style="color:#333; margin-bottom:10px">${msg}</h2>
+                    <p style="color:#666; font-size:1.1em">Bạn đã hoàn thành bài thi với số điểm:</p>
+                    <h1 style="font-size:4em; color:${color}; margin:15px 0; font-weight:bold">${finalS} / ${max}</h1>
+                    
+                    <div style="margin-top:40px; display:flex; justify-content:center; gap:15px; flex-wrap:wrap; flex-direction:column">
+                        <button class="btn btn-blue" onclick="location.reload()" style="padding:12px 30px; font-size:1.1em">🔄 Làm lại đề này</button>
+                        <div style="margin-top:15px">
+                            ${viewBtn}
+                        </div>
                     </div>
-                    <div>
-                        ${viewBtn} </div>
                 </div>
             </div>
         `;
-        
-        document.getElementById('main-interface').innerHTML = resultHtml;
-        window.scrollTo({top:0,behavior:'smooth'});
+        document.body.insertAdjacentHTML('beforeend', overlayHtml);
+        window.scrollTo({top:0, behavior:'smooth'});
     }
     
     function bg(el,isT,txt){ el.insertAdjacentHTML('beforeend',`<div class="res-badge ${isT?'res-correct':'res-wrong'}">${txt}</div>`); }
