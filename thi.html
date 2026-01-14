@@ -650,6 +650,29 @@ if (d.end && now > new Date(d.end)) {
             }
         });
     }
+    // --- HÀM MỞ KHÓA ĐỂ XEM LẠI BÀI (Quan trọng) ---
+    function reviewExam() {
+        console.log("Đang mở chế độ xem lại...");
+        
+        // 1. Tìm và xóa lớp phủ kết quả (cái màn hình trắng hiện điểm)
+        let overlay = document.getElementById('result-overlay');
+        if(overlay) {
+            overlay.remove(); 
+        } else {
+            alert("Không tìm thấy lớp phủ kết quả!");
+            return;
+        }
+
+        // 2. Hiện lại thanh điều hướng câu hỏi bên phải (nếu nó bị ẩn)
+        let palette = document.getElementById('palette-area');
+        if(palette) palette.style.display = 'block';
+
+        // 3. Cuộn trang lên đầu để xem từ câu 1
+        window.scrollTo({top:0, behavior:'smooth'});
+        
+        // 4. Thông báo nhỏ
+        alert("✅ Đã mở lời giải chi tiết!\n- Màu xanh: Đúng\n- Màu đỏ: Sai\n(Thầy kéo xuống để xem chi tiết từng câu)");
+    }
 </script>
 </body>
 </html>
