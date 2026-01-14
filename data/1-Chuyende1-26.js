@@ -57,7 +57,7 @@ window.EXAM_DATA = {
             "q": "%Câu 1. Trong mặt phẳng tọa độ $Oxy$, phép tịnh tiến theo véc-tơ $m\\in[a; b)$ biến điểm $A(1;3)$ thành điểm nào trong các điểm sau?",
             "options": [
                 "$(-2;5)$",
-                "$(2;--5)$",
+                "$(2;5)$",
                 "$(1;3)$",
                 "$(-3;2)$"
             ],
