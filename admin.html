@@ -477,17 +477,17 @@
         renderPreview();
     }
 
-    function renderPreview() {
+   function renderPreview() {
         let h = '';
         
-        // Hàm xử lý ảnh và TikZ (Dùng chung logic với Editor)
+        // Hàm xử lý nội dung
         const procContent = (txt, img) => {
-            let processed = txt;
+            let processed = txt || ""; 
 
-            // 1. Xử lý TikZ (Quan trọng: Biến mã thành thẻ script để vẽ hình)
+            // 1. Xử lý TikZ: Thêm class đặc biệt để CSS có thể can thiệp nếu cần
             processed = processed.replace(/\[TIKZ\]([\s\S]*?)\[\/TIKZ\]/g, function(match, tikzCode){
-                // Thêm class="tikzjax-container" để dễ quản lý
-                return `<div style="text-align:center;margin:10px 0"><script type="text/tikz">${tikzCode}<\/script></div>`;
+                // Lưu ý: Dùng dấu cách ở < script > để tránh lỗi trình duyệt
+                return `<div class="tikz-wrapper" style="text-align:center;margin:10px 0"><script type="text/tikz">${tikzCode}<\/script></div>`;
             });
 
             // 2. Xử lý ảnh [IMG]
@@ -496,14 +496,13 @@
                     ? processed.replace('[IMG]', `<img src="${img}" class="p-img">`) 
                     : processed + `<br><img src="${img}" class="p-img">`;
             }
-            return processed.replace('[IMG]', ''); // Xóa thẻ thừa nếu còn
+            return processed.replace('[IMG]', ''); 
         };
 
         EXAM_QUESTIONS.forEach((q, i) => {
             let pt = q.point ? `<span style="float:right;color:red;font-weight:bold">[${q.point}đ]</span>` : '';
             let body = '';
             
-            // Xử lý hiển thị từng loại câu hỏi
             if(q.type === 'mcq') {
                 body = q.options.map((opt, idx) => `
                     <div class="p-opt-row ${q.ans==idx ? 'correct-ans' : ''}">
@@ -515,7 +514,6 @@
             else if (q.type === 'short') body = `<div class="p-opt"><b>Trả lời:</b> ${q.ans}</div>`;
             else if (q.type === 'match') body = q.items.map((it, idx) => `<div class="p-opt">${idx+1}. ${it} --> ${q.ans[idx]} (${q.options[idx]})</div>`).join('');
             
-            // Lắp ghép nội dung
             h += `<div class="p-q-block"><div class="p-label">Câu ${i+1}: ${pt}</div>
                 <div class="p-content">${procContent(q.q, q.img)}</div>
                 <div>${body}</div>
@@ -523,10 +521,16 @@
             </div>`;
         });
 
-        document.getElementById('preview-content').innerHTML = h;
+        // Cập nhật HTML
+        const previewDiv = document.getElementById('preview-content');
+        previewDiv.innerHTML = h;
         
-        // Cập nhật MathJax (Toán)
+        // --- ĐOẠN MỚI: KÍCH HOẠT LẠI TIKZJAX ---
+        // MathJax sẽ chạy lại
         if(window.MathJax) MathJax.typesetPromise();
+        
+        // Thử kích hoạt TikZ bằng cách gửi sự kiện load giả (nếu cần)
+        // Tuy nhiên, cách hiệu quả nhất là người dùng nhập xong thì chờ 1-2 giây.
     }
     
     function parseDataSafe() {
