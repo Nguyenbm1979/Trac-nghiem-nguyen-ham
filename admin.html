@@ -401,20 +401,20 @@
         EXAM_QUESTIONS.forEach((q,i)=>{
             totalScore += parseFloat(q.point || 0);
             
-            // --- 1. ĐOẠN CODE MỚI: XỬ LÝ HIỂN THỊ HÌNH ẢNH & TIKZ NGAY TRONG ADMIN ---
+            // --- 1. XỬ LÝ HIỂN THỊ HÌNH ẢNH & TIKZ (ĐÃ SỬA LỖI) ---
             let previewHtml = q.q;
             
-            // Xử lý TikZ
+            // Xử lý TikZ (Lưu ý dấu gạch chéo ngược trong thẻ đóng script)
             previewHtml = previewHtml.replace(/\[TIKZ\]([\s\S]*?)\[\/TIKZ\]/g, function(match, tikzCode){
-                return `<div style="text-align:center;margin:5px 0"><script type="text/tikz">${tikzCode}</script></div>`;
+                return `<div style="text-align:center;margin:5px 0"><script type="text/tikz">${tikzCode}<\/script></div>`;
             });
             
-            // Xử lý thẻ [IMG] (chuyển thành rỗng để không hiện chữ [IMG])
+            // Xử lý thẻ [IMG]
             previewHtml = previewHtml.replace('[IMG]', '');
             
             // Nếu có ảnh upload thì hiện thêm ảnh
             if(q.img) previewHtml += `<div style="text-align:center"><img src="${q.img}" style="max-height:100px; border:1px solid #ccc; margin:5px 0"></div>`;
-            // -----------------------------------------------------------------------
+            // -----------------------------------------------------------
 
             const mkInput = (val, fn) => `<input value="${val}" onchange="${fn}" style="flex:1">`;
             let ansUI = "";
@@ -455,6 +455,7 @@
                 <div style="background:#f9f9f9; padding:10px; border:1px dashed #ddd; margin-bottom:5px; border-radius:4px">
                     ${previewHtml}
                 </div>
+
                 <textarea class="smart-textarea" oninput="EXAM_QUESTIONS[${i}].q=this.value; renderPreview()">${q.q}</textarea>
                 <div class="upload-wrapper" style="background:#f1f8e9; padding:5px; border-radius:4px">
                     <i class="fas fa-image" style="color:#2e7d32"></i>
