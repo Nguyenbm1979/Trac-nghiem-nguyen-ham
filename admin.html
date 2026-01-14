@@ -8,8 +8,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
-    <script src="https://tikzjax.com/v1/tikzjax.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
@@ -177,6 +175,7 @@
 
 <div id="main-app">
     <h1>QUẢN TRỊ v25.0 (OPTIMIZED)</h1>
+    
     <div class="config-box">
         <div class="row">
             <div class="col"><label>User GitHub</label><input type="text" id="gh-user"></div>
@@ -319,7 +318,7 @@
 </div>
 
 <script>
-   const ADMIN_HASH = "21232f297a57a5a743894a0e4a801fc3"; 
+   const ADMIN_HASH = "55ab43ebd8eb2635766c3944cb192e72"; // Mật khẩu: binhminh
     let EXAM_QUESTIONS = [];
 
     // --- HỆ THỐNG: ĐĂNG NHẬP (Đã thêm trim() sửa lỗi nhập) ---
@@ -400,22 +399,6 @@
         let totalScore = 0;
         EXAM_QUESTIONS.forEach((q,i)=>{
             totalScore += parseFloat(q.point || 0);
-            
-            // --- 1. XỬ LÝ HIỂN THỊ HÌNH ẢNH & TIKZ (ĐÃ SỬA LỖI) ---
-            let previewHtml = q.q;
-            
-            // Xử lý TikZ (Lưu ý dấu gạch chéo ngược trong thẻ đóng script)
-            previewHtml = previewHtml.replace(/\[TIKZ\]([\s\S]*?)\[\/TIKZ\]/g, function(match, tikzCode){
-                return `<div style="text-align:center;margin:5px 0"><script type="text/tikz">${tikzCode}<\/script></div>`;
-            });
-            
-            // Xử lý thẻ [IMG]
-            previewHtml = previewHtml.replace('[IMG]', '');
-            
-            // Nếu có ảnh upload thì hiện thêm ảnh
-            if(q.img) previewHtml += `<div style="text-align:center"><img src="${q.img}" style="max-height:100px; border:1px solid #ccc; margin:5px 0"></div>`;
-            // -----------------------------------------------------------
-
             const mkInput = (val, fn) => `<input value="${val}" onchange="${fn}" style="flex:1">`;
             let ansUI = "";
             
@@ -451,11 +434,6 @@
                     </div>
                 </div>
                 <div style="margin-bottom:5px"><b>Nội dung câu hỏi:</b></div>
-                
-                <div style="background:#f9f9f9; padding:10px; border:1px dashed #ddd; margin-bottom:5px; border-radius:4px">
-                    ${previewHtml}
-                </div>
-
                 <textarea class="smart-textarea" oninput="EXAM_QUESTIONS[${i}].q=this.value; renderPreview()">${q.q}</textarea>
                 <div class="upload-wrapper" style="background:#f1f8e9; padding:5px; border-radius:4px">
                     <i class="fas fa-image" style="color:#2e7d32"></i>
@@ -477,60 +455,34 @@
         renderPreview();
     }
 
-   function renderPreview() {
+    function renderPreview() {
         let h = '';
-        
-        // Hàm xử lý nội dung
-        const procContent = (txt, img) => {
-            let processed = txt || ""; 
-
-            // 1. Xử lý TikZ: Thêm class đặc biệt để CSS có thể can thiệp nếu cần
-            processed = processed.replace(/\[TIKZ\]([\s\S]*?)\[\/TIKZ\]/g, function(match, tikzCode){
-                // Lưu ý: Dùng dấu cách ở < script > để tránh lỗi trình duyệt
-                return `<div class="tikz-wrapper" style="text-align:center;margin:10px 0"><script type="text/tikz">${tikzCode}<\/script></div>`;
-            });
-
-            // 2. Xử lý ảnh [IMG]
-            if(img) {
-                processed = processed.includes('[IMG]') 
-                    ? processed.replace('[IMG]', `<img src="${img}" class="p-img">`) 
-                    : processed + `<br><img src="${img}" class="p-img">`;
-            }
-            return processed.replace('[IMG]', ''); 
+        const procImg = (txt, img) => {
+            if(!img) return txt;
+            return txt.includes('[IMG]') ? txt.replace('[IMG]', `<img src="${img}" class="p-img">`) : txt + `<br><img src="${img}" class="p-img">`;
         };
-
         EXAM_QUESTIONS.forEach((q, i) => {
             let pt = q.point ? `<span style="float:right;color:red;font-weight:bold">[${q.point}đ]</span>` : '';
             let body = '';
-            
             if(q.type === 'mcq') {
                 body = q.options.map((opt, idx) => `
                     <div class="p-opt-row ${q.ans==idx ? 'correct-ans' : ''}">
                         <div class="p-opt-label">${['A','B','C','D'][idx]}.</div>
-                        <div class="p-opt-content">${procContent(opt)}</div> 
+                        <div class="p-opt-content">${opt}</div>
                     </div>`).join('');
             }
-            else if (q.type === 'tf') body = `<table width="100%"><tr><th>Ý</th><th>Nội dung</th><th>Đ/S</th></tr>` + q.items.map((it, idx) => `<tr><td>${idx+1}</td><td>${procContent(it.sub)}</td><td><b>${it.ans=='T'?'Đ':'S'}</b></td></tr>`).join('') + `</table>`;
+            else if (q.type === 'tf') body = `<table width="100%"><tr><th>Ý</th><th>Nội dung</th><th>Đ/S</th></tr>` + q.items.map((it, idx) => `<tr><td>${idx+1}</td><td>${it.sub}</td><td><b>${it.ans=='T'?'Đ':'S'}</b></td></tr>`).join('') + `</table>`;
             else if (q.type === 'short') body = `<div class="p-opt"><b>Trả lời:</b> ${q.ans}</div>`;
             else if (q.type === 'match') body = q.items.map((it, idx) => `<div class="p-opt">${idx+1}. ${it} --> ${q.ans[idx]} (${q.options[idx]})</div>`).join('');
             
             h += `<div class="p-q-block"><div class="p-label">Câu ${i+1}: ${pt}</div>
-                <div class="p-content">${procContent(q.q, q.img)}</div>
+                <div class="p-content">${procImg(q.q, q.img)}</div>
                 <div>${body}</div>
-                <div class="p-sol"><b>Lời giải:</b><br>${procContent(q.explain, q.solImg)}</div>
+                <div class="p-sol"><b>Lời giải:</b><br>${procImg(q.explain, q.solImg)}</div>
             </div>`;
         });
-
-        // Cập nhật HTML
-        const previewDiv = document.getElementById('preview-content');
-        previewDiv.innerHTML = h;
-        
-        // --- ĐOẠN MỚI: KÍCH HOẠT LẠI TIKZJAX ---
-        // MathJax sẽ chạy lại
+        document.getElementById('preview-content').innerHTML = h;
         if(window.MathJax) MathJax.typesetPromise();
-        
-        // Thử kích hoạt TikZ bằng cách gửi sự kiện load giả (nếu cần)
-        // Tuy nhiên, cách hiệu quả nhất là người dùng nhập xong thì chờ 1-2 giây.
     }
     
     function parseDataSafe() {
