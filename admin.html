@@ -479,31 +479,53 @@
 
     function renderPreview() {
         let h = '';
-        const procImg = (txt, img) => {
-            if(!img) return txt;
-            return txt.includes('[IMG]') ? txt.replace('[IMG]', `<img src="${img}" class="p-img">`) : txt + `<br><img src="${img}" class="p-img">`;
+        
+        // Hàm xử lý ảnh và TikZ (Dùng chung logic với Editor)
+        const procContent = (txt, img) => {
+            let processed = txt;
+
+            // 1. Xử lý TikZ (Quan trọng: Biến mã thành thẻ script để vẽ hình)
+            processed = processed.replace(/\[TIKZ\]([\s\S]*?)\[\/TIKZ\]/g, function(match, tikzCode){
+                // Thêm class="tikzjax-container" để dễ quản lý
+                return `<div style="text-align:center;margin:10px 0"><script type="text/tikz">${tikzCode}<\/script></div>`;
+            });
+
+            // 2. Xử lý ảnh [IMG]
+            if(img) {
+                processed = processed.includes('[IMG]') 
+                    ? processed.replace('[IMG]', `<img src="${img}" class="p-img">`) 
+                    : processed + `<br><img src="${img}" class="p-img">`;
+            }
+            return processed.replace('[IMG]', ''); // Xóa thẻ thừa nếu còn
         };
+
         EXAM_QUESTIONS.forEach((q, i) => {
             let pt = q.point ? `<span style="float:right;color:red;font-weight:bold">[${q.point}đ]</span>` : '';
             let body = '';
+            
+            // Xử lý hiển thị từng loại câu hỏi
             if(q.type === 'mcq') {
                 body = q.options.map((opt, idx) => `
                     <div class="p-opt-row ${q.ans==idx ? 'correct-ans' : ''}">
                         <div class="p-opt-label">${['A','B','C','D'][idx]}.</div>
-                        <div class="p-opt-content">${opt}</div>
+                        <div class="p-opt-content">${procContent(opt)}</div> 
                     </div>`).join('');
             }
-            else if (q.type === 'tf') body = `<table width="100%"><tr><th>Ý</th><th>Nội dung</th><th>Đ/S</th></tr>` + q.items.map((it, idx) => `<tr><td>${idx+1}</td><td>${it.sub}</td><td><b>${it.ans=='T'?'Đ':'S'}</b></td></tr>`).join('') + `</table>`;
+            else if (q.type === 'tf') body = `<table width="100%"><tr><th>Ý</th><th>Nội dung</th><th>Đ/S</th></tr>` + q.items.map((it, idx) => `<tr><td>${idx+1}</td><td>${procContent(it.sub)}</td><td><b>${it.ans=='T'?'Đ':'S'}</b></td></tr>`).join('') + `</table>`;
             else if (q.type === 'short') body = `<div class="p-opt"><b>Trả lời:</b> ${q.ans}</div>`;
             else if (q.type === 'match') body = q.items.map((it, idx) => `<div class="p-opt">${idx+1}. ${it} --> ${q.ans[idx]} (${q.options[idx]})</div>`).join('');
             
+            // Lắp ghép nội dung
             h += `<div class="p-q-block"><div class="p-label">Câu ${i+1}: ${pt}</div>
-                <div class="p-content">${procImg(q.q, q.img)}</div>
+                <div class="p-content">${procContent(q.q, q.img)}</div>
                 <div>${body}</div>
-                <div class="p-sol"><b>Lời giải:</b><br>${procImg(q.explain, q.solImg)}</div>
+                <div class="p-sol"><b>Lời giải:</b><br>${procContent(q.explain, q.solImg)}</div>
             </div>`;
         });
+
         document.getElementById('preview-content').innerHTML = h;
+        
+        // Cập nhật MathJax (Toán)
         if(window.MathJax) MathJax.typesetPromise();
     }
     
