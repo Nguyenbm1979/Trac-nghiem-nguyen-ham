@@ -7,8 +7,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
-    <script src="https://tikzjax.com/v1/tikzjax.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -232,23 +230,7 @@
 
         d.questions.forEach((q, i) => {
             let imgHtml = q.img ? `<img src="${q.img}" style="max-height:150px;display:block;margin:5px 0">` : '';
-            // --- ĐOẠN CODE XỬ LÝ ẢNH & TIKZ (MỚI) ---
-            
-            // 1. Xử lý ảnh upload [IMG]
-            let finalQ = q.q;
-            if(q.img) {
-                finalQ += `<div style="text-align:center"><img src="${q.img}" style="max-width:100%;border-radius:8px;margin:10px auto;border:1px solid #eee"></div>`;
-            }
-            finalQ = finalQ.replace('[IMG]', ''); 
-
-            // 2. Xử lý mã TikZ [TIKZ]...[/TIKZ] (Biến code thành hình vẽ)
-            finalQ = finalQ.replace(/\[TIKZ\]([\s\S]*?)\[\/TIKZ\]/g, function(match, tikzCode){
-                return `<div style="text-align:center; margin:10px 0"><script type="text/tikz">${tikzCode}</script></div>`;
-            });
-
-            // 3. Gán nội dung vào biến contentHtml để in ra màn hình
-            let contentHtml = finalQ; 
-            // ------------------------------------------
+            let contentHtml = q.q.replace('[IMG]', imgHtml);
             
             h += `<div class="print-q">
                 <b>Câu ${i+1}:</b> ${contentHtml} ${imgHtml}
@@ -303,11 +285,7 @@ if (d.end && now > new Date(d.end)) {
 // -----------------------------------------------
         isEnc = d.encrypted===true;
         document.getElementById('exam-title').innerText = d.title||"BÀI KIỂM TRA";
-       // --- SỬA LẠI ĐOẠN HIỂN THỊ SỐ CÂU ---
-        // Nếu có thiết lập lấy ít hơn tổng số, thì hiện số lượng lấy
-        let realCount = (d.take && d.take > 0 && d.take < rawQ.length) ? d.take : rawQ.length;
-        document.getElementById('exam-info').innerText = `${realCount} Câu | ${d.time} Phút`;
-        // ------------------------------------
+        document.getElementById('exam-info').innerText = `${rawQ.length} Câu | ${d.time} Phút`;
         if(d.password) document.getElementById('pass-area').style.display='block';
         document.getElementById('loading').style.display='none'; 
         document.getElementById('welcome-screen').style.display='flex';
