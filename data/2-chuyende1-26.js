@@ -1,9 +1,9 @@
 window.EXAM_DATA = {
-    "title": "Đề kiểm tra chương 1, Chuyên đề 1, Toán 12, năm 2026",
+    "title": "Đề kiểm tra chương 1 lớp 12A9, Chuyên đề 1, Toán 12, năm 2026",
     "subject": "Toan",
     "grade": "12",
     "time": 30,
-    "password": "fdd6aec7ac5117edb595e53b984b4e0d",
+    "password": "e76056c1a876e2e7960b1bbab92f7b05",
     "encrypted": false,
     "shuffle": true,
     "viewDetail": false,
@@ -224,20 +224,6 @@ window.EXAM_DATA = {
         },
         {
             "type": "mcq",
-            "q": "Xác suất thành công khi làm một thí nghiệm $T$ là $0{,}4$. Một nhóm gồm $9$ học sinh độc lập với nhau tiến hành thí nghiệm $T$. Tính xác suất để có đúng $6$ học sinh thực hiện thí nghiệm thành công (làm tròn kết quả đến $4$ chữ số thập phân).",
-            "options": [
-                "$0{,}0212$",
-                "$0{,}0743$",
-                "$0{,}1003$",
-                "$0{,}2508$"
-            ],
-            "ans": 1,
-            "explain": "Gọi $X$ là số học sinh thực hiện thí nghiệm thành công trong $9$ học sinh. Khi đó $X$ tuân theo quy luật phân phối nhị thức $B(n; p)$ với $n=9$ và $p=0{,}4$.<br> Công thức tính xác suất là $\\mathrm{P}(X=k) = \\mathrm{C}_n^k p^k (1-p)^{n-k}$.<br> Xác suất để có đúng $6$ học sinh thực hiện thí nghiệm thành công là $$\\mathrm{P}(X=6) = \\mathrm{C}_9^6 \\cdot (0{,}4)^6 \\cdot (1-0{,}4)^{9-6} = \\mathrm{C}_9^6 \\cdot (0{,}4)^6 \\cdot (0{,}6)^3 \\approx 0{,}0743.$$",
-            "id": "",
-            "point": 0.5
-        },
-        {
-            "type": "mcq",
             "q": "Trong một trò chơi, mỗi ván người chơi gieo đồng thời $3$ xúc xắc cân đối. Người chơi thắng ván đó nếu có ít nhất $2$ xúc xắc xuất hiện mặt $6$ chấm. Tính xác suất để người chơi thắng trong một ván chơi đơn lẻ.",
             "options": [
                 "$\\dfrac{1}{27}$",
@@ -305,6 +291,21 @@ window.EXAM_DATA = {
             "explain": "Gọi $X$ là số tài xế thường xuyên nghe tin tức giao thông trong $6$ người.<br> Xác suất thành công là $p = 60\\% = 0{,}6$. Xác suất thất bại là $1-p = 0{,}4$.<br> Số phép thử $n=6$. Ta có $X \\sim B(6; 0{,}6)$.<br> Xác suất để có đúng $4$ tài xế nghe tin tức là $$\\mathrm{P}(X=4) = \\mathrm{C}_6^4 \\cdot (0{,}6)^4 \\cdot (1-0{,}6)^{6-4} = \\mathrm{C}_6^4 (0{,}6)^4 (0{,}4)^2.$$",
             "id": "",
             "point": 0.5
+        },
+        {
+            "point": "0.5",
+            "type": "mcq",
+            "img": "",
+            "explain": "Gọi $X$ là số tài xế thường xuyên nghe tin tức ($X \\sim B(6; 0{,}6)$).<br> Biến cố \"có ít nhất $5$ tài xế\" tương ứng với $X \\ge 5$, tức là $X=5$ hoặc $X=6$.<br> Ta có: <br><b>-</b> $\\mathrm{P}(X=5) = \\mathrm{C}_6^5 (0{,}6)^5 (0{,}4)^1 = 6 \\cdot 0{,}07776 \\cdot 0{,}4 \\approx 0{,}1866$. <br><b>-</b> $\\mathrm{P}(X=6) = \\mathrm{C}_6^6 (0{,}6)^6 (0{,}4)^0 = 1 \\cdot 0{,}046656 \\cdot 1 \\approx 0{,}0467$. <br>Vậy xác suất cần tìm là $$\\mathrm{P}(X \\ge 5) = \\mathrm{P}(X=5) + \\mathrm{P}(X=6) \\approx 0{,}1866 + 0{,}0467 = 0{,}2333.$$",
+            "solImg": "",
+            "q": "Có $60\\%$ tài xế thường xuyên nghe tin tức giao thông trên đài khi lái xe. Chọn ngẫu nhiên một cách độc lập $6$ tài xế. Tính xác suất để có ít nhất $5$ tài xế thường xuyên nghe tin tức giao thông trên đài (làm tròn kết quả đến $4$ chữ số thập phân).",
+            "options": [
+                "$0{,}1866$",
+                "$0{,}0467$",
+                "$0{,}2333$",
+                "$0{,}7667$"
+            ],
+            "ans": 2
         }
     ]
 };
