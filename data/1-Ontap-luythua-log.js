@@ -3,9 +3,10 @@ window.EXAM_DATA = {
     "subject": "Toan",
     "grade": "11",
     "time": 45,
+    "take": 0,
     "password": "2afba7e5bf6e676c5798e444f8b1b261",
     "encrypted": false,
-    "shuffle": true,
+    "shuffle": false,
     "viewDetail": true,
     "music": true,
     "allowPrint": false,
@@ -172,7 +173,7 @@ window.EXAM_DATA = {
         {
             "type": "short",
             "q": "Cho số thực $a$ ($0 < a \\ne 1$). Giá trị của biểu thức $P = \\log_a(a\\sqrt{a^3})$ là bao nhiêu?",
-            "ans": "$2{,}5$",
+            "ans": "2,5",
             "explain": "$P = \\log_a(a\\sqrt{a^3}) = \\log_a \\left( a \\cdot a^{\\tfrac{3}{2}} \\right) = \\log_a \\left( a^{\\tfrac{5}{2}}\\right) = \\dfrac{5}{2}=2{,}5$.",
             "id": "1D6H2-1",
             "point": "0.62"
@@ -208,7 +209,7 @@ window.EXAM_DATA = {
         {
             "type": "short",
             "q": " Gọi $m$, $n$ là hai số nguyên dương sao cho \\[ \\dfrac{1}{\\log_3x}+\\dfrac{1}{\\log_{3^2}x}+\\dfrac{1}{\\log_{3^3}x}=\\dfrac{m}{n\\log_3x} \\quad\\text{đúng với mọi}\\quad x>0. \\] Tính giá trị của biểu thức $P=\\dfrac{m}{2n}$.",
-            "ans": "$3$",
+            "ans": "3",
             "explain": "Ta có \\[ \\log_{3^2}x = \\dfrac{1}{2}\\log_3x, \\quad \\log_{3^3}x = \\dfrac{1}{3}\\log_3x. \\] Do đó \\[ \\dfrac{1}{\\log_{3^2}x} = 2\\cdot\\dfrac{1}{\\log_3x}, \\quad \\dfrac{1}{\\log_{3^3}x} = 3\\cdot\\dfrac{1}{\\log_3x}. \\] Vậy vế trái của phương trình trở thành \\[ \\dfrac{1}{\\log_3x} + 2\\cdot\\dfrac{1}{\\log_3x} + 3\\cdot\\dfrac{1}{\\log_3x} = 6\\cdot\\dfrac{1}{\\log_3x}. \\] So sánh với vế phải ta có \\[ 6\\cdot\\dfrac{1}{\\log_3x} = \\dfrac{m}{n\\log_3x}. \\] Suy ra $\\dfrac{6}{1} = \\dfrac{m}{n}\\Rightarrow T=\\dfrac{m}{2n}=3$.",
             "id": "1D6V4-4",
             "point": "0.72"
