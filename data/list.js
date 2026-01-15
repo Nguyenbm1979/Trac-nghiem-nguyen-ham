@@ -1,5 +1,15 @@
 window.EXAM_LIST = [
     {
+        "id": "1-Ontap-luythua-log",
+        "title": "Ôn tập lũy thừa và Logarit, 11 VIP",
+        "subject": "Toan",
+        "grade": "11",
+        "time": 45,
+        "allowPrint": false,
+        "start": "",
+        "end": ""
+    },
+    {
         "id": "2-Ontichphan-1-25-26",
         "title": "Đề Ôn Tập Tích Phân, Số 1, Năm 2025-2026",
         "subject": "Toan",
@@ -138,15 +148,5 @@ window.EXAM_LIST = [
         "allowPrint": false,
         "start": "2026-01-05T21:15",
         "end": "2026-01-25T21:15"
-    },
-    {
-        "id": "1-Ontap-luythua-log",
-        "title": "Ôn tập lũy thừa và Logarit, 11 VIP",
-        "subject": "Toan",
-        "grade": "11",
-        "time": 45,
-        "allowPrint": false,
-        "start": "",
-        "end": ""
     }
 ];
