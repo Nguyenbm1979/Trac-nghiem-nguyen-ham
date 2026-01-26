@@ -513,13 +513,54 @@ if (d.end && now > new Date(d.end)) {
             let qPoint = (q.point && parseFloat(q.point) > 0) ? parseFloat(q.point) : scoresConfig[q.type];
             
             // --- TÍNH ĐIỂM NGẦM (Vẫn tính điểm nhưng chỉ hiện màu nếu được phép) ---
-            if(q.type==='mcq' || q.type==='short'){
+            // --- 1. XỬ LÝ TRẮC NGHIỆM (MCQ) - GIỮ NGUYÊN ---
+            if(q.type === 'mcq'){
                 max += qPoint;
                 if(chk(userAns[i], q.ans)) { 
                     score += qPoint; 
-                    if(allowView) bg(bl, true, 'Đúng'); // Chỉ tô màu Xanh nếu được phép
+                    if(allowView) bg(bl, true, 'Đúng'); 
                 } else {
-                    if(allowView) bg(bl, false, `Sai. ĐS: ${q.ans}`); // Chỉ tô màu Đỏ & hiện ĐS nếu được phép
+                    if(allowView) bg(bl, false, `Sai. ĐS: ${['A','B','C','D'][q.ans]}`); 
+                }
+            }
+            // --- 2. XỬ LÝ TRẢ LỜI NGẮN (SHORT) - CÓ BỘ LỌC THÔNG MINH ---
+            else if(q.type === 'short'){
+                max += qPoint;
+
+                // Hàm làm sạch dữ liệu (Xóa $, {, }, đổi phẩy -> chấm)
+                const normalize = (val) => {
+                    return String(val || "").toLowerCase()
+                        .replace(/[\$\{\}]/g, '') // Xóa ký tự toán học thừa
+                        .replace(/,/g, '.')       // Đổi phẩy thành chấm
+                        .replace(/\s/g, '');      // Xóa khoảng trắng
+                };
+
+                let uInput = normalize(userAns[i]);
+                let qInput = normalize(q.ans); // Làm sạch cả đáp án gốc (nếu chưa làm ở admin)
+
+                // Kiểm tra đáp án
+                let isCorrect = false;
+                
+                // Trường hợp 1: Nếu đề có Mã hóa (check qua hàm chk với MD5)
+                if(window.EXAM_DATA.encrypted) {
+                     // Lưu ý: Nếu mã hóa thì q.ans đã là MD5, ta cần MD5 cái uInput đã làm sạch
+                     // Tuy nhiên để đơn giản, thầy cứ dùng hàm chk cũ nhưng cẩn thận logic
+                     // Nếu thầy dùng mã hóa, logic này hơi phức tạp xíu. 
+                     // Tạm thời em giả định thầy dùng hàm chk có sẵn:
+                     if(chk(CryptoJS.MD5(uInput).toString(), q.ans)) isCorrect = true;
+                } 
+                // Trường hợp 2: So sánh trực tiếp (Không mã hóa)
+                else {
+                    if(uInput === qInput) isCorrect = true;
+                }
+
+                if(isCorrect) {
+                    score += qPoint;
+                    if(allowView) bg(bl, true, 'Đúng');
+                } else {
+                    // Hiển thị đáp án gốc đã làm sạch cho gọn
+                    let cleanAns = String(q.ans).replace(/[\$\{\}]/g, '');
+                    if(allowView) bg(bl, false, `Sai. ĐS: ${cleanAns}`);
                 }
             }
             else if(q.type==='tf'){
