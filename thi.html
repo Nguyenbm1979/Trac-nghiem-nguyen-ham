@@ -407,6 +407,7 @@ if (d.end && now > new Date(d.end)) {
             timeLeft = d.time;
             renderUI(); // Render lại để điền đáp án cũ
         }
+        document.getElementById('loading-overlay').style.display = 'none';
     }
 
     function renderUI(){
