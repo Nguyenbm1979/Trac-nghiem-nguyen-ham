@@ -596,7 +596,7 @@ if (d.end && now > new Date(d.end)) {
         });
         let finalS = Math.round(score*100)/100;
         sendToGoogleSheet(finalS, max); // Vẫn gửi điểm về Sheet bình thường
-        
+    }
         // --- 3. HIỂN THỊ KẾT QUẢ CUỐI CÙNG ---
         let msg = finalS >= max/2 ? "Chúc mừng bạn đã hoàn thành!" : "Cố gắng hơn lần sau nhé!";
         let color = finalS >= max/2 ? "#2e7d32" : "#d32f2f";
