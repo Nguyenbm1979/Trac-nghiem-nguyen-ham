@@ -327,7 +327,62 @@ if (d.end && now > new Date(d.end)) {
         document.getElementById('d-class').innerText = c;
         startLogic(n);
     }
+    // --- HÀM CHECKPASS MỚI ---
+    async function checkPass(){
+        let pInput = document.getElementById('pass-input').value.trim();
+        let name = document.getElementById('name-input').value.trim() || 'Học sinh';
+        
+        if(!pInput){ alert("Vui lòng nhập mật khẩu!"); return; }
 
+        let ov = document.getElementById('loading-overlay');
+        if(ov) ov.style.display = 'flex';
+
+        try {
+            // 1. Kiểm tra mật khẩu
+            if(typeof ADMIN_HASH !== 'undefined' && ADMIN_HASH) {
+                let isMatch = false;
+                if(typeof CryptoJS !== 'undefined') {
+                    if(CryptoJS.MD5(pInput).toString() === ADMIN_HASH) isMatch = true;
+                } else {
+                    if(pInput === ADMIN_HASH) isMatch = true; 
+                }
+
+                if(!isMatch){
+                    alert("Sai mật khẩu!");
+                    if(ov) ov.style.display = 'none';
+                    return;
+                }
+            }
+
+            // 2. Giải mã (nếu cần)
+            if(window.EXAM_DATA && window.EXAM_DATA.encrypted) {
+                try {
+                    let bytes = CryptoJS.AES.decrypt(window.EXAM_DATA.raw, pInput);
+                    let decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+                    window.rawQ = decryptedData;
+                } catch(e) {
+                    alert("Mật khẩu đúng nhưng dữ liệu lỗi.");
+                    if(ov) ov.style.display = 'none';
+                    return;
+                }
+            }
+            
+            // 3. GỌI HÀM VÀO THI (CÓ CỨU HỘ)
+            setTimeout(() => {
+                if(typeof startLogic === 'function') {
+                    startLogic(name);
+                } else {
+                    alert("Lỗi: Không tìm thấy hàm startLogic!"); // Báo lỗi nếu thiếu hàm
+                    if(ov) ov.style.display = 'none';
+                }
+            }, 100);
+
+        } catch(err) {
+            console.error(err);
+            // Cứu hộ: Cố gắng vào thi dù có lỗi
+            setTimeout(() => { startLogic(name); }, 1000); 
+        }
+    }
     // --- PHIÊN BẢN STARTLOGIC: CHỐNG TREO & TỰ SỬA LỖI ---
     function startLogic(name){
         // Bắt đầu chế độ bảo vệ (Try-Catch)
