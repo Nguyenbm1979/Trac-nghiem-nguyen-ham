@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hệ Thống Thi Trực Tuyến 3</title>
+    <title>Hệ Thống Thi Trực Tuyến</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }, svg: { fontCache: 'global' } };</script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -327,169 +327,98 @@ if (d.end && now > new Date(d.end)) {
         document.getElementById('d-class').innerText = c;
         startLogic(n);
     }
-    // --- HÀM CHECKPASS MỚI ---
-    async function checkPass(){
-        let pInput = document.getElementById('pass-input').value.trim();
-        let name = document.getElementById('name-input').value.trim() || 'Học sinh';
-        
-        if(!pInput){ alert("Vui lòng nhập mật khẩu!"); return; }
 
-        let ov = document.getElementById('loading-overlay');
-        if(ov) ov.style.display = 'flex';
-
-        try {
-            // 1. Kiểm tra mật khẩu
-            if(typeof ADMIN_HASH !== 'undefined' && ADMIN_HASH) {
-                let isMatch = false;
-                if(typeof CryptoJS !== 'undefined') {
-                    if(CryptoJS.MD5(pInput).toString() === ADMIN_HASH) isMatch = true;
-                } else {
-                    if(pInput === ADMIN_HASH) isMatch = true; 
-                }
-
-                if(!isMatch){
-                    alert("Sai mật khẩu!");
-                    if(ov) ov.style.display = 'none';
-                    return;
-                }
-            }
-
-            // 2. Giải mã (nếu cần)
-            if(window.EXAM_DATA && window.EXAM_DATA.encrypted) {
-                try {
-                    let bytes = CryptoJS.AES.decrypt(window.EXAM_DATA.raw, pInput);
-                    let decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-                    window.rawQ = decryptedData;
-                } catch(e) {
-                    alert("Mật khẩu đúng nhưng dữ liệu lỗi.");
-                    if(ov) ov.style.display = 'none';
-                    return;
-                }
-            }
-            
-            // 3. GỌI HÀM VÀO THI (CÓ CỨU HỘ)
-            setTimeout(() => {
-                if(typeof startLogic === 'function') {
-                    startLogic(name);
-                } else {
-                    alert("Lỗi: Không tìm thấy hàm startLogic!"); // Báo lỗi nếu thiếu hàm
-                    if(ov) ov.style.display = 'none';
-                }
-            }, 100);
-
-        } catch(err) {
-            console.error(err);
-            // Cứu hộ: Cố gắng vào thi dù có lỗi
-            setTimeout(() => { startLogic(name); }, 1000); 
-        }
-    }
-    // --- PHIÊN BẢN STARTLOGIC: CHỐNG TREO & TỰ SỬA LỖI ---
-    // --- PHIÊN BẢN STARTLOGIC: CÓ CHUYỂN MÀN HÌNH ---
     function startLogic(name){
-        try {
-            startTime = new Date().toLocaleString('vi-VN');
-            
-            // 1. Phân loại câu hỏi
-            let pool = { mcq: [], tf: [], short: [], match: [] };
-            if(Array.isArray(rawQ)) {
-                rawQ.forEach(q => { 
-                    if(pool[q.type]) pool[q.type].push(JSON.parse(JSON.stringify(q))); 
-                });
-            }
+        startTime = new Date().toLocaleString('vi-VN');
+        // --- ĐOẠN CODE MỚI: TRỘN ĐỀ THÔNG MINH (GHIM + NGẪU NHIÊN) ---
+    let aq = JSON.parse(JSON.stringify(rawQ));
+    let doShuffle = (window.EXAM_DATA.shuffle !== false);
+    let takeCount = parseInt(window.EXAM_DATA.take) || 0; // Số câu cần lấy
 
-            // 2. Lấy cấu hình ma trận
-            let mx = window.EXAM_DATA.matrix || {};
-            const getCfg = (type) => (mx[type] || { take: 9999, score: 0 });
-            let m = { mcq: getCfg('mcq'), tf: getCfg('tf'), short: getCfg('short'), match: getCfg('match') };
+    // Tạo bộ sinh số ngẫu nhiên theo tên
+    let seed = 0;
+    for(let i=0; i<name.length; i++) seed += name.charCodeAt(i);
+    const random = () => { var x = Math.sin(seed++) * 10000; return x - Math.floor(x); };
 
-            // 3. Random
-            let seed = 0;
-            if(name) { for(let i=0; i<name.length; i++) seed += name.charCodeAt(i); }
-            const random = () => { var x = Math.sin(seed++) * 10000; return x - Math.floor(x); };
+    if(doShuffle) {
+        // BƯỚC 1: Tách nhóm Ghim và Không Ghim
+        let fixedQs = aq.filter(q => q.mustTake === true); 
+        let poolQs  = aq.filter(q => !q.mustTake);         
 
-            // 4. Rút câu hỏi
-            const pickQs = (sourceArr, count, sectionScore) => {
-                if(!sourceArr || sourceArr.length === 0) return [];
-                let takeCount = (count > 0) ? count : sourceArr.length;
-                let pinned = sourceArr.filter(q => q.mustTake === true);
-                let others = sourceArr.filter(q => !q.mustTake);
-                if(window.EXAM_DATA.shuffle !== false) others.sort(() => random() - 0.5);
-                let needed = takeCount - pinned.length;
-                let pickedOthers = others.slice(0, Math.max(0, needed));
-                let final = pinned.concat(pickedOthers);
-                if(window.EXAM_DATA.shuffle !== false) final.sort(() => random() - 0.5);
-                
-                if(final.length > 0 && sectionScore > 0) {
-                    let pPerQ = sectionScore / final.length;
-                    final.forEach(q => q.point = parseFloat(pPerQ.toFixed(3)));
-                }
-                return final;
-            };
+        // BƯỚC 2: Tính toán và rút câu hỏi
+        let finalSet = [];
+        if (takeCount > 0 && takeCount < aq.length) {
+            let needMore = takeCount - fixedQs.length;
+            if (needMore < 0) needMore = 0;
 
-            // 5. Thực hiện rút
-            let part1 = pickQs(pool.mcq, m.mcq.take, m.mcq.score);
-            let part2 = pickQs(pool.tf, m.tf.take, m.tf.score);
-            let part3 = pickQs(pool.short, m.short.take, m.short.score);
-            let part4 = pickQs(pool.match, m.match.take, m.match.score);
-
-            // 6. Tiêu đề
-            if(part1.length) part1[0].sectionTitle = "PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn";
-            if(part2.length) part2[0].sectionTitle = "PHẦN II. Câu trắc nghiệm đúng sai";
-            if(part3.length) part3[0].sectionTitle = "PHẦN III. Câu trắc nghiệm trả lời ngắn";
-            if(part4.length) part4[0].sectionTitle = "PHẦN IV. Câu hỏi ghép đôi";
-
-            curQ = [...part1, ...part2, ...part3, ...part4];
-            if(curQ.length === 0) throw new Error("Không tìm thấy câu hỏi nào! Kiểm tra lại Admin.");
-
-            curQ.forEach(q => {
-                if(q.type === 'mcq') {
-                    if(window.EXAM_DATA.shuffle !== false) 
-                        q.idx = q.options.map((_,i)=>i).sort(() => random() - 0.5);
-                    else 
-                        q.idx = q.options.map((_,i)=>i);
-                }
-            });
-
-            renderUI();
-            
-            // Khôi phục bài cũ
-            let savedData = localStorage.getItem(window.storageKey);
-            if(savedData){
-                try {
-                    let d = JSON.parse(savedData);
-                    userAns = d.ans || {};
-                    timeLeft = d.time;
-                    // Nếu có thời gian cũ thì dùng, không thì dùng thời gian gốc
-                    if(timeLeft) timerDur = parseInt(timeLeft);
-                    renderUI(); 
-                    // Gọi hàm restoreUI để điền lại đáp án lên giao diện
-                    if(typeof restoreUI === 'function') restoreUI();
-                } catch(e) {}
-            }
-
-            // --- [QUAN TRỌNG] CHUYỂN MÀN HÌNH & CHẠY ĐỒNG HỒ ---
-            document.getElementById('welcome-screen').style.display = 'none'; // Ẩn màn hình chào
-            document.getElementById('main-interface').style.display = 'block'; // Hiện bài thi
-            startTimer(); // Bắt đầu tính giờ
-            // ----------------------------------------------------
-
-        } catch (err) {
-            alert("⚠️ Lỗi khởi tạo đề thi:\n" + err.message);
-            console.error(err);
-        } finally {
-            let overlay = document.getElementById('loading-overlay');
-            if(overlay) overlay.style.display = 'none';
+            poolQs.sort(() => random() - 0.5); // Trộn ngân hàng
+            let pickedFromPool = poolQs.slice(0, needMore); // Rút thêm
+            finalSet = fixedQs.concat(pickedFromPool); // Gộp lại
+        } else {
+            finalSet = aq; // Lấy hết nếu không giới hạn
         }
+
+        // BƯỚC 3: Trộn đều lần cuối
+        finalSet.sort(() => random() - 0.5);
+        aq = finalSet;
+
+        // BƯỚC 4: Trộn đáp án trắc nghiệm
+        aq.forEach(q => { 
+            if(q.type === 'mcq') {
+                q.idx = q.options.map((_,i)=>i).sort(() => random() - 0.5);
+            } else {
+                q.idx = q.options ? q.options.map((_,i)=>i) : [];
+            }
+        });
+
+    } else {
+        // TRƯỜNG HỢP KHÔNG ĐẢO (Lấy theo thứ tự từ trên xuống)
+        if (takeCount > 0 && takeCount < aq.length) {
+            aq = aq.slice(0, takeCount);
+        }
+        aq.forEach(q => { if(q.type === 'mcq') q.idx = q.options.map((_,i)=>i); });
+    }
+
+    curQ = aq; // Gán danh sách câu hỏi cuối cùng
+    // -----------------------------------------------------------
+
+        renderUI();
+        
+        // --- CODE MỚI: KHÔI PHỤC BÀI CŨ NẾU CÓ ---
+        let savedData = localStorage.getItem(window.storageKey);
+        if(savedData){
+            try {
+                let d = JSON.parse(savedData);
+                userAns = d.ans || {};
+                timerDur = d.time || timerDur; // Lấy lại thời gian cũ
+                restoreUI(); // Hàm này sẽ tự viết ở Bước 4
+            } catch(e) {}
+        }
+        // ------------------------------------------
+
+        document.getElementById('welcome-screen').style.display = 'none';
+        document.getElementById('main-interface').style.display = 'block';
+
+        clearInterval(timerInt);
+        timerInt = setInterval(() => {
+            let m = Math.floor(timerDur / 60);
+            let s = timerDur % 60;
+            document.getElementById('timer').innerText = `${m}:${s<10?'0'+s:s}`;
+            if(timerDur % 5 === 0 && window.storageKey) {
+                 localStorage.setItem(window.storageKey, JSON.stringify({ans: userAns, time: timerDur}));
+            }
+            if (--timerDur < 0) {
+                clearInterval(timerInt);
+                submitQuiz();
+                alert("Hết giờ làm bài!");
+            }
+        }, 1000);
+        document.addEventListener("visibilitychange", handleVisibilityChange);
     }
 
     function renderUI(){
         let bh='', ph='';
         curQ.forEach((q,i)=>{
-            // --- THÊM ĐOẠN NÀY ĐỂ HIỆN TIÊU ĐỀ PHẦN ---
-            if(q.sectionTitle) {
-                bh += `<div style="background:#e3f2fd; color:#0d47a1; padding:10px 15px; margin:25px 0 15px 0; border-radius:5px; font-weight:bold; font-size:1.1em; border-left:5px solid #2196f3; text-transform:uppercase;">${q.sectionTitle}</div>`;
-            }
-            // ------------------------------------------
             ph+=`<div class="palette-item" id="pb-${i}" onclick="document.getElementById('q-${i}').scrollIntoView({behavior:'smooth',block:'center'})">${i+1}</div>`;
             bh+=`<div class="question-block" id="q-${i}"><div style="margin-bottom:15px"><span style="color:#1a237e;font-weight:bold">Câu ${i+1}:</span> <span style="font-weight:500">${q.q}</span></div>`;
             if(q.img)bh+=`<div style="text-align:center"><img src="${q.img}" style="max-width:100%;border-radius:8px;margin:10px auto;border:1px solid #eee"></div>`;
@@ -586,78 +515,23 @@ if (d.end && now > new Date(d.end)) {
             let qPoint = (q.point && parseFloat(q.point) > 0) ? parseFloat(q.point) : scoresConfig[q.type];
             
             // --- TÍNH ĐIỂM NGẦM (Vẫn tính điểm nhưng chỉ hiện màu nếu được phép) ---
-            // --- 1. XỬ LÝ TRẮC NGHIỆM (MCQ) - GIỮ NGUYÊN ---
-            if(q.type === 'mcq'){
+            if(q.type==='mcq' || q.type==='short'){
                 max += qPoint;
                 if(chk(userAns[i], q.ans)) { 
                     score += qPoint; 
-                    if(allowView) bg(bl, true, 'Đúng'); 
+                    if(allowView) bg(bl, true, 'Đúng'); // Chỉ tô màu Xanh nếu được phép
                 } else {
-                    if(allowView) bg(bl, false, `Sai. ĐS: ${['A','B','C','D'][q.ans]}`); 
-                }
-            }
-            // --- 2. XỬ LÝ TRẢ LỜI NGẮN (SHORT) - CÓ BỘ LỌC THÔNG MINH ---
-            else if(q.type === 'short'){
-                max += qPoint;
-
-                // Hàm làm sạch dữ liệu (Xóa $, {, }, đổi phẩy -> chấm)
-                const normalize = (val) => {
-                    return String(val || "").toLowerCase()
-                        .replace(/[\$\{\}]/g, '') // Xóa ký tự toán học thừa
-                        .replace(/,/g, '.')       // Đổi phẩy thành chấm
-                        .replace(/\s/g, '');      // Xóa khoảng trắng
-                };
-
-                let uInput = normalize(userAns[i]);
-                let qInput = normalize(q.ans); // Làm sạch cả đáp án gốc (nếu chưa làm ở admin)
-
-                // Kiểm tra đáp án
-                let isCorrect = false;
-                
-                // Trường hợp 1: Nếu đề có Mã hóa (check qua hàm chk với MD5)
-                if(window.EXAM_DATA.encrypted) {
-                     // Lưu ý: Nếu mã hóa thì q.ans đã là MD5, ta cần MD5 cái uInput đã làm sạch
-                     // Tuy nhiên để đơn giản, thầy cứ dùng hàm chk cũ nhưng cẩn thận logic
-                     // Nếu thầy dùng mã hóa, logic này hơi phức tạp xíu. 
-                     // Tạm thời em giả định thầy dùng hàm chk có sẵn:
-                     if(chk(CryptoJS.MD5(uInput).toString(), q.ans)) isCorrect = true;
-                } 
-                // Trường hợp 2: So sánh trực tiếp (Không mã hóa)
-                else {
-                    if(uInput === qInput) isCorrect = true;
-                }
-
-                if(isCorrect) {
-                    score += qPoint;
-                    if(allowView) bg(bl, true, 'Đúng');
-                } else {
-                    // Hiển thị đáp án gốc đã làm sạch cho gọn
-                    let cleanAns = String(q.ans).replace(/[\$\{\}]/g, '');
-                    if(allowView) bg(bl, false, `Sai. ĐS: ${cleanAns}`);
+                    if(allowView) bg(bl, false, `Sai. ĐS: ${q.ans}`); // Chỉ tô màu Đỏ & hiện ĐS nếu được phép
                 }
             }
             else if(q.type==='tf'){
-                max += q.point; // Cộng điểm tối đa của câu này
-                
-                let correctCount = 0;
-                // Đếm số ý đúng
-                q.items.forEach((it, idx) => { 
-                    // So sánh đáp án học sinh chọn (userAns[i][idx]) với đáp án đúng (it.ans)
-                    if(chk(userAns[i]?userAns[i][idx]:null, it.ans)) correctCount++; 
-                });
-                
+                max += qPoint; let c=0;
+                q.items.forEach((it, idx) => { if(chk(userAns[i]?userAns[i][idx]:null, it.ans)) c++; });
                 let earned = 0;
-                // --- CÔNG THỨC TÍNH ĐIỂM BẬC THANG (MỚI) ---
-                // q.point là điểm trọn vẹn của câu (VD: 1 điểm)
-                if(correctCount == 1) earned = q.point * 0.1;       // Đúng 1 ý: 10% điểm
-                else if(correctCount == 2) earned = q.point * 0.25; // Đúng 2 ý: 25% điểm
-                else if(correctCount == 3) earned = q.point * 0.5;  // Đúng 3 ý: 50% điểm
-                else if(correctCount == 4) earned = q.point * 1.0;  // Đúng 4 ý: 100% điểm
+                if(c==1) earned = qPoint * 0.1; else if(c==2) earned = qPoint * 0.25; else if(c==3) earned = qPoint * 0.5; else if(c==4) earned = qPoint * 1.0;
+                score += earned; 
                 
-                score += earned;
-                
-                // Hiển thị kết quả chi tiết
-                if(allowView) bg(bl, earned>0, `Đúng ${correctCount}/4 ý (+${earned.toFixed(2)}đ)`);
+                if(allowView) bg(bl, earned>0, `Đúng ${c}/${q.items.length} ý (+${earned}đ)`);
             }
             else if(q.type==='match'){
                 max += qPoint; let c=0; let uObj = userAns[i] || {};
@@ -667,9 +541,10 @@ if (d.end && now > new Date(d.end)) {
                 if(allowView) bg(bl, s>0, `Đúng ${c}/${q.items.length} cặp (+${s.toFixed(2)}đ)`);
             }
         });
+        
         let finalS = Math.round(score*100)/100;
         sendToGoogleSheet(finalS, max); // Vẫn gửi điểm về Sheet bình thường
-    }
+        
         // --- 3. HIỂN THỊ KẾT QUẢ CUỐI CÙNG ---
         let msg = finalS >= max/2 ? "Chúc mừng bạn đã hoàn thành!" : "Cố gắng hơn lần sau nhé!";
         let color = finalS >= max/2 ? "#2e7d32" : "#d32f2f";
@@ -826,23 +701,6 @@ if (d.end && now > new Date(d.end)) {
         
         // 4. Thông báo nhỏ
         alert("✅ Đã mở lời giải chi tiết!\n- Màu xanh: Đúng\n- Màu đỏ: Sai\n(Thầy kéo xuống để xem chi tiết từng câu)");
-    }
-    // --- HÀM ĐẾM NGƯỢC THỜI GIAN (BẮT BUỘC PHẢI CÓ) ---
-    function startTimer() {
-        let display = document.getElementById('timer');
-        timerInt = setInterval(function () {
-            let m = parseInt(timerDur / 60, 10);
-            let s = parseInt(timerDur % 60, 10);
-            m = m < 10 ? "0" + m : m;
-            s = s < 10 ? "0" + s : s;
-            display.textContent = m + ":" + s;
-            
-            if (--timerDur < 0) {
-                clearInterval(timerInt);
-                alert("Hết giờ làm bài!");
-                submitQuiz();
-            }
-        }, 1000);
     }
 </script>
 </body>
