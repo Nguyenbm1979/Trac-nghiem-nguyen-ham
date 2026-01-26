@@ -218,16 +218,49 @@
             <div class="row">
                 <div class="col"><label>Môn Học</label><select id="exam-subject"><option value="Toan">Toán</option><option value="Ly">Vật Lý</option><option value="Hoa">Hóa Học</option><option value="Sinh">Sinh Học</option><option value="Anh">Tiếng Anh</option><option value="Van">Ngữ Văn</option><option value="Su">Lịch Sử</option><option value="Dia">Địa Lý</option><option value="GDCD">GDCD</option></select></div>
                 <div class="col"><label>Khối Lớp</label><select id="exam-grade"><option value="12">Khối 12</option><option value="11">Khối 11</option><option value="10">Khối 10</option><option value="9">Khối 9</option></select></div>
-                <div class="row">
-                <div class="col">
-                    <label>Thời gian (phút)</label>
-                    <input type="number" id="exam-time" value="45">
-                </div>
-                <div class="col">
-                    <label style="color:#d32f2f; font-weight:bold">Lấy SL câu (0 = Lấy hết)</label>
-                    <input type="number" id="exam-take" placeholder="VD: 20">
-                </div>
-            </div>
+               <div style="background:#fff3e0; padding:15px; border-radius:8px; border:1px solid #ffcc80; margin:10px 0">
+    <h4 style="margin-top:0; color:#e65100; border-bottom:1px solid #ffcc80; padding-bottom:5px">
+        <i class="fas fa-table"></i> CẤU TRÚC MA TRẬN ĐỀ THI
+    </h4>
+
+    <div class="row">
+        <div class="col">
+            <label>Thời gian làm bài (phút)</label>
+            <input type="number" id="exam-time" value="45" style="font-weight:bold; color:#d32f2f">
+        </div>
+        <input type="hidden" id="exam-take" value="0">
+    </div>
+
+    <table style="width:100%; border-collapse:collapse; background:white; margin-top:10px; font-size:0.9em" border="1" bordercolor="#ddd">
+        <tr style="background:#eceff1; color:#37474f">
+            <th style="padding:8px; text-align:left">Dạng bài</th>
+            <th style="padding:8px; width:80px">Kho có</th>
+            <th style="padding:8px; color:#d32f2f; width:80px">Cần lấy</th>
+            <th style="padding:8px; color:#2e7d32; width:80px">Tổng điểm</th>
+        </tr>
+        <tr>
+            <td style="padding:8px"><b>Phần I:</b> TN 4 phương án (MCQ)</td>
+            <td align="center" id="count-mcq" style="font-weight:bold; color:#666">0</td>
+            <td align="center"><input type="number" id="take-mcq" value="0" style="text-align:center; font-weight:bold"></td>
+            <td align="center"><input type="number" id="score-mcq" value="0" step="0.1" style="text-align:center; font-weight:bold; color:#2e7d32"></td>
+        </tr>
+        <tr>
+            <td style="padding:8px"><b>Phần II:</b> TN Đúng/Sai (TF)</td>
+            <td align="center" id="count-tf" style="font-weight:bold; color:#666">0</td>
+            <td align="center"><input type="number" id="take-tf" value="0" style="text-align:center; font-weight:bold"></td>
+            <td align="center"><input type="number" id="score-tf" value="0" step="0.1" style="text-align:center; font-weight:bold; color:#2e7d32"></td>
+        </tr>
+        <tr>
+            <td style="padding:8px"><b>Phần III:</b> Trả lời ngắn (Short)</td>
+            <td align="center" id="count-short" style="font-weight:bold; color:#666">0</td>
+            <td align="center"><input type="number" id="take-short" value="0" style="text-align:center; font-weight:bold"></td>
+            <td align="center"><input type="number" id="score-short" value="0" step="0.1" style="text-align:center; font-weight:bold; color:#2e7d32"></td>
+        </tr>
+    </table>
+    <div style="margin-top:5px; font-size:0.85em; color:#795548">
+        <i>* Nhập số lượng cần lấy cho từng phần. Nếu nhập 0 sẽ lấy hết. Hệ thống tự chia điểm đều cho các câu trong phần.</i>
+    </div>
+</div>
             </div>
             <div class="row">
                 <div class="col"><label>Giá (VNĐ)</label><input type="number" id="exam-price" placeholder="0"></div>
@@ -393,6 +426,12 @@
     }
 
    function renderEditor(){
+       if(document.getElementById('count-mcq')) {
+            document.getElementById('count-mcq').innerText = EXAM_QUESTIONS.filter(q=>q.type==='mcq').length;
+            document.getElementById('count-tf').innerText = EXAM_QUESTIONS.filter(q=>q.type==='tf').length;
+            document.getElementById('count-short').innerText = EXAM_QUESTIONS.filter(q=>q.type==='short').length;
+        }
+        // ----------------------------------
         let c=document.getElementById('questions-list'); c.innerHTML="";
         if(EXAM_QUESTIONS.length > 0) { document.getElementById('empty-msg').style.display='none'; document.getElementById('preview-area').style.display='block'; }
         
@@ -541,6 +580,21 @@
                     if(el) el.value = data[k].toString().replace('K','');
                 }
             });
+            // --- CODE MỚI: TỰ ĐỘNG ĐIỀN LẠI THÔNG SỐ MA TRẬN ---
+if(data.matrix) {
+    // Nếu đề đã có cấu hình ma trận thì điền vào ô
+    if(document.getElementById('take-mcq')) {
+        document.getElementById('take-mcq').value = data.matrix.mcq ? data.matrix.mcq.take : 0;
+        document.getElementById('score-mcq').value = data.matrix.mcq ? data.matrix.mcq.score : 0;
+
+        document.getElementById('take-tf').value = data.matrix.tf ? data.matrix.tf.take : 0;
+        document.getElementById('score-tf').value = data.matrix.tf ? data.matrix.tf.score : 0;
+
+        document.getElementById('take-short').value = data.matrix.short ? data.matrix.short.take : 0;
+        document.getElementById('score-short').value = data.matrix.short ? data.matrix.short.score : 0;
+    }
+}
+// ---------------------------------------------------
             document.getElementById('exam-pass-hash').value=data.password||"";
             document.getElementById('secure-mode').checked=data.encrypted;
             document.getElementById('exam-shuffle').checked = (data.shuffle !== false);
@@ -605,7 +659,23 @@
                 subject: document.getElementById('exam-subject').value, 
                 grade: document.getElementById('exam-grade').value,
                 time: parseInt(document.getElementById('exam-time').value),
-                take: parseInt(document.getElementById('exam-take').value) || 0,
+                // --- THAY DÒNG "take: ..." BẰNG ĐOẠN NÀY ---
+matrix: {
+    mcq: { 
+        take: parseInt(document.getElementById('take-mcq').value) || 0, 
+        score: parseFloat(document.getElementById('score-mcq').value) || 0 
+    },
+    tf: { 
+        take: parseInt(document.getElementById('take-tf').value) || 0, 
+        score: parseFloat(document.getElementById('score-tf').value) || 0 
+    },
+    short: { 
+        take: parseInt(document.getElementById('take-short').value) || 0, 
+        score: parseFloat(document.getElementById('score-short').value) || 0 
+    }
+},
+take: 0, // Giữ lại để tương thích ngược (nhưng đặt là 0)
+// -------------------------------------------
                 password: document.getElementById('exam-pass-hash').value,
                 encrypted: sec,
                 shuffle: document.getElementById('exam-shuffle').checked,
