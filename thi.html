@@ -384,55 +384,41 @@ if (d.end && now > new Date(d.end)) {
         }
     }
     // --- PHIÊN BẢN STARTLOGIC: CHỐNG TREO & TỰ SỬA LỖI ---
+    // --- PHIÊN BẢN STARTLOGIC: CÓ CHUYỂN MÀN HÌNH ---
     function startLogic(name){
-        // Bắt đầu chế độ bảo vệ (Try-Catch)
         try {
             startTime = new Date().toLocaleString('vi-VN');
             
-            // 1. Tạo rổ đựng câu hỏi (Đủ 4 loại để không bị lỗi undefined)
+            // 1. Phân loại câu hỏi
             let pool = { mcq: [], tf: [], short: [], match: [] };
-            
-            // Lọc câu hỏi an toàn
             if(Array.isArray(rawQ)) {
                 rawQ.forEach(q => { 
                     if(pool[q.type]) pool[q.type].push(JSON.parse(JSON.stringify(q))); 
                 });
             }
 
-            // 2. Lấy cấu hình ma trận (Tự điền nếu thiếu để tránh lỗi)
+            // 2. Lấy cấu hình ma trận
             let mx = window.EXAM_DATA.matrix || {};
-            // Hàm hỗ trợ lấy cấu hình an toàn
             const getCfg = (type) => (mx[type] || { take: 9999, score: 0 });
+            let m = { mcq: getCfg('mcq'), tf: getCfg('tf'), short: getCfg('short'), match: getCfg('match') };
 
-            let m = {
-                mcq: getCfg('mcq'),
-                tf: getCfg('tf'),
-                short: getCfg('short'),
-                match: getCfg('match')
-            };
-
-            // 3. Hàm Random ổn định
+            // 3. Random
             let seed = 0;
             if(name) { for(let i=0; i<name.length; i++) seed += name.charCodeAt(i); }
             const random = () => { var x = Math.sin(seed++) * 10000; return x - Math.floor(x); };
 
-            // 4. Hàm rút câu hỏi
+            // 4. Rút câu hỏi
             const pickQs = (sourceArr, count, sectionScore) => {
                 if(!sourceArr || sourceArr.length === 0) return [];
                 let takeCount = (count > 0) ? count : sourceArr.length;
-                
                 let pinned = sourceArr.filter(q => q.mustTake === true);
                 let others = sourceArr.filter(q => !q.mustTake);
-                
                 if(window.EXAM_DATA.shuffle !== false) others.sort(() => random() - 0.5);
-                
                 let needed = takeCount - pinned.length;
                 let pickedOthers = others.slice(0, Math.max(0, needed));
-                
                 let final = pinned.concat(pickedOthers);
                 if(window.EXAM_DATA.shuffle !== false) final.sort(() => random() - 0.5);
                 
-                // Chia điểm tự động
                 if(final.length > 0 && sectionScore > 0) {
                     let pPerQ = sectionScore / final.length;
                     final.forEach(q => q.point = parseFloat(pPerQ.toFixed(3)));
@@ -440,25 +426,21 @@ if (d.end && now > new Date(d.end)) {
                 return final;
             };
 
-            // 5. Thực hiện rút câu hỏi (An toàn)
+            // 5. Thực hiện rút
             let part1 = pickQs(pool.mcq, m.mcq.take, m.mcq.score);
             let part2 = pickQs(pool.tf, m.tf.take, m.tf.score);
             let part3 = pickQs(pool.short, m.short.take, m.short.score);
             let part4 = pickQs(pool.match, m.match.take, m.match.score);
 
-            // 6. Gán tiêu đề phần
+            // 6. Tiêu đề
             if(part1.length) part1[0].sectionTitle = "PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn";
             if(part2.length) part2[0].sectionTitle = "PHẦN II. Câu trắc nghiệm đúng sai";
             if(part3.length) part3[0].sectionTitle = "PHẦN III. Câu trắc nghiệm trả lời ngắn";
             if(part4.length) part4[0].sectionTitle = "PHẦN IV. Câu hỏi ghép đôi";
 
-            // 7. Gộp đề
             curQ = [...part1, ...part2, ...part3, ...part4];
-            
-            // Nếu không có câu hỏi nào -> Báo lỗi ngay
             if(curQ.length === 0) throw new Error("Không tìm thấy câu hỏi nào! Kiểm tra lại Admin.");
 
-            // 8. Trộn đáp án MCQ
             curQ.forEach(q => {
                 if(q.type === 'mcq') {
                     if(window.EXAM_DATA.shuffle !== false) 
@@ -468,26 +450,33 @@ if (d.end && now > new Date(d.end)) {
                 }
             });
 
-            // 9. Hiển thị giao diện
             renderUI();
             
-            // 10. Khôi phục bài làm cũ
+            // Khôi phục bài cũ
             let savedData = localStorage.getItem(window.storageKey);
             if(savedData){
                 try {
                     let d = JSON.parse(savedData);
                     userAns = d.ans || {};
                     timeLeft = d.time;
+                    // Nếu có thời gian cũ thì dùng, không thì dùng thời gian gốc
+                    if(timeLeft) timerDur = parseInt(timeLeft);
                     renderUI(); 
+                    // Gọi hàm restoreUI để điền lại đáp án lên giao diện
+                    if(typeof restoreUI === 'function') restoreUI();
                 } catch(e) {}
             }
 
+            // --- [QUAN TRỌNG] CHUYỂN MÀN HÌNH & CHẠY ĐỒNG HỒ ---
+            document.getElementById('welcome-screen').style.display = 'none'; // Ẩn màn hình chào
+            document.getElementById('main-interface').style.display = 'block'; // Hiện bài thi
+            startTimer(); // Bắt đầu tính giờ
+            // ----------------------------------------------------
+
         } catch (err) {
-            // NẾU CÓ LỖI: Sẽ hiện thông báo này thay vì treo máy
-            alert("⚠️ Lỗi khởi tạo đề thi:\n" + err.message + "\n\nThầy hãy vào Admin Xuất bản lại đề để cập nhật dữ liệu mới nhất.");
+            alert("⚠️ Lỗi khởi tạo đề thi:\n" + err.message);
             console.error(err);
         } finally {
-            // --- BẮT BUỘC TẮT MÀN HÌNH CHỜ (DÙ SỐNG HAY CHẾT) ---
             let overlay = document.getElementById('loading-overlay');
             if(overlay) overlay.style.display = 'none';
         }
@@ -837,6 +826,23 @@ if (d.end && now > new Date(d.end)) {
         
         // 4. Thông báo nhỏ
         alert("✅ Đã mở lời giải chi tiết!\n- Màu xanh: Đúng\n- Màu đỏ: Sai\n(Thầy kéo xuống để xem chi tiết từng câu)");
+    }
+    // --- HÀM ĐẾM NGƯỢC THỜI GIAN (BẮT BUỘC PHẢI CÓ) ---
+    function startTimer() {
+        let display = document.getElementById('timer');
+        timerInt = setInterval(function () {
+            let m = parseInt(timerDur / 60, 10);
+            let s = parseInt(timerDur % 60, 10);
+            m = m < 10 ? "0" + m : m;
+            s = s < 10 ? "0" + s : s;
+            display.textContent = m + ":" + s;
+            
+            if (--timerDur < 0) {
+                clearInterval(timerInt);
+                alert("Hết giờ làm bài!");
+                submitQuiz();
+            }
+        }, 1000);
     }
 </script>
 </body>
