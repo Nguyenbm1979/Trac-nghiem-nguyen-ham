@@ -649,7 +649,19 @@ if(data.matrix) {
                     const h = (v) => CryptoJS.MD5(String(v).trim()).toString();
                     if(q.type==='mcq') q.ans=h(q.ans);
                     else if(q.type==='tf') q.items.forEach(x=>x.ans=h(x.ans));
-                    else if(q.type==='short') q.ans=h(String(q.ans).toLowerCase().replace(',','.'));
+                    else if(q.type==='short') {
+                        // 1. Lấy đáp án gốc
+                        let clean = String(q.ans).toLowerCase();
+                        // 2. Xóa ký tự LaTeX: $ { }
+                        clean = clean.replace(/[\$\{\}]/g, ''); 
+                        // 3. Đổi phẩy thành chấm để thống nhất
+                        clean = clean.replace(/,/g, '.');
+                        // 4. Xóa khoảng trắng thừa
+                        clean = clean.trim();
+                        
+                        // Mã hóa (nếu đang bật chế độ bảo mật) hoặc lưu thẳng
+                        q.ans = h(clean);
+                    }
                     else if(q.type==='match') q.ans=q.ans.map(v=>h(v));
                 }
             });
