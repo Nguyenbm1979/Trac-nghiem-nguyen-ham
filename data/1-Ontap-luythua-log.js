@@ -3,6 +3,20 @@ window.EXAM_DATA = {
     "subject": "Toan",
     "grade": "11",
     "time": 45,
+    "matrix": {
+        "mcq": {
+            "take": 17,
+            "score": 0
+        },
+        "tf": {
+            "take": 1,
+            "score": 0
+        },
+        "short": {
+            "take": 4,
+            "score": 0
+        }
+    },
     "take": 0,
     "password": "2afba7e5bf6e676c5798e444f8b1b261",
     "encrypted": false,
