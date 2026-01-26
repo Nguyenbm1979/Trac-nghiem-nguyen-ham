@@ -328,86 +328,114 @@ if (d.end && now > new Date(d.end)) {
         startLogic(n);
     }
 
-    // --- LOGIC TRỘN ĐỀ THEO MA TRẬN (MỚI) ---
+    // --- PHIÊN BẢN STARTLOGIC: CHỐNG TREO & TỰ SỬA LỖI ---
     function startLogic(name){
-        startTime = new Date().toLocaleString('vi-VN');
-        
-        // 1. Phân loại câu hỏi từ kho dữ liệu gốc
-        let pool = { mcq: [], tf: [], short: [] };
-        rawQ.forEach(q => { if(pool[q.type]) pool[q.type].push(JSON.parse(JSON.stringify(q))); });
-
-        // 2. Lấy cấu hình ma trận (Nếu không có thì mặc định lấy hết)
-        let m = window.EXAM_DATA.matrix || { 
-            mcq: {take: 999}, tf: {take: 999}, short: {take: 999} 
-        };
-
-        // Hàm tạo bộ số ngẫu nhiên theo tên học sinh
-        let seed = 0;
-        for(let i=0; i<name.length; i++) seed += name.charCodeAt(i);
-        const random = () => { var x = Math.sin(seed++) * 10000; return x - Math.floor(x); };
-
-        // 3. Hàm rút câu hỏi: Ghim trước -> Random sau
-        const pickQs = (sourceArr, count, sectionScore) => {
-            if(!sourceArr) return [];
-            // Nếu count = 0 hoặc không nhập thì lấy hết
-            let takeCount = (count > 0) ? count : sourceArr.length;
+        // Bắt đầu chế độ bảo vệ (Try-Catch)
+        try {
+            startTime = new Date().toLocaleString('vi-VN');
             
-            // Tách câu ghim và câu thường
-            let pinned = sourceArr.filter(q => q.mustTake === true);
-            let others = sourceArr.filter(q => !q.mustTake);
+            // 1. Tạo rổ đựng câu hỏi (Đủ 4 loại để không bị lỗi undefined)
+            let pool = { mcq: [], tf: [], short: [], match: [] };
             
-            // Trộn ngẫu nhiên câu thường
-            if(window.EXAM_DATA.shuffle !== false) others.sort(() => random() - 0.5);
-            
-            // Lấy cho đủ số lượng (ưu tiên ghim trước)
-            let needed = takeCount - pinned.length;
-            let pickedOthers = others.slice(0, Math.max(0, needed));
-            
-            // Gộp lại & Trộn thứ tự hiển thị TRONG NHÓM (nếu muốn)
-            let final = pinned.concat(pickedOthers);
-            if(window.EXAM_DATA.shuffle !== false) final.sort(() => random() - 0.5);
-            
-            // TÍNH LẠI ĐIỂM CHO TỪNG CÂU (Tự động chia điểm)
-            if(final.length > 0 && sectionScore > 0) {
-                let pPerQ = sectionScore / final.length;
-                final.forEach(q => q.point = pPerQ);
+            // Lọc câu hỏi an toàn
+            if(Array.isArray(rawQ)) {
+                rawQ.forEach(q => { 
+                    if(pool[q.type]) pool[q.type].push(JSON.parse(JSON.stringify(q))); 
+                });
             }
+
+            // 2. Lấy cấu hình ma trận (Tự điền nếu thiếu để tránh lỗi)
+            let mx = window.EXAM_DATA.matrix || {};
+            // Hàm hỗ trợ lấy cấu hình an toàn
+            const getCfg = (type) => (mx[type] || { take: 9999, score: 0 });
+
+            let m = {
+                mcq: getCfg('mcq'),
+                tf: getCfg('tf'),
+                short: getCfg('short'),
+                match: getCfg('match')
+            };
+
+            // 3. Hàm Random ổn định
+            let seed = 0;
+            if(name) { for(let i=0; i<name.length; i++) seed += name.charCodeAt(i); }
+            const random = () => { var x = Math.sin(seed++) * 10000; return x - Math.floor(x); };
+
+            // 4. Hàm rút câu hỏi
+            const pickQs = (sourceArr, count, sectionScore) => {
+                if(!sourceArr || sourceArr.length === 0) return [];
+                let takeCount = (count > 0) ? count : sourceArr.length;
+                
+                let pinned = sourceArr.filter(q => q.mustTake === true);
+                let others = sourceArr.filter(q => !q.mustTake);
+                
+                if(window.EXAM_DATA.shuffle !== false) others.sort(() => random() - 0.5);
+                
+                let needed = takeCount - pinned.length;
+                let pickedOthers = others.slice(0, Math.max(0, needed));
+                
+                let final = pinned.concat(pickedOthers);
+                if(window.EXAM_DATA.shuffle !== false) final.sort(() => random() - 0.5);
+                
+                // Chia điểm tự động
+                if(final.length > 0 && sectionScore > 0) {
+                    let pPerQ = sectionScore / final.length;
+                    final.forEach(q => q.point = parseFloat(pPerQ.toFixed(3)));
+                }
+                return final;
+            };
+
+            // 5. Thực hiện rút câu hỏi (An toàn)
+            let part1 = pickQs(pool.mcq, m.mcq.take, m.mcq.score);
+            let part2 = pickQs(pool.tf, m.tf.take, m.tf.score);
+            let part3 = pickQs(pool.short, m.short.take, m.short.score);
+            let part4 = pickQs(pool.match, m.match.take, m.match.score);
+
+            // 6. Gán tiêu đề phần
+            if(part1.length) part1[0].sectionTitle = "PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn";
+            if(part2.length) part2[0].sectionTitle = "PHẦN II. Câu trắc nghiệm đúng sai";
+            if(part3.length) part3[0].sectionTitle = "PHẦN III. Câu trắc nghiệm trả lời ngắn";
+            if(part4.length) part4[0].sectionTitle = "PHẦN IV. Câu hỏi ghép đôi";
+
+            // 7. Gộp đề
+            curQ = [...part1, ...part2, ...part3, ...part4];
             
-            return final;
-        };
+            // Nếu không có câu hỏi nào -> Báo lỗi ngay
+            if(curQ.length === 0) throw new Error("Không tìm thấy câu hỏi nào! Kiểm tra lại Admin.");
 
-        // 4. Thực hiện rút câu hỏi cho 3 phần
-        let part1 = pickQs(pool.mcq, m.mcq.take, m.mcq.score);
-        let part2 = pickQs(pool.tf, m.tf.take, m.tf.score);
-        let part3 = pickQs(pool.short, m.short.take, m.short.score);
+            // 8. Trộn đáp án MCQ
+            curQ.forEach(q => {
+                if(q.type === 'mcq') {
+                    if(window.EXAM_DATA.shuffle !== false) 
+                        q.idx = q.options.map((_,i)=>i).sort(() => random() - 0.5);
+                    else 
+                        q.idx = q.options.map((_,i)=>i);
+                }
+            });
 
-        // 5. Gán nhãn tiêu đề phần (để hiển thị lúc render)
-        if(part1.length) part1[0].sectionTitle = "PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn";
-        if(part2.length) part2[0].sectionTitle = "PHẦN II. Câu trắc nghiệm đúng sai";
-        if(part3.length) part3[0].sectionTitle = "PHẦN III. Câu trắc nghiệm trả lời ngắn";
-
-        // 6. Gộp lại thành đề thi hoàn chỉnh (Theo thứ tự I -> II -> III)
-        curQ = [...part1, ...part2, ...part3];
-
-        // 7. Trộn đáp án ABCD (chỉ cho phần trắc nghiệm)
-        curQ.forEach(q => {
-            if(q.type === 'mcq' && window.EXAM_DATA.shuffle !== false) {
-                q.idx = q.options.map((_,i)=>i).sort(() => random() - 0.5);
-            } else if (q.type === 'mcq') {
-                q.idx = q.options.map((_,i)=>i);
+            // 9. Hiển thị giao diện
+            renderUI();
+            
+            // 10. Khôi phục bài làm cũ
+            let savedData = localStorage.getItem(window.storageKey);
+            if(savedData){
+                try {
+                    let d = JSON.parse(savedData);
+                    userAns = d.ans || {};
+                    timeLeft = d.time;
+                    renderUI(); 
+                } catch(e) {}
             }
-        });
 
-        renderUI();
-        // Giữ nguyên phần khôi phục bài làm cũ
-        let savedData = localStorage.getItem(window.storageKey);
-        if(savedData){
-            let d = JSON.parse(savedData);
-            userAns = d.ans;
-            timeLeft = d.time;
-            renderUI(); // Render lại để điền đáp án cũ
+        } catch (err) {
+            // NẾU CÓ LỖI: Sẽ hiện thông báo này thay vì treo máy
+            alert("⚠️ Lỗi khởi tạo đề thi:\n" + err.message + "\n\nThầy hãy vào Admin Xuất bản lại đề để cập nhật dữ liệu mới nhất.");
+            console.error(err);
+        } finally {
+            // --- BẮT BUỘC TẮT MÀN HÌNH CHỜ (DÙ SỐNG HAY CHẾT) ---
+            let overlay = document.getElementById('loading-overlay');
+            if(overlay) overlay.style.display = 'none';
         }
-        document.getElementById('loading-overlay').style.display = 'none';
     }
 
     function renderUI(){
